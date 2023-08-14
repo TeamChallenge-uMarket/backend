@@ -26,8 +26,8 @@ public class AuthenticationService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .phone(registerRequest.getPhone())
-                .country(registerRequest.getCountry())
-                .city(registerRequest.getCity())
+                .country(registerRequest.getAddress().getCountry())
+                .city(registerRequest.getAddress().getCity())
                 .role(Role.USER)
                 .build();
         String jwtToken = jwtService.generateToken(appUser);
@@ -71,7 +71,7 @@ public class AuthenticationService {
                 .orElseThrow(() -> new UsernameNotFoundException("Not found by refresh token"));
         String newAccessToken = null;
         String newRefreshToken = null;
-        if(appUser.getRefreshToken().equals(token)) {
+        if (appUser.getRefreshToken().equals(token)) {
             newAccessToken = jwtService.generateToken(appUser);
             newRefreshToken = jwtService.generateRefreshToken(appUser);
             appUser.setRefreshToken(newRefreshToken);
