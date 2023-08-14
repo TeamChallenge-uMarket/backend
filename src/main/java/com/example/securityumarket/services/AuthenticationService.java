@@ -2,6 +2,8 @@ package com.example.securityumarket.services;
 
 import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.*;
+import com.example.securityumarket.models.entities.AppUser;
+import com.example.securityumarket.models.entities.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -57,7 +59,7 @@ public class AuthenticationService {
         appUserDAO.save(appUser);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .refreshToken(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
