@@ -24,10 +24,11 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-        if (validation(registerRequest).isPresent()) {
-            String validationError = String.valueOf(validation(registerRequest));
-            return AuthenticationResponse.builder().token(validationError).build();
-        }
+//        Optional<String> validationError = validation(registerRequest);
+//        if (validationError.isPresent()) {
+//            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
+//                    .body(new ErrorResponse(HttpStatus.UNPROCESSABLE_ENTITY.value(), validationError.get()));
+//        }
         AppUser appUser = AppUser.builder()
                 .name(registerRequest.getName())
                 .email(registerRequest.getEmail())
@@ -50,17 +51,20 @@ public class AuthenticationService {
                 .build();
     }
 
-    private Optional<String> validation(RegisterRequest registerRequest) {
-        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
-            return Optional.of("Password is not correct");
-        }
-        if (!registerRequest.getPhone().isBlank()) {
-            if (appUserDAO.existsByPhone(registerRequest.getPhone())) {
-                return Optional.of("Phone number is already registered");
-            }
-        }
-        return Optional.empty();
-    }
+//    private Optional<String> validation(RegisterRequest registerRequest) {
+//        if (registerRequest.getName().isBlank()) {
+//            return Optional.of("Name is required");
+//        }
+//        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
+//            return Optional.of("Password is not correct");
+//        }
+//        if (!registerRequest.getPhone().isBlank()) {
+//            if (appUserDAO.existsByPhone(registerRequest.getPhone())) {
+//                return Optional.of("Phone number is already registered");
+//            }
+//        }
+//        return Optional.empty();
+//    }
 
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
         authenticationManager.authenticate(

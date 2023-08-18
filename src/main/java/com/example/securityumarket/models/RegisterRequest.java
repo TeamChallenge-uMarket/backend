@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisterRequest {
-    @NotBlank(message = "Email is required")
+    @NotBlank(message = "Name is required")
     private String name;
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
@@ -27,6 +27,5 @@ public class RegisterRequest {
     @NotBlank(message = "The confirm Password is required.")
     private String confirmPassword;
     private String phone;
-    @NotNull(message = "The address is required.")
     private AddressDTO address;
 }

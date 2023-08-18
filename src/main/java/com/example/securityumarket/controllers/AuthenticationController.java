@@ -7,11 +7,15 @@ import com.example.securityumarket.models.RegisterRequest;
 import com.example.securityumarket.services.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -21,7 +25,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
     private AuthenticationService authenticationService;
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest registerRequest, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(AuthenticationResponse.builder().build(),HttpStatus.UNPROCESSABLE_ENTITY);
+        }
         return ResponseEntity.ok(authenticationService.register(registerRequest));
     }
 
