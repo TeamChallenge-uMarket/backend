@@ -29,11 +29,16 @@ public class SecurityConfiguration {
                         matcherRegistry
                                 .requestMatchers("/api/v1/auth/**")
                                 .permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
-                        )
+                )
+                .formLogin(httpSecurityFormLoginConfigurer ->
+                        httpSecurityFormLoginConfigurer.loginPage("/login").defaultSuccessUrl("/").permitAll())
+                .logout(logoutConfigurer ->
+                        logoutConfigurer.permitAll().logoutSuccessUrl("/"))
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
