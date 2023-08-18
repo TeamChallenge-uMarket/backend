@@ -1,6 +1,9 @@
 package com.example.securityumarket.filters;
 
 import com.example.securityumarket.dao.AppUserDAO;
+import com.example.securityumarket.models.AuthenticationResponse;
+import com.example.securityumarket.models.RefreshRequest;
+import com.example.securityumarket.services.AuthenticationService;
 import com.example.securityumarket.services.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -21,12 +24,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    public JwtAuthenticationFilter(UserDetailsService userDetailsService, JwtService jwtService, AppUserDAO appUserDAO) {
+        this.userDetailsService = userDetailsService;
+        this.jwtService = jwtService;
+        this.appUserDAO = appUserDAO;
+    }
 
     private UserDetailsService userDetailsService;
     private JwtService jwtService;
     private AppUserDAO appUserDAO;
+    private AuthenticationService authenticationService;
 
     @Override
     protected void doFilterInternal(
@@ -34,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         try {
-            String authHeader = request.getHeader("Authorization");
+                String authHeader = request.getHeader("Authorization");
             String jwt;
             String userEmail;
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -59,13 +68,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                } else {
+                    // Оновлюємо токени
+                    RefreshRequest refreshRequest = new RefreshRequest();
+                    refreshRequest.setRefreshToken(jwt); // Оновлення токену за базовим JWT
+
+                    AuthenticationResponse refreshedTokens = authenticationService.refresh(refreshRequest);
+
+                    String newAccessToken = refreshedTokens.getToken();
+
+                    if (newAccessToken != null) {
+                        // Оновлюємо токен у заголовку запиту
+                        response.setHeader("Authorization", "Bearer " + newAccessToken);
+
+                        // Продовжуємо обробку запиту
+                        filterChain.doFilter(request, response);
+                    } else {
+                        // Якщо оновлення токенів не вдалось, повертаємо помилку або іншу відповідь
+                        response.setHeader("Error", "Token refresh failed");
+                        return;
+                    }
                 }
             }
         } catch (IOException | ServletException | UsernameNotFoundException e) {
             throw new RuntimeException(e);
         } catch (ExpiredJwtException e) {
-            response.setHeader("Error", "token is dead");
+            response.setHeader("Error", "Token is expired");
         }
         filterChain.doFilter(request, response);
     }
 }
+
