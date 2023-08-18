@@ -5,6 +5,9 @@ import com.example.securityumarket.models.*;
 import com.example.securityumarket.models.entities.AppUser;
 import com.example.securityumarket.models.entities.Role;
 import lombok.AllArgsConstructor;
+import java.util.Optional;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +24,10 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest registerRequest) {
+        if (validation(registerRequest).isPresent()) {
+            String validationError = String.valueOf(validation(registerRequest));
+            return AuthenticationResponse.builder().token(validationError).build();
+        }
         AppUser appUser = AppUser.builder()
                 .name(registerRequest.getName())
                 .email(registerRequest.getEmail())
@@ -41,6 +48,18 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    private Optional<String> validation(RegisterRequest registerRequest) {
+        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
+            return Optional.of("Password is not correct");
+        }
+        if (!registerRequest.getPhone().isBlank()) {
+            if (appUserDAO.existsByPhone(registerRequest.getPhone())) {
+                return Optional.of("Phone number is already registered");
+            }
+        }
+        return Optional.empty();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {

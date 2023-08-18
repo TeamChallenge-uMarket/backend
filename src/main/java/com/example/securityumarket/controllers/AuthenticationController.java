@@ -22,9 +22,6 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest registerRequest) {
-        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(AuthenticationResponse.builder().token("Password is not correct").build());
-        }
         return ResponseEntity.ok(authenticationService.register(registerRequest));
     }
 
