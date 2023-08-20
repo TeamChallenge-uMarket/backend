@@ -32,8 +32,8 @@ public class SecurityConfiguration {
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
-                .formLogin(httpSecurityFormLoginConfigurer ->
-                        httpSecurityFormLoginConfigurer.loginPage("/login").defaultSuccessUrl("/").permitAll())
+//                .formLogin(httpSecurityFormLoginConfigurer ->
+//                        httpSecurityFormLoginConfigurer.loginPage("/login").defaultSuccessUrl("/").permitAll())
                 .logout(logoutConfigurer ->
                         logoutConfigurer.permitAll().logoutSuccessUrl("/"))
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->

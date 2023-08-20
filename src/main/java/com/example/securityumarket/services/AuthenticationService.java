@@ -64,17 +64,9 @@ public class AuthenticationService {
 //            }
 //        }
 //        return Optional.empty();
-//    }
-
-    public AuthenticationResponse authenticate(AuthenticationRequest authenticationRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(),
-                        authenticationRequest.getPassword()
-                )
-        );
-        AppUser appUser = appUserDAO.findAppUserByEmail(authenticationRequest.getEmail()).orElseThrow(() -> new UsernameNotFoundException(
-                "no " + "such user and no authenticate"));
+//
+    public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
+        AppUser appUser = authenticate(authenticationRequest);
 
         String jwtToken = jwtService.generateToken(appUser);
         String refreshToken = jwtService.generateRefreshToken(appUser);
@@ -84,6 +76,17 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    protected AppUser authenticate (AuthenticationRequest authenticationRequest) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authenticationRequest.getEmail(),
+                        authenticationRequest.getPassword()
+                )
+        );
+        return appUserDAO.findAppUserByEmail(authenticationRequest.getEmail()).orElseThrow(() -> new UsernameNotFoundException(
+                "no " + "such user and no authenticate"));
     }
 
     public AuthenticationResponse refresh(RefreshRequest refreshRequest) {

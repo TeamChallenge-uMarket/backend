@@ -1,21 +1,18 @@
 package com.example.securityumarket.controllers;
 
-import com.example.securityumarket.models.AuthenticationRequest;
-import com.example.securityumarket.models.AuthenticationResponse;
-import com.example.securityumarket.models.RefreshRequest;
-import com.example.securityumarket.models.RegisterRequest;
+import com.example.securityumarket.models.*;
+import com.example.securityumarket.models.resetPassword.ConfiderCodeRequest;
+import com.example.securityumarket.models.resetPassword.PasswordRequest;
+import com.example.securityumarket.models.resetPassword.SenderCodeRequest;
 import com.example.securityumarket.services.AuthenticationService;
+import com.example.securityumarket.services.MailService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -24,6 +21,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
     private AuthenticationService authenticationService;
+    private MailService mailService;
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest registerRequest, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -32,13 +30,28 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.register(registerRequest));
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
-        return ResponseEntity.ok(authenticationService.authenticate(authenticationRequest));
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest) {
+        return ResponseEntity.ok(authenticationService.login(authenticationRequest));
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refresh (@RequestBody RefreshRequest refreshRequest) {
         return ResponseEntity.ok(authenticationService.refresh(refreshRequest));
+    }
+
+    @PostMapping("/send-code")
+    public ResponseEntity<String> sendCode (@RequestBody SenderCodeRequest senderCodeRequest) {
+        return mailService.sendCode(senderCodeRequest);
+    }
+
+    @PostMapping("/confirm-reset-code")
+    public ResponseEntity<String> confirmResetCode(@RequestBody ConfiderCodeRequest code) {
+        return mailService.confirmResetCode(code);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword (@RequestBody PasswordRequest passwordRequest) {
+        return mailService.reset(passwordRequest);
     }
 }
