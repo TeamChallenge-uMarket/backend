@@ -23,11 +23,8 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
     private MailService mailService;
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody @Valid RegisterRequest registerRequest, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(AuthenticationResponse.builder().build(),HttpStatus.UNPROCESSABLE_ENTITY);
-        }
-        return ResponseEntity.ok(authenticationService.register(registerRequest));
+    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
+        return authenticationService.register(registerRequest);
     }
 
     @PostMapping("/login")
