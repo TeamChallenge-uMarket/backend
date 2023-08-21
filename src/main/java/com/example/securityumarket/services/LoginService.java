@@ -12,15 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class LoginService {
     private AppUserDAO appUserDAO;
     private JwtService jwtService;
-
-    public LoginService(AppUserDAO appUserDAO, JwtService jwtService) {
-        this.appUserDAO = appUserDAO;
-        this.jwtService = jwtService;
-    }
-
     private AuthenticationManager authenticationManager;
 
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {

@@ -24,11 +24,10 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    public JwtAuthenticationFilter(UserDetailsService userDetailsService, JwtService jwtService, AppUserDAO appUserDAO, LoginService loginService) {
+    public JwtAuthenticationFilter(UserDetailsService userDetailsService, JwtService jwtService, AppUserDAO appUserDAO) {
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
         this.appUserDAO = appUserDAO;
-        this.loginService = loginService;
     }
 
     private UserDetailsService userDetailsService;
