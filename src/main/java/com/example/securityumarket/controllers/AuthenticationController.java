@@ -7,7 +7,8 @@ import com.example.securityumarket.models.RegisterRequest;
 import com.example.securityumarket.models.resetPassword.ConfiderCodeRequest;
 import com.example.securityumarket.models.resetPassword.PasswordRequest;
 import com.example.securityumarket.models.resetPassword.SenderCodeRequest;
-import com.example.securityumarket.services.AuthenticationService;
+import com.example.securityumarket.services.LoginService;
+import com.example.securityumarket.services.RegistrationService;
 import com.example.securityumarket.services.MailService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,21 +21,22 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
-    private AuthenticationService authenticationService;
+    private RegistrationService registrationService;
+    private LoginService loginService;
     private MailService mailService;
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
-        return authenticationService.register(registerRequest);
+        return registrationService.register(registerRequest);
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest) {
-        return ResponseEntity.ok(authenticationService.login(authenticationRequest));
+        return ResponseEntity.ok(loginService.login(authenticationRequest));
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refresh (@RequestBody RefreshRequest refreshRequest) {
-        return ResponseEntity.ok(authenticationService.refresh(refreshRequest));
+        return ResponseEntity.ok(loginService.refresh(refreshRequest));
     }
 
     @PostMapping("/send-code")

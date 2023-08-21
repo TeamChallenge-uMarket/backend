@@ -3,7 +3,7 @@ package com.example.securityumarket.filters;
 import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.RefreshRequest;
-import com.example.securityumarket.services.AuthenticationService;
+import com.example.securityumarket.services.LoginService;
 import com.example.securityumarket.services.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
@@ -24,16 +24,17 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    public JwtAuthenticationFilter(UserDetailsService userDetailsService, JwtService jwtService, AppUserDAO appUserDAO) {
+    public JwtAuthenticationFilter(UserDetailsService userDetailsService, JwtService jwtService, AppUserDAO appUserDAO, LoginService loginService) {
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
         this.appUserDAO = appUserDAO;
+        this.loginService = loginService;
     }
 
     private UserDetailsService userDetailsService;
     private JwtService jwtService;
     private AppUserDAO appUserDAO;
-    private AuthenticationService authenticationService;
+    private LoginService loginService;
 
     @Override
     protected void doFilterInternal(
@@ -71,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     RefreshRequest refreshRequest = new RefreshRequest();
                     refreshRequest.setRefreshToken(jwt); // Оновлення токену за базовим JWT
 
-                    AuthenticationResponse refreshedTokens = authenticationService.refresh(refreshRequest);
+                    AuthenticationResponse refreshedTokens = loginService.refresh(refreshRequest);
 
                     String newAccessToken = refreshedTokens.getToken();
 

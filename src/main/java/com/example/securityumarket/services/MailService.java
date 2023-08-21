@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 @Service
@@ -50,11 +51,13 @@ public class MailService {
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
         generateRandomCode();
         try {
-            mimeMessage.setFrom(new InternetAddress("authenticator.umarket@gmail.com"));
+            String senderEmail = "authenticator.umarket@gmail.com";
+            String senderName = "uMarket";
+            mimeMessage.setFrom(new InternetAddress(senderEmail,senderName));
             helper.setTo(senderCodeRequest.getEmail());
             helper.setSubject("Password Reset Verification");
             helper.setText("Your verification code: " + code, false);
-        } catch (MessagingException e) {
+        } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         javaMailSender.send(mimeMessage);
@@ -80,7 +83,7 @@ public class MailService {
 
 
     public ResponseEntity<String> reset(PasswordRequest passwordRequest) {
-        if (passwordRequest.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+        if (!passwordRequest.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Password must be at least 8 characters long and contain at least one letter and one digit");
         }
