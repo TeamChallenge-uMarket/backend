@@ -3,14 +3,15 @@ package com.example.securityumarket.filters;
 import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.RefreshRequest;
-import com.example.securityumarket.services.JwtRefreshService;
 import com.example.securityumarket.services.LoginService;
 import com.example.securityumarket.services.JwtService;
+import com.example.securityumarket.services.TokenRefreshService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,17 +24,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
+@AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    public JwtAuthenticationFilter(UserDetailsService userDetailsService, JwtService jwtService, AppUserDAO appUserDAO) {
-        this.userDetailsService = userDetailsService;
-        this.jwtService = jwtService;
-        this.appUserDAO = appUserDAO;
-    }
 
-    private UserDetailsService userDetailsService;
-    private JwtService jwtService;
-    private AppUserDAO appUserDAO;
-    private JwtRefreshService loginService;
+    private final UserDetailsService userDetailsService;
+    private final JwtService jwtService;
+    private final AppUserDAO appUserDAO;
+    private final TokenRefreshService tokenRefreshService;
 
     @Override
     protected void doFilterInternal(
@@ -66,31 +63,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
-                } else {
-
-                    AuthenticationResponse refreshedTokens = loginService.refresh(jwt);
+                } else if (jwtService.isTokenExpired(jwt)) {
+                    AuthenticationResponse refreshedTokens = tokenRefreshService.refreshTokens(jwt);
 
                     String newAccessToken = refreshedTokens.getToken();
 
                     if (newAccessToken != null) {
-                        // Оновлюємо токен у заголовку запиту
+                        // Update the access token in the response header
                         response.setHeader("Authorization", "Bearer " + newAccessToken);
-
-                        // Продовжуємо обробку запиту
-                        filterChain.doFilter(request, response);
-                    } else {
-                        // Якщо оновлення токенів не вдалось, повертаємо помилку або іншу відповідь
-                        response.setHeader("Error", "Token refresh failed");
-                        return;
                     }
                 }
             }
-        } catch (IOException | ServletException | UsernameNotFoundException e) {
+        } catch (IOException | ServletException e) {
             throw new RuntimeException(e);
-        } catch (ExpiredJwtException e) {
-            response.setHeader("Error", "Token is expired");
         }
         filterChain.doFilter(request, response);
     }
 }
-

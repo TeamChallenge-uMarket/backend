@@ -1,7 +1,6 @@
 package com.example.securityumarket.services;
 
 import com.example.securityumarket.dao.AppUserDAO;
-import com.example.securityumarket.models.RefreshRequest;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.AppUser;
@@ -14,9 +13,10 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class LoginService {
-    private AppUserDAO appUserDAO;
-    private JwtService jwtService;
-    private AuthenticationManager authenticationManager;
+
+    private final AppUserDAO appUserDAO;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
         AppUser appUser = authenticate(authenticationRequest);
@@ -38,7 +38,7 @@ public class LoginService {
                         authenticationRequest.getPassword()
                 )
         );
-        return appUserDAO.findAppUserByEmail(authenticationRequest.getEmail()).orElseThrow(() -> new UsernameNotFoundException(
-                "no " + "such user and no authenticate"));
+        return appUserDAO.findAppUserByEmail(authenticationRequest.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

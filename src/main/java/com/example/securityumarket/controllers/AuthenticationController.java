@@ -3,9 +3,9 @@ package com.example.securityumarket.controllers;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.RegisterRequest;
-import com.example.securityumarket.services.JwtRefreshService;
 import com.example.securityumarket.services.LoginService;
 import com.example.securityumarket.services.RegistrationService;
+import com.example.securityumarket.services.TokenRefreshService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class AuthenticationController {
 
     private RegistrationService registrationService;
     private LoginService loginService;
-    private JwtRefreshService jwtRefreshService;
+    private TokenRefreshService tokenRefreshService;
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
@@ -34,7 +34,7 @@ public class AuthenticationController {
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refresh(@RequestBody Map<String, String> refreshRequest) {
-        return ResponseEntity.ok(jwtRefreshService.refresh(refreshRequest.get("refreshToken")));
+        return ResponseEntity.ok(tokenRefreshService.refreshTokens(refreshRequest.get("refreshToken")));
     }
 
 }
