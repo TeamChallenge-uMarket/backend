@@ -41,23 +41,4 @@ public class LoginService {
         return appUserDAO.findAppUserByEmail(authenticationRequest.getEmail()).orElseThrow(() -> new UsernameNotFoundException(
                 "no " + "such user and no authenticate"));
     }
-
-    public AuthenticationResponse refresh(String refreshToken) {
-        String username = jwtService.extractUsername(refreshToken);
-        AppUser appUser = appUserDAO
-                .findAppUserByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Not found by refresh token"));
-        String newAccessToken = null;
-        String newRefreshToken = null;
-        if (appUser.getRefreshToken().equals(refreshToken)) {
-            newAccessToken = jwtService.generateToken(appUser);
-            newRefreshToken = jwtService.generateRefreshToken(appUser);
-            appUser.setRefreshToken(newRefreshToken);
-            appUserDAO.save(appUser);
-        }
-        return AuthenticationResponse.builder()
-                .token(newAccessToken)
-                .refreshToken(newRefreshToken)
-                .build();
-    }
 }
