@@ -37,7 +37,7 @@ public class MailService {
     JavaMailSender javaMailSender;
 
     public ResponseEntity<String> sendCode(SenderCodeRequest senderCodeRequest) {
-        if (!appUserDAO.existsAppUserByEmail(senderCodeRequest.getEmail())) {
+        if (appUserDAO.findAppUserByEmail(senderCodeRequest.getEmail()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The email address you entered is not associated with any account.\n" +
                     "Please make sure you've entered the correct email address or sign up for a new account.\n");
         }

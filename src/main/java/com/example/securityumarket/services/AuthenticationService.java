@@ -4,9 +4,7 @@ import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.*;
 import com.example.securityumarket.models.entities.AppUser;
 import com.example.securityumarket.models.entities.Role;
-import io.micrometer.common.util.StringUtils;
 import lombok.AllArgsConstructor;
-import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static org.apache.logging.log4j.util.Strings.isBlank;
 
 
 @Service
@@ -25,25 +25,35 @@ public class AuthenticationService {
     private AuthenticationManager authenticationManager;
 
     private ResponseEntity<String> validateRegisterRequest(RegisterRequest registerRequest) {
-        if (StringUtils.isBlank(registerRequest.getName())) {
+        if (isBlank(registerRequest.getName())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User name is required");
         }
 
-        if (StringUtils.isBlank(registerRequest.getEmail()) || !registerRequest.getEmail().matches("^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$")) {
+        if (isBlank(registerRequest.getEmail()) || !registerRequest.getEmail().matches("^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email");
         }
 
-        if (StringUtils.isBlank(registerRequest.getPassword()) ||
+        if (appUserDAO.findAppUserByEmail(registerRequest.getEmail()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User with this email already exists");
+        }
+
+        if (isBlank(registerRequest.getPassword()) ||
                 !registerRequest.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Password must be at least 8 characters long and contain at least one letter and one digit");
         }
 
+
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
         }
-        if (registerRequest.getPhone()!=null && !registerRequest.getPhone().matches("(?=.*\\+[0-9]{3}\\s?[0-9]{2}\\s?[0-9]{3}\\s?[0-9]{4,5}$)")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid phone number");
+        if (!isBlank(registerRequest.getPhone())) {
+            if (!registerRequest.getPhone().matches("((\\+38)?\\(?\\d{3}\\)?[\\s.-]?(\\d{7}|\\d{3}[\\s.-]\\d{2}[\\s.-]\\d{2}|\\d{3}-\\d{4}))")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid phone number");
+            }
+        }
+        if (appUserDAO.findAppUserByPhone(normalizePhoneNumber(registerRequest.getPhone())).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User with this phone already exists");
         }
         return null; // Всі поля валідні
     }
@@ -54,11 +64,12 @@ public class AuthenticationService {
         if (validationResponse != null) {
             return validationResponse;
         }
+
         AppUser appUser = AppUser.builder()
                 .name(registerRequest.getName())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .phone(registerRequest.getPhone())
+                .phone(normalizePhoneNumber(registerRequest.getPhone()))
                 .country(registerRequest.getAddress().getCountry())
                 .city(registerRequest.getAddress().getCity())
                 .role(Role.USER)
@@ -77,21 +88,24 @@ public class AuthenticationService {
         return ResponseEntity.ok("AppUser is registered");
     }
 
+    public String normalizePhoneNumber(String inputPhoneNumber) {
+        // Видаляємо всі нецифрові символи, крім дужок
+        String digitsAndParentheses = inputPhoneNumber.replaceAll("[^\\d()]", "");
 
-//    private Optional<String> validation(RegisterRequest registerRequest) {
-//        if (registerRequest.getName().isBlank()) {
-//            return Optional.of("Name is required");
-//        }
-//        if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
-//            return Optional.of("Password is not correct");
-//        }
-//        if (!registerRequest.getPhone().isBlank()) {
-//            if (appUserDAO.existsByPhone(registerRequest.getPhone())) {
-//                return Optional.of("Phone number is already registered");
-//            }
-//        }
-//        return Optional.empty();
-//
+        // Видаляємо всі дужки зі строки
+        String digitsOnly = digitsAndParentheses.replaceAll("[()]", "");
+
+        // Додаємо префікс "+38" (якщо його ще немає)
+        String normalizedNumber;
+        if (digitsOnly.startsWith("38")) {
+            normalizedNumber = "+" + digitsOnly;
+        } else {
+            normalizedNumber = "+38" + digitsOnly;
+        }
+
+        return normalizedNumber;
+    }
+
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
         AppUser appUser = authenticate(authenticationRequest);
 

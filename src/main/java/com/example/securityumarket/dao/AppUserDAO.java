@@ -7,6 +7,5 @@
 
     public interface AppUserDAO extends JpaRepository<AppUser, Long> {
         Optional<AppUser> findAppUserByEmail(String email);
-        boolean existsAppUserByPhone(String phone);
-        boolean existsAppUserByEmail(String email);
+        Optional<AppUser> findAppUserByPhone(String phone);
     }
