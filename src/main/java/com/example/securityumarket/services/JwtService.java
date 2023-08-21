@@ -16,11 +16,17 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+    private static final long ACCESS_TOKEN_EXPIRATION = 15 * 60 * 1000; // 15 minutes
 
+    private static final long REFRESH_TOKEN_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
     private static final String SECRETE_KEY = "78144c389e7d7330c70e8150c9749a6005758037340a667a5c7963249e817112";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    private Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
@@ -35,7 +41,7 @@ public class JwtService {
                 .setClaims(extraClaim)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*15))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -49,7 +55,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*60*24))
+                .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -68,12 +74,8 @@ public class JwtService {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
     private Claims extractAllClaims(String token) {
-       return Jwts
+        return Jwts
                 .parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()

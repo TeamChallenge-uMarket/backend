@@ -28,6 +28,6 @@ public class ResetPasswordController {
 
     @PostMapping("/reset")
     public ResponseEntity<String> resetPassword(@RequestBody PasswordRequest passwordRequest) {
-        return mailService.reset(passwordRequest);
+        return mailService.resetPassword(passwordRequest);
     }
 }

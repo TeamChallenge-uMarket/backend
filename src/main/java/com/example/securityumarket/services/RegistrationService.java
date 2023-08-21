@@ -2,16 +2,12 @@ package com.example.securityumarket.services;
 
 import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.*;
-import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.AppUser;
 import com.example.securityumarket.models.entities.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +17,9 @@ import static org.apache.logging.log4j.util.Strings.isBlank;
 @Service
 @AllArgsConstructor
 public class RegistrationService {
-    private PasswordEncoder passwordEncoder;
-    private AppUserDAO appUserDAO;
-    private JwtService jwtService;
-
+    private final PasswordEncoder passwordEncoder;
+    private final AppUserDAO appUserDAO;
+    private final JwtService jwtService;
 
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
         ResponseEntity<String> validationResponse = validateRegisterRequest(registerRequest);
@@ -32,20 +27,10 @@ public class RegistrationService {
             return validationResponse;
         }
 
-        AppUser appUser = AppUser.builder()
-                .name(registerRequest.getName())
-                .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .phone(normalizePhoneNumber(registerRequest.getPhone()))
-                .country(registerRequest.getAddress().getCountry())
-                .city(registerRequest.getAddress().getCity())
-                .role(Role.USER)
-                .build();
+        AppUser appUser = buildAppUserFromRequest(registerRequest);
         String jwtToken = jwtService.generateToken(appUser);
-
         String refreshToken = jwtService.generateRefreshToken(appUser);
         appUser.setRefreshToken(refreshToken);
-
         appUserDAO.save(appUser);
 
         AuthenticationResponse.builder()
@@ -54,15 +39,23 @@ public class RegistrationService {
                 .build();
         return ResponseEntity.ok("AppUser is registered");
     }
+    private AppUser buildAppUserFromRequest(RegisterRequest registerRequest) {
+        return AppUser.builder()
+                .name(registerRequest.getName())
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .phone(normalizePhoneNumber(registerRequest.getPhone()))
+                .country(registerRequest.getAddress().getCountry())
+                .city(registerRequest.getAddress().getCity())
+                .role(Role.USER)
+                .build();
+    }
 
     public String normalizePhoneNumber(String inputPhoneNumber) {
-        // Видаляємо всі нецифрові символи, крім дужок
         String digitsAndParentheses = inputPhoneNumber.replaceAll("[^\\d()]", "");
 
-        // Видаляємо всі дужки зі строки
         String digitsOnly = digitsAndParentheses.replaceAll("[()]", "");
 
-        // Додаємо префікс "+38" (якщо його ще немає)
         String normalizedNumber;
         if (digitsOnly.startsWith("38")) {
             normalizedNumber = "+" + digitsOnly;

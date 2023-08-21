@@ -32,13 +32,11 @@ public class SecurityConfiguration {
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
-//                .formLogin(httpSecurityFormLoginConfigurer ->
-//                        httpSecurityFormLoginConfigurer.loginPage("/login").defaultSuccessUrl("/").permitAll())
-                .logout(logoutConfigurer ->
-                        logoutConfigurer.permitAll().logoutSuccessUrl("/"))
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .logout(logoutConfigurer ->
+                        logoutConfigurer.permitAll().logoutSuccessUrl("/api/v1/auth/login"))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
