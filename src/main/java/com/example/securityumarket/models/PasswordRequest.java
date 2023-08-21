@@ -1,4 +1,4 @@
-package com.example.securityumarket.models.resetPassword;
+package com.example.securityumarket.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

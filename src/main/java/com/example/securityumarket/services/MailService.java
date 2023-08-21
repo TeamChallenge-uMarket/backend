@@ -1,9 +1,7 @@
 package com.example.securityumarket.services;
 
 import com.example.securityumarket.dao.AppUserDAO;
-import com.example.securityumarket.models.resetPassword.ConfiderCodeRequest;
-import com.example.securityumarket.models.resetPassword.PasswordRequest;
-import com.example.securityumarket.models.resetPassword.SenderCodeRequest;
+import com.example.securityumarket.models.PasswordRequest;
 import com.example.securityumarket.models.entities.AppUser;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -37,14 +35,14 @@ public class MailService {
 
     JavaMailSender javaMailSender;
 
-    public ResponseEntity<String> sendCode(SenderCodeRequest senderCodeRequest) {
-        if (appUserDAO.findAppUserByEmail(senderCodeRequest.getEmail()).isEmpty()) {
+    public ResponseEntity<String> sendCode(String email) {
+        if (appUserDAO.findAppUserByEmail(email).isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("""
                     The email address you entered is not associated with any account.
                     Please make sure you've entered the correct email address or sign up for a new account.
                     """);
         }
-        appUser =  appUserDAO.findAppUserByEmail(senderCodeRequest.getEmail()).orElseThrow(() -> new UsernameNotFoundException(
+        appUser =  appUserDAO.findAppUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(
                 "no " + "such user"));
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -54,7 +52,7 @@ public class MailService {
             String senderEmail = "authenticator.umarket@gmail.com";
             String senderName = "uMarket";
             mimeMessage.setFrom(new InternetAddress(senderEmail,senderName));
-            helper.setTo(senderCodeRequest.getEmail());
+            helper.setTo(email);
             helper.setSubject("Password Reset Verification");
             helper.setText("Your verification code: " + code, false);
         } catch (MessagingException | UnsupportedEncodingException e) {
@@ -73,8 +71,8 @@ public class MailService {
         code = String.valueOf(randomNumber);
     }
 
-    public ResponseEntity<String> confirmResetCode(ConfiderCodeRequest confiderCodeRequest) {
-        if (code.equals(confiderCodeRequest.getCodeConfirm())) {
+    public ResponseEntity<String> confirmResetCode(String codeConfirm) {
+        if (code.equals(codeConfirm)) {
             return ResponseEntity.ok("Code confirmed successfully");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid code");

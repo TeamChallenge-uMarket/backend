@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         try {
-                String authHeader = request.getHeader("Authorization");
+            String authHeader = request.getHeader("Authorization");
             String jwt;
             String userEmail;
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -68,10 +68,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 } else {
                     // Оновлюємо токени
-                    RefreshRequest refreshRequest = new RefreshRequest();
-                    refreshRequest.setRefreshToken(jwt); // Оновлення токену за базовим JWT
+//                    RefreshRequest refreshRequest = new RefreshRequest();
+//                    refreshRequest.setRefreshToken(jwt); // Оновлення токену за базовим JWT
 
-                    AuthenticationResponse refreshedTokens = loginService.refresh(refreshRequest);
+                    AuthenticationResponse refreshedTokens = loginService.refresh(jwt);
 
                     String newAccessToken = refreshedTokens.getToken();
 
