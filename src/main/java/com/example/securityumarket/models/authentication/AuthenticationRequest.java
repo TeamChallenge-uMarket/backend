@@ -1,4 +1,4 @@
-package com.example.securityumarket.models;
+package com.example.securityumarket.models.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

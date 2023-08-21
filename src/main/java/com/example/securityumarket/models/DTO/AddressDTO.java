@@ -1,7 +1,6 @@
 package com.example.securityumarket.models.DTO;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
 import lombok.Data;
 
 @Data

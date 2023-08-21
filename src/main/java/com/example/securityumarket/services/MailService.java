@@ -38,8 +38,10 @@ public class MailService {
 
     public ResponseEntity<String> sendCode(SenderCodeRequest senderCodeRequest) {
         if (appUserDAO.findAppUserByEmail(senderCodeRequest.getEmail()).isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The email address you entered is not associated with any account.\n" +
-                    "Please make sure you've entered the correct email address or sign up for a new account.\n");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("""
+                    The email address you entered is not associated with any account.
+                    Please make sure you've entered the correct email address or sign up for a new account.
+                    """);
         }
         appUser =  appUserDAO.findAppUserByEmail(senderCodeRequest.getEmail()).orElseThrow(() -> new UsernameNotFoundException(
                 "no " + "such user"));
@@ -56,8 +58,10 @@ public class MailService {
             e.printStackTrace();
         }
         javaMailSender.send(mimeMessage);
-        return ResponseEntity.ok("A verification code for password reset has been sent to your registered email address.\n" +
-                        "Please check your inbox and use the provided code to reset your password.\n");
+        return ResponseEntity.ok("""
+                A verification code for password reset has been sent to your registered email address.
+                Please check your inbox and use the provided code to reset your password.
+                """);
     }
 
     public void generateRandomCode() {
@@ -76,6 +80,10 @@ public class MailService {
 
 
     public ResponseEntity<String> reset(PasswordRequest passwordRequest) {
+        if (passwordRequest.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Password must be at least 8 characters long and contain at least one letter and one digit");
+        }
         if (!passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
         } else {

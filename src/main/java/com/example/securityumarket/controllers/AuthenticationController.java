@@ -1,16 +1,16 @@
 package com.example.securityumarket.controllers;
 
-import com.example.securityumarket.models.*;
+import com.example.securityumarket.models.authentication.AuthenticationRequest;
+import com.example.securityumarket.models.authentication.AuthenticationResponse;
+import com.example.securityumarket.models.RefreshRequest;
+import com.example.securityumarket.models.RegisterRequest;
 import com.example.securityumarket.models.resetPassword.ConfiderCodeRequest;
 import com.example.securityumarket.models.resetPassword.PasswordRequest;
 import com.example.securityumarket.models.resetPassword.SenderCodeRequest;
 import com.example.securityumarket.services.AuthenticationService;
 import com.example.securityumarket.services.MailService;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

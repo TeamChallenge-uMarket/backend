@@ -1,7 +1,7 @@
 package com.example.securityumarket.filters;
 
 import com.example.securityumarket.dao.AppUserDAO;
-import com.example.securityumarket.models.AuthenticationResponse;
+import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.RefreshRequest;
 import com.example.securityumarket.services.AuthenticationService;
 import com.example.securityumarket.services.JwtService;
@@ -10,8 +10,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;

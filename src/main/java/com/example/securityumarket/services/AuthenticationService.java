@@ -2,6 +2,8 @@ package com.example.securityumarket.services;
 
 import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.*;
+import com.example.securityumarket.models.authentication.AuthenticationRequest;
+import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.AppUser;
 import com.example.securityumarket.models.entities.Role;
 import lombok.AllArgsConstructor;
