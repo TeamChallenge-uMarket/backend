@@ -6,7 +6,6 @@ import com.example.securityumarket.models.entities.AppUser;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,8 +17,6 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Service
 public class MailService {
@@ -28,8 +25,8 @@ public class MailService {
     private final AppUserDAO appUserDAO;
     private final JavaMailSender javaMailSender;
 
-    private String verificationCode;
-    private String userEmail;
+    protected String verificationCode;
+    protected String userEmail;
 
 
     public MailService(PasswordEncoder passwordEncoder, AppUserDAO appUserDAO, JavaMailSender javaMailSender) {

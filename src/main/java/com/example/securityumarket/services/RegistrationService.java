@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
 
@@ -20,6 +22,7 @@ public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final AppUserDAO appUserDAO;
     private final JwtService jwtService;
+    private final MailService mailService;
 
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
         ResponseEntity<String> validationResponse = validateRegisterRequest(registerRequest);
@@ -33,11 +36,23 @@ public class RegistrationService {
         appUser.setRefreshToken(refreshToken);
         appUserDAO.save(appUser);
 
+        mailService.sendCode(appUser.getEmail());
+
         AuthenticationResponse.builder()
                 .token(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
-        return ResponseEntity.ok("AppUser is registered");
+        return ResponseEntity.ok("Verification code sent successfully");
+    }
+
+    public ResponseEntity<String> confirmRegistration(String codeConfirm) {
+        if (mailService.verificationCode.equals(codeConfirm)) {
+            return ResponseEntity.ok("Code confirmed successfully. AppUser is registered");
+        } else {
+            Optional<AppUser> appUserByEmail = appUserDAO.findAppUserByEmail(mailService.userEmail);
+            appUserDAO.deleteById(appUserByEmail.get().getId());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid code");
+        }
     }
     private AppUser buildAppUserFromRequest(RegisterRequest registerRequest) {
         return AppUser.builder()
@@ -50,6 +65,8 @@ public class RegistrationService {
                 .role(Role.USER)
                 .build();
     }
+
+
 
     public String normalizePhoneNumber(String inputPhoneNumber) {
         String digitsAndParentheses = inputPhoneNumber.replaceAll("[^\\d()]", "");
