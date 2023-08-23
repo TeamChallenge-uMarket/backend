@@ -21,12 +21,16 @@ import java.util.Random;
 @Service
 public class MailService {
 
+    private static final long CODE_EXPIRATION_TIME_MS = 5 * 60 * 1000; // 5 хвилин у мілісекундах
+
     private final PasswordEncoder passwordEncoder;
     private final AppUserDAO appUserDAO;
     private final JavaMailSender javaMailSender;
 
     protected String verificationCode;
     protected String userEmail;
+    protected long codeCreationTime;
+
 
 
     public MailService(PasswordEncoder passwordEncoder, AppUserDAO appUserDAO, JavaMailSender javaMailSender) {
@@ -43,13 +47,21 @@ public class MailService {
         }
         userEmail = email;
         verificationCode = generateRandomCode();
+        codeCreationTime = System.currentTimeMillis();
         sendVerificationEmail(verificationCode);
 
         return ResponseEntity.ok("Verification code sent successfully");
     }
 
     public ResponseEntity<String> confirmResetCode(String codeConfirm) {
+        long currentTime = System.currentTimeMillis();
+        long elapsedTime = currentTime - codeCreationTime;
+        if (elapsedTime > CODE_EXPIRATION_TIME_MS) {
+            verificationCode = null; // код застарів, перевстановлюємо його на null
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Code has expired");
+        }
         if (verificationCode.equals(codeConfirm)) { // Порівнюємо збережений код з введеним користувачем
+            verificationCode = null;
             return ResponseEntity.ok("Code confirmed successfully");
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid code");
