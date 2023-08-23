@@ -1,7 +1,6 @@
 package com.example.securityumarket.services;
 
 import com.example.securityumarket.dao.AppUserDAO;
-import com.example.securityumarket.models.PasswordRequest;
 import com.example.securityumarket.models.entities.AppUser;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -10,8 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -21,9 +18,8 @@ import java.util.Random;
 @Service
 public class MailService {
 
-    private static final long CODE_EXPIRATION_TIME_MS = 5 * 60 * 1000; // 5 хвилин у мілісекундах
+    protected static final long CODE_EXPIRATION_TIME_MS = 5 * 60 * 1000; // 5 хвилин у мілісекундах
 
-    private final PasswordEncoder passwordEncoder;
     private final AppUserDAO appUserDAO;
     private final JavaMailSender javaMailSender;
 
@@ -31,10 +27,7 @@ public class MailService {
     protected String userEmail;
     protected long codeCreationTime;
 
-
-
-    public MailService(PasswordEncoder passwordEncoder, AppUserDAO appUserDAO, JavaMailSender javaMailSender) {
-        this.passwordEncoder = passwordEncoder;
+    public MailService(AppUserDAO appUserDAO, JavaMailSender javaMailSender) {
         this.appUserDAO = appUserDAO;
         this.javaMailSender = javaMailSender;
     }
@@ -68,27 +61,7 @@ public class MailService {
         }
     }
 
-    public ResponseEntity<String> resetPassword(PasswordRequest passwordRequest) {
-        if (!isValidPassword(passwordRequest.getPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Password must be at least 8 characters long and contain at least one letter and one digit");
-        }
-
-        if (!passwordRequest.getPassword().equals(passwordRequest.getConfirmPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
-        }
-
-        Optional<AppUser> optionalAppUser = appUserDAO.findAppUserByEmail(userEmail);
-        AppUser appUser = optionalAppUser.orElseThrow(() -> new UsernameNotFoundException("No user with the given email"));
-
-        appUser.setPassword(passwordEncoder.encode(passwordRequest.getPassword()));
-        appUserDAO.save(appUser);
-
-
-        return ResponseEntity.ok("Password reset successfully");
-    }
-
-    private void sendVerificationEmail(String code) {
+    public void sendVerificationEmail(String code) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
 
@@ -110,9 +83,5 @@ public class MailService {
         Random random = new Random();
         int randomNumber = 100000 + random.nextInt(900000);
         return String.valueOf(randomNumber);
-    }
-
-    private boolean isValidPassword(String password) {
-        return password.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
     }
 }

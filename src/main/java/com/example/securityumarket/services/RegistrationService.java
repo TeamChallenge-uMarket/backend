@@ -5,11 +5,14 @@ import com.example.securityumarket.models.*;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.AppUser;
 import com.example.securityumarket.models.entities.Role;
-import lombok.AllArgsConstructor;
+import com.example.securityumarket.services.JwtService;
+import com.example.securityumarket.services.MailService;
+import com.example.securityumarket.services.UserCleanupService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -17,13 +20,22 @@ import static org.apache.logging.log4j.util.Strings.isBlank;
 
 
 @Service
-@AllArgsConstructor
 public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final AppUserDAO appUserDAO;
     private final JwtService jwtService;
     private final MailService mailService;
+    private final UserCleanupService cleanupService;
 
+    public RegistrationService(PasswordEncoder passwordEncoder, AppUserDAO appUserDAO, JwtService jwtService, MailService mailService, UserCleanupService cleanupService) {
+        this.passwordEncoder = passwordEncoder;
+        this.appUserDAO = appUserDAO;
+        this.jwtService = jwtService;
+        this.mailService = mailService;
+        this.cleanupService = cleanupService;
+    }
+
+    @Transactional
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
         ResponseEntity<String> validationResponse = validateRegisterRequest(registerRequest);
         if (validationResponse != null) {
@@ -38,19 +50,20 @@ public class RegistrationService {
 
         mailService.sendCode(appUser.getEmail());
 
-        AuthenticationResponse.builder()
-                .token(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
+        cleanupService.scheduleCleanupUnconfirmedUsers();
         return ResponseEntity.ok("Verification code sent successfully");
     }
 
     public ResponseEntity<String> confirmRegistration(String codeConfirm) {
         if (mailService.verificationCode.equals(codeConfirm)) {
+            mailService.verificationCode = null; // код використано, перевстановлюємо його на null
+            Optional<AppUser> appUserByEmail = appUserDAO.findAppUserByEmail(mailService.userEmail);
+            appUserByEmail.get().setConfirmEmail(true);
+            appUserDAO.save(appUserByEmail.get());
             return ResponseEntity.ok("Code confirmed successfully. AppUser is registered");
         } else {
             Optional<AppUser> appUserByEmail = appUserDAO.findAppUserByEmail(mailService.userEmail);
-            appUserDAO.deleteById(appUserByEmail.get().getId());
+            appUserByEmail.ifPresent(appUser -> appUserDAO.deleteById(appUser.getId()));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid code");
         }
     }
@@ -117,6 +130,4 @@ public class RegistrationService {
         }
         return null; // Всі поля валідні
     }
-
-
 }

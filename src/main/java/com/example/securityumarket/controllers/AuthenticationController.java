@@ -4,7 +4,6 @@ import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.RegisterRequest;
 import com.example.securityumarket.services.LoginService;
-import com.example.securityumarket.services.MailService;
 import com.example.securityumarket.services.RegistrationService;
 import com.example.securityumarket.services.TokenRefreshService;
 import lombok.AllArgsConstructor;
