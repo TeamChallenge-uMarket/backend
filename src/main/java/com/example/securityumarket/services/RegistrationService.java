@@ -52,13 +52,13 @@ public class RegistrationService {
         long currentTime = System.currentTimeMillis();
         long elapsedTime = currentTime - mailService.getCodeCreationTime();
         if (elapsedTime > CODE_EXPIRATION_TIME_MS) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Code has expired");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Code has expired");
         }
         if (mailService.getVerificationCode().equals(codeConfirm)) {
             appUserDAO.save(appUser);
             return ResponseEntity.ok("Code confirmed successfully");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid code");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid code");
         }
     }
 
@@ -94,11 +94,11 @@ public class RegistrationService {
 
     private ResponseEntity<String> validateRegisterRequest(RegisterRequest registerRequest) {
         if (isBlank(registerRequest.getName())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User name is required");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("User name is required");
         }
 
         if (isBlank(registerRequest.getEmail()) || !registerRequest.getEmail().matches("^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid email");
         }
 
         if (appUserDAO.findAppUserByEmail(registerRequest.getEmail()).isPresent()) {
@@ -107,17 +107,17 @@ public class RegistrationService {
 
         if (isBlank(registerRequest.getPassword()) ||
                 !registerRequest.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
                     .body("Password must be at least 8 characters long and contain at least one letter and one digit");
         }
 
 
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Passwords do not match");
         }
         if (!isBlank(registerRequest.getPhone())) {
             if (!registerRequest.getPhone().matches("((\\+38)?\\(?\\d{3}\\)?[\\s.-]?(\\d{7}|\\d{3}[\\s.-]\\d{2}[\\s.-]\\d{2}|\\d{3}-\\d{4}))")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid phone number");
+                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid phone number");
             }
         }
         if (appUserDAO.findAppUserByPhone(normalizePhoneNumber(registerRequest.getPhone())).isPresent()) {

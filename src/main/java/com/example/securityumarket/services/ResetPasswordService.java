@@ -42,12 +42,12 @@ public class ResetPasswordService {
         long currentTime = System.currentTimeMillis();
         long elapsedTime = currentTime - mailService.getCodeCreationTime();
         if (elapsedTime > CODE_EXPIRATION_TIME_MS) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Code has expired");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Code has expired");
         }
         if (mailService.getVerificationCode().equals(codeConfirm)) {
             return ResponseEntity.ok("Code confirmed successfully");
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid code");
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid code");
         }
     }
 

@@ -3,9 +3,9 @@ package com.example.securityumarket.services;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -43,9 +43,9 @@ public class MailService {
         verificationCode = generateRandomCode();
         codeCreationTime = System.currentTimeMillis();
         sendVerificationEmail(verificationCode, email);
-        ResponseEntity.ok("Verification code sent successfully");
     }
 
+    @Async
     public void sendVerificationEmail(String code, String userEmail) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
