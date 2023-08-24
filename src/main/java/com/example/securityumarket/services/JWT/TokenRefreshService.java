@@ -1,9 +1,10 @@
-package com.example.securityumarket.services;
+package com.example.securityumarket.services.JWT;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.AppUser;
+import com.example.securityumarket.services.JWT.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -18,14 +18,23 @@ import java.util.Random;
 @Service
 public class MailService {
 
-    protected static final long CODE_EXPIRATION_TIME_MS = 5 * 60 * 1000; // 5 хвилин у мілісекундах
+    private static final long CODE_EXPIRATION_TIME_MS = 5 * 60 * 1000; // 5 хвилин у мілісекундах
 
     private final AppUserDAO appUserDAO;
     private final JavaMailSender javaMailSender;
 
-    protected String verificationCode;
-    protected String userEmail;
-    protected long codeCreationTime;
+    private String verificationCode;
+    private String userEmail;
+    private long codeCreationTime;
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
 
     public MailService(AppUserDAO appUserDAO, JavaMailSender javaMailSender) {
         this.appUserDAO = appUserDAO;

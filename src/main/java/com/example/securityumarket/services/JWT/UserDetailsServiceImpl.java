@@ -1,4 +1,4 @@
-package com.example.securityumarket.services;
+package com.example.securityumarket.services.JWT;
 
 import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.entities.AppUser;

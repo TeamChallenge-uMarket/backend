@@ -36,7 +36,7 @@ public class ResetPasswordService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
         }
 
-        Optional<AppUser> optionalAppUser = appUserDAO.findAppUserByEmail(mailService.userEmail);
+        Optional<AppUser> optionalAppUser = appUserDAO.findAppUserByEmail(mailService.getUserEmail());
         AppUser appUser = optionalAppUser.orElseThrow(() -> new UsernameNotFoundException("No user with the given email"));
 
         appUser.setPassword(passwordEncoder.encode(passwordRequest.getPassword()));

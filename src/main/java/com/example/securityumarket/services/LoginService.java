@@ -4,6 +4,7 @@ import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.AppUser;
+import com.example.securityumarket.services.JWT.JwtService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

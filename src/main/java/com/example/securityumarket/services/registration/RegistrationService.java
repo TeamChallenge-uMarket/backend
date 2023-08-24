@@ -1,13 +1,11 @@
-package com.example.securityumarket.services;
+package com.example.securityumarket.services.registration;
 
 import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.*;
-import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.AppUser;
 import com.example.securityumarket.models.entities.Role;
-import com.example.securityumarket.services.JwtService;
+import com.example.securityumarket.services.JWT.JwtService;
 import com.example.securityumarket.services.MailService;
-import com.example.securityumarket.services.UserCleanupService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,18 +53,19 @@ public class RegistrationService {
     }
 
     public ResponseEntity<String> confirmRegistration(String codeConfirm) {
-        if (mailService.verificationCode.equals(codeConfirm)) {
-            mailService.verificationCode = null; // код використано, перевстановлюємо його на null
-            Optional<AppUser> appUserByEmail = appUserDAO.findAppUserByEmail(mailService.userEmail);
+        ResponseEntity<String> responseEntity = mailService.confirmResetCode(codeConfirm);
+        if (responseEntity.getStatusCode().equals(HttpStatus.OK)) {
+            Optional<AppUser> appUserByEmail = appUserDAO.findAppUserByEmail(mailService.getUserEmail());
             appUserByEmail.get().setConfirmEmail(true);
             appUserDAO.save(appUserByEmail.get());
             return ResponseEntity.ok("Code confirmed successfully. AppUser is registered");
         } else {
-            Optional<AppUser> appUserByEmail = appUserDAO.findAppUserByEmail(mailService.userEmail);
+            Optional<AppUser> appUserByEmail = appUserDAO.findAppUserByEmail(mailService.getUserEmail());
             appUserByEmail.ifPresent(appUser -> appUserDAO.deleteById(appUser.getId()));
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid code");
+            return responseEntity;
         }
     }
+
     private AppUser buildAppUserFromRequest(RegisterRequest registerRequest) {
         return AppUser.builder()
                 .name(registerRequest.getName())
@@ -78,7 +77,6 @@ public class RegistrationService {
                 .role(Role.USER)
                 .build();
     }
-
 
 
     public String normalizePhoneNumber(String inputPhoneNumber) {

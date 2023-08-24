@@ -1,4 +1,4 @@
-package com.example.securityumarket.services;
+package com.example.securityumarket.services.JWT;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
