@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.example.securityumarket.services.MailService.CODE_EXPIRATION_TIME_MS;
+
 @Service
 public class ResetPasswordService {
     
@@ -26,6 +28,29 @@ public class ResetPasswordService {
         this.mailService = mailService;
     }
 
+    public ResponseEntity<String> sendResetPasswordCode(String email) {
+        Optional<AppUser> optionalAppUser = appUserDAO.findAppUserByEmail(email);
+        if (optionalAppUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("The email address you entered is not associated with any account.");
+        }
+        mailService.sendCode(email);
+        return ResponseEntity.ok("Verification code sent successfully");
+    }
+
+    public ResponseEntity<String> confirmResetPasswordCode(String codeConfirm) {
+        long currentTime = System.currentTimeMillis();
+        long elapsedTime = currentTime - mailService.getCodeCreationTime();
+        if (elapsedTime > CODE_EXPIRATION_TIME_MS) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Code has expired");
+        }
+        if (mailService.getVerificationCode().equals(codeConfirm)) {
+            return ResponseEntity.ok("Code confirmed successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid code");
+        }
+    }
+
     public ResponseEntity<String> resetPassword(PasswordRequest passwordRequest) {
         if (!isValidPassword(passwordRequest.getPassword())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -36,7 +61,7 @@ public class ResetPasswordService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Passwords do not match");
         }
 
-        Optional<AppUser> optionalAppUser = appUserDAO.findAppUserByEmail(mailService.userEmail);
+        Optional<AppUser> optionalAppUser = appUserDAO.findAppUserByEmail(mailService.getUserEmail());
         AppUser appUser = optionalAppUser.orElseThrow(() -> new UsernameNotFoundException("No user with the given email"));
 
         appUser.setPassword(passwordEncoder.encode(passwordRequest.getPassword()));

@@ -28,8 +28,6 @@ public class AppUser implements UserDetails {
     private String phone;
     private String country;
     private String city;
-    private boolean confirmEmail;
-
     @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
     private String refreshToken;

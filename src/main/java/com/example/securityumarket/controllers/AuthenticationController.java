@@ -27,14 +27,14 @@ public class AuthenticationController {
         return registrationService.register(registerRequest);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest) {
-        return ResponseEntity.ok(loginService.login(authenticationRequest));
-    }
-
     @PostMapping("/register/confirm-code")
     public ResponseEntity<String> register(@RequestBody Map<String, String> requestConfirmCode) {
         return registrationService.confirmRegistration(requestConfirmCode.get("confirmCode"));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest) {
+        return ResponseEntity.ok(loginService.login(authenticationRequest));
     }
 
     @PostMapping("/refresh")

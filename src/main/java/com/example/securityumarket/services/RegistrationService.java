@@ -2,20 +2,16 @@ package com.example.securityumarket.services;
 
 import com.example.securityumarket.dao.AppUserDAO;
 import com.example.securityumarket.models.*;
-import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.AppUser;
 import com.example.securityumarket.models.entities.Role;
-import com.example.securityumarket.services.JwtService;
-import com.example.securityumarket.services.MailService;
-import com.example.securityumarket.services.UserCleanupService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
+import static com.example.securityumarket.services.MailService.CODE_EXPIRATION_TIME_MS;
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
 
@@ -25,14 +21,14 @@ public class RegistrationService {
     private final AppUserDAO appUserDAO;
     private final JwtService jwtService;
     private final MailService mailService;
-    private final UserCleanupService cleanupService;
 
-    public RegistrationService(PasswordEncoder passwordEncoder, AppUserDAO appUserDAO, JwtService jwtService, MailService mailService, UserCleanupService cleanupService) {
+    private AppUser appUser;
+
+    public RegistrationService(PasswordEncoder passwordEncoder, AppUserDAO appUserDAO, JwtService jwtService, MailService mailService) {
         this.passwordEncoder = passwordEncoder;
         this.appUserDAO = appUserDAO;
         this.jwtService = jwtService;
         this.mailService = mailService;
-        this.cleanupService = cleanupService;
     }
 
     @Transactional
@@ -42,31 +38,30 @@ public class RegistrationService {
             return validationResponse;
         }
 
-        AppUser appUser = buildAppUserFromRequest(registerRequest);
-        String jwtToken = jwtService.generateToken(appUser);
+        appUser = buildAppUserFromRequest(registerRequest);
+        jwtService.generateToken(appUser);
         String refreshToken = jwtService.generateRefreshToken(appUser);
         appUser.setRefreshToken(refreshToken);
-        appUserDAO.save(appUser);
 
         mailService.sendCode(appUser.getEmail());
 
-        cleanupService.scheduleCleanupUnconfirmedUsers();
         return ResponseEntity.ok("Verification code sent successfully");
     }
 
     public ResponseEntity<String> confirmRegistration(String codeConfirm) {
-        if (mailService.verificationCode.equals(codeConfirm)) {
-            mailService.verificationCode = null; // код використано, перевстановлюємо його на null
-            Optional<AppUser> appUserByEmail = appUserDAO.findAppUserByEmail(mailService.userEmail);
-            appUserByEmail.get().setConfirmEmail(true);
-            appUserDAO.save(appUserByEmail.get());
-            return ResponseEntity.ok("Code confirmed successfully. AppUser is registered");
+        long currentTime = System.currentTimeMillis();
+        long elapsedTime = currentTime - mailService.getCodeCreationTime();
+        if (elapsedTime > CODE_EXPIRATION_TIME_MS) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Code has expired");
+        }
+        if (mailService.getVerificationCode().equals(codeConfirm)) {
+            appUserDAO.save(appUser);
+            return ResponseEntity.ok("Code confirmed successfully");
         } else {
-            Optional<AppUser> appUserByEmail = appUserDAO.findAppUserByEmail(mailService.userEmail);
-            appUserByEmail.ifPresent(appUser -> appUserDAO.deleteById(appUser.getId()));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid code");
         }
     }
+
     private AppUser buildAppUserFromRequest(RegisterRequest registerRequest) {
         return AppUser.builder()
                 .name(registerRequest.getName())
@@ -81,7 +76,7 @@ public class RegistrationService {
 
 
 
-    public String normalizePhoneNumber(String inputPhoneNumber) {
+    private String normalizePhoneNumber(String inputPhoneNumber) {
         String digitsAndParentheses = inputPhoneNumber.replaceAll("[^\\d()]", "");
 
         String digitsOnly = digitsAndParentheses.replaceAll("[()]", "");
