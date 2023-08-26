@@ -12,9 +12,9 @@ services:
     depends_on:
       - db
     environment:
-      - DATASOURCE_URL=jdbc:postgresql://db:5432/umarket
-      - DATASOURCE_USERNAME=postgres
-      - DATASOURCE_PASSWORD=1111
+      - spring.datasource.url=jdbc:postgresql://db:5432/umarket
+      - spring.datasource.username=postgres
+      - spring.datasource.password=1111
     networks:
       - postgres
 
