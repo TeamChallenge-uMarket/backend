@@ -1,0 +1,39 @@
+version: '3.9'
+
+services:
+  app:
+    container_name: "uMarket"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: umarket-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    restart: on-failure
+    environment:
+#      need use env in future DO NOT FORGET
+#      in docker DB timeStamp is different, need to set it correct
+      - spring.datasource.url=jdbc:postgresql://db:5432/umarket
+      - spring.datasource.username=postgres
+      - spring.datasource.password=1111
+    networks:
+      - postgres
+
+  db:
+    container_name: umarket_db
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1111
+      - POSTGRES_DB=umarket
+    ports:
+      - "5432:5432"
+    restart: on-failure
+    networks:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
