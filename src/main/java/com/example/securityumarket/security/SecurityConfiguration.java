@@ -29,7 +29,6 @@ public class SecurityConfiguration {
                         matcherRegistry
                                 .requestMatchers("/api/v1/auth/**")
                                 .permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->

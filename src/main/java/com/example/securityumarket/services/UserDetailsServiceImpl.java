@@ -1,7 +1,7 @@
 package com.example.securityumarket.services;
 
-import com.example.securityumarket.dao.AppUserDAO;
-import com.example.securityumarket.models.entities.AppUser;
+import com.example.securityumarket.dao.UsersDAO;
+import com.example.securityumarket.models.entities.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,18 +14,18 @@ import java.util.ArrayList;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final AppUserDAO appUserDAO;
+    private final UsersDAO usersDAO;
 
     @Autowired
-    public UserDetailsServiceImpl(AppUserDAO appUserDAO) {
-        this.appUserDAO = appUserDAO;
+    public UserDetailsServiceImpl(UsersDAO usersDAO) {
+        this.usersDAO = usersDAO;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = appUserDAO.findAppUserByEmail(username)
+        Users users = usersDAO.findAppUserByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
 
-        return new User(appUser.getEmail(), appUser.getPassword(), new ArrayList<>());
+        return new User(users.getEmail(), users.getPassword(), new ArrayList<>());
     }
 }

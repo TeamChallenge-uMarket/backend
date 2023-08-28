@@ -1,6 +1,6 @@
 package com.example.securityumarket.configs;
 
-import com.example.securityumarket.dao.AppUserDAO;
+import com.example.securityumarket.dao.UsersDAO;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,11 +17,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AllArgsConstructor
 public class ApplicationConfig {
 
-    private AppUserDAO appUserDAO;
+    private UsersDAO usersDAO;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> appUserDAO.findAppUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException(
+        return username -> usersDAO.findAppUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException(
                 "no " + "such user"));
     }
 

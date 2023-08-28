@@ -13,7 +13,6 @@ services:
       - db
     restart: on-failure
     environment:
-#      in docker DB timeStamp is different, need to set it correct
       - DATASOURCE_URL=jdbc:postgresql://db:5432/umarket
       - DATASOURCE_USERNAME=postgres
       - DATASOURCE_PASSWORD=1111

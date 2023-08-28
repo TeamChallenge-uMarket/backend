@@ -1,8 +1,8 @@
 package com.example.securityumarket.services;
 
-import com.example.securityumarket.dao.AppUserDAO;
+import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.models.*;
-import com.example.securityumarket.models.entities.AppUser;
+import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.models.entities.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +18,15 @@ import static org.apache.logging.log4j.util.Strings.isBlank;
 @Service
 public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
-    private final AppUserDAO appUserDAO;
+    private final UsersDAO usersDAO;
     private final JwtService jwtService;
     private final MailService mailService;
 
-    private AppUser appUser;
+    private Users users;
 
-    public RegistrationService(PasswordEncoder passwordEncoder, AppUserDAO appUserDAO, JwtService jwtService, MailService mailService) {
+    public RegistrationService(PasswordEncoder passwordEncoder, UsersDAO usersDAO, JwtService jwtService, MailService mailService) {
         this.passwordEncoder = passwordEncoder;
-        this.appUserDAO = appUserDAO;
+        this.usersDAO = usersDAO;
         this.jwtService = jwtService;
         this.mailService = mailService;
     }
@@ -38,12 +38,12 @@ public class RegistrationService {
             return validationResponse;
         }
 
-        appUser = buildAppUserFromRequest(registerRequest);
-        jwtService.generateToken(appUser);
-        String refreshToken = jwtService.generateRefreshToken(appUser);
-        appUser.setRefreshToken(refreshToken);
+        users = buildUserFromRequest(registerRequest);
+        jwtService.generateToken(users);
+        String refreshToken = jwtService.generateRefreshToken(users);
+        users.setRefreshToken(refreshToken);
 
-        mailService.sendCode(appUser.getEmail());
+        mailService.sendCode(users.getEmail());
 
         return ResponseEntity.ok("Verification code sent successfully");
     }
@@ -55,22 +55,22 @@ public class RegistrationService {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Code has expired");
         }
         if (mailService.getVerificationCode().equals(codeConfirm)) {
-            appUserDAO.save(appUser);
+            usersDAO.save(users);
             return ResponseEntity.ok("Code confirmed successfully");
         } else {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid code");
         }
     }
 
-    private AppUser buildAppUserFromRequest(RegisterRequest registerRequest) {
-        return AppUser.builder()
+    private Users buildUserFromRequest(RegisterRequest registerRequest) {
+        return Users.builder()
                 .name(registerRequest.getName())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .phone(normalizePhoneNumber(registerRequest.getPhone()))
                 .country(registerRequest.getAddress().getCountry())
                 .city(registerRequest.getAddress().getCity())
-                .role(Role.USER)
+//                .role(Role.USER)
                 .build();
     }
 
@@ -101,7 +101,7 @@ public class RegistrationService {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid email");
         }
 
-        if (appUserDAO.findAppUserByEmail(registerRequest.getEmail()).isPresent()) {
+        if (usersDAO.findAppUserByEmail(registerRequest.getEmail()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User with this email already exists");
         }
 
@@ -120,7 +120,7 @@ public class RegistrationService {
                 return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid phone number");
             }
         }
-        if (appUserDAO.findAppUserByPhone(normalizePhoneNumber(registerRequest.getPhone())).isPresent()) {
+        if (usersDAO.findAppUserByPhone(normalizePhoneNumber(registerRequest.getPhone())).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User with this phone already exists");
         }
         return null; // Всі поля валідні
