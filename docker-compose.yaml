@@ -13,11 +13,10 @@ services:
       - db
     restart: on-failure
     environment:
-#      need use env in future DO NOT FORGET
 #      in docker DB timeStamp is different, need to set it correct
-      - spring.datasource.url=jdbc:postgresql://db:5432/umarket
-      - spring.datasource.username=postgres
-      - spring.datasource.password=1111
+      - DATASOURCE_URL=jdbc:postgresql://db:5432/umarket
+      - DATASOURCE_USERNAME=postgres
+      - DATASOURCE_PASSWORD=1111
     networks:
       - postgres
 
