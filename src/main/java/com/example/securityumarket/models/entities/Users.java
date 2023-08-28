@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,15 +29,29 @@ public class Users extends DateAudit implements UserDetails {
     private String phone;
     private String country;
     private String city;
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
     private String refreshToken;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserPermission> userPermissions;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserRole> userRoles;
+
+    @OneToMany(mappedBy = "user")
+    private List<Product> products;
+
+    @OneToMany(mappedBy = "user")
+    private List<ProductReview> productReviews;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (UserRole userRole : userRoles) {
+            authorities.add(new SimpleGrantedAuthority(userRole.getRole().getName().toString()));
+        }
+        return authorities;
     }
+
 
     @Override
     public String getUsername() {

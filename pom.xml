@@ -11,8 +11,8 @@
     <groupId>com.example</groupId>
     <artifactId>uMarketPrj</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SecurityUmarket</name>
-    <description>SecurityUmarket</description>
+    <name>uMarket</name>
+    <description>uMarket</description>
     <properties>
         <java.version>17</java.version>
     </properties>

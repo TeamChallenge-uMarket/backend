@@ -70,7 +70,7 @@ public class RegistrationService {
                 .phone(normalizePhoneNumber(registerRequest.getPhone()))
                 .country(registerRequest.getAddress().getCountry())
                 .city(registerRequest.getAddress().getCity())
-                .role(Role.USER)
+//                .role(Role.USER)
                 .build();
     }
 
