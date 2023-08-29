@@ -24,6 +24,6 @@ public class Role extends DateAudit {
 
     // ... конструктори, геттери, сеттери та інші методи ...
     public enum Roles {
-        USER, ADMIN
+        USER, ADMIN, MODERATOR, GUEST
     }
 }

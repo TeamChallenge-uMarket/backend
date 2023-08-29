@@ -35,6 +35,9 @@ public class Users extends DateAudit implements UserDetails {
     private List<UserPermission> userPermissions;
 
     @OneToMany(mappedBy = "user")
+    private List<FavoriteProducts> favoriteProducts;
+
+    @OneToMany(mappedBy = "user")
     private List<UserRole> userRoles;
 
     @OneToMany(mappedBy = "user")
