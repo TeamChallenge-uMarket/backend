@@ -21,23 +21,26 @@ public class Product extends DateAudit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private Users user;
 
     private String name;
     private String description;
     private BigDecimal price;
-    @Enumerated(EnumType.STRING) // Додайте анотацію Enumerated для вказання, що використовується перерахування
+    @Enumerated(EnumType.STRING)
     private Status status = Status.INACTIVE;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private Users user;
 
     @OneToMany(mappedBy = "product")
     private List<ProductGallery> images;
 
     @OneToMany(mappedBy = "product")
+    private List<FavoriteProducts> favoriteProducts;
+
+    @OneToMany(mappedBy = "product")
     private List<ProductReview> productReviews;
 
-    // ... конструктори, геттери, сеттери та інші методи ...
 
     public enum Status {
         PENDING, ACTIVE, INACTIVE
