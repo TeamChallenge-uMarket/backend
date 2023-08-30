@@ -3,7 +3,7 @@ package com.example.securityumarket.services;
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.models.*;
 import com.example.securityumarket.models.entities.Users;
-import com.example.securityumarket.models.entities.Role;
+import com.example.securityumarket.services.security.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
