@@ -1,4 +1,4 @@
-package com.example.securityumarket.services;
+package com.example.securityumarket.services.authorization;
 
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;

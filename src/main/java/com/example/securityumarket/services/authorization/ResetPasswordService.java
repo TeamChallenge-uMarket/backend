@@ -1,4 +1,4 @@
-package com.example.securityumarket.services;
+package com.example.securityumarket.services.authorization;
 
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.models.PasswordRequest;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.example.securityumarket.services.MailService.CODE_EXPIRATION_TIME_MS;
+import static com.example.securityumarket.services.authorization.MailService.CODE_EXPIRATION_TIME_MS;
 
 @Service
 public class ResetPasswordService {

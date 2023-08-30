@@ -1,9 +1,9 @@
 package com.example.securityumarket.filters;
 
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
-import com.example.securityumarket.services.JwtService;
-import com.example.securityumarket.services.TokenRefreshService;
-import com.example.securityumarket.services.UserDetailsServiceImpl;
+import com.example.securityumarket.services.security.JwtService;
+import com.example.securityumarket.services.security.TokenRefreshService;
+import com.example.securityumarket.services.authorization.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
