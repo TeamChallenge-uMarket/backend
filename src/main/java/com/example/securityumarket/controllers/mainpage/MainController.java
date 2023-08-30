@@ -3,6 +3,7 @@ package com.example.securityumarket.controllers.mainpage;
 import com.example.securityumarket.models.DTO.CategoryDTO;
 import com.example.securityumarket.models.DTO.ParentCategoryDTO;
 import com.example.securityumarket.models.DTO.ProductDTO;
+import com.example.securityumarket.models.entities.Category;
 import com.example.securityumarket.models.entities.Product;
 import com.example.securityumarket.services.main.CategoryService;
 import com.example.securityumarket.services.main.ParentCategoryService;
@@ -48,4 +49,8 @@ public class MainController {
         return userService.getProductsById(1L);
     }
 
+    @GetMapping("/categories")
+    public ResponseEntity<List<Category>> getCategories(){
+        return categoryService.getCategoriesByParentId(1L);
+    }
 }
