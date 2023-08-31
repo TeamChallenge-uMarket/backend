@@ -29,6 +29,8 @@ public class SecurityConfiguration {
                         matcherRegistry
                                 .requestMatchers("/api/v1/auth/**")
                                 .permitAll()
+                                .requestMatchers("/api/v1/main/search/**")
+                                .permitAll()
 //                                .requestMatchers("/api/v1/main/**")
 //                                .permitAll()
                                 .anyRequest().authenticated()
