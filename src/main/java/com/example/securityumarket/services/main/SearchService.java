@@ -1,7 +1,7 @@
 package com.example.securityumarket.services.main;
 
 import com.example.securityumarket.dao.*;
-import com.example.securityumarket.models.DTO.ProductByNameDTO;
+import com.example.securityumarket.models.DTO.SearchedProductDTO;
 import com.example.securityumarket.models.entities.Category;
 import com.example.securityumarket.models.entities.Product;
 import com.example.securityumarket.models.search.SearchByCategoryRequest;
@@ -23,16 +23,16 @@ public class SearchService {
     private final CategoryDAO categoryDAO;
     private final ProductCategoryDAO productCategoryDAO;
 
-    public ResponseEntity<List<ProductByNameDTO>> findLimitProducts(SearchRequest searchRequest, int page, int limit) {
+    public ResponseEntity<List<SearchedProductDTO>> findProductsByName(SearchRequest searchRequest, int page, int limit) {
         String searchField = searchRequest.getSearchField();
         PageRequest pageable = PageRequest.of(page, limit);
 
         List<Product> products = productDAO.findProductByNameIsContainingIgnoreCase(searchField, pageable);
 
-        return ResponseEntity.ok(getProductsDto(products));
+        return ResponseEntity.ok(convertProductToSearchedProductDTO(products));
     }
 
-    public ResponseEntity<List<ProductByNameDTO>> findByCategories(SearchByCategoryRequest searchRequest, int page, int limit) {
+    public ResponseEntity<List<SearchedProductDTO>> findProductsByCategoryIds(SearchByCategoryRequest searchRequest, int page, int limit) {
         List<Long> categoryIds = searchRequest.getCategoriesId();
         PageRequest pageable = PageRequest.of(page, limit);
 
@@ -40,14 +40,14 @@ public class SearchService {
 
         List<Product> productsByCategories = productCategoryDAO.findProductsByCategories(categoryList, pageable);
 
-        return ResponseEntity.ok(getProductsDto(productsByCategories));
+        return ResponseEntity.ok(convertProductToSearchedProductDTO(productsByCategories));
     }
 
 
-    private List<ProductByNameDTO> getProductsDto(List<Product> productList) {
+    private List<SearchedProductDTO> convertProductToSearchedProductDTO(List<Product> productList) {
 
         return productList.stream()
-                .map(product -> ProductByNameDTO.builder()
+                .map(product -> SearchedProductDTO.builder()
                         .id(product.getId())
                         .name(product.getName())
                         .description(product.getDescription())

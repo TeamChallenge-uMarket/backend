@@ -1,6 +1,6 @@
 package com.example.securityumarket.controllers.mainpage;
 
-import com.example.securityumarket.models.DTO.ProductByNameDTO;
+import com.example.securityumarket.models.DTO.SearchedProductDTO;
 import com.example.securityumarket.models.search.SearchByCategoryRequest;
 import com.example.securityumarket.models.search.SearchRequest;
 import com.example.securityumarket.services.main.SearchService;
@@ -25,11 +25,11 @@ public class SearchController {
      * service finds products by part of name products and returns list with productDTO
      */
     @GetMapping("/findProductsByName/{page}/{limit}")
-    public ResponseEntity<List<ProductByNameDTO>> findProductsByName(
+    public ResponseEntity<List<SearchedProductDTO>> findProductsByName(
             @RequestBody final SearchRequest searchRequest,
             @PathVariable int limit,
             @PathVariable int page) {
-        return searchService.findLimitProducts(searchRequest, page, limit);
+        return searchService.findProductsByName(searchRequest, page, limit);
     }
 
 
@@ -39,10 +39,10 @@ public class SearchController {
      * service finds products by category of products and returns list with productDTO
      */
     @GetMapping("/findProductsByCategory/{page}/{limit}")
-    public ResponseEntity<List<ProductByNameDTO>> findProductsByParentCategory(
+    public ResponseEntity<List<SearchedProductDTO>> findProductsByParentCategory(
             @RequestBody final SearchByCategoryRequest searchRequest,
             @PathVariable int limit,
             @PathVariable int page) {
-        return searchService.findByCategories(searchRequest, page, limit);
+        return searchService.findProductsByCategoryIds(searchRequest, page, limit);
     }
 }
