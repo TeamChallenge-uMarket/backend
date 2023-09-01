@@ -20,7 +20,6 @@ public class SearchService {
 
     private final ProductDAO productDAO;
     private final ProductGalleryDAO productGalleryDAO;
-    private final ParentCategoryDAO parentCategoryDAO;
     private final CategoryDAO categoryDAO;
     private final ProductCategoryDAO productCategoryDAO;
 
