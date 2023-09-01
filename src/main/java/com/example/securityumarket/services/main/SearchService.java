@@ -65,6 +65,7 @@ public class SearchService {
                         .description(product.getDescription())
                         .price(product.getPrice())
                         .imgUrl(productGalleryDAO.findByProductIdAndIsMain(product.getId(), true).getUrl())
+                        .status(product.getStatus().toString())
                         .build())
                 .collect(Collectors.toList());
     }
