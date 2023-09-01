@@ -13,5 +13,5 @@ import java.util.List;
 @Builder
 public class SearchByCategoryRequest {
 
-    private List<String> categories;
+    private List<Long> categoriesId;
 }

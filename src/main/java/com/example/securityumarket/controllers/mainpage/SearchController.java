@@ -20,7 +20,9 @@ public class SearchController {
     //TODO write doc
 
     /**
-     * write documentation
+     * 'page' - starts from 0
+     * 'limit' - show limit count products on page
+     * service finds products by part of name products and returns list with productDTO
      */
     @GetMapping("/findProductsByName/{page}/{limit}")
     public ResponseEntity<List<ProductByNameDTO>> findProductsByName(
@@ -32,7 +34,9 @@ public class SearchController {
 
 
     /**
-     * write documentation
+     * 'page' - starts from 0
+     * 'limit' - show limit count products on page
+     * service finds products by category of products and returns list with productDTO
      */
     @GetMapping("/findProductsByCategory/{page}/{limit}")
     public ResponseEntity<List<ProductByNameDTO>> findProductsByParentCategory(
