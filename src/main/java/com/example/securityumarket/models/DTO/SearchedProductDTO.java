@@ -14,4 +14,5 @@ public class SearchedProductDTO {
     private String description;
     private String imgUrl;
     private BigDecimal price;
+    //TODO add status etc
 }
