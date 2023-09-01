@@ -5,6 +5,7 @@ import com.example.securityumarket.models.DTO.SearchedProductDTO;
 import com.example.securityumarket.models.entities.Category;
 import com.example.securityumarket.models.entities.Product;
 import com.example.securityumarket.models.search.SearchByCategoryRequest;
+import com.example.securityumarket.models.search.SearchNameCategoryRequest;
 import com.example.securityumarket.models.search.SearchRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +28,7 @@ public class SearchService {
         String searchField = searchRequest.getSearchField();
         PageRequest pageable = PageRequest.of(page, limit);
 
-        List<Product> products = productDAO.findProductByNameIsContainingIgnoreCase(searchField, pageable);
+        List<Product> products = productDAO.findProductsByPartOfName(searchField, pageable);
 
         return ResponseEntity.ok(convertProductToSearchedProductDTO(products));
     }
@@ -41,6 +42,17 @@ public class SearchService {
         List<Product> productsByCategories = productCategoryDAO.findProductsByCategories(categoryList, pageable);
 
         return ResponseEntity.ok(convertProductToSearchedProductDTO(productsByCategories));
+    }
+
+
+    public ResponseEntity<List<SearchedProductDTO>> findProductsByNameAndCategories(SearchNameCategoryRequest searchRequest, int page, int limit) {
+        PageRequest pageable = PageRequest.of(page, limit);
+        String name = searchRequest.getSearchField();
+        List<Long> categoriesId = searchRequest.getCategoriesId();
+
+        List<Product> allByNameAndCategory = productCategoryDAO.findAllByNameAndCategory(categoriesId, name, pageable);
+
+        return ResponseEntity.ok(convertProductToSearchedProductDTO(allByNameAndCategory));
     }
 
 

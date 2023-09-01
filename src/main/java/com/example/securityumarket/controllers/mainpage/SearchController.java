@@ -2,6 +2,7 @@ package com.example.securityumarket.controllers.mainpage;
 
 import com.example.securityumarket.models.DTO.SearchedProductDTO;
 import com.example.securityumarket.models.search.SearchByCategoryRequest;
+import com.example.securityumarket.models.search.SearchNameCategoryRequest;
 import com.example.securityumarket.models.search.SearchRequest;
 import com.example.securityumarket.services.main.SearchService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,15 @@ import java.util.List;
 public class SearchController {
 
     private final SearchService searchService;
-    //TODO write doc
 
     /**
      * 'page' - starts from 0
      * 'limit' - show limit count products on page
-     * service finds products by part of name products and returns list with productDTO
+     * service finds:
+     *          products by part of product name
+     *          by categoryIds
+     *          by part of product nam + categoryIds
+     * and returns list with productDTO
      */
     @GetMapping("/findProductsByName/{page}/{limit}")
     public ResponseEntity<List<SearchedProductDTO>> findProductsByName(
@@ -32,17 +36,19 @@ public class SearchController {
         return searchService.findProductsByName(searchRequest, page, limit);
     }
 
-
-    /**
-     * 'page' - starts from 0
-     * 'limit' - show limit count products on page
-     * service finds products by category of products and returns list with productDTO
-     */
     @GetMapping("/findProductsByCategory/{page}/{limit}")
     public ResponseEntity<List<SearchedProductDTO>> findProductsByParentCategory(
             @RequestBody final SearchByCategoryRequest searchRequest,
             @PathVariable int limit,
             @PathVariable int page) {
         return searchService.findProductsByCategoryIds(searchRequest, page, limit);
+    }
+
+    @GetMapping("/findProductsByNameAndCategory/{page}/{limit}")
+    public ResponseEntity<List<SearchedProductDTO>> findProductsByNameAnsCategory(
+            @RequestBody final SearchNameCategoryRequest searchRequest,
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return searchService.findProductsByNameAndCategories(searchRequest, page, limit);
     }
 }
