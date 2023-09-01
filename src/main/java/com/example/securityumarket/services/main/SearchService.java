@@ -50,6 +50,10 @@ public class SearchService {
         String name = searchRequest.getSearchField();
         List<Long> categoriesId = searchRequest.getCategoriesId();
 
+        if (categoriesId.isEmpty()) {
+            return ResponseEntity.ok(convertProductToSearchedProductDTO(productDAO.findProductsByPartOfName(name, pageable)));
+        }
+
         List<Product> allByNameAndCategory = productCategoryDAO.findAllByNameAndCategory(categoriesId, name, pageable);
 
         return ResponseEntity.ok(convertProductToSearchedProductDTO(allByNameAndCategory));
