@@ -1,6 +1,7 @@
 package com.example.securityumarket.models.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +21,6 @@ public class Product extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     private String name;
     private String description;
     private BigDecimal price;
@@ -30,6 +29,7 @@ public class Product extends DateAudit {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private Users user;
 
     @OneToMany(mappedBy = "product")

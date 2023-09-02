@@ -1,7 +1,7 @@
 package com.example.securityumarket.controllers;
 
 import com.example.securityumarket.models.PasswordRequest;
-import com.example.securityumarket.services.ResetPasswordService;
+import com.example.securityumarket.services.authorization.ResetPasswordService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,9 +1,9 @@
-package com.example.securityumarket.services;
+package com.example.securityumarket.services.authorization;
 
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.models.*;
 import com.example.securityumarket.models.entities.Users;
-import com.example.securityumarket.models.entities.Role;
+import com.example.securityumarket.services.security.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import static com.example.securityumarket.services.MailService.CODE_EXPIRATION_TIME_MS;
+import static com.example.securityumarket.services.authorization.MailService.CODE_EXPIRATION_TIME_MS;
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
 

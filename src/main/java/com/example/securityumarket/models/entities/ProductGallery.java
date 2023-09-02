@@ -1,8 +1,16 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "product_gallery")
 public class ProductGallery {
     @Id
@@ -18,6 +26,5 @@ public class ProductGallery {
 
     private String url;
 
-    // ... конструктори, геттери, сеттери та інші методи ...
 }
 
