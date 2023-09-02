@@ -20,7 +20,7 @@ public interface ProductDAO extends JpaRepository<Product, Long> {
             "   case when lower(:#{#searchRequest.orderBy.name()}) = 'created' and lower(:#{#searchRequest.sortBy.name()}) = 'desc' then p.created end desc, " +
             "   case when lower(:#{#searchRequest.orderBy.name()}) = 'price' and  lower(:#{#searchRequest.sortBy.name()}) = 'asc' then p.price end asc, " +
             "   case when lower(:#{#searchRequest.orderBy.name()}) = 'price' and lower(:#{#searchRequest.sortBy.name()}) = 'desc' then p.price end desc")
-    List<Product> findProductByName(
+    List<Product> findProductsByName(
             @Param("searchRequest") FullSearchRequest searchRequest,
             PageRequest pageable);
 

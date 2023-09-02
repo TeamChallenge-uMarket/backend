@@ -25,13 +25,12 @@ public class SearchService {
 
     public ResponseEntity<List<SearchedProductDTO>> findProductsByNameAndCategories(FullSearchRequest searchRequest, int page, int limit) {
         PageRequest pageable = PageRequest.of(page, limit);
-        List<Long> categoriesId = searchRequest.getCategoriesId();
 
-        if (categoriesId.isEmpty()) {
-            return ResponseEntity.ok(convertProductToSearchedProductDTO(productDAO.findProductByName(searchRequest, pageable)));
+        if (searchRequest.getCategoriesId().isEmpty()) {
+            return ResponseEntity.ok(convertProductToSearchedProductDTO(productDAO.findProductsByName(searchRequest, pageable)));
         }
 
-        List<Product> allByNameAndCategory = productCategoryDAO.findAllByNameAndCategory(searchRequest, pageable);
+        List<Product> allByNameAndCategory = productCategoryDAO.findProductsByNameAndCategory(searchRequest, pageable);
 
         return ResponseEntity.ok(convertProductToSearchedProductDTO(allByNameAndCategory));
     }

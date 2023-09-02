@@ -22,7 +22,7 @@ public interface ProductCategoryDAO extends JpaRepository<ProductCategory, Long>
             "   case when lower(:#{#searchRequest.orderBy.name()}) = 'created' and lower(:#{#searchRequest.sortBy.name()}) = 'desc' then p.product.created end desc, " +
             "   case when lower(:#{#searchRequest.orderBy.name()}) = 'price' and  lower(:#{#searchRequest.sortBy.name()}) = 'asc' then p.product.price end asc, " +
             "   case when lower(:#{#searchRequest.orderBy.name()}) = 'price' and lower(:#{#searchRequest.sortBy.name()}) = 'desc' then p.product.price end desc")
-    List<Product> findAllByNameAndCategory(
+    List<Product> findProductsByNameAndCategory(
             @Param("searchRequest") FullSearchRequest searchRequest,
             PageRequest pageable);
 }
