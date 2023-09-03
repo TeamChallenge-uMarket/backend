@@ -3,9 +3,10 @@ package com.example.securityumarket.controllers.mainpage;
 import com.example.securityumarket.models.DTO.CategoryDTO;
 import com.example.securityumarket.models.DTO.ParentCategoryDTO;
 import com.example.securityumarket.models.DTO.ProductDTO;
+import com.example.securityumarket.models.DTO.SearchedProductDTO;
 import com.example.securityumarket.models.entities.Category;
 import com.example.securityumarket.models.entities.Product;
-import com.example.securityumarket.models.favorite.AddMyFavoriteRequest;
+import com.example.securityumarket.models.favorite.MyFavoriteRequest;
 import com.example.securityumarket.services.main.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +57,19 @@ public class MainController {
 
     @PostMapping("/add-favorite")
     public ResponseEntity<String> addFavoriteProducts(
-            @RequestBody AddMyFavoriteRequest addingRequest) {
+            @RequestBody MyFavoriteRequest addingRequest) {
         return favoriteService.addMyFavoriteProducts(addingRequest);
+    }
+
+    @GetMapping("/my-favorites-products/{page}/{limit}")
+    public ResponseEntity<List<SearchedProductDTO>> findMyFavoriteProducts(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return favoriteService.getAllMyFavoriteProducts(page, limit);
+    }
+
+    @DeleteMapping("/delete-favorite")
+    public ResponseEntity<String> deleteFavoriteProduct(@RequestBody final MyFavoriteRequest myFavoriteRequest) {
+        return favoriteService.deleteMyFavorite(myFavoriteRequest);
     }
 }

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddMyFavoriteRequest {
+public class MyFavoriteRequest {
     private Long myFavProductId;
 }
