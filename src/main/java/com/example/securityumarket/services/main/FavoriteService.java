@@ -51,14 +51,12 @@ public class FavoriteService {
         Product favoriteProduct = productDAO.findProductById(myFavoriteRequest.getMyFavProductId());
         Users authenticatedUser = userService.getAuthenticatedUser();
 
-        //TODO need to check and refactor
         if (favoriteProductsDAO.findProduct(favoriteProduct) == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect product ID to delete");
-        } else if (favoriteProduct != null) {
-            favoriteProductsDAO.deleteMyFavorite(favoriteProduct.getId(), authenticatedUser.getId());
-            return ResponseEntity.status(HttpStatus.CREATED).body("Favorite product deleted");
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Incorrect product ID to delete");
         }
+
+        favoriteProductsDAO.deleteMyFavorite(favoriteProduct.getId(), authenticatedUser.getId());
+        return ResponseEntity.ok("Favorite product deleted");
+
     }
 }
