@@ -3,12 +3,11 @@ package com.example.securityumarket.controllers.mainpage;
 import com.example.securityumarket.models.DTO.CategoryDTO;
 import com.example.securityumarket.models.DTO.ParentCategoryDTO;
 import com.example.securityumarket.models.DTO.ProductDTO;
+import com.example.securityumarket.models.DTO.SearchedProductDTO;
 import com.example.securityumarket.models.entities.Category;
 import com.example.securityumarket.models.entities.Product;
-import com.example.securityumarket.services.main.CategoryService;
-import com.example.securityumarket.services.main.ParentCategoryService;
-import com.example.securityumarket.services.main.ProductService;
-import com.example.securityumarket.services.main.UserService;
+import com.example.securityumarket.models.favorite.MyFavoriteRequest;
+import com.example.securityumarket.services.main.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +23,8 @@ public class MainController {
     CategoryService categoryService;
     ProductService productService;
     UserService userService;
+    FavoriteService favoriteService;
+
     @GetMapping("/add-product")
     public ResponseEntity<String> openAddProduct() {
         return ResponseEntity.ok("Secure endpoint - open add product page");
@@ -52,5 +53,23 @@ public class MainController {
     @GetMapping("/categories")
     public ResponseEntity<List<Category>> getCategories(){
         return categoryService.getCategoriesByParentId(1L);
+    }
+
+    @PostMapping("/add-favorite")
+    public ResponseEntity<String> addFavoriteProducts(
+            @RequestBody MyFavoriteRequest addingRequest) {
+        return favoriteService.addMyFavoriteProducts(addingRequest);
+    }
+
+    @GetMapping("/my-favorites-products/{page}/{limit}")
+    public ResponseEntity<List<SearchedProductDTO>> findMyFavoriteProducts(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return favoriteService.getAllMyFavoriteProducts(page, limit);
+    }
+
+    @DeleteMapping("/delete-favorite")
+    public ResponseEntity<String> deleteFavoriteProduct(@RequestBody final MyFavoriteRequest myFavoriteRequest) {
+        return favoriteService.deleteMyFavorite(myFavoriteRequest);
     }
 }
