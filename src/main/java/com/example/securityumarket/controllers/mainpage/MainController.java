@@ -6,10 +6,7 @@ import com.example.securityumarket.models.DTO.ProductDTO;
 import com.example.securityumarket.models.entities.Category;
 import com.example.securityumarket.models.entities.Product;
 import com.example.securityumarket.models.favorite.AddMyFavoriteRequest;
-import com.example.securityumarket.services.main.CategoryService;
-import com.example.securityumarket.services.main.ParentCategoryService;
-import com.example.securityumarket.services.main.ProductService;
-import com.example.securityumarket.services.main.UserService;
+import com.example.securityumarket.services.main.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +22,8 @@ public class MainController {
     CategoryService categoryService;
     ProductService productService;
     UserService userService;
+    FavoriteService favoriteService;
+
     @GetMapping("/add-product")
     public ResponseEntity<String> openAddProduct() {
         return ResponseEntity.ok("Secure endpoint - open add product page");
@@ -58,6 +57,6 @@ public class MainController {
     @PostMapping("/add-favorite")
     public ResponseEntity<String> addFavoriteProducts(
             @RequestBody AddMyFavoriteRequest addingRequest) {
-        return userService.addMyFavoriteProducts(addingRequest);
+        return favoriteService.addMyFavoriteProducts(addingRequest);
     }
 }
