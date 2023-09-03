@@ -12,6 +12,8 @@ import java.util.List;
 public interface ProductDAO extends JpaRepository<Product, Long> {
     List<Product> findAllByUserId(Long id);
 
+    Product findProductById(Long id);
+
     @Query("select p from Product p " +
             "where upper(p.name) like upper(concat('%', :#{#searchRequest.searchQuery}, '%')) " +
             "and upper(p.status) = upper(:#{#searchRequest.status.name()}) " +

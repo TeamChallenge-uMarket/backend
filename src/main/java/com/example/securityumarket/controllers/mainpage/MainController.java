@@ -5,6 +5,7 @@ import com.example.securityumarket.models.DTO.ParentCategoryDTO;
 import com.example.securityumarket.models.DTO.ProductDTO;
 import com.example.securityumarket.models.entities.Category;
 import com.example.securityumarket.models.entities.Product;
+import com.example.securityumarket.models.favorite.AddMyFavoriteRequest;
 import com.example.securityumarket.services.main.CategoryService;
 import com.example.securityumarket.services.main.ParentCategoryService;
 import com.example.securityumarket.services.main.ProductService;
@@ -52,5 +53,11 @@ public class MainController {
     @GetMapping("/categories")
     public ResponseEntity<List<Category>> getCategories(){
         return categoryService.getCategoriesByParentId(1L);
+    }
+
+    @PostMapping("/add-favorite")
+    public ResponseEntity<String> addFavoriteProducts(
+            @RequestBody AddMyFavoriteRequest addingRequest) {
+        return userService.addMyFavoriteProducts(addingRequest);
     }
 }
