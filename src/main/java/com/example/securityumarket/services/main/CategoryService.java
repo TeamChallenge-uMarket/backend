@@ -3,8 +3,6 @@ package com.example.securityumarket.services.main;
 import com.example.securityumarket.dao.CategoryDAO;
 import com.example.securityumarket.dao.ParentCategoryDAO;
 import com.example.securityumarket.models.DTO.CategoryDTO;
-import com.example.securityumarket.models.entities.Category;
-import com.example.securityumarket.models.entities.ParentCategory;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

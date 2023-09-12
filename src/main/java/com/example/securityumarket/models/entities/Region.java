@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+
 @Entity
-@Table(name = "permissions")
-public class Permission extends DateAudit {
+@Table(name = "regions")
+public class Region {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -17,10 +18,6 @@ public class Permission extends DateAudit {
     private String description;
 
 
-    @OneToMany(mappedBy = "permission")
-    private List<UserPermission> userPermissions;
-
-    @OneToMany(mappedBy = "permission")
-    private List<RolePermission> rolePermissions;
-
+    @OneToMany(mappedBy = "region")
+    private List<City> cities;
 }

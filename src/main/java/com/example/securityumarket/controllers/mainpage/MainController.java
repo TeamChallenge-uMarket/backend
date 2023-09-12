@@ -4,8 +4,6 @@ import com.example.securityumarket.models.DTO.CategoryDTO;
 import com.example.securityumarket.models.DTO.ParentCategoryDTO;
 import com.example.securityumarket.models.DTO.ProductDTO;
 import com.example.securityumarket.models.DTO.SearchedProductDTO;
-import com.example.securityumarket.models.entities.Category;
-import com.example.securityumarket.models.entities.Product;
 import com.example.securityumarket.models.favorite.MyFavoriteRequest;
 import com.example.securityumarket.services.main.*;
 import lombok.AllArgsConstructor;

@@ -2,7 +2,6 @@ package com.example.securityumarket.services.main;
 
 import com.example.securityumarket.dao.ProductDAO;
 import com.example.securityumarket.dao.UsersDAO;
-import com.example.securityumarket.models.entities.Product;
 import com.example.securityumarket.models.entities.Users;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

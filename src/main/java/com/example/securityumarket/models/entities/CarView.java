@@ -2,10 +2,9 @@ package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name = "user_has_permissions")
-public class UserPermission extends DateAudit {
+@Table(name = "car_views")
+public class CarView extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -17,7 +16,6 @@ public class UserPermission extends DateAudit {
     private Users user;
 
     @ManyToOne
-    @JoinColumn(name = "permissions_id")
-    private Permission permission;
+    @JoinColumn(name = "car_id")
+    private Car car;
 }
-

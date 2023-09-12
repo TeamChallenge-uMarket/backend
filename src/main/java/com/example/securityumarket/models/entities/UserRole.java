@@ -1,15 +1,17 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
 
 @Entity
-@Data
+@Getter
 @Table(name = "user_has_roles")
 public class UserRole extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")

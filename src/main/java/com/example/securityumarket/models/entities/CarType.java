@@ -1,12 +1,13 @@
 package com.example.securityumarket.models.entities;
 
+
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
-@Table(name = "permissions")
-public class Permission extends DateAudit {
+@Table(name = "type_cars")
+public class CarType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -17,10 +18,6 @@ public class Permission extends DateAudit {
     private String description;
 
 
-    @OneToMany(mappedBy = "permission")
-    private List<UserPermission> userPermissions;
-
-    @OneToMany(mappedBy = "permission")
-    private List<RolePermission> rolePermissions;
-
+    @OneToMany(mappedBy = "carType")
+    private List<CarBrand> carBrands;
 }

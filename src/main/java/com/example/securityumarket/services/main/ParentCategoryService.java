@@ -2,15 +2,10 @@ package com.example.securityumarket.services.main;
 
 import com.example.securityumarket.dao.ParentCategoryDAO;
 import com.example.securityumarket.models.DTO.ParentCategoryDTO;
-import com.example.securityumarket.models.entities.Category;
-import com.example.securityumarket.models.entities.ParentCategory;
-import com.example.securityumarket.models.entities.Product;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor

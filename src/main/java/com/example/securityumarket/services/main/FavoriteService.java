@@ -3,8 +3,6 @@ package com.example.securityumarket.services.main;
 import com.example.securityumarket.dao.FavoriteProductsDAO;
 import com.example.securityumarket.dao.ProductDAO;
 import com.example.securityumarket.models.DTO.SearchedProductDTO;
-import com.example.securityumarket.models.entities.FavoriteProducts;
-import com.example.securityumarket.models.entities.Product;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.models.favorite.MyFavoriteRequest;
 import com.example.securityumarket.services.common.CommonService;

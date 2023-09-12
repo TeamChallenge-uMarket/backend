@@ -1,7 +1,5 @@
 package com.example.securityumarket.dao;
 
-import com.example.securityumarket.models.entities.FavoriteProducts;
-import com.example.securityumarket.models.entities.Product;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

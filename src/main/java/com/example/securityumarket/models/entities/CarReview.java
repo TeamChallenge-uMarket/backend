@@ -1,26 +1,29 @@
 package com.example.securityumarket.models.entities;
 
-import jakarta.persistence.*;
-import lombok.Data;
 
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "product_reviews")
-public class ProductReview extends CreatedAtAudit {
+public class CarReview extends CreatedAtAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+
+    @Column(name = "rating")
     private int rating;
+
+    @Column(name = "comment")
     private String comment;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;
-    // ... конструктори, геттери, сеттери та інші методи ...
-}
 
+    @ManyToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
+}

@@ -3,7 +3,6 @@ package com.example.securityumarket.services.main;
 import com.example.securityumarket.dao.ProductCategoryDAO;
 import com.example.securityumarket.dao.ProductDAO;
 import com.example.securityumarket.models.DTO.SearchedProductDTO;
-import com.example.securityumarket.models.entities.Product;
 import com.example.securityumarket.models.search.FullSearchRequest;
 import com.example.securityumarket.services.common.CommonService;
 import lombok.AllArgsConstructor;

@@ -1,30 +1,32 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Table(name = "product_gallery")
-public class ProductGallery {
+@Table(name = "car_galleries")
+public class CarGallery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+
+    @Column(name = "image_name")
+    private String imageName;
 
     @Column(name = "is_main")
     private boolean isMain;
 
+    @Column(name = "url")
     private String url;
 
+    @Column(name = "url_small")
+    private String urlSmall;
+
+
+    @ManyToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
 }
 

@@ -21,39 +21,47 @@ import java.util.List;
 public class Users extends DateAudit implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+
+    @Column(name = "name")
     private String name;
-    @Column(unique = true)
+
+    @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "phone")
     private String phone;
-    private String country;
-    private String city;
+
+    @Column(name = "refresh_token")
     private String refreshToken;
+
+
+    @OneToMany(mappedBy = "user")
+    private List<Car> cars;
 
     @OneToMany(mappedBy = "user")
     private List<UserPermission> userPermissions;
 
     @OneToMany(mappedBy = "user")
-    private List<FavoriteProducts> favoriteProducts;
-
-    @OneToMany(mappedBy = "user")
     private List<UserRole> userRoles;
 
     @OneToMany(mappedBy = "user")
-    private List<Product> products;
+    private List<CarReview> carReviews;
 
     @OneToMany(mappedBy = "user")
-    private List<ProductReview> productReviews;
+    private List<CarFavorite> carFavorites;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (UserRole userRole : userRoles) {
-            authorities.add(new SimpleGrantedAuthority(userRole.getRole().getName().toString()));
-        }
-        return authorities;
-    }
+    @OneToMany(mappedBy = "user")
+    private List<CarView> carViews;
+
+    @ManyToOne
+    @JoinColumn(name = "city")
+    private City city;
 
 
     @Override
@@ -79,5 +87,15 @@ public class Users extends DateAudit implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (UserRole userRole : userRoles) {
+            authorities.add(new SimpleGrantedAuthority(userRole.getRole().getName().toString()));
+        }
+        return authorities;
     }
 }

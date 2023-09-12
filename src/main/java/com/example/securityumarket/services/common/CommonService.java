@@ -2,7 +2,6 @@ package com.example.securityumarket.services.common;
 
 import com.example.securityumarket.dao.ProductGalleryDAO;
 import com.example.securityumarket.models.DTO.SearchedProductDTO;
-import com.example.securityumarket.models.entities.Product;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
