@@ -14,8 +14,8 @@ public class CarType {
     private Long id;
 
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "type")
+    private String type;
 
 
     @OneToMany(mappedBy = "carType")

@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class AddressDTO {
-    private String country;
+    private String region;
     private String city;
 }

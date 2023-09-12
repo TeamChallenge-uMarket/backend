@@ -11,8 +11,8 @@ public class CarModel {
     private Long id;
 
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "model")
+    private String model;
 
 
     @ManyToOne
