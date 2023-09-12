@@ -4,7 +4,7 @@ package com.example.securityumarket.models.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "product_reviews")
+@Table(name = "car_reviews")
 public class CarReview extends CreatedAtAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

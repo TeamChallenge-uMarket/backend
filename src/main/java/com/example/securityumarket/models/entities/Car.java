@@ -25,9 +25,6 @@ public class Car {
     @Column(name = "body_type")
     private String bodyType;
 
-    @Column(name = "address")
-    private String address;
-
     @Column(name = "vincode")
     private String vincode;
 
@@ -39,9 +36,6 @@ public class Car {
 
     @Column(name = "fuel_type")
     private String fuelType;
-
-    @Column(name = "consumption_id")
-    private int consumptionId; //TODO
 
     @Column(name = "engine_displacement")
     private double engineDisplacement;
@@ -69,9 +63,6 @@ public class Car {
 
     @Column(name = "condition")
     private String condition;
-
-    @Column(name = "gallery")
-    private String gallery;//TODO
 
 
     @OneToOne()
