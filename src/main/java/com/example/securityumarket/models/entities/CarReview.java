@@ -1,16 +1,22 @@
 package com.example.securityumarket.models.entities;
 
+
 import jakarta.persistence.*;
-import lombok.Getter;
 
 @Entity
-@Getter
-@Table(name = "user_has_roles")
-public class UserRole extends DateAudit {
+@Table(name = "car_reviews")
+public class CarReview extends CreatedAtAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+
+    @Column(name = "rating")
+    private int rating;
+
+    @Column(name = "comment")
+    private String comment;
 
 
     @ManyToOne
@@ -18,7 +24,6 @@ public class UserRole extends DateAudit {
     private Users user;
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @JoinColumn(name = "car_id")
+    private Car car;
 }
-

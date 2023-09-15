@@ -2,22 +2,20 @@ package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name = "role_has_permissions")
-public class RolePermission {
+@Table(name = "models")
+public class CarModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
 
-    @ManyToOne
-    @JoinColumn(name = "permissions_id")
-    private Permission permission;
+    @Column(name = "model")
+    private String model;
+
 
     @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @JoinColumn(name = "brand_id")
+    private CarBrand carBrand;
 }
-

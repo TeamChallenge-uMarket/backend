@@ -11,10 +11,13 @@ import java.util.List;
 public class Role extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
 
     @Enumerated(EnumType.STRING)
     private Roles name = Roles.USER;
+
 
     @OneToMany(mappedBy = "role")
     private List<UserRole> userRoles;
@@ -22,7 +25,7 @@ public class Role extends DateAudit {
     @OneToMany(mappedBy = "role")
     private List<RolePermission> rolePermissions;
 
-    // ... конструктори, геттери, сеттери та інші методи ...
+
     public enum Roles {
         USER, ADMIN, MODERATOR, GUEST
     }

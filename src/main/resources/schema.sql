@@ -1,183 +1,170 @@
-create table if not exists parent_categories
+CREATE TABLE IF NOT EXISTS regions
 (
-    id          bigserial,
-    description varchar(255),
-    name        varchar(255),
-    primary key (id)
+    id          BIGSERIAL PRIMARY KEY,
+    description VARCHAR(255)
 );
 
-create table if not exists categories
+CREATE TABLE IF NOT EXISTS cities
 (
-    id          bigserial,
-    parent_id   bigint,
-    description varchar(255),
-    name        varchar(255),
-    primary key (id),
-    constraint categories_parent_categories_id_fk
-        foreign key (parent_id) references parent_categories
+    id          BIGSERIAL PRIMARY KEY,
+    description VARCHAR(255),
+    region_id   BIGINT,
+    FOREIGN KEY (region_id) REFERENCES regions (id)
 );
 
-create table if not exists permissions
+CREATE TABLE IF NOT EXISTS permissions
 (
-    created     timestamp(6) not null,
-    id          bigserial,
-    last_update timestamp(6),
-    name        varchar(255),
-    primary key (id)
+    id          BIGSERIAL PRIMARY KEY,
+    description VARCHAR(255)
 );
 
-create table if not exists roles
+CREATE TABLE IF NOT EXISTS roles
 (
-    created     timestamp(6) not null,
-    id          bigserial,
-    last_update timestamp(6),
-    name        varchar(255),
-    primary key (id),
-    constraint roles_name_check
-        check ((name)::text = ANY
-               (ARRAY [('USER'::character varying)::text, ('ADMIN'::character varying)::text, ('MODERATOR'::character varying)::text, ('GUEST'::character varying)::text]))
+    id   BIGSERIAL PRIMARY KEY,
+    name VARCHAR(255) CHECK (name IN ('USER', 'ADMIN', 'MODERATOR', 'GUEST'))
 );
 
-create table if not exists role_has_permissions
+CREATE TABLE IF NOT EXISTS role_has_permissions
 (
-    id             bigserial,
-    permissions_id bigint,
-    role_id        bigint,
-    primary key (id),
-    constraint role_has_permissions_permissions_id_fk
-        foreign key (permissions_id) references permissions,
-    constraint role_has_permissions_roles_id_fk
-        foreign key (role_id) references roles
+    id             BIGSERIAL PRIMARY KEY,
+    permissions_id BIGINT,
+    role_id        BIGINT,
+    FOREIGN KEY (permissions_id) REFERENCES permissions (id),
+    FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
-create table if not exists users
+CREATE TABLE IF NOT EXISTS user_has_permissions
 (
-    created       timestamp(6) not null,
-    id            bigserial,
-    last_update   timestamp(6),
-    city          varchar(255),
-    country       varchar(255),
-    email         varchar(255),
-    name          varchar(255),
-    password      varchar(255),
-    phone         varchar(255),
-    refresh_token varchar(255),
-    primary key (id),
-    unique (email)
+    id             BIGSERIAL PRIMARY KEY,
+    permissions_id BIGINT,
+    user_id        BIGINT,
+    FOREIGN KEY (permissions_id) REFERENCES permissions (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-create table if not exists products
+CREATE TABLE IF NOT EXISTS user_has_roles
 (
-    price       numeric(38, 2),
-    created     timestamp(6) not null,
-    id          bigserial,
-    last_update timestamp(6),
-    user_id     bigint,
-    description varchar(255),
-    name        varchar(255),
-    status      varchar(255),
-    primary key (id),
-    constraint products_users_id_fk
-        foreign key (user_id) references users,
-    constraint products_status_check
-        check ((status)::text = ANY
-               (ARRAY [('PENDING'::character varying)::text, ('ACTIVE'::character varying)::text, ('INACTIVE'::character varying)::text]))
+    id      BIGSERIAL PRIMARY KEY,
+    role_id BIGINT,
+    user_id BIGINT,
+    FOREIGN KEY (role_id) REFERENCES roles (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-create table if not exists favorite_products
+CREATE TABLE IF NOT EXISTS fuel_consumption
 (
-    id         bigserial,
-    product_id bigint,
-    user_id    bigint,
-    primary key (id),
-    constraint favorite_products_products_id_fk
-        foreign key (product_id) references products,
-    constraint favorite_products_users_id_fk
-        foreign key (user_id) references users
+    id      BIGSERIAL PRIMARY KEY,
+    city    DOUBLE PRECISION,
+    highway DOUBLE PRECISION,
+    mixed   DOUBLE PRECISION
 );
 
-create table if not exists orders
+CREATE TABLE IF NOT EXISTS cars
 (
-    price       numeric(38, 2),
-    quantity    integer,
-    created     timestamp(6) not null,
-    id          bigserial,
-    last_update timestamp(6),
-    product_id  bigint,
-    user_id     bigint,
-    address     varchar(255),
-    comment     varchar(255),
-    phone       varchar(255),
-    status      varchar(255),
-    primary key (id),
-    constraint orders_products_id_fk
-        foreign key (product_id) references products,
-    constraint orders_users_id_fk
-        foreign key (user_id) references users
+    id                  BIGSERIAL PRIMARY KEY,
+    year                INTEGER,
+    mileage             INTEGER,
+    body_type           VARCHAR(255),
+    address             VARCHAR(255),
+    vincode             VARCHAR(255),
+    description         TEXT,
+    transmission        VARCHAR(255),
+    fuel_type           VARCHAR(255),
+    consumption_id      INTEGER,
+    engine_displacement DOUBLE PRECISION,
+    engine_power        INTEGER,
+    drive_type          VARCHAR(255),
+    number_of_doors     INTEGER,
+    number_of_seats     INTEGER,
+    color               VARCHAR(255),
+    imported_from       VARCHAR(255),
+    accident_history    BOOLEAN,
+    condition           VARCHAR(255),
+    gallery             TEXT,
+    fuelConsumption_id  BIGINT,
+    price_id            BIGINT,
+    model_id            BIGINT,
+    user_id             BIGINT,
+    city                BIGINT,
+    FOREIGN KEY (fuelConsumption_id) REFERENCES fuel_consumption (id),
+    FOREIGN KEY (price_id) REFERENCES car_prices (id),
+    FOREIGN KEY (model_id) REFERENCES car_models (id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (city) REFERENCES cities (id)
 );
 
-create table if not exists product_categories
+CREATE TABLE IF NOT EXISTS car_galleries
 (
-    category_id bigint,
-    id          bigserial,
-    product_id  bigint,
-    primary key (id),
-    constraint product_categories_categories_id_fk
-        foreign key (category_id) references categories,
-    constraint product_categories_products_id_fk
-        foreign key (product_id) references products
+    id         BIGSERIAL PRIMARY KEY,
+    image_name VARCHAR(255),
+    is_main    BOOLEAN,
+    url        VARCHAR(255),
+    url_small  VARCHAR(255),
+    car_id     BIGINT,
+    FOREIGN KEY (car_id) REFERENCES cars (id)
 );
 
-create table if not exists product_gallery
+CREATE TABLE IF NOT EXISTS car_models
 (
-    is_main    boolean,
-    id         bigserial,
-    product_id bigint,
-    url        varchar(255),
-    primary key (id),
-    constraint product_gallery_products_id_fk
-        foreign key (product_id) references products
+    id       BIGSERIAL PRIMARY KEY,
+    model    VARCHAR(255),
+    brand_id BIGINT,
+    FOREIGN KEY (brand_id) REFERENCES brand_cars (id)
 );
 
-create table if not exists product_reviews
+CREATE TABLE IF NOT EXISTS brand_cars
 (
-    rating     integer      not null,
-    created    timestamp(6) not null,
-    id         bigserial,
-    product_id bigint,
-    user_id    bigint,
-    comment    varchar(255),
-    primary key (id),
-    constraint product_reviews_products_id_fk
-        foreign key (product_id) references products,
-    constraint product_reviews_users_id_fk
-        foreign key (user_id) references users
+    id      BIGSERIAL PRIMARY KEY,
+    brand   VARCHAR(255),
+    type_id BIGINT,
+    FOREIGN KEY (type_id) REFERENCES car_types (id)
 );
 
-create table if not exists user_has_permissions
+CREATE TABLE IF NOT EXISTS car_favorites
 (
-    created        timestamp(6) not null,
-    id             bigserial,
-    last_update    timestamp(6),
-    permissions_id bigint,
-    user_id        bigint,
-    primary key (id),
-    constraint user_has_permissions_permissions_id_fk
-        foreign key (permissions_id) references permissions,
-    constraint user_has_permissions_users_id_fk
-        foreign key (user_id) references users
+    id      BIGSERIAL PRIMARY KEY,
+    user_id BIGINT,
+    car_id  BIGINT,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (car_id) REFERENCES cars (id)
 );
 
-create table if not exists user_has_roles
+CREATE TABLE IF NOT EXISTS car_prices
 (
-    created     timestamp(6) not null,
-    id          bigserial,
-    last_update timestamp(6),
-    role_id     bigint,
-    user_id     bigint,
-    primary key (id),
-    constraint user_has_roles_roles_id_fk
-        foreign key (role_id) references roles,
-    constraint user_has_roles_users_id_fk
-        foreign key (user_id) references users
+    id                  BIGSERIAL PRIMARY KEY,
+    price               NUMERIC(38, 2),
+    bargain             BOOLEAN,
+    trade               BOOLEAN,
+    military            BOOLEAN,
+    installment_payment BOOLEAN,
+    uncleared           BOOLEAN,
+    car_id              BIGINT,
+    FOREIGN KEY (car_id) REFERENCES cars (id)
+);
+
+CREATE TABLE IF NOT EXISTS car_reviews
+(
+    id      BIGSERIAL PRIMARY KEY,
+    rating  INTEGER      NOT NULL,
+    comment VARCHAR(255),
+    created TIMESTAMP(6) NOT NULL,
+    user_id BIGINT,
+    car_id  BIGINT,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (car_id) REFERENCES cars (id)
+);
+
+CREATE TABLE IF NOT EXISTS car_types
+(
+    id   BIGSERIAL PRIMARY KEY,
+    type VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS car_views
+(
+    id      BIGSERIAL PRIMARY KEY,
+    user_id BIGINT,
+    car_id  BIGINT,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (car_id) REFERENCES cars (id)
 );
