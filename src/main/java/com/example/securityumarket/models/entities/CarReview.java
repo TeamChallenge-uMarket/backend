@@ -2,7 +2,9 @@ package com.example.securityumarket.models.entities;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "car_reviews")
 public class CarReview extends CreatedAtAudit {

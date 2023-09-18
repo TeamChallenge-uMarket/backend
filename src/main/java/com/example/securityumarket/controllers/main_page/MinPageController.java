@@ -20,9 +20,16 @@ public class MinPageController {
 
     @GetMapping("/getNewCars/{page}/{limit}")
     public ResponseEntity<List<ResponseCarDTO>> getNewCars(
-            @PathVariable String limit,
-            @PathVariable String page) {
+            @PathVariable int limit,
+            @PathVariable int page) {
         return mainPageService.getNewCars(page, limit);
+    }
+
+    @GetMapping("/getPopularCars/{page}/{limit}")
+    public ResponseEntity<List<ResponseCarDTO>> getPopularsCars(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return mainPageService.getPopularCars(page, limit);
     }
 
 }
