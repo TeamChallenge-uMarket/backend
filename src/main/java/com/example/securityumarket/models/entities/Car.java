@@ -66,7 +66,7 @@ public class Car {
 
 
     @OneToOne()
-    @JoinColumn(name = "fuelConsumption_id", referencedColumnName = "id")
+    @JoinColumn(name = "fuel_consumption_id", referencedColumnName = "id")
     private FuelConsumption fuelConsumption;
 
     @OneToOne()
