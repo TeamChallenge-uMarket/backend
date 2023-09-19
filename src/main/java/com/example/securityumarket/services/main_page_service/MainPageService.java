@@ -4,9 +4,11 @@ import com.example.securityumarket.dao.CarDAO;
 import com.example.securityumarket.dao.CarViewDAO;
 import com.example.securityumarket.models.DTO.main_page.ResponseCarDTO;
 import com.example.securityumarket.models.entities.Car;
+import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,5 +33,20 @@ public class MainPageService {
         List<Car> popularCars = carViewDAO.findPopularCars(PageRequest.of(page, limit));
         List<ResponseCarDTO> popularCarsResponse = commonMainService.convertCarsListToDtoCarsList(popularCars);
         return ResponseEntity.ok(popularCarsResponse);
+    }
+
+    public ResponseEntity<List<ResponseCarDTO>> getRecentlyViewedCars(int page, int limit) {
+
+        try {
+            Users user = commonMainService.getAuthenticatedUser();
+            List<Car> viewedCarsByUser = carViewDAO.findViewedCarsByRegisteredUser(user, PageRequest.of(page, limit));
+            List<ResponseCarDTO> viewedCarsByUserResponse = commonMainService.convertCarsListToDtoCarsList(viewedCarsByUser);
+
+            return ResponseEntity.ok(viewedCarsByUserResponse);
+
+        } catch (UsernameNotFoundException e) {
+
+            return ResponseEntity.noContent().build();
+        }
     }
 }

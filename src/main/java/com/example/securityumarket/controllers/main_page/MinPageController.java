@@ -32,4 +32,10 @@ public class MinPageController {
         return mainPageService.getPopularCars(page, limit);
     }
 
+    @GetMapping("/getRecentlyViewed/{page}/{limit}")
+    public ResponseEntity<List<ResponseCarDTO>> getRecentlyViewedCars(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return mainPageService.getRecentlyViewedCars(page, limit);
+    }
 }
