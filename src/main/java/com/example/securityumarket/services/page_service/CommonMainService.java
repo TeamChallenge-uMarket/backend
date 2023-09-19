@@ -1,4 +1,4 @@
-package com.example.securityumarket.services.main_page_service;
+package com.example.securityumarket.services.page_service;
 
 import com.example.securityumarket.dao.CarGalleryDAO;
 import com.example.securityumarket.dao.UsersDAO;

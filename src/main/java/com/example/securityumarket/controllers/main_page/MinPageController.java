@@ -1,7 +1,7 @@
 package com.example.securityumarket.controllers.main_page;
 
 import com.example.securityumarket.models.DTO.main_page.ResponseCarDTO;
-import com.example.securityumarket.services.main_page_service.MainPageService;
+import com.example.securityumarket.services.page_service.MainPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,10 +32,31 @@ public class MinPageController {
         return mainPageService.getPopularCars(page, limit);
     }
 
+    //TODO need to test with and without auth
     @GetMapping("/getRecentlyViewed/{page}/{limit}")
     public ResponseEntity<List<ResponseCarDTO>> getRecentlyViewedCars(
             @PathVariable int limit,
             @PathVariable int page) {
         return mainPageService.getRecentlyViewedCars(page, limit);
+    }
+
+    @GetMapping("/getType")
+    public ResponseEntity<List<String>> getTypeTransport() {
+        return mainPageService.getTypeTransport();
+    }
+
+    @GetMapping("/getBrand")
+    public ResponseEntity<List<String>> getBrandTransport() {
+        return mainPageService.getBrandTransport();
+    }
+
+    @GetMapping("/getModel")
+    public ResponseEntity<List<String>> getModelTransport() {
+        return mainPageService.getModelTransport();
+    }
+
+    @GetMapping("/getCities")
+    public ResponseEntity<List<String>> getCities() {
+        return mainPageService.getCities();
     }
 }
