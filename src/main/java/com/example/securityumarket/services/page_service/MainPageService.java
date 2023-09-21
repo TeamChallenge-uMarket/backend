@@ -1,6 +1,7 @@
 package com.example.securityumarket.services.page_service;
 
 import com.example.securityumarket.dao.*;
+import com.example.securityumarket.models.DTO.main_page.request.RequestCarSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.models.entities.Car;
 import com.example.securityumarket.models.entities.Users;
@@ -54,6 +55,13 @@ public class MainPageService {
         }
     }
 
+
+    public ResponseEntity<List<ResponseCarDTO>> searchCarsByRequest(RequestCarSearchDTO requestSearch, int page, int limit) {
+        List<Car> searchedCars = carDAO.findCarsByRequest(requestSearch, PageRequest.of(page, limit));
+        return okResponseCarsDTOList(searchedCars);
+    }
+
+
     public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
         return ResponseEntity.ok(carTypeDAO.findAll().stream().map(carType -> ResponseTypeDTO.builder()
                 .typeId(carType.getId())
@@ -83,4 +91,5 @@ public class MainPageService {
                         .build())
                 .collect(Collectors.toList()));
     }
+
 }
