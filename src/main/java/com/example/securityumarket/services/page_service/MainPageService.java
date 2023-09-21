@@ -1,7 +1,7 @@
 package com.example.securityumarket.services.page_service;
 
 import com.example.securityumarket.dao.*;
-import com.example.securityumarket.models.DTO.main_page.*;
+import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.models.entities.Car;
 import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +54,6 @@ public class MainPageService {
         }
     }
 
-    //TODO need to test
     public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
         return ResponseEntity.ok(carTypeDAO.findAll().stream().map(carType -> ResponseTypeDTO.builder()
                 .typeId(carType.getId())

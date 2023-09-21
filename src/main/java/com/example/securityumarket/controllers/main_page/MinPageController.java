@@ -1,6 +1,6 @@
 package com.example.securityumarket.controllers.main_page;
 
-import com.example.securityumarket.models.DTO.main_page.*;
+import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.services.page_service.MainPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

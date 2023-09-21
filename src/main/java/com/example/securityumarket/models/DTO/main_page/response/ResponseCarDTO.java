@@ -1,4 +1,4 @@
-package com.example.securityumarket.models.DTO.main_page;
+package com.example.securityumarket.models.DTO.main_page.response;
 
 import com.example.securityumarket.models.entities.CarBrand;
 import com.example.securityumarket.models.entities.CarModel;

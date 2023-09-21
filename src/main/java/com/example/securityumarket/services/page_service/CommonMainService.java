@@ -2,7 +2,7 @@ package com.example.securityumarket.services.page_service;
 
 import com.example.securityumarket.dao.CarGalleryDAO;
 import com.example.securityumarket.dao.UsersDAO;
-import com.example.securityumarket.models.DTO.main_page.ResponseCarDTO;
+import com.example.securityumarket.models.DTO.main_page.response.ResponseCarDTO;
 import com.example.securityumarket.models.entities.Car;
 import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
