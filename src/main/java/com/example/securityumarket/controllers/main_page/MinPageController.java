@@ -1,6 +1,6 @@
 package com.example.securityumarket.controllers.main_page;
 
-import com.example.securityumarket.models.DTO.main_page.ResponseCarDTO;
+import com.example.securityumarket.models.DTO.main_page.*;
 import com.example.securityumarket.services.page_service.MainPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -41,23 +41,23 @@ public class MinPageController {
     }
 
     @GetMapping("/getType")
-    public ResponseEntity<List<String>> getTypeTransport() {
+    public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
         return mainPageService.getTypeTransport();
     }
 
     @GetMapping("/getBrand")
-    public ResponseEntity<List<String>> getBrandTransport() {
+    public ResponseEntity<List<ResponseBrandDTO>> getBrandTransport() {
         return mainPageService.getBrandTransport();
     }
 
     @GetMapping("/getModel/{brandId}")
-    public ResponseEntity<List<String>> getModelTransport(
+    public ResponseEntity<List<ResponseModelDTO>> getModelTransport(
             @PathVariable long brandId) {
         return mainPageService.getModelTransport(brandId);
     }
 
     @GetMapping("/getCities")
-    public ResponseEntity<List<String>> getCities() {
+    public ResponseEntity<List<ResponseCitiesDTO>> getCities() {
         return mainPageService.getCities();
     }
 }

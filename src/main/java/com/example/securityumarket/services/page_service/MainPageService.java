@@ -1,8 +1,9 @@
 package com.example.securityumarket.services.page_service;
 
 import com.example.securityumarket.dao.*;
-import com.example.securityumarket.models.DTO.main_page.ResponseCarDTO;
-import com.example.securityumarket.models.entities.*;
+import com.example.securityumarket.models.DTO.main_page.*;
+import com.example.securityumarket.models.entities.Car;
+import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -54,19 +55,33 @@ public class MainPageService {
     }
 
     //TODO need to test
-    public ResponseEntity<List<String>> getTypeTransport() {
-        return ResponseEntity.ok(carTypeDAO.findAll().stream().map(CarType::getType).collect(Collectors.toList()));
+    public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
+        return ResponseEntity.ok(carTypeDAO.findAll().stream().map(carType -> ResponseTypeDTO.builder()
+                .typeId(carType.getId())
+                .type(carType.getType())
+                .build()).collect(Collectors.toList()));
     }
 
-    public ResponseEntity<List<String>> getBrandTransport() {
-        return ResponseEntity.ok(carBrandDAO.findAll().stream().map(CarBrand::getBrand).collect(Collectors.toList()));
+    public ResponseEntity<List<ResponseBrandDTO>> getBrandTransport() {
+        return ResponseEntity.ok(carBrandDAO.findAll().stream().map(carBrand -> ResponseBrandDTO.builder()
+                .brandId(carBrand.getId())
+                .brand(carBrand.getBrand())
+                .build()).collect(Collectors.toList()));
     }
 
-    public ResponseEntity<List<String>> getModelTransport(long brandId) {
-        return ResponseEntity.ok(carModelDAO.findAllByCarBrand(brandId).stream().map(CarModel::getModel).collect(Collectors.toList()));
+    public ResponseEntity<List<ResponseModelDTO>> getModelTransport(long brandId) {
+        return ResponseEntity.ok(carModelDAO.findAllByCarBrand(brandId).stream().map(carModel -> ResponseModelDTO.builder()
+                .modelId(carModel.getId())
+                .brand(carModel.getCarBrand().getBrand())
+                .model(carModel.getModel())
+                .build()).collect(Collectors.toList()));
     }
 
-    public ResponseEntity<List<String>> getCities() {
-        return ResponseEntity.ok(cityDAO.findAll().stream().map(City::getDescription).collect(Collectors.toList()));
+    public ResponseEntity<List<ResponseCitiesDTO>> getCities() {
+        return ResponseEntity.ok(cityDAO.findAll().stream().map(city -> ResponseCitiesDTO.builder()
+                        .cityId(city.getId())
+                        .city(city.getDescription())
+                        .build())
+                .collect(Collectors.toList()));
     }
 }
