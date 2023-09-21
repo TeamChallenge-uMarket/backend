@@ -62,8 +62,8 @@ public class MainPageService {
         return ResponseEntity.ok(carBrandDAO.findAll().stream().map(CarBrand::getBrand).collect(Collectors.toList()));
     }
 
-    public ResponseEntity<List<String>> getModelTransport() {
-        return ResponseEntity.ok(carModelDAO.findAll().stream().map(CarModel::getModel).collect(Collectors.toList()));
+    public ResponseEntity<List<String>> getModelTransport(long brandId) {
+        return ResponseEntity.ok(carModelDAO.findAllByCarBrand(brandId).stream().map(CarModel::getModel).collect(Collectors.toList()));
     }
 
     public ResponseEntity<List<String>> getCities() {

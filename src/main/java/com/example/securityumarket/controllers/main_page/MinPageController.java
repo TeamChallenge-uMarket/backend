@@ -50,9 +50,10 @@ public class MinPageController {
         return mainPageService.getBrandTransport();
     }
 
-    @GetMapping("/getModel")
-    public ResponseEntity<List<String>> getModelTransport() {
-        return mainPageService.getModelTransport();
+    @GetMapping("/getModel/{brandId}")
+    public ResponseEntity<List<String>> getModelTransport(
+            @PathVariable long brandId) {
+        return mainPageService.getModelTransport(brandId);
     }
 
     @GetMapping("/getCities")
