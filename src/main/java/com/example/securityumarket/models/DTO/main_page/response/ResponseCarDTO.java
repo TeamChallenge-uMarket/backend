@@ -14,12 +14,13 @@ public class ResponseCarDTO {
 
     private long carId;
     private String imgUrlSmall;
-    private CarBrand carBrand;
-    private CarModel carModel;
+    private String carBrand;
+    private String carModel;
     private BigDecimal price;
     private int mileage;
-    private City city;
+    private String city;
     private String transmission;
     private String fuelType;
     private int year;
+    private String created;
 }

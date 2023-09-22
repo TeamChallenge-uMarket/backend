@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,15 +25,16 @@ public class CommonMainService {
        return newCars.stream()
                 .map(car -> ResponseCarDTO.builder()
                         .carId(car.getId())
-                        .carModel(car.getCarModel())
-                        .carBrand(car.getCarModel().getCarBrand())
+                        .carModel(car.getCarModel().getModel())
+                        .carBrand(car.getCarModel().getCarBrand().getBrand())
                         .price(car.getPrice().getPrice())
                         .mileage(car.getMileage())
                         .year(car.getYear())
-                        .city(car.getCity())
+                        .city(car.getCity().getDescription())
                         .transmission(car.getTransmission())
                         .fuelType(car.getFuelType())
                         .imgUrlSmall(carGalleryDAO.findSmallMainPic(car.getId()))
+                        .created(car.getCreated().toString())
                         .build())
                 .collect(Collectors.toList());
     }
