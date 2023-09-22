@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class MainPageService {
+public class MainPageService { //TODO do check for uncorrected request
 
     private final CarDAO carDAO;
     private final CommonMainService commonMainService;
