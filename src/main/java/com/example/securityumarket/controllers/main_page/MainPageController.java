@@ -30,7 +30,6 @@ public class MainPageController {
         return mainPageService.getPopularCars(page, limit);
     }
 
-    //TODO need to test with and without auth
     @GetMapping("/recentlyViewed/{page}/{limit}")
     public ResponseEntity<List<ResponseCarDTO>> getRecentlyViewedCars(
             @PathVariable int limit,
@@ -46,7 +45,6 @@ public class MainPageController {
         return mainPageService.searchCarsByRequest(requestSearch, page, limit);
     }
 
-    //tested +
     @GetMapping("/type")
     public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
         return mainPageService.getTypeTransport();

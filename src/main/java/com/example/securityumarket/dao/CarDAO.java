@@ -14,11 +14,14 @@ public interface CarDAO extends JpaRepository<Car, Long> {
     @Query("select c from Car c order by c.created desc")
     List<Car> findNewCars(PageRequest pageRequest);
 
-    //TODO need to check
     @Query("select c from Car c " +
-            "where c.carModel.carBrand.carType.id = :#{#requestSearch.typeId} " +
-            "and c.carModel.carBrand.id = :#{#requestSearch.brandId} " +
-            "and c.carModel.id = :#{#requestSearch.modelId} " +
-            "order by :#{requestSearch.sort} ")
+            "where (:#{#requestSearch.typeId} = 0 or c.carModel.carBrand.carType.id = :#{#requestSearch.typeId}) " +
+            "and (:#{#requestSearch.brandId} = 0 or c.carModel.carBrand.id = :#{#requestSearch.brandId}) " +
+            "and (:#{#requestSearch.modelId} = 0 or c.carModel.id = :#{#requestSearch.modelId}) " +
+            "order by " +
+            "   case when lower(:#{#requestSearch.orderBy.name()}) = 'created' and lower(:#{#requestSearch.sortBy.name()}) = 'asc' then c.created end asc, " +
+            "   case when lower(:#{#requestSearch.orderBy.name()}) = 'created' and lower(:#{#requestSearch.sortBy.name()}) = 'desc' then c.created end desc, " +
+            "   case when lower(:#{#requestSearch.orderBy.name()}) = 'price' and  lower(:#{#requestSearch.sortBy.name()}) = 'asc' then c.price.price end asc, " +
+            "   case when lower(:#{#requestSearch.orderBy.name()}) = 'price' and lower(:#{#requestSearch.sortBy.name()}) = 'desc' then c.price.price end desc")
     List<Car> findCarsByRequest(@Param("requestSearch") RequestCarSearchDTO requestSearch, PageRequest pageRequest);
 }
