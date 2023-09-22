@@ -1,7 +1,9 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "car_views")
 public class CarView extends DateAudit {

@@ -1,9 +1,10 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
-
+@Data
 @Entity
 @Table(name = "permissions")
 public class Permission extends DateAudit {

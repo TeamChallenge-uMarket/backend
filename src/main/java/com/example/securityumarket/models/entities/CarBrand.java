@@ -2,9 +2,11 @@ package com.example.securityumarket.models.entities;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 @Entity
 @Table(name = "brand_cars")
 public class CarBrand {

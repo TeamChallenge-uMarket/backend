@@ -1,8 +1,10 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @Entity
 @NoArgsConstructor
 @Table(name = "car_galleries")
