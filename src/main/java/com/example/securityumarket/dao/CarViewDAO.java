@@ -12,7 +12,6 @@ import java.util.List;
 
 public interface CarViewDAO extends JpaRepository<CarView, Long> {
 
-    //TODO need check this query
     @Query("select cw.car from CarView cw group by cw.car order by count(cw.car) desc")
     List<Car> findPopularCars(PageRequest pageRequest);
 

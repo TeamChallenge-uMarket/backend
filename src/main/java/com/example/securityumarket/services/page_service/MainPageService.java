@@ -25,6 +25,7 @@ public class MainPageService { //TODO do check for uncorrected request
     private final CarBrandDAO carBrandDAO;
     private final CarModelDAO carModelDAO;
     private final CityDAO cityDAO;
+    private final CarFavoriteDAO carFavoriteDAO;
 
     //transform car entity list to carDTO list
     private ResponseEntity<List<ResponseCarDTO>> okResponseCarsDTOList(List<Car> newCars) {
@@ -92,4 +93,13 @@ public class MainPageService { //TODO do check for uncorrected request
                 .collect(Collectors.toList()));
     }
 
+    public ResponseEntity<List<ResponseCarDTO>> getFavoriteCars(int page, int limit) {
+        try {
+            Users user = commonMainService.getAuthenticatedUser();
+            List<Car> viewedCarsByUser = carFavoriteDAO.findFavorites(user, PageRequest.of(page, limit));
+            return okResponseCarsDTOList(viewedCarsByUser);
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.noContent().build();
+        }
+    }
 }

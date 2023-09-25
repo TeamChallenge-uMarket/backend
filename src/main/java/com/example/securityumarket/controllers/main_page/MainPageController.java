@@ -45,6 +45,13 @@ public class MainPageController {
         return mainPageService.searchCarsByRequest(requestSearch, page, limit);
     }
 
+    @GetMapping("/favoriteCars/{page}/{limit}")
+    public ResponseEntity<List<ResponseCarDTO>> getFavorites(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return mainPageService.getFavoriteCars(page, limit);
+    }
+
     @GetMapping("/type")
     public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
         return mainPageService.getTypeTransport();
