@@ -1,7 +1,9 @@
 package com.example.securityumarket.controllers.main_page;
 
+import com.example.securityumarket.models.DTO.main_page.request.RequestAddCarDTO;
 import com.example.securityumarket.models.DTO.main_page.request.RequestCarSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
+import com.example.securityumarket.services.page_service.AddCarService;
 import com.example.securityumarket.services.page_service.MainPageService;
 import com.example.securityumarket.services.page_service.StorageService;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +24,21 @@ public class MainPageController {
 
     private final StorageService storageService;
 
+    private final AddCarService addCarService;
+
     @GetMapping("/login")
     public String getLoginPage() {
         return "redirect:/api/v1/authorization/login";
+    }
+
+    @GetMapping("/add-car")
+    public String getAddCarPage() {
+        return "add-car";
+    }
+
+    @PostMapping("/add-car")
+    public ResponseEntity<String> getAddCarPage(@RequestBody RequestAddCarDTO requestAddCarDTO) {
+        return addCarService.addCar(requestAddCarDTO);
     }
 
     @GetMapping("/newCars/{page}/{limit}")
@@ -85,11 +99,11 @@ public class MainPageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) { //TODO TEST METHOD
         return new ResponseEntity<>(storageService.uploadFileWithPublicRead(file), HttpStatus.OK);
     }
 
-    @GetMapping("/download/{fileName}")
+    @GetMapping("/download/{fileName}") //TODO TEST METHOD
     public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileName) {
         byte[] data = storageService.downloadFile(fileName);
         ByteArrayResource resource = new ByteArrayResource(data);
@@ -101,14 +115,14 @@ public class MainPageController {
                 .body(resource);
     }
 
-    @DeleteMapping("/delete/{fileName}")
+    @DeleteMapping("/delete/{fileName}") //TODO TEST METHOD
     public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
         return new ResponseEntity<>(storageService.deleteFile(fileName), HttpStatus.OK);
     }
 
-    @GetMapping("/get-photo/{fileName}")
+    @GetMapping("/get-photo/{fileName}") //TODO TEST METHOD
     public ResponseEntity<String> getPhotoUrl(@PathVariable String fileName) {
-        return new ResponseEntity<>(storageService.getPhotoUrlFromPublicRead(fileName), HttpStatus.OK);
+        return new ResponseEntity<>(storageService.getFileUrlFromPublicRead(fileName), HttpStatus.OK);
     }
 
 }
