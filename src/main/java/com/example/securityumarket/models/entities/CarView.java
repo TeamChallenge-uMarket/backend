@@ -1,21 +1,23 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
-@Table(name = "favorite_products")
-public class FavoriteProducts {
+@Table(name = "car_views")
+public class CarView extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Users user;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "car_id")
+    private Car car;
 }
-
-

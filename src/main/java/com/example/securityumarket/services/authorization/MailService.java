@@ -1,4 +1,4 @@
-package com.example.securityumarket.services;
+package com.example.securityumarket.services.authorization;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;

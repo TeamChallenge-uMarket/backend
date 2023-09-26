@@ -2,16 +2,22 @@ package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
+
 @Entity
-@Table(name = "parent_categories")
-public class ParentCategory {
+@Table(name = "regions")
+public class Region {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    private String name;
+
+    @Column(name = "description")
     private String description;
 
-    // ... конструктори, геттери, сеттери та інші методи ...
-}
 
+    @OneToMany(mappedBy = "region")
+    private List<City> cities;
+}

@@ -1,17 +1,18 @@
-package com.example.securityumarket.services;
+package com.example.securityumarket.services.authorization;
 
+import com.example.securityumarket.dao.CityDAO;
+import com.example.securityumarket.dao.RegionDAO;
 import com.example.securityumarket.dao.UsersDAO;
-import com.example.securityumarket.models.*;
+import com.example.securityumarket.models.RegisterRequest;
 import com.example.securityumarket.models.entities.Users;
-import com.example.securityumarket.models.entities.Role;
+import com.example.securityumarket.services.security.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import static com.example.securityumarket.services.MailService.CODE_EXPIRATION_TIME_MS;
+import static com.example.securityumarket.services.authorization.MailService.CODE_EXPIRATION_TIME_MS;
 import static org.apache.logging.log4j.util.Strings.isBlank;
 
 
@@ -19,14 +20,18 @@ import static org.apache.logging.log4j.util.Strings.isBlank;
 public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final UsersDAO usersDAO;
+    private final CityDAO cityDAO;
+    private final RegionDAO regionDAO;
     private final JwtService jwtService;
     private final MailService mailService;
 
     private Users users;
 
-    public RegistrationService(PasswordEncoder passwordEncoder, UsersDAO usersDAO, JwtService jwtService, MailService mailService) {
+    public RegistrationService(PasswordEncoder passwordEncoder, UsersDAO usersDAO, CityDAO cityDAO, RegionDAO regionDAO, JwtService jwtService, MailService mailService) {
         this.passwordEncoder = passwordEncoder;
         this.usersDAO = usersDAO;
+        this.cityDAO = cityDAO;
+        this.regionDAO = regionDAO;
         this.jwtService = jwtService;
         this.mailService = mailService;
     }
@@ -68,9 +73,9 @@ public class RegistrationService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .phone(normalizePhoneNumber(registerRequest.getPhone()))
-                .country(registerRequest.getAddress().getCountry())
-                .city(registerRequest.getAddress().getCity())
-//                .role(Role.USER)
+                .city(cityDAO.findByRegionDescriptionAndAndDescription(
+                        registerRequest.getAddressDTO().getRegion(),
+                        registerRequest.getAddressDTO().getCity()).get())
                 .build();
     }
 
@@ -111,7 +116,6 @@ public class RegistrationService {
                     .body("Password must be at least 8 characters long and contain at least one letter and one digit");
         }
 
-
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Passwords do not match");
         }
@@ -123,6 +127,16 @@ public class RegistrationService {
         if (usersDAO.findAppUserByPhone(normalizePhoneNumber(registerRequest.getPhone())).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User with this phone already exists");
         }
-        return null; // Всі поля валідні
+
+        if (regionDAO.findByDescription(registerRequest.getAddressDTO().getRegion()).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid region");
+        }
+        if (cityDAO.findByDescription(registerRequest.getAddressDTO().getCity()).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid city");
+        }
+        if (cityDAO.findByRegionDescriptionAndAndDescription(registerRequest.getAddressDTO().getRegion(), registerRequest.getAddressDTO().getCity()).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Check your address, this " + registerRequest.getAddressDTO().getRegion() + " or this " + registerRequest.getAddressDTO().getCity() + " city are not exists");
+        }
+        return null;
     }
 }
