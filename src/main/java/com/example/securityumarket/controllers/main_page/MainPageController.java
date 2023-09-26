@@ -3,9 +3,13 @@ package com.example.securityumarket.controllers.main_page;
 import com.example.securityumarket.models.DTO.main_page.request.RequestCarSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.services.page_service.MainPageService;
+import com.example.securityumarket.services.page_service.StorageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,6 +19,13 @@ import java.util.List;
 public class MainPageController {
 
     private final MainPageService mainPageService;
+
+    private final StorageService storageService;
+
+    @GetMapping("/login")
+    public String getLoginPage() {
+        return "redirect:/api/v1/authorization/login";
+    }
 
     @GetMapping("/newCars/{page}/{limit}")
     public ResponseEntity<List<ResponseCarDTO>> getNewCars(
@@ -72,4 +83,32 @@ public class MainPageController {
     public ResponseEntity<List<ResponseCitiesDTO>> getCities() {
         return mainPageService.getCities();
     }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam(value = "file") MultipartFile file) {
+        return new ResponseEntity<>(storageService.uploadFileWithPublicRead(file), HttpStatus.OK);
+    }
+
+    @GetMapping("/download/{fileName}")
+    public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileName) {
+        byte[] data = storageService.downloadFile(fileName);
+        ByteArrayResource resource = new ByteArrayResource(data);
+        return ResponseEntity
+                .ok()
+                .contentLength(data.length)
+                .header("Content-type", "application/octet-stream")
+                .header("Content-disposition", "attachment; filename=\"" + fileName + "\"")
+                .body(resource);
+    }
+
+    @DeleteMapping("/delete/{fileName}")
+    public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
+        return new ResponseEntity<>(storageService.deleteFile(fileName), HttpStatus.OK);
+    }
+
+    @GetMapping("/get-photo/{fileName}")
+    public ResponseEntity<String> getPhotoUrl(@PathVariable String fileName) {
+        return new ResponseEntity<>(storageService.getPhotoUrlFromPublicRead(fileName), HttpStatus.OK);
+    }
+
 }

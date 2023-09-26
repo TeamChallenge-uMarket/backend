@@ -1,9 +1,7 @@
 package com.example.securityumarket.services.page_service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Objects;
 
 @Slf4j
@@ -26,13 +28,6 @@ public class StorageService {
 
     public StorageService(AmazonS3 s3Client) {
         this.s3Client = s3Client;
-    }
-
-    public String uploadFile(MultipartFile file) {
-        File fileObj = convertMultiPartFileToFile(file);
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        s3Client.putObject(new PutObjectRequest(bucketName,fileName,fileObj));
-        return "File uploaded : " + fileName;
     }
 
     public byte[] downloadFile(String fileName) {
@@ -61,5 +56,40 @@ public class StorageService {
         }
         return convertedFile;
     }
+
+    public String uploadFileWithPublicRead(MultipartFile file) {
+        File fileObj = convertMultiPartFileToFile(file);
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        s3Client.putObject(new PutObjectRequest(bucketName,fileName,fileObj)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        fileObj.delete();
+        return "File uploaded : " + fileName;
+    }
+
+    public String getPhotoUrlFromPublicRead(String fileName)
+    {
+        GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(bucketName, fileName);
+        ResponseHeaderOverrides headers = new ResponseHeaderOverrides();
+        urlRequest.addRequestParameter("Content-Disposition", "inline");
+        URL url = s3Client.generatePresignedUrl(urlRequest);
+        return url.toString();
+    }
+
+    public String uploadFileWithPrivateRead(MultipartFile file) {
+        File fileObj = convertMultiPartFileToFile(file);
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        s3Client.putObject(new PutObjectRequest(bucketName,fileName,fileObj));
+        fileObj.delete();
+        return "File uploaded : " + fileName;
+    }
+
+    public String getPhotoUrlFromPrivateRead(String fileName)
+    {
+        GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(bucketName, fileName);
+        urlRequest.setExpiration(Date.from(Instant.now().plus(Duration.ofHours(1))));
+        return s3Client.generatePresignedUrl(urlRequest).toString();
+    }
+
+
 
 }

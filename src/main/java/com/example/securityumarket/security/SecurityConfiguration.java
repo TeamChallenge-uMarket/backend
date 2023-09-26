@@ -27,7 +27,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(matcherRegistry ->
                         matcherRegistry
-                                .requestMatchers("/api/v1/auth/**")
+                                .requestMatchers("/api/v1/authorization/**")
                                 .permitAll()
                                 .requestMatchers("/api/v1/main/**")
                                 .permitAll()
@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                         httpSecuritySessionManagementConfigurer
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .logout(logoutConfigurer ->
-                        logoutConfigurer.permitAll().logoutSuccessUrl("/api/v1/auth/login"))
+                        logoutConfigurer.logoutSuccessUrl("/api/v1/authorization/login"))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
