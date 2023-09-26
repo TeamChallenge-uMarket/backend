@@ -84,7 +84,7 @@ public class StorageService {
         }
     }
 
-    public String getFileUrlFromPublicRead2(String fileName) {
+    public String getFileUrlFromPublicRead(String fileName) {
         if (s3Client.doesObjectExist(getBucketName(), fileName)) {
             GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(getBucketName(), fileName);
             ResponseHeaderOverrides headers = new ResponseHeaderOverrides();
@@ -96,7 +96,7 @@ public class StorageService {
         }
     }
 
-    public String getFileUrlFromPublicRead(String fileName) {
+    public String getFileUrlFromPublicRead2(String fileName) {
         if (s3Client.doesObjectExist(getBucketName(), fileName)) {
             GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest(getBucketName(), fileName);
             URL url = s3Client.generatePresignedUrl(urlRequest);

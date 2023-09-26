@@ -32,10 +32,9 @@ public class AddCarService {
 
     private final CarService carService;
 
-    @Transactional
-    public ResponseEntity<String> addCar(RequestAddCarDTO requestAddCarDTO) {
+    public ResponseEntity<String> addCar(RequestAddCarDTO requestAddCarDTO, MultipartFile[] multipartFiles) {
         try {
-            Car car = buildCar(requestAddCarDTO);
+            Car car = buildCar(requestAddCarDTO, multipartFiles);
             carService.save(car);
             return ResponseEntity.ok("The ad with your car has been successfully added.");
         } catch (UAutoException exception) {
@@ -44,7 +43,7 @@ public class AddCarService {
         }
     }
 
-    private Car buildCar(RequestAddCarDTO requestAddCarDTO) throws UAutoException {
+    private Car buildCar(RequestAddCarDTO requestAddCarDTO, MultipartFile[] multipartFiles) throws UAutoException {
         return Car.builder()
                 .user(getUser())
                 .carModel(getCarModelFromRequestAddCarDTO(requestAddCarDTO.getModel()))
@@ -78,7 +77,7 @@ public class AddCarService {
                         requestAddCarDTO.isInstallmentPayment(),
                         requestAddCarDTO.isUncleared()
                 ))
-                .carGalleries(getGalleryFromRequestAddCarDTO(requestAddCarDTO.getFiles()))
+                .carGalleries(getGalleryFromRequestAddCarDTO(multipartFiles))
                 .build();
     }
 

@@ -24,7 +24,7 @@ public class CarGallery {
     @Column(name = "is_main")
     private boolean isMain;
 
-    @Column(name = "url")
+    @Column(name = "url", length = 500)
     private String url;
 
     @Column(name = "url_small")

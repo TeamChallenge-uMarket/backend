@@ -41,5 +41,5 @@ public class RequestAddCarDTO {
     private boolean military;
     private boolean installmentPayment;
     private boolean uncleared;
-    private MultipartFile[] files;
+//    private MultipartFile[] files;
 }

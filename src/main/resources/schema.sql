@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS car_galleries
     id         BIGSERIAL PRIMARY KEY,
     image_name VARCHAR(255),
     is_main    BOOLEAN,
-    url        VARCHAR(255),
+    url        VARCHAR(500),
     url_small  VARCHAR(255),
     car_id     BIGINT,
     FOREIGN KEY (car_id) REFERENCES cars (id)

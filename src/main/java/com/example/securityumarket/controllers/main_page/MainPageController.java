@@ -37,8 +37,10 @@ public class MainPageController {
     }
 
     @PostMapping("/add-car")
-    public ResponseEntity<String> getAddCarPage(@RequestBody RequestAddCarDTO requestAddCarDTO) {
-        return addCarService.addCar(requestAddCarDTO);
+    public ResponseEntity<String> getAddCarPage(
+            @RequestPart("requestAddCarDTO") RequestAddCarDTO requestAddCarDTO,
+            @RequestPart("multipartFiles") MultipartFile[] multipartFiles) {
+        return addCarService.addCar(requestAddCarDTO, multipartFiles);
     }
 
     @GetMapping("/newCars/{page}/{limit}")

@@ -30,7 +30,7 @@ public class CarGalleryService {
     private List<String> uploadFiles(MultipartFile[] files) throws UAutoException {
         List<String> uploadedFileUrls = new ArrayList<>();
         for (MultipartFile file : files) {
-            String fileName = storageService.uploadFileWithPublicRead(file);
+            String fileName = storageService.uploadFileWithPublicRead(file).substring(16);
             String fileUrl = storageService.getFileUrlFromPublicRead(fileName);
             CarGallery buildCarGallery = CarGallery.builder()
                     .imageName(fileName)
