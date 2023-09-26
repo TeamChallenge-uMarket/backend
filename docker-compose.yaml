@@ -13,9 +13,11 @@ services:
       - db
     restart: on-failure
     environment:
-      - DATASOURCE_URL=jdbc:postgresql://db:5432/umarket
-      - DATASOURCE_USERNAME=postgres
-      - DATASOURCE_PASSWORD=1111
+      - PGHOST=localhost
+      - PGPORT=5432
+      - PGDATABASE=umarket
+      - PGUSER=postgres
+      - PGPASSWORD=1111
     networks:
       - postgres
 
