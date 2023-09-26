@@ -379,7 +379,6 @@ VALUES (
         NOW(), -- created (поточна дата і час)
         NOW() -- last_update (поточна дата і час)
        ),
-
 -- Row 2
        (false,
         'Sedan',
