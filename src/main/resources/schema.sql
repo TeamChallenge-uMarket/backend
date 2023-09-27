@@ -51,6 +51,27 @@ CREATE TABLE IF NOT EXISTS role_has_permissions
     FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
+create table if not exists users
+(
+    id            bigserial,
+    created       timestamp(6) not null,
+    last_update   timestamp(6),
+    email         varchar(255),
+    name          varchar(255),
+    password      varchar(255),
+    phone         varchar(255),
+    refresh_token varchar(255),
+    city          bigint,
+    constraint users_pkey
+        primary key (id),
+    constraint users_email_uindex
+        unique (email),
+    constraint users_cities_id_fk
+        foreign key (city) references cities
+);
+
+
+
 CREATE TABLE IF NOT EXISTS user_has_permissions
 (
     id             BIGSERIAL PRIMARY KEY,
