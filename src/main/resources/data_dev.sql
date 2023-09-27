@@ -203,6 +203,25 @@ VALUES (10.1, 7.2, 8.7),
        (13.1, 8.8, 10.7),
        (4.9, 3.7, 4.1);
 
+INSERT INTO users (name, email, password, phone, refresh_token, city, created, last_update)
+VALUES (
+           'Імя', -- Замініть на реальне ім'я користувача
+           'email@example.com', -- Замініть на реальний email користувача
+           'password11', -- Замініть на хешований пароль користувача
+           '+380980000000', -- Замініть на реальний номер телефону користувача
+           'refresh_token_value', -- Замініть на реальний refresh token користувача
+           1, -- Замініть на ID міста, в якому проживає користувач
+           TO_TIMESTAMP('2023-08-26 20:31:23', 'YYYY-MM-DD HH24:MI:SS'), -- created (поточна дата і час)
+           NOW() -- last_update (поточна дата і час)
+       );
+
+-- PRICES
+INSERT INTO car_prices (bargain, installment_payment, military, price, trade, uncleared)
+VALUES (true, false, false, 20000, true, false),
+       (true, true, false, 10000, true, false),
+       (true, false, false, 9000, false, false),
+       (false, true, true, 25000, false, true);
+
 
 INSERT INTO cars (accident_history, body_type, color, condition, description, drive_type, engine_displacement,
                   engine_power, fuel_type, imported_from, mileage, number_of_doors, number_of_seats, transmission,
@@ -230,7 +249,7 @@ VALUES (
            3, -- fuel_consumption_id (замініть це на ID вашого показника витрат пального)
            1, -- price_id (замініть це на ID вашої ціни)
            1, -- user_id (замініть це на ID користувача, який додав цей запис)
-           TO_DATE('2023-08-26 20:31:23', 'YYYY-MM-DD HH:MM:SS'), -- created (поточна дата і час)
+           TO_TIMESTAMP('2023-08-26 20:31:23', 'YYYY-MM-DD HH24:MI:SS'), -- created (поточна дата і час)
            NOW() -- last_update (поточна дата і час)
        ),
 --     second car
@@ -255,14 +274,6 @@ VALUES (
         2, -- fuel_consumption_id (замініть це на ID іншого показника витрат пального)
         2, -- price_id (замініть це на ID іншої ціни)
         1, -- user_id (замініть це на ID іншого користувача)
-        TO_DATE('2023-07-26 12:20:23', 'YYYY-MM-DD HH:MM:SS'), -- created (поточна дата і час)
+        TO_TIMESTAMP('2023-08-26 20:31:23', 'YYYY-MM-DD HH24:MI:SS'), -- created (поточна дата і час)
         NOW() -- last_update (поточна дата і час)
        );
-
-
--- PRICES
-INSERT INTO car_prices (bargain, installment_payment, military, price, trade, uncleared)
-VALUES (true, false, false, 20000, true, false),
-       (true, true, false, 10000, true, false),
-       (true, false, false, 9000, false, false),
-       (false, true, true, 25000, false, true);

@@ -73,7 +73,7 @@ public class RegistrationService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .phone(normalizePhoneNumber(registerRequest.getPhone()))
-                .city(cityDAO.findByRegionDescriptionAndAndDescription(
+                .city(cityDAO.findByRegionDescriptionAndDescription(
                         registerRequest.getAddressDTO().getRegion(),
                         registerRequest.getAddressDTO().getCity()).get())
                 .build();
@@ -134,7 +134,7 @@ public class RegistrationService {
         if (cityDAO.findByDescription(registerRequest.getAddressDTO().getCity()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid city");
         }
-        if (cityDAO.findByRegionDescriptionAndAndDescription(registerRequest.getAddressDTO().getRegion(), registerRequest.getAddressDTO().getCity()).isEmpty()) {
+        if (cityDAO.findByRegionDescriptionAndDescription(registerRequest.getAddressDTO().getRegion(), registerRequest.getAddressDTO().getCity()).isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Check your address, this " + registerRequest.getAddressDTO().getRegion() + " or this " + registerRequest.getAddressDTO().getCity() + " city are not exists");
         }
         return null;

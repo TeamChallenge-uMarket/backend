@@ -1,4 +1,4 @@
-package com.example.securityumarket.controllers;
+package com.example.securityumarket.controllers.authorization;
 
 import com.example.securityumarket.models.PasswordRequest;
 import com.example.securityumarket.services.authorization.ResetPasswordService;
@@ -11,10 +11,20 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
-@RequestMapping("/api/v1/auth/reset-password")
+@RequestMapping("/api/v1/authorization/reset-password")
 public class ResetPasswordController {
 
     private ResetPasswordService resetPasswordService;
+
+    @GetMapping("")
+    public String getResetPasswordPage() {
+        return "";
+    }
+
+    @GetMapping("/confirm-code")
+    public String getConfirmCodePage() {
+        return "confirm-code";
+    }
 
     @PostMapping("")
     public ResponseEntity<String> sendCode(@RequestBody Map<String, String> requestEmail) {

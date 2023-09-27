@@ -1,12 +1,16 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "car_galleries")
 public class CarGallery {
     @Id
@@ -20,7 +24,7 @@ public class CarGallery {
     @Column(name = "is_main")
     private boolean isMain;
 
-    @Column(name = "url")
+    @Column(name = "url", length = 500)
     private String url;
 
     @Column(name = "url_small")
