@@ -66,7 +66,7 @@ public class StorageService {
         return convertedFile;
     }
 
-    public String uploadFileWithPublicRead(MultipartFile file) {
+    public String uploadFileWithPublicRead(MultipartFile file) throws UAutoException {
         if (file.getSize() >= minFileSize && file.getSize() <= maxFileSize) {
             String contentType = file.getContentType();
             if (Objects.requireNonNull(contentType).startsWith("image/") || contentType.startsWith("video/")) {

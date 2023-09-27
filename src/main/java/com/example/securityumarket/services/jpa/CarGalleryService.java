@@ -32,11 +32,8 @@ public class CarGalleryService {
         for (MultipartFile file : files) {
             String fileName = storageService.uploadFileWithPublicRead(file).substring(16);
             String fileUrl = storageService.getFileUrlFromPublicRead(fileName);
-            CarGallery buildCarGallery = CarGallery.builder()
-                    .imageName(fileName)
-                    .url(fileUrl)
-                    .build();
-            save(buildCarGallery);
+            CarGallery carGallery = buildCarGallery(fileName, fileUrl);
+            save(carGallery);
             uploadedFileUrls.add(fileName);
         }
         return uploadedFileUrls;
@@ -44,6 +41,19 @@ public class CarGalleryService {
 
     private void save(CarGallery carGallery) {
         carGalleryDAO.save(carGallery);
+    }
+
+    private CarGallery buildCarGallery(String fileName, String fileUrl) throws UAutoException {
+        if (!fileName.isEmpty() && fileName.length() < 100)
+        {
+            if (!fileUrl.isEmpty() && fileUrl.length() < 500) {
+                return CarGallery.builder()
+                        .imageName(fileName)
+                        .url(fileUrl)
+                        .isMain(false)
+                        .build();
+            } else throw new UAutoException("The file name must not be empty and longer than 100 characters");
+        } else throw new UAutoException("The file name must not be empty and longer than 100 characters");
     }
 
 
