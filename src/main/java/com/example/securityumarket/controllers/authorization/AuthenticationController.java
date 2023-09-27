@@ -1,4 +1,4 @@
-package com.example.securityumarket.controllers;
+package com.example.securityumarket.controllers.authorization;
 
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
@@ -15,12 +15,27 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/authorization")
 public class AuthenticationController {
 
     private RegistrationService registrationService;
     private LoginService loginService;
     private TokenRefreshService tokenRefreshService;
+
+    @GetMapping("/login")
+    public String getLoginPage() {
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String getRegistrationPage() {
+        return "register";
+    }
+
+    @GetMapping("/register/confirm-code")
+    public String getConfirmCodePage() {
+        return "register/confirm-code";
+    }
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
@@ -28,7 +43,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register/confirm-code")
-    public ResponseEntity<String> register(@RequestBody Map<String, String> requestConfirmCode) {
+    public ResponseEntity<String> confirmCode(@RequestBody Map<String, String> requestConfirmCode) {
         return registrationService.confirmRegistration(requestConfirmCode.get("confirmCode"));
     }
 
@@ -38,7 +53,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthenticationResponse> refresh(@RequestBody Map<String, String> refreshRequest) {
+    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody Map<String, String> refreshRequest) {
         return ResponseEntity.ok(tokenRefreshService.refreshTokens(refreshRequest.get("refreshToken")));
     }
 

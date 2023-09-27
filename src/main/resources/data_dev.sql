@@ -210,10 +210,24 @@ VALUES (10.1, 7.2, 8.7),
        (4.9, 3.7, 4.1),
        (4.9, 3.7, 4.1);
 
+
+INSERT INTO users (name, email, password, phone, refresh_token, city, created, last_update)
+VALUES (
+           'Імя', -- Замініть на реальне ім'я користувача
+           'email@example.com', -- Замініть на реальний email користувача
+           'password11', -- Замініть на хешований пароль користувача
+           '+380980000000', -- Замініть на реальний номер телефону користувача
+           'refresh_token_value', -- Замініть на реальний refresh token користувача
+           1, -- Замініть на ID міста, в якому проживає користувач
+           TO_TIMESTAMP('2023-08-26 20:31:23', 'YYYY-MM-DD HH24:MI:SS'), -- created (поточна дата і час)
+           NOW() -- last_update (поточна дата і час)
+       );
+
 -- PRICES
 INSERT INTO car_prices (bargain, installment_payment, military, price, trade, uncleared)
 VALUES (true, false, false, 20000, true, false),
        (true, true, false, 10000, true, false),
+       (true, false, false, 9000, false, false),
        (true, true, false, 1000, true, false),
        (true, false, false, 9000, false, false),
        (false, false, false, 23600, false, false),
@@ -499,6 +513,3 @@ VALUES (
         2,
         NOW(),
         NOW());
-
-
-
