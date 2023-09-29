@@ -1,15 +1,10 @@
 package com.example.securityumarket.services.page_service;
 
 import com.example.securityumarket.dao.CarGalleryDAO;
-import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.models.DTO.main_page.response.ResponseCarDTO;
 import com.example.securityumarket.models.entities.Car;
-import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,7 +14,6 @@ import java.util.stream.Collectors;
 public class CommonMainService {
 
     private final CarGalleryDAO carGalleryDAO;
-    private final UsersDAO usersDAO;
 
     public List<ResponseCarDTO> convertCarsListToDtoCarsList(List<Car> newCars) {
        return newCars.stream()
@@ -37,10 +31,5 @@ public class CommonMainService {
                         .created(car.getCreated().toString())
                         .build())
                 .collect(Collectors.toList());
-    }
-
-    protected Users getAuthenticatedUser() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return usersDAO.findAppUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("user not founded"));
     }
 }

@@ -5,6 +5,7 @@ import com.example.securityumarket.models.DTO.main_page.request.RequestCarSearch
 import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.models.entities.Car;
 import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.services.jpa.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class MainPageService { //TODO do check for uncorrected request
     private final CarModelDAO carModelDAO;
     private final CityDAO cityDAO;
     private final CarFavoriteDAO carFavoriteDAO;
+    private final UserService userService;
 
     //transform car entity list to carDTO list
     private ResponseEntity<List<ResponseCarDTO>> okResponseCarsDTOList(List<Car> newCars) {
@@ -47,7 +49,7 @@ public class MainPageService { //TODO do check for uncorrected request
 
     public ResponseEntity<List<ResponseCarDTO>> getRecentlyViewedCars(int page, int limit) {
         try {
-            Users user = commonMainService.getAuthenticatedUser();
+            Users user = userService.getAuthenticatedUser();
             List<Car> viewedCarsByUser = carViewDAO.findViewedCarsByRegisteredUser(user, PageRequest.of(page, limit));
             return okResponseCarsDTOList(viewedCarsByUser);
 
@@ -95,7 +97,7 @@ public class MainPageService { //TODO do check for uncorrected request
 
     public ResponseEntity<List<ResponseCarDTO>> getFavoriteCars(int page, int limit) {
         try {
-            Users user = commonMainService.getAuthenticatedUser();
+            Users user = userService.getAuthenticatedUser();
             List<Car> viewedCarsByUser = carFavoriteDAO.findFavorites(user, PageRequest.of(page, limit));
             return okResponseCarsDTOList(viewedCarsByUser);
         } catch (UsernameNotFoundException e) {
