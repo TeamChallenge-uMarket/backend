@@ -25,11 +25,11 @@ public class ApiDocumentationConfig {
     public OpenAPI uAutoAPI() {
         Server devServer = new Server();
         devServer.setUrl(devUrl);
-        devServer.setDescription("Server URL in Development environment");
+        devServer.setDescription("Server URL in Development");
 
         Server prodServer = new Server();
         prodServer.setUrl(prodUrl);
-        prodServer.setDescription("Server URL in Production environment");
+        prodServer.setDescription("Server URL in Production");
 
 
         Contact contact = new Contact();
