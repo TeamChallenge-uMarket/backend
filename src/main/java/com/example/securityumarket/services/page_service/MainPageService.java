@@ -127,8 +127,4 @@ public class MainPageService { //TODO Return ResponseEntity<String>
             return ResponseEntity.noContent().build();
         }
     }
-
-    private ResponseEntity<String> handleNotFoundException(Exception e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
 }
