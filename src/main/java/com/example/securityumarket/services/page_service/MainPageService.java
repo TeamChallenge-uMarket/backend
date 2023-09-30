@@ -5,6 +5,7 @@ import com.example.securityumarket.models.DTO.main_page.request.RequestCarSearch
 import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.models.entities.Car;
 import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.services.jpa.CarService;
 import com.example.securityumarket.services.jpa.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 public class MainPageService { //TODO do check for uncorrected request
 
     private final CarDAO carDAO;
-    private final CommonMainService commonMainService;
     private final CarViewDAO carViewDAO;
     private final CarTypeDAO carTypeDAO;
     private final CarBrandDAO carBrandDAO;
@@ -28,10 +28,11 @@ public class MainPageService { //TODO do check for uncorrected request
     private final CityDAO cityDAO;
     private final CarFavoriteDAO carFavoriteDAO;
     private final UserService userService;
+    private final CarService carService;
 
     //transform car entity list to carDTO list
     private ResponseEntity<List<ResponseCarDTO>> okResponseCarsDTOList(List<Car> newCars) {
-        List<ResponseCarDTO> newCarsResponse = commonMainService.convertCarsListToDtoCarsList(newCars);
+        List<ResponseCarDTO> newCarsResponse = carService.convertCarsListToDtoCarsList(newCars);
         return ResponseEntity.ok(newCarsResponse);
     }
 
