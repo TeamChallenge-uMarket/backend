@@ -10,14 +10,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Getter
 @Service
 public class CarGalleryService {
+
     private final CarGalleryDAO carGalleryDAO;
 
     private final StorageService storageService;
@@ -31,10 +30,6 @@ public class CarGalleryService {
             CarGallery carGallery = buildCarGallery(fileName, fileUrl, car, isMain);
             save(carGallery);
         }
-    }
-
-    private void save(CarGallery carGallery) {
-        carGalleryDAO.save(carGallery);
     }
 
     private CarGallery buildCarGallery(String fileName, String fileUrl, Car car, boolean isMain) throws UAutoException {
@@ -51,11 +46,18 @@ public class CarGalleryService {
         } else throw new UAutoException("The file name must not be empty and longer than 100 characters");
     }
 
-
-
     public List<CarGallery> findCarGalleriesByImageNames(List<String> imageNames) throws UAutoException {
         return carGalleryDAO.findCarGalleriesByImageNames(imageNames)
                 .filter(fileList -> !fileList.isEmpty())
                 .orElseThrow(() -> new UAutoException("Gallery not found"));
+    }
+
+    public String findMainFileByCar(long carId) {
+        return carGalleryDAO.findMainFileByCar(carId)
+                .orElse("The main photo of the car was not found");
+    }
+
+    private void save(CarGallery carGallery) {
+        carGalleryDAO.save(carGallery);
     }
 }

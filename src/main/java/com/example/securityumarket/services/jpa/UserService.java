@@ -3,13 +3,14 @@ package com.example.securityumarket.services.jpa;
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.UAutoException;
 import com.example.securityumarket.models.entities.Users;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class UserService {
+
     private final UsersDAO usersDAO;
 
     private String getAuthenticatedUserEmail() {

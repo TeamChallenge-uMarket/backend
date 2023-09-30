@@ -6,6 +6,8 @@
     import java.util.Optional;
 
     public interface UsersDAO extends JpaRepository<Users, Long> {
+
         Optional<Users> findAppUserByEmail(String email);
+
         Optional<Users> findAppUserByPhone(String phone);
     }

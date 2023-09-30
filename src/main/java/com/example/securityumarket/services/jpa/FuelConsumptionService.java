@@ -3,10 +3,10 @@ package com.example.securityumarket.services.jpa;
 import com.example.securityumarket.dao.FuelConsumptionDAO;
 import com.example.securityumarket.exception.UAutoException;
 import com.example.securityumarket.models.entities.FuelConsumption;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class FuelConsumptionService {
 

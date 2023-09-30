@@ -1,7 +1,6 @@
 package com.example.securityumarket.dao;
 
 import com.example.securityumarket.models.entities.Region;
-import com.example.securityumarket.models.entities.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

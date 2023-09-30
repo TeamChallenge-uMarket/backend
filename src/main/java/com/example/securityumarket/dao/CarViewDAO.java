@@ -9,12 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarViewDAO extends JpaRepository<CarView, Long> {
 
     @Query("select cw.car from CarView cw group by cw.car order by count(cw.car) desc")
-    List<Car> findPopularCars(PageRequest pageRequest);
+    Optional<List<Car>> findPopularCars(PageRequest pageRequest);
 
     @Query("select cw.car from CarView cw where cw.user = :user order by cw.lastUpdate desc")
-    List<Car> findViewedCarsByRegisteredUser(@Param("user") Users user, PageRequest pageRequest);
+    Optional<List<Car>> findViewedCarsByRegisteredUser(@Param("user") Users user, PageRequest pageRequest);
 }

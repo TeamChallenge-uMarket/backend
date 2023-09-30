@@ -9,8 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarFavoriteDAO extends JpaRepository<CarFavorite, Long> {
     @Query("select cf.car from CarFavorite cf where cf.user = :user order by cf.created desc")
-    List<Car> findFavorites(@Param("user") Users user, PageRequest pageRequest);
+    Optional<List<Car>> findFavorites(@Param("user") Users user, PageRequest pageRequest);
 }
