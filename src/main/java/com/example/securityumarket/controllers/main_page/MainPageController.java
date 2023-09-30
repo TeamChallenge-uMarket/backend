@@ -84,7 +84,7 @@ public class MainPageController {
 
     @Operation(
             summary = "Retrieve a types",
-            description = "Get a Tutorial object by specifying its id. The response is Tutorial object with id, title, description and published status.")
+            description = "Get a type of vehicle. The response is List of Types object with id, description and status.")
     @GetMapping("/type")
     public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
         return mainPageService.getTypeTransport();
