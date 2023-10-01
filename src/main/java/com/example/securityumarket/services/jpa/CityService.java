@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -17,7 +16,7 @@ public class CityService {
 
     public City findByRegionDescriptionAndDescription(String region, String city) {
         return cityDAO.findByRegionDescriptionAndDescription(region,city)
-                .orElseThrow(() -> new UAutoException("Region from this city not found"));
+                .orElseThrow(() -> new UAutoException("City from this region not found"));
     }
 
     public City findByDescription(String city) {
