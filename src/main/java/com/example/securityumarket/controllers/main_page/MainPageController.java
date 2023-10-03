@@ -6,6 +6,7 @@ import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.services.page_service.AddCarService;
 import com.example.securityumarket.services.page_service.MainPageService;
 import com.example.securityumarket.services.page_service.StorageService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class MainPageController {
 
     @PostMapping("/add-car")
     public ResponseEntity<String> getAddCarPage(
-            @RequestPart("requestAddCarDTO") RequestAddCarDTO requestAddCarDTO,
+            @RequestPart("requestAddCarDTO") @Valid RequestAddCarDTO requestAddCarDTO,
             @RequestPart("multipartFiles") MultipartFile[] multipartFiles) {
         return addCarService.addCar(requestAddCarDTO, multipartFiles);
     }

@@ -1,6 +1,5 @@
 package com.example.securityumarket.services.authorization;
 
-import com.example.securityumarket.exception.UAutoException;
 import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
 import com.example.securityumarket.models.entities.City;
 import com.example.securityumarket.models.entities.Users;

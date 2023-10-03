@@ -1,7 +1,7 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.FuelConsumptionDAO;
-import com.example.securityumarket.exception.UAutoException;
+import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.models.entities.FuelConsumption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class FuelConsumptionService {
                     .build();
             return fuelConsumptionDAO.save(fuelConsumption);
         } else {
-            throw new UAutoException("Enter the correct fuel consumption > 1 L per 100 km");
+            throw new DataNotValidException("Enter the correct fuel consumption > 1 L per 100 km");
         }
     }
 

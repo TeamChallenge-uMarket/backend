@@ -1,7 +1,7 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.CarPriceDAO;
-import com.example.securityumarket.exception.UAutoException;
+import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.models.entities.CarPrice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class CarPriceService {
 
             return carPriceDAO.save(buildCarPrice);
         } else {
-            throw new UAutoException("Price must be greater than 0");
+            throw new DataNotValidException("The price must be more than 0");
         }
     }
 }

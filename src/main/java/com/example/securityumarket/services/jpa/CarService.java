@@ -1,7 +1,7 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.CarDAO;
-import com.example.securityumarket.exception.UAutoException;
+import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.DTO.main_page.request.RequestCarSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.ResponseCarDTO;
 import com.example.securityumarket.models.entities.Car;
@@ -28,13 +28,13 @@ public class CarService {
     public List<Car> findNewCars(PageRequest pageRequest) {
         return carDAO.findNewCars(pageRequest)
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new UAutoException("New cars not found by request"));
+                .orElseThrow(() -> new DataNotFoundException("New cars"));
     }
 
     public List<Car> findCarsByRequest(RequestCarSearchDTO requestSearch, PageRequest of) {
         return carDAO.findCarsByRequest(requestSearch, of)
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new UAutoException("Cars not found by request"));
+                .orElseThrow(() -> new DataNotFoundException("Cars"));
     }
 
     public List<ResponseCarDTO> convertCarsListToDtoCarsList(List<Car> newCars) {
