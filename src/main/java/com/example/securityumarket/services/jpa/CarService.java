@@ -15,11 +15,9 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-@RequiredArgsConstructor
 public class CarService {
 
     private final CarDAO carDAO;
-    private final CarGalleryDAO carGalleryDAO;
 
     private final CarGalleryService carGalleryService;
 
