@@ -1,7 +1,8 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.CarGalleryDAO;
-import com.example.securityumarket.exception.UAutoException;
+import com.example.securityumarket.exception.DataNotValidException;
+import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.entities.Car;
 import com.example.securityumarket.models.entities.CarGallery;
 import com.example.securityumarket.services.page_service.StorageService;
@@ -21,7 +22,7 @@ public class CarGalleryService {
 
     private final StorageService storageService;
 
-    public void uploadFiles(MultipartFile[] files, Car car) throws UAutoException {
+    public void uploadFiles(MultipartFile[] files, Car car) {
         for (int i = 0; i < files.length; i++) {
             MultipartFile file = files[i];
             String fileName = storageService.uploadFileWithPublicRead(file).substring(16);
@@ -32,7 +33,7 @@ public class CarGalleryService {
         }
     }
 
-    private CarGallery buildCarGallery(String fileName, String fileUrl, Car car, boolean isMain) throws UAutoException {
+    private CarGallery buildCarGallery(String fileName, String fileUrl, Car car, boolean isMain) {
         if (!fileName.isEmpty() && fileName.length() < 100)
         {
             if (!fileUrl.isEmpty() && fileUrl.length() < 500) {
@@ -42,19 +43,19 @@ public class CarGalleryService {
                         .url(fileUrl)
                         .isMain(isMain)
                         .build();
-            } else throw new UAutoException("The file name must not be empty and longer than 100 characters");
-        } else throw new UAutoException("The file name must not be empty and longer than 100 characters");
+            } else throw new DataNotValidException("The file name must not be empty and longer than 100 characters");
+        } else throw new DataNotValidException("The file name must not be empty and longer than 100 characters");
     }
 
-    public List<CarGallery> findCarGalleriesByImageNames(List<String> imageNames) throws UAutoException {
+    public List<CarGallery> findCarGalleriesByImageNames(List<String> imageNames) {
         return carGalleryDAO.findCarGalleriesByImageNames(imageNames)
                 .filter(fileList -> !fileList.isEmpty())
-                .orElseThrow(() -> new UAutoException("Gallery not found"));
+                .orElseThrow(() -> new DataNotFoundException("Gallery"));
     }
 
     public String findMainFileByCar(long carId) {
         return carGalleryDAO.findMainFileByCar(carId)
-                .orElse("The main photo of the car was not found");
+                .orElse("The main photo of the car was not found");//TODO Add file with this name
     }
 
     private void save(CarGallery carGallery) {

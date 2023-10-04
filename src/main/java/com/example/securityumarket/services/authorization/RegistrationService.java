@@ -1,7 +1,7 @@
 package com.example.securityumarket.services.authorization;
 
-import com.example.securityumarket.exception.UAutoException;
-import com.example.securityumarket.models.RegisterRequest;
+import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
+import com.example.securityumarket.models.entities.City;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.CityService;
 import com.example.securityumarket.services.jpa.RegionService;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.securityumarket.services.authorization.MailService.CODE_EXPIRATION_TIME_MS;
-import static org.apache.logging.log4j.util.Strings.isBlank;
 
 
 @Service
@@ -45,10 +44,7 @@ public class RegistrationService {
 
     @Transactional
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
-        ResponseEntity<String> validationResponse = validateRegisterRequest(registerRequest);
-        if (validationResponse != null) {
-            return validationResponse;
-        }
+        validateRegisterRequest(registerRequest);
 
         users = buildUserFromRequest(registerRequest);
         jwtService.generateToken(users);
@@ -58,6 +54,25 @@ public class RegistrationService {
         mailService.sendCode(users.getEmail());
 
         return ResponseEntity.ok("Verification code sent successfully");
+    }
+
+    private void validateRegisterRequest(RegisterRequest registerRequest) {
+        userService.isUserEmailUnique(registerRequest.getEmail());
+        String normalizePhoneNumber = normalizePhoneNumber(registerRequest.getPhone());
+        userService.isUserPhoneUnique(normalizePhoneNumber);
+        getAddressFromRequest(registerRequest);
+    }
+
+    private City getAddressFromRequest(RegisterRequest registerRequest) {
+        if (registerRequest.getAddressDTO().isEmpty()) {
+            return null;
+        } else {
+            String region = registerRequest.getAddressDTO().getRegion();
+            String city = registerRequest.getAddressDTO().getCity();
+            regionService.findByDescription(region);
+            cityService.findByDescription(city);
+            return cityService.findByRegionDescriptionAndDescription(region, city);
+        }
     }
 
     public ResponseEntity<String> confirmRegistration(String codeConfirm) {
@@ -95,53 +110,7 @@ public class RegistrationService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .phone(normalizePhoneNumber(registerRequest.getPhone()))
-                .city(cityService.findByRegionDescriptionAndDescription(
-                        registerRequest.getAddressDTO().getRegion(),
-                        registerRequest.getAddressDTO().getCity()))
+                .city(getAddressFromRequest(registerRequest))
                 .build();
-    }
-
-    private ResponseEntity<String> validateRegisterRequest(RegisterRequest registerRequest) {
-        try {
-            if (isBlank(registerRequest.getName())) {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("User name is required");
-            }
-
-            if (isBlank(registerRequest.getEmail()) || !registerRequest.getEmail().matches("^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$")) {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid email");
-            }
-            userService.isUserEmailUnique(registerRequest.getEmail());
-
-            if (
-                    isBlank(registerRequest.getPassword()) ||
-                            !registerRequest.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")) {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
-                        .body("Password must be at least 8 characters long and contain at least one letter and one digit");
-            }
-
-            if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword())) {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Passwords do not match");
-            }
-
-            if (!isBlank(registerRequest.getPhone())) {
-                if (!registerRequest.getPhone().matches("((\\+38)?\\(?\\d{3}\\)?[\\s.-]?(\\d{7}|\\d{3}[\\s.-]\\d{2}[\\s.-]\\d{2}|\\d{3}-\\d{4}))")) {
-                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid phone number");
-                }
-            }
-
-            String normalizePhoneNumber = normalizePhoneNumber(registerRequest.getPhone());
-            userService.existsUsersByPhone(normalizePhoneNumber);
-
-            if (!registerRequest.getAddressDTO().isEmpty()) {
-                String region = registerRequest.getAddressDTO().getRegion();
-                String city = registerRequest.getAddressDTO().getCity();
-                regionService.findByDescription(region);
-                cityService.findByDescription(city);
-                cityService.findByRegionDescriptionAndDescription(region, city);
-            }
-            return null;
-        } catch (UAutoException exception) {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exception.getMessage());
-        }
     }
 }

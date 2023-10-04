@@ -1,7 +1,8 @@
 package com.example.securityumarket.controllers.authorization;
 
-import com.example.securityumarket.models.PasswordRequest;
+import com.example.securityumarket.models.DTO.login_page.PasswordRequest;
 import com.example.securityumarket.services.authorization.ResetPasswordService;
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class ResetPasswordController {
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<String> resetPassword(@RequestBody PasswordRequest passwordRequest) {
+    public ResponseEntity<String> resetPassword(@RequestBody @Valid PasswordRequest passwordRequest) {
         return resetPasswordService.resetPassword(passwordRequest);
     }
 }

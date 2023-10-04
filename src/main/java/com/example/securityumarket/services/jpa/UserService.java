@@ -1,13 +1,13 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.UsersDAO;
-import com.example.securityumarket.exception.UAutoException;
+import com.example.securityumarket.exception.DataNotFoundException;
+import com.example.securityumarket.exception.DataNotValidException;
+import com.example.securityumarket.exception.DuplicateDataException;
 import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -21,8 +21,12 @@ public class UserService {
 
     public Users getAuthenticatedUser() {
         String email = getAuthenticatedUserEmail();
+        return findAppUserByEmail(email);
+    }
+
+    public Users findAppUserByEmail(String email) {
         return usersDAO.findAppUserByEmail(email)
-                .orElseThrow(() -> new UAutoException("User not founded"));
+                .orElseThrow(() -> new DataNotFoundException("User with email " + email));
     }
 
     public Users save(Users users) {
@@ -37,15 +41,15 @@ public class UserService {
         return usersDAO.existsUsersByPhone(email);
     }
 
-    public boolean isUserPhoneUnique(String phone) {
+    public void isUserPhoneUnique(String phone) {
         if (existsUsersByPhone(phone)) {
-            throw new UAutoException("User with this phone already exists");
-        } else return true;
+            throw new DuplicateDataException("User with " + phone + " already exists");
+        }
     }
 
     public void isUserEmailUnique(String email) {
         if (existsUsersByEmail(email)) {
-            throw new UAutoException("User with this email already exists");
+            throw new DuplicateDataException("User with " + email + "already exists");
         }
     }
 }
