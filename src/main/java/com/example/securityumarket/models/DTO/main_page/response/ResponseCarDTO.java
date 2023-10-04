@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class ResponseCarDTO {
 
     private long carId;
-    private String imgUrlSmall;
+    private String imgUrl;
     private String carBrand;
     private String carModel;
     private BigDecimal price;

@@ -1,7 +1,9 @@
 package com.example.securityumarket.controllers.authorization;
 
-import com.example.securityumarket.models.PasswordRequest;
+import com.example.securityumarket.models.DTO.login_page.PasswordRequest;
 import com.example.securityumarket.services.authorization.ResetPasswordService;
+import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
 @RequestMapping("/api/v1/authorization/reset-password")
+@Tag(name = "Reset passwords", description = "reset password endpoints")
 public class ResetPasswordController {
 
     private ResetPasswordService resetPasswordService;
@@ -37,7 +40,7 @@ public class ResetPasswordController {
     }
 
     @PostMapping("/reset")
-    public ResponseEntity<String> resetPassword(@RequestBody PasswordRequest passwordRequest) {
+    public ResponseEntity<String> resetPassword(@RequestBody @Valid PasswordRequest passwordRequest) {
         return resetPasswordService.resetPassword(passwordRequest);
     }
 }

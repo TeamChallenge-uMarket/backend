@@ -2,10 +2,12 @@ package com.example.securityumarket.controllers.authorization;
 
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
-import com.example.securityumarket.models.RegisterRequest;
+import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
 import com.example.securityumarket.services.authorization.LoginService;
 import com.example.securityumarket.services.authorization.RegistrationService;
 import com.example.securityumarket.services.security.TokenRefreshService;
+import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
 @RequestMapping("/api/v1/authorization")
+@Tag(name = "Authorization", description = "authorization endpoints: registration, confirm-account, login, refresh-token")
 public class AuthenticationController {
 
     private RegistrationService registrationService;
@@ -38,7 +41,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<String> register(@RequestBody @Valid RegisterRequest registerRequest) {
         return registrationService.register(registerRequest);
     }
 

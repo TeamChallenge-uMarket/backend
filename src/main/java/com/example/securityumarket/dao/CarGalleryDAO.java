@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CarGalleryDAO extends JpaRepository<CarGallery, Long> {
-    @Query("select c.urlSmall from CarGallery c where c.car.id = :carId and c.isMain = true")
-    String findSmallMainPic(@Param("carId") long carId);
+
+    @Query("select c.url from CarGallery c where c.car.id = :carId and c.isMain = true")
+    Optional<String> findMainFileByCar(@Param("carId") long carId);
 
     @Query("SELECT cg FROM CarGallery cg WHERE cg.imageName IN (:imageNames)")
     Optional<List<CarGallery>> findCarGalleriesByImageNames(@Param("imageNames") List<String> imageNames);
