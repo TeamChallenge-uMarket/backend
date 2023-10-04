@@ -7,6 +7,8 @@ import com.example.securityumarket.services.page_service.AddCarService;
 import com.example.securityumarket.services.page_service.MainPageService;
 import com.example.securityumarket.services.page_service.StorageService;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/main")
 @RequiredArgsConstructor
+@Tag(name = "Main page", description = "main page endpoints")
 public class MainPageController {
 
     private final MainPageService mainPageService;
@@ -80,6 +83,9 @@ public class MainPageController {
         return mainPageService.getFavoriteCars(page, limit);
     }
 
+    @Operation(
+            summary = "Retrieve a types",
+            description = "Get a type of vehicle. The response is List of Types object with id, description and status.")
     @GetMapping("/type")
     public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
         return mainPageService.getTypeTransport();

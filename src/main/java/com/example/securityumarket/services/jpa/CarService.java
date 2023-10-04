@@ -12,11 +12,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class CarService {
 
     private final CarDAO carDAO;
+    private final CarGalleryDAO carGalleryDAO;
 
     private final CarGalleryService carGalleryService;
 
@@ -24,6 +27,8 @@ public class CarService {
     public Car save(Car car) {
         return carDAO.save(car);
     }
+
+
 
     public List<Car> findNewCars(PageRequest pageRequest) {
         return carDAO.findNewCars(pageRequest)
