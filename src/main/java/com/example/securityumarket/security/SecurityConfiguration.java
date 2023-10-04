@@ -31,6 +31,8 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .requestMatchers("/api/v1/main/**")
                                 .permitAll()
+                                .requestMatchers("/swagger/**")
+                                .permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->

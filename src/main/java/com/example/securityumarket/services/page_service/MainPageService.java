@@ -36,8 +36,11 @@ public class MainPageService { //TODO Return ResponseEntity<String>
     private final CityService cityService;
 
     private final UserService userService;
+  
+    private final CarService carService;
 
     private ResponseEntity<List<ResponseCarDTO>> okResponseCarsDTOList(List<Car> newCars) {
+
         try {
             List<ResponseCarDTO> newCarsResponse = carService.convertCarsListToDtoCarsList(newCars);
             return ResponseEntity.ok(newCarsResponse);
