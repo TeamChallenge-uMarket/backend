@@ -26,7 +26,7 @@ public class ApiDocumentationConfig {
     public OpenAPI uAutoAPI() {
         Server devServer = new Server();
         devServer.setUrl(devUrl);
-        devServer.setDescription("Server URL in Development");
+        devServer.setDescription("Local server URL for development");
 
         Server prodServer = new Server();
         prodServer.setUrl(prodUrl);
