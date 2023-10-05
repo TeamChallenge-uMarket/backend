@@ -25,7 +25,7 @@ public class StorageService {
     @Value("${application.bucket.name}")
     private String bucketName;
 
-    @Value("${file.upload.minSize2}")
+    @Value("${file.upload.minSize}")
     private long minFileSize;
 
     @Value("${file.upload.maxSize}")

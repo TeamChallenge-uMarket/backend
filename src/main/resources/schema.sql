@@ -94,14 +94,6 @@ CREATE TABLE IF NOT EXISTS user_has_roles
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
-CREATE TABLE IF NOT EXISTS fuel_consumption
-(
-    id      BIGSERIAL PRIMARY KEY,
-    city    DOUBLE PRECISION,
-    highway DOUBLE PRECISION,
-    mixed   DOUBLE PRECISION
-);
-
 CREATE TABLE IF NOT EXISTS type_cars
 (
     id   BIGSERIAL PRIMARY KEY,
@@ -143,34 +135,21 @@ CREATE TABLE IF NOT EXISTS cars
     imported_from       VARCHAR(255),
     accident_history    BOOLEAN,
     condition           VARCHAR(255),
-    fuel_consumption_id  BIGINT,
-    price_id            BIGINT,
-    model_id            BIGINT,
-    user_id             BIGINT,
-    city             BIGINT,
-    created             TIMESTAMP(6),
-    last_update         TIMESTAMP(6)
-);
-
-CREATE TABLE IF NOT EXISTS car_prices
-(
-    id                  BIGSERIAL PRIMARY KEY,
+    fuel_consumption_city    DOUBLE PRECISION,
+    fuel_consumption_highway DOUBLE PRECISION,
+    fuel_consumption_mixed   DOUBLE PRECISION,
     price               NUMERIC(38, 2),
     bargain             BOOLEAN,
     trade               BOOLEAN,
     military            BOOLEAN,
     installment_payment BOOLEAN,
     uncleared           BOOLEAN,
-    car_id              BIGINT
+    model_id            BIGINT,
+    user_id             BIGINT,
+    city             BIGINT,
+    created             TIMESTAMP(6),
+    last_update         TIMESTAMP(6)
 );
-
-ALTER TABLE cars
-    ADD CONSTRAINT fk_fuel_consumption
-        FOREIGN KEY (fuel_consumption_id) REFERENCES fuel_consumption (id);
-
-ALTER TABLE cars
-    ADD CONSTRAINT fk_price
-        FOREIGN KEY (price_id) REFERENCES car_prices (id);
 
 ALTER TABLE cars
     ADD CONSTRAINT fk_model
@@ -183,10 +162,6 @@ ALTER TABLE cars
 ALTER TABLE cars
     ADD CONSTRAINT fk_city
         FOREIGN KEY (city) REFERENCES cities (id);
-
-ALTER TABLE car_prices
-    ADD CONSTRAINT fk_car
-        FOREIGN KEY (car_id) REFERENCES cars (id);
 
 CREATE TABLE IF NOT EXISTS car_favorites
 (
@@ -204,7 +179,6 @@ CREATE TABLE IF NOT EXISTS car_galleries
     image_name VARCHAR(255),
     is_main    BOOLEAN,
     url        VARCHAR(500),
-    url_small  VARCHAR(255),
     car_id     BIGINT,
     FOREIGN KEY (car_id) REFERENCES cars (id)
 );

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -69,14 +70,33 @@ public class Car extends DateAudit{
     @Column(name = "condition")
     private String condition;
 
+    @Column(name = "fuel_consumption_city")
+    private double fuelConsumptionCity;
 
-    @OneToOne()
-    @JoinColumn(name = "fuel_consumption_id", referencedColumnName = "id")
-    private FuelConsumption fuelConsumption;
+    @Column(name = "fuel_consumption_highway")
+    private double fuelConsumptionHighway;
 
-    @OneToOne()
-    @JoinColumn(name = "price_id", referencedColumnName = "id")
-    private CarPrice price;
+    @Column(name = "fuel_consumption_mixed")
+    private double fuelConsumptionMixed;
+
+    @Column(name = "price")
+    private BigDecimal price;
+
+    @Column(name = "bargain")
+    private boolean bargain;
+
+    @Column(name = "trade")
+    private boolean trade;
+
+    @Column(name = "military")
+    private boolean military;
+
+    @Column(name = "installment_payment")
+    private boolean installmentPayment;
+
+    @Column(name = "uncleared")
+    private boolean uncleared;
+
 
     @OneToMany(mappedBy = "car")
     private List<CarReview> carReviews;

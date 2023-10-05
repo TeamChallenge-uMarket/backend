@@ -45,11 +45,17 @@ public class RequestAddCarDTO {
 
     private String fuelType;
 
-    private int consumptionCity;
+    @Min(value = 0, message = "fuel consumption in city should be a non-negative value")
+    @Max(value = 50, message = "fuel consumption in city should be less then 50l per 100km")
+    private double consumptionCity;
 
-    private int consumptionHighway;
+    @Min(value = 0, message = "fuel consumption on highway should be a non-negative value")
+    @Max(value = 50, message = "fuel consumption on highway should be less then 50l per 100km")
+    private double consumptionHighway;
 
-    private int consumptionMixed;
+    @Min(value = 0, message = "fuel consumption in mixed should be a non-negative value")
+    @Max(value = 50, message = "fuel consumption in mixed should be less then 50l per 100km")
+    private double consumptionMixed;
 
     private double engineDisplacement;
 

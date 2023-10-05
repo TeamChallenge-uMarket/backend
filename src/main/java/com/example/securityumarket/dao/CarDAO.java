@@ -22,7 +22,7 @@ public interface CarDAO extends JpaRepository<Car, Long> {
             "order by " +
             "   case when lower(:#{#requestSearch.orderBy.name()}) = 'created' and lower(:#{#requestSearch.sortBy.name()}) = 'asc' then c.created end asc, " +
             "   case when lower(:#{#requestSearch.orderBy.name()}) = 'created' and lower(:#{#requestSearch.sortBy.name()}) = 'desc' then c.created end desc, " +
-            "   case when lower(:#{#requestSearch.orderBy.name()}) = 'price' and  lower(:#{#requestSearch.sortBy.name()}) = 'asc' then c.price.price end asc, " +
-            "   case when lower(:#{#requestSearch.orderBy.name()}) = 'price' and lower(:#{#requestSearch.sortBy.name()}) = 'desc' then c.price.price end desc")
+            "   case when lower(:#{#requestSearch.orderBy.name()}) = 'price' and  lower(:#{#requestSearch.sortBy.name()}) = 'asc' then c.price end asc, " +
+            "   case when lower(:#{#requestSearch.orderBy.name()}) = 'price' and lower(:#{#requestSearch.sortBy.name()}) = 'desc' then c.price end desc")
     Optional<List<Car>> findCarsByRequest(@Param("requestSearch") RequestCarSearchDTO requestSearch, PageRequest pageRequest);
 }

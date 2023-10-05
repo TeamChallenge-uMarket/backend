@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigDecimal;
-
 @RequiredArgsConstructor
 @Service
 public class AddCarService {
@@ -20,16 +18,12 @@ public class AddCarService {
 
     private final CityService cityService;
 
-    private final FuelConsumptionService fuelConsumptionService;
-
-    private final CarPriceService carPriceService;
-
     private final CarGalleryService carGalleryService;
 
     private final CarService carService;
 
     public ResponseEntity<String> addCar(RequestAddCarDTO requestAddCarDTO, MultipartFile[] multipartFiles) {
-            Car car = buildCar(requestAddCarDTO);
+            Car car = buildCarFromRequestAddCarDTO(requestAddCarDTO);
             carService.save(car);
             uploadFilesFromRequest(multipartFiles, car);
             return ResponseEntity.ok("The ad with your car has been successfully added.");
@@ -39,22 +33,11 @@ public class AddCarService {
         carGalleryService.uploadFiles(files, car);
     }
 
-    private CarPrice getPriceFromRequestAddCarDTO(
-            BigDecimal price, boolean bargain, boolean trade,
-            boolean military, boolean installmentPayment, boolean uncleared) {
-        return carPriceService.save(price, bargain, trade, military, installmentPayment, uncleared);
-    }
-
-    private FuelConsumption getFuelConsumptionFromRequestAddCarDTO(
-            int consumptionCity, int consumptionHighway, int consumptionMixed)  {
-        return fuelConsumptionService.save(consumptionCity, consumptionHighway, consumptionMixed);
-    }
-
     private City getCityFromRequestAddCarDTO(String region, String city) {
         return cityService.findByRegionDescriptionAndDescription(region, city);
     }
 
-    private Car buildCar(RequestAddCarDTO requestAddCarDTO) {
+    private Car buildCarFromRequestAddCarDTO(RequestAddCarDTO requestAddCarDTO) {
         return Car.builder()
                 .user(getUser())
                 .carModel(getCarModelFromRequestAddCarDTO(requestAddCarDTO.getModel()))
@@ -66,11 +49,9 @@ public class AddCarService {
                 .description(requestAddCarDTO.getDescription())
                 .transmission(requestAddCarDTO.getTransmission())
                 .fuelType(requestAddCarDTO.getFuelType())
-                .fuelConsumption(getFuelConsumptionFromRequestAddCarDTO(
-                        requestAddCarDTO.getConsumptionCity(),
-                        requestAddCarDTO.getConsumptionHighway(),
-                        requestAddCarDTO.getConsumptionMixed()
-                ))
+                .fuelConsumptionCity(requestAddCarDTO.getConsumptionCity())
+                .fuelConsumptionHighway(requestAddCarDTO.getConsumptionHighway())
+                .fuelConsumptionMixed(requestAddCarDTO.getConsumptionMixed())
                 .engineDisplacement(requestAddCarDTO.getEngineDisplacement())
                 .enginePower(requestAddCarDTO.getEnginePower())
                 .driveType(requestAddCarDTO.getDriveType())
@@ -80,14 +61,12 @@ public class AddCarService {
                 .importedFrom(requestAddCarDTO.getImportedFrom())
                 .accidentHistory(requestAddCarDTO.isAccidentHistory())
                 .condition(requestAddCarDTO.getCondition())
-                .price(getPriceFromRequestAddCarDTO(
-                        requestAddCarDTO.getPrice(),
-                        requestAddCarDTO.isBargain(),
-                        requestAddCarDTO.isTrade(),
-                        requestAddCarDTO.isMilitary(),
-                        requestAddCarDTO.isInstallmentPayment(),
-                        requestAddCarDTO.isUncleared()
-                ))
+                .price(requestAddCarDTO.getPrice())
+                .bargain(requestAddCarDTO.isBargain())
+                .trade(requestAddCarDTO.isTrade())
+                .military(requestAddCarDTO.isMilitary())
+                .installmentPayment(requestAddCarDTO.isInstallmentPayment())
+                .uncleared(requestAddCarDTO.isUncleared())
                 .build();
     }
 

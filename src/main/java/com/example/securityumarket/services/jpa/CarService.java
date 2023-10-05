@@ -46,7 +46,7 @@ public class CarService {
                         .carId(car.getId())
                         .carModel(car.getCarModel().getModel())
                         .carBrand(car.getCarModel().getCarBrand().getBrand())
-                        .price(car.getPrice().getPrice())
+                        .price(car.getPrice())
                         .mileage(car.getMileage())
                         .year(car.getYear())
                         .city(car.getCity().getDescription())

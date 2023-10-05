@@ -27,9 +27,6 @@ public class CarGallery {
     @Column(name = "url", length = 500)
     private String url;
 
-    @Column(name = "url_small")
-    private String urlSmall;
-
 
     @ManyToOne
     @JoinColumn(name = "car_id")

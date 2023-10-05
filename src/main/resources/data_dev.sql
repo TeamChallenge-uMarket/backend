@@ -197,20 +197,6 @@ VALUES ('Вінниця', 1),
        ('Чернівці', 23),
        ('Чернігів', 24);
 
-INSERT INTO fuel_consumption (city, highway, mixed)
-VALUES (10.1, 7.2, 8.7),
-       (7.1, 4.2, 5.7),
-       (13.1, 8.8, 10.7),
-       (4.9, 3.7, 4.1),
-       (5.9, 3.7, 4.1),
-       (4.9, 3.7, 4.1),
-       (3.9, 3.7, 4.1),
-       (5.9, 3.7, 4.1),
-       (4.9, 3.7, 4.1),
-       (4.9, 3.7, 4.1),
-       (4.9, 3.7, 4.1);
-
-
 INSERT INTO users (name, email, password, phone, refresh_token, city, created, last_update)
 VALUES (
            'Імя', -- Замініть на реальне ім'я користувача
@@ -223,25 +209,22 @@ VALUES (
            NOW() -- last_update (поточна дата і час)
        );
 
--- PRICES
-INSERT INTO car_prices (bargain, installment_payment, military, price, trade, uncleared)
-VALUES (true, false, false, 20000, true, false),
-       (true, true, false, 10000, true, false),
-       (true, false, false, 9000, false, false),
-       (true, true, false, 1000, true, false),
-       (true, false, false, 9000, false, false),
-       (false, false, false, 23600, false, false),
-       (true, false, false, 11000, false, false),
-       (true, false, false, 15000, false, false),
-       (true, false, false, 14000, false, false),
-       (true, false, false, 13000, false, false),
-       (true, false, false, 19000, false, false),
-       (false, true, true, 25000, false, true);
+INSERT INTO users(id, created, last_update,
+                  email, name, password, phone,
+                  refresh_token, city)
+VALUES (2, '2023-09-27 01:02:29.892836', '2023-10-03 17:37:59.276989',
+        'praice07@gmail.com', 'Oleh11',
+        'Password11', '+380982704401',
+        'refresh_token_value',
+        12);
+
 
 
 INSERT INTO cars (accident_history, body_type, color, condition, description, drive_type, engine_displacement,
+                  fuel_consumption_city, fuel_consumption_highway, fuel_consumption_mixed,
                   engine_power, fuel_type, imported_from, mileage, number_of_doors, number_of_seats, transmission,
-                  vincode, year, model_id, city, fuel_consumption_id, price_id, user_id, created, last_update)
+                  vincode, year, bargain, installment_payment, military, price, trade, uncleared, model_id, city,
+                  user_id, created, last_update)
 VALUES (
 --      first car
            false, -- accident_history (boolean)
@@ -251,6 +234,9 @@ VALUES (
            'A reliable car in good condition.', -- description
            'Front-wheel drive', -- drive_type
            2.0, -- engine_displacement
+           9.5, -- fuel_consumption_city
+           6.4, -- fuel_consumption_highway
+           8.1, -- fuel_consumption_mixed
            150, -- engine_power
            'Petrol', -- fuel_type
            'Germany', -- imported_from
@@ -260,256 +246,208 @@ VALUES (
            'Automatic', -- transmission
            'ABC123XYZ456', -- vincode
            2018, -- year
+           true,
+           true,
+           true,
+           9500,
+           true,
+           false,
            43, -- model_id (замініть це на ID вашої моделі)
            9, -- city id
-           1, -- fuel_consumption_id (замініть це на ID вашого показника витрат пального)
-           1, -- price_id (замініть це на ID вашої ціни)
-           1, -- user_id (замініть це на ID користувача, який додав цей запис)
+           2, -- user_id (замініть це на ID користувача, який додав цей запис)
            NOW(), -- created (поточна дата і час)
            NOW() -- last_update (поточна дата і час)
        ),
 --     second car
-       (true, -- accident_history (boolean)
-        'SUV', -- body_type
-        'Red', -- color
+       (false, -- accident_history (boolean)
+        'Sedan', -- body_type
+        'Blue', -- color
         'Used', -- condition
-        'Good family car with spacious interior.', -- description
-        'All-wheel drive', -- drive_type
+        'A reliable car in good condition.', -- description
+        'Front-wheel drive', -- drive_type
         2.5, -- engine_displacement
-        180, -- engine_power
-        'Diesel', -- fuel_type
-        'USA', -- imported_from
-        60000, -- mileage
-        5, -- number_of_doors
-        7, -- number_of_seats
-        'Manual', -- transmission
-        'DEF456UVW789', -- vincode
-        2017, -- year
-        64, -- model_id (замініть це на ID іншої моделі)
-        12, -- city id
-        2, -- fuel_consumption_id (замініть це на ID іншого показника витрат пального)
-        2, -- price_id (замініть це на ID іншої ціни)
-        1, -- user_id (замініть це на ID іншого користувача)
+        12, -- fuel_consumption_city
+        8.4, -- fuel_consumption_highway
+        10, -- fuel_consumption_mixed
+        150, -- engine_power
+        'Petrol', -- fuel_type
+        'Germany', -- imported_from
+        85000, -- mileage
+        4, -- number_of_doors
+        5, -- number_of_seats
+        'Automatic', -- transmission
+        'ABC124XYZ457', -- vincode
+        2014, -- year
+        true,
+        true,
+        true,
+        12000,
+        true,
+        true,
+        4, -- model_id (замініть це на ID вашої моделі)
+        4, -- city id
+        2, -- user_id (замініть це на ID користувача, який додав цей запис)
         NOW(), -- created (поточна дата і час)
         NOW() -- last_update (поточна дата і час)
        ),
 --      third car
        (false, -- accident_history (boolean)
         'Sedan', -- body_type
-        'black', -- color
-        'New', -- condition
-        'A good condition.', -- description
+        'Blue', -- color
+        'Used', -- condition
+        'A reliable car in good condition.', -- description
         'Front-wheel drive', -- drive_type
-        2.0, -- engine_displacement
-        110, -- engine_power
+        2.5, -- engine_displacement
+        12, -- fuel_consumption_city
+        8.4, -- fuel_consumption_highway
+        10, -- fuel_consumption_mixed
+        250, -- engine_power
         'Petrol', -- fuel_type
-        'Norway', -- imported_from
-        800000, -- mileage
-        3, -- number_of_doors
-        4, -- number_of_seats
+        'Germany', -- imported_from
+        10000, -- mileage
+        4, -- number_of_doors
+        5, -- number_of_seats
         'Automatic', -- transmission
-        'ABC123X456C', -- vincode
-        2077, -- year
-        33, -- model_id (замініть це на ID вашої моделі)
-        3, -- city id
-        3, -- fuel_consumption_id (замініть це на ID вашого показника витрат пального)
-        3, -- price_id (замініть це на ID вашої ціни)
+        'ABC124XYZ427', -- vincode
+        2022, -- year
+        false,
+        false,
+        false,
+        35000,
+        false,
+        false,
+        10, -- model_id (замініть це на ID вашої моделі)
+        5, -- city id
         2, -- user_id (замініть це на ID користувача, який додав цей запис)
         NOW(), -- created (поточна дата і час)
         NOW() -- last_update (поточна дата і час)
        ),
 --      forth car
        (false, -- accident_history (boolean)
-        'Hatch', -- body_type
-        'White', -- color
+        'Sedan', -- body_type
+        'Blue', -- color
         'Used', -- condition
-        'Not good condition.', -- description
+        'A reliable car in good condition.', -- description
         'Front-wheel drive', -- drive_type
-        1.0, -- engine_displacement
-        110, -- engine_power
-        'Gasoline', -- fuel_type
-        'Hungry', -- imported_from
-        8000, -- mileage
+        2.5, -- engine_displacement
+        9, -- fuel_consumption_city
+        5.4, -- fuel_consumption_highway
+        6, -- fuel_consumption_mixed
+        124, -- engine_power
+        'Petrol', -- fuel_type
+        'Germany', -- imported_from
+        144000, -- mileage
         5, -- number_of_doors
         5, -- number_of_seats
         'Automatic', -- transmission
-        'ABC12113X456C', -- vincode
-        1990, -- year
-        33, -- model_id (замініть це на ID вашої моделі)
-        3, -- city id
-        4, -- fuel_consumption_id (замініть це на ID вашого показника витрат пального)
-        4, -- price_id (замініть це на ID вашої ціни)
-        2, -- user_id (замініть це на ID користувача, який додав цей запис)
+        'ABC144XYZ417', -- vincode
+        2010, -- year
+        true,
+        true,
+        true,
+        6000,
+        true,
+        true,
+        18, -- model_id (замініть це на ID вашої моделі)
+        8, -- city id
+        1, -- user_id (замініть це на ID користувача, який додав цей запис)
         NOW(), -- created (поточна дата і час)
         NOW() -- last_update (поточна дата і час)
        ),
        --     five car
        (true, -- accident_history (boolean)
-        'SUV', -- body_type
-        'Green', -- color
+        'Sedan', -- body_type
+        'Blue', -- color
         'Used', -- condition
-        'Wife''s car', -- description
-        'All-wheel drive', -- drive_type
-        2.3, -- engine_displacement
-        170, -- engine_power
-        'Diesel', -- fuel_type
-        'USA', -- imported_from
-        6000, -- mileage
-        5, -- number_of_doors
-        7, -- number_of_seats
+        'A reliable car in good condition.', -- description
+        'Front-wheel drive', -- drive_type
+        2.0, -- engine_displacement
+        11, -- fuel_consumption_city
+        9.4, -- fuel_consumption_highway
+        10, -- fuel_consumption_mixed
+        310, -- engine_power
+        'Petrol', -- fuel_type
+        'Germany', -- imported_from
+        10000, -- mileage
+        4, -- number_of_doors
+        5, -- number_of_seats
         'Automatic', -- transmission
-        'DEF456UVW789', -- vincode
-        2017, -- year
-        53, -- model_id (замініть це на ID іншої моделі)
-        12, -- city id
-        5, -- fuel_consumption_id (замініть це на ID іншого показника витрат пального)
-        5, -- price_id (замініть це на ID іншої ціни)
-        2, -- user_id (замініть це на ID іншого користувача)
+        'ABC104XYZ457', -- vincode
+        2018, -- year
+        true,
+        true,
+        true,
+        14000,
+        true,
+        true,
+        10, -- model_id (замініть це на ID вашої моделі)
+        1, -- city id
+        2, -- user_id (замініть це на ID користувача, який додав цей запис)
         NOW(), -- created (поточна дата і час)
         NOW() -- last_update (поточна дата і час)
        ),
        --     six car
-       (true, -- accident_history (boolean)
-        'SUV', -- body_type
-        'Green', -- color
+       (false, -- accident_history (boolean)
+        'Sedan', -- body_type
+        'Blue', -- color
         'Used', -- condition
-        'Wife''s car', -- description
-        'All-wheel drive', -- drive_type
-        2.3, -- engine_displacement
-        170, -- engine_power
-        'Diesel', -- fuel_type
-        'USA', -- imported_from
-        6000, -- mileage
-        5, -- number_of_doors
-        7, -- number_of_seats
+        'A reliable car in good condition.', -- description
+        'Front-wheel drive', -- drive_type
+        2.5, -- engine_displacement
+        12, -- fuel_consumption_city
+        8.4, -- fuel_consumption_highway
+        10, -- fuel_consumption_mixed
+        199, -- engine_power
+        'Petrol', -- fuel_type
+        'Germany', -- imported_from
+        65000, -- mileage
+        4, -- number_of_doors
+        5, -- number_of_seats
         'Automatic', -- transmission
-        'DEF456UVW789', -- vincode
+        'ABC124XYZ057', -- vincode
         2017, -- year
-        53, -- model_id (замініть це на ID іншої моделі)
-        12, -- city id
-        6, -- fuel_consumption_id (замініть це на ID іншого показника витрат пального)
-        6, -- price_id (замініть це на ID іншої ціни)
-        2, -- user_id (замініть це на ID іншого користувача)
+        true,
+        true,
+        true,
+        15000,
+        true,
+        true,
+        12, -- model_id (замініть це на ID вашої моделі)
+        10, -- city id
+        2, -- user_id (замініть це на ID користувача, який додав цей запис)
         NOW(), -- created (поточна дата і час)
         NOW() -- last_update (поточна дата і час)
-       ),
--- Row 2
-       (false,
-        'Sedan',
-        'Blue',
-        'New',
-        'First owner',
-        'Front-wheel drive',
-        1.6,
-        120,
-        'Petrol',
-        'Germany',
-        15000,
-        4,
-        5,
-        'Manual',
-        'ABC123XYZ456',
-        2022,
-        45,
-        8,
-        7,
-        7,
-        1,
-        NOW(),
-        NOW()),
--- Row 3
-       (true,
-        'Convertible',
-        'Red',
-        'Used',
-        'Fun to drive',
-        'Rear-wheel drive',
-        3,
-        200,
-        'Petrol',
-        'Italy',
-        8000,
-        2,
-        2,
-        'Automatic',
-        'XYZ789ABC123',
-        2020,
-        61,
-        13,
-        8,
-        8,
-        1,
-        NOW(),
-        NOW()),
--- Row 4
-       (false,
-        'Hatchback',
-        'Silver',
-        'Used',
-        'Great daily driver',
-        'Front-wheel drive',
-        1.4,
-        100,
-        'Petrol',
-        'France',
-        30000,
-        5,
-        5,
-        'Automatic',
-        'LMN456OPQ789',
-        2019,
-        18,
-        20,
-        9,
-        9,
-        2,
-        NOW(),
-        NOW()),
--- Row 5
-       (true,
-        'SUV',
-        'Black',
-        'Used',
-        'Family car',
-        'All-wheel drive',
-        2.5,
-        180,
-        'Petrol',
-        'USA',
-        25000,
-        4,
-        5,
-        'Automatic',
-        'PQR789XYZ123',
-        2021,
-        19,
-        10,
-        10,
-        10,
-        1,
-        NOW(),
-        NOW()),
--- Row 6
-       (false,
-        'Sedan',
-        'White',
-        'New',
-        'Low mileage',
-        'Front-wheel drive',
-        1.8,
-        150,
-        'Petrol',
-        'Germany',
-        10000,
-        4,
-        5,
-        'Automatic',
-        'JKL123MNO456',
-        2023,
-        29,
-        16,
-        11,
-        11,
-        2,
-        NOW(),
-        NOW());
+       );
+
+INSERT INTO roles (name)
+VALUES ('USER'),
+       ('ADMIN'),
+       ('MODERATOR'),
+       ('GUEST');
+
+INSERT INTO permissions (description)
+VALUES ('Permission 1 Description'),
+       ('Permission 2 Description'),
+       ('Permission 3 Description');
+
+INSERT INTO user_has_roles (user_id, role_id)
+VALUES (1, 1), -- User1
+       (2, 1), -- User2
+       (2, 2);
+
+INSERT INTO user_has_permissions (user_id, permissions_id)
+VALUES (1, 1),
+       (2, 1),
+       (2, 2),
+       (2, 3);
+
+INSERT INTO role_has_permissions (role_id, permissions_id)
+VALUES (1, 1),
+       (2, 1),
+       (2, 2),
+       (2, 3),
+       (3, 1),
+       (3, 2),
+       (4, 1);
+
+
