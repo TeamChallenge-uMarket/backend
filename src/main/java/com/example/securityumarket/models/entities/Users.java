@@ -40,7 +40,7 @@ public class Users extends DateAudit implements UserDetails {
 
 
     @OneToMany(mappedBy = "user")
-    private List<Car> cars;
+    private List<Transport> transports;
 
     @OneToMany(mappedBy = "user")
     private List<UserPermission> userPermissions;
@@ -49,13 +49,13 @@ public class Users extends DateAudit implements UserDetails {
     private List<UserRole> userRoles;
 
     @OneToMany(mappedBy = "user")
-    private List<CarReview> carReviews;
+    private List<TransportReview> transportReviews;
 
     @OneToMany(mappedBy = "user")
-    private List<CarFavorite> carFavorites;
+    private List<FavoriteTransport> favoriteTransports;
 
     @OneToMany(mappedBy = "user")
-    private List<CarView> carViews;
+    private List<TransportView> transportViews;
 
     @ManyToOne
     @JoinColumn(name = "city")

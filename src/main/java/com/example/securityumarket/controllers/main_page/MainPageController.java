@@ -1,9 +1,9 @@
 package com.example.securityumarket.controllers.main_page;
 
-import com.example.securityumarket.models.DTO.main_page.request.RequestAddCarDTO;
-import com.example.securityumarket.models.DTO.main_page.request.RequestCarSearchDTO;
+import com.example.securityumarket.models.DTO.main_page.request.RequestAddTransportDTO;
+import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
-import com.example.securityumarket.services.page_service.AddCarService;
+import com.example.securityumarket.services.page_service.AddTransportService;
 import com.example.securityumarket.services.page_service.MainPageService;
 import com.example.securityumarket.services.page_service.StorageService;
 import jakarta.validation.Valid;
@@ -28,7 +28,7 @@ public class MainPageController {
 
     private final StorageService storageService;
 
-    private final AddCarService addCarService;
+    private final AddTransportService addTransportService;
 
     @GetMapping("/login")
     public String getLoginPage() {
@@ -42,45 +42,45 @@ public class MainPageController {
 
     @PostMapping("/add-car")
     public ResponseEntity<String> getAddCarPage(
-            @RequestPart("requestAddCarDTO") @Valid RequestAddCarDTO requestAddCarDTO,
+            @RequestPart("requestAddTransportDTO") @Valid RequestAddTransportDTO requestAddTransportDTO,
             @RequestPart("multipartFiles") MultipartFile[] multipartFiles) {
-        return addCarService.addCar(requestAddCarDTO, multipartFiles);
+        return addTransportService.addCar(requestAddTransportDTO, multipartFiles);
     }
 
     @GetMapping("/newCars/{page}/{limit}")
-    public ResponseEntity<List<ResponseCarDTO>> getNewCars(
+    public ResponseEntity<List<ResponseTransportDTO>> getNewCars(
             @PathVariable int limit,
             @PathVariable int page) {
-        return mainPageService.getNewCars(page, limit);
+        return mainPageService.getNewTransports(page, limit);
     }
 
     @GetMapping("/popularCars/{page}/{limit}")
-    public ResponseEntity<List<ResponseCarDTO>> getPopularsCars(
+    public ResponseEntity<List<ResponseTransportDTO>> getPopularsCars(
             @PathVariable int limit,
             @PathVariable int page) {
-        return mainPageService.getPopularCars(page, limit);
+        return mainPageService.getPopularTransports(page, limit);
     }
 
     @GetMapping("/recentlyViewed/{page}/{limit}")
-    public ResponseEntity<List<ResponseCarDTO>> getRecentlyViewedCars(
+    public ResponseEntity<List<ResponseTransportDTO>> getRecentlyViewedCars(
             @PathVariable int limit,
             @PathVariable int page) {
-        return mainPageService.getRecentlyViewedCars(page, limit);
+        return mainPageService.getRecentlyViewedTransports(page, limit);
     }
 
     @GetMapping("/cars/{page}/{limit}")
-    public ResponseEntity<List<ResponseCarDTO>> findCars(
-            @RequestBody RequestCarSearchDTO requestSearch,
+    public ResponseEntity<List<ResponseTransportDTO>> findCars(
+            @RequestBody RequestTransportSearchDTO requestSearch,
             @PathVariable int limit,
             @PathVariable int page) {
-        return mainPageService.searchCarsByRequest(requestSearch, page, limit);
+        return mainPageService.searchTransportByRequest(requestSearch, page, limit);
     }
 
     @GetMapping("/favoriteCars/{page}/{limit}")
-    public ResponseEntity<List<ResponseCarDTO>> getFavorites(
+    public ResponseEntity<List<ResponseTransportDTO>> getFavorites(
             @PathVariable int limit,
             @PathVariable int page) {
-        return mainPageService.getFavoriteCars(page, limit);
+        return mainPageService.getFavoriteTransport(page, limit);
     }
 
     @Operation(
