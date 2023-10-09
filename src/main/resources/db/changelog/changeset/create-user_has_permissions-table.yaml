@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-user_has_permissions-table
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: user_has_permissions
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: permissions_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: FK_USER_HAS_PERMISSIONS_PERMISSIONS
+                    references:
+                      tableName: permissions
+                      column: id
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: FK_USER_HAS_PERMISSIONS_USERS
+                    references:
+                      tableName: users
+                      column: id
+              - column:
+                  name: created
+                  type: TIMESTAMP(6)
+              - column:
+                  name: last_update
+                  type: TIMESTAMP(6)

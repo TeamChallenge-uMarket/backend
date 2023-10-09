@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-transport_type_brands
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: transport_type_brands
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: brand_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_type_brands_transport_brands
+                    references: transport_brands(id)
+              - column:
+                  name: type_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_type_brands_transport_types
+                    references: transport_types(id)

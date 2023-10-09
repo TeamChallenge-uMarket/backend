@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-role_has_permissions-table
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: role_has_permissions
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: permissions_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: FK_ROLE_HAS_PERMISSIONS_PERMISSIONS
+                    references:
+                      tableName: permissions
+                      column: id
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: FK_ROLE_HAS_PERMISSIONS_ROLES
+                    references:
+                      tableName: roles
+                      column: id

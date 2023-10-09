@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-transport_reviews
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: transport_reviews
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: rating
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: VARCHAR(255)
+              - column:
+                  name: created
+                  type: TIMESTAMP(6)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transport_reviews_users
+                    references: users(id)
+              - column:
+                  name: transport_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transport_reviews_transports
+                    references: transports(id)

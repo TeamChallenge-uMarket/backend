@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-roles-table
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    checkConstraint: name IN ('USER', 'ADMIN', 'MODERATOR', 'GUEST')
+              - column:
+                  name: created
+                  type: TIMESTAMP(6)
+              - column:
+                  name: last_update
+                  type: TIMESTAMP(6)

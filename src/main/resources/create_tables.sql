@@ -12,20 +12,6 @@ CREATE TABLE IF NOT EXISTS cities
     FOREIGN KEY (region_id) REFERENCES regions (id)
 );
 
-CREATE TABLE IF NOT EXISTS users
-(
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255),
-    email VARCHAR(255) UNIQUE,
-    password VARCHAR(255),
-    phone VARCHAR(20),
-    refresh_token VARCHAR(255),
-    city BIGINT,
-    created             TIMESTAMP(6),
-    last_update         TIMESTAMP(6),
-    FOREIGN KEY (city) REFERENCES cities (id)
-);
-
 CREATE TABLE IF NOT EXISTS permissions
 (
     id          BIGSERIAL PRIMARY KEY,
