@@ -25,6 +25,11 @@ public class CityService {
                 .orElseThrow(() -> new DataNotFoundException(city));
     }
 
+    public List<City> findByRegion(Long regionId) {
+        return cityDAO.findAllByRegionId(regionId)
+                .filter(cities -> !cities.isEmpty())
+                .orElseThrow(() -> new DataNotFoundException("Cities from region"));
+    }
 
     public List<City> findAll() {
         return cityDAO.findAll();

@@ -34,6 +34,8 @@ public class MainPageService { //TODO Return ResponseEntity<String>
 
     private final UserService userService;
 
+    private final RegionService regionService;
+
 
     private ResponseEntity<List<ResponseTransportDTO>> okResponseTransportDTOList(List<Transport> newTransports) {
         List<ResponseTransportDTO> newCarsResponse = transportService.convertCarsListToDtoCarsList(newTransports);
@@ -61,14 +63,14 @@ public class MainPageService { //TODO Return ResponseEntity<String>
             return okResponseTransportDTOList(searchedTransports);
     }
 
-    public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() { //TODO GOOD
+    public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
         return ResponseEntity.ok(transportTypeService.findAll().stream().map(carType -> ResponseTypeDTO.builder()
                 .typeId(carType.getId())
                 .type(carType.getType())
                 .build()).collect(Collectors.toList()));
     }
 
-    public ResponseEntity<List<ResponseBrandDTO>> getBrandTransport() {//TODO GOOD
+    public ResponseEntity<List<ResponseBrandDTO>> getBrandTransport() {
         return ResponseEntity.ok(transportBrandService.findAll().stream().map(carBrand -> ResponseBrandDTO.builder()
                 .brandId(carBrand.getId())
                 .brand(carBrand.getBrand())
@@ -81,14 +83,6 @@ public class MainPageService { //TODO Return ResponseEntity<String>
                         .modelId(carModel.getId())
                         .brand(carModel.getTransportTypeBrand().getTransportBrand().getBrand())
                         .model(carModel.getModel())
-                        .build())
-                .collect(Collectors.toList()));
-    }
-
-    public ResponseEntity<List<ResponseCitiesDTO>> getCities() {
-        return ResponseEntity.ok(cityService.findAll().stream().map(city -> ResponseCitiesDTO.builder()
-                        .cityId(city.getId())
-                        .city(city.getDescription())
                         .build())
                 .collect(Collectors.toList()));
     }
@@ -128,5 +122,23 @@ public class MainPageService { //TODO Return ResponseEntity<String>
         } else {
             return getModelTransport(transportBrandId);
         }
+    }
+
+    public ResponseEntity<List<ResponseRegionDTO>> getRegions() {
+        return ResponseEntity.ok(regionService.findAll().stream()
+                .map(region -> ResponseRegionDTO.builder()
+                        .regionId(region.getId())
+                        .region(region.getDescription())
+                        .build())
+                .collect(Collectors.toList()));
+    }
+
+    public ResponseEntity<List<ResponseCityDTO>> getCities(Long regionId) {
+        return ResponseEntity.ok(cityService.findByRegion(regionId).stream().map(city -> ResponseCityDTO.builder()
+                        .cityId(city.getId())
+                        .city(city.getDescription())
+                        .region(city.getRegion().getDescription())
+                        .build())
+                .collect(Collectors.toList()));
     }
 }
