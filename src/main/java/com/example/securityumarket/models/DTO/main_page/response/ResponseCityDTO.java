@@ -8,4 +8,5 @@ import lombok.Data;
 public class ResponseCitiesDTO {
     private long cityId;
     private String city;
+    private String region;
 }
