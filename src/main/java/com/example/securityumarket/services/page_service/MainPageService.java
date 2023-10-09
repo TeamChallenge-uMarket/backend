@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class MainPageService { //TODO Return ResponseEntity<String>
+public class MainPageService {
 
     private final TransportService transportService;
 

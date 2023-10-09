@@ -23,6 +23,6 @@ public class TransportViewService {
 
     public List<Transport> findViewedCarsByRegisteredUser(Users user, PageRequest of) {
         return transportViewDAO.findViewedCarsByRegisteredUser(user, of)
-                .orElseThrow(() -> new DataNotFoundException("The most popular transports"));
+                .orElseThrow(() -> new DataNotFoundException("Popular transports"));
     }
 }

@@ -7,6 +7,4 @@ import java.util.Optional;
 
 public interface RegionDAO extends JpaRepository<Region, Long> {
     Optional<Region> findByDescription(String region);
-
-    boolean existsByDescription(String region);
 }

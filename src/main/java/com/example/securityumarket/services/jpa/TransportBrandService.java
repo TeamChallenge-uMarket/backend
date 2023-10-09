@@ -2,6 +2,7 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportBrandDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
+import com.example.securityumarket.models.entities.Region;
 import com.example.securityumarket.models.entities.TransportBrand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,16 @@ public class TransportBrandService {
     private final TransportBrandDAO transportBrandDAO;
 
     public List<TransportBrand> findAll() {
-        return transportBrandDAO.findAll();
+        List<TransportBrand> transportBrands = transportBrandDAO.findAll();
+        if (transportBrands.isEmpty()) {
+            throw new DataNotFoundException("Any transport brands");
+        }
+        return transportBrands;
     }
 
     public List<TransportBrand> findAllByTransportTypeId(Long id) {
         return transportBrandDAO.findAllByTransportTypeId(id)
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException("Car brands by type"));
+                .orElseThrow(() -> new DataNotFoundException("Transport brands by type"));
     }
  }

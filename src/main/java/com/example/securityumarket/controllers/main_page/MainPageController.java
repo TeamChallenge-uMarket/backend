@@ -2,7 +2,6 @@ package com.example.securityumarket.controllers.main_page;
 
 import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
-import com.example.securityumarket.models.entities.Region;
 import com.example.securityumarket.services.page_service.MainPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -18,6 +18,7 @@ import static com.example.securityumarket.services.authorization.MailService.COD
 
 @Service
 public class RegistrationService {
+
     private final PasswordEncoder passwordEncoder;
 
     private final UserService userService;
@@ -69,8 +70,10 @@ public class RegistrationService {
         } else {
             String region = registerRequest.getAddressDTO().getRegion();
             String city = registerRequest.getAddressDTO().getCity();
+
             regionService.findByDescription(region);
             cityService.findByDescription(city);
+
             return cityService.findByRegionDescriptionAndDescription(region, city);
         }
     }

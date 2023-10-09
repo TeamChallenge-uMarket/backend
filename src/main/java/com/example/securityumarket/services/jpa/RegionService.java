@@ -14,12 +14,16 @@ public class RegionService {
 
     private final RegionDAO regionDAO;
 
-    public Region findByDescription(String region) {
-        return regionDAO.findByDescription(region)
+    public void findByDescription(String region) {
+        regionDAO.findByDescription(region)
                 .orElseThrow(() -> new DataNotFoundException(region));
     }
 
     public List<Region> findAll() {
-        return regionDAO.findAll();
+        List<Region> regions = regionDAO.findAll();
+        if (regions.isEmpty()) {
+            throw new DataNotFoundException("Any regions");
+        }
+        return regions;
     }
 }

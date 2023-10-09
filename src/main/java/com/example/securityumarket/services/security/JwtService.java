@@ -19,6 +19,7 @@ public class JwtService {
     private static final long ACCESS_TOKEN_EXPIRATION = 15 * 60 * 1000; // 15 minutes
 
     private static final long REFRESH_TOKEN_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
+
     private static final String SECRETE_KEY = "78144c389e7d7330c70e8150c9749a6005758037340a667a5c7963249e817112";
 
     public String extractUsername(String token) {

@@ -20,8 +20,8 @@ public class CityService {
                 .orElseThrow(() -> new DataNotFoundException(address));
     }
 
-    public City findByDescription(String city) {
-        return cityDAO.findByDescription(city)
+    public void findByDescription(String city) {
+        cityDAO.findByDescription(city)
                 .orElseThrow(() -> new DataNotFoundException(city));
     }
 
@@ -29,9 +29,5 @@ public class CityService {
         return cityDAO.findAllByRegionId(regionId)
                 .filter(cities -> !cities.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("Cities from region"));
-    }
-
-    public List<City> findAll() {
-        return cityDAO.findAll();
     }
 }

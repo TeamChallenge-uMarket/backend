@@ -9,8 +9,6 @@
 
         Optional<Users> findAppUserByEmail(String email);
 
-        Optional<Users> findAppUserByPhone(String phone);
-
         boolean existsUsersByEmail(String email);
 
         boolean existsUsersByPhone(String phone);
