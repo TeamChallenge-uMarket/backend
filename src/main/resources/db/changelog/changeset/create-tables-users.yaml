@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-users
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: phone
+                  type: VARCHAR(20)
+              - column:
+                  name: refresh_token
+                  type: VARCHAR(255)
+              - column:
+                  name: city
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_users_cities
+                    references: cities(id)
+              - column:
+                  name: created
+                  type: TIMESTAMP(6)
+              - column:
+                  name: last_update
+                  type: TIMESTAMP(6)

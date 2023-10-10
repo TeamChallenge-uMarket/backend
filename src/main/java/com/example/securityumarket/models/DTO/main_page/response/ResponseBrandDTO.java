@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class ResponseBrandDTO {
+
     private long brandId;
+
     private String brand;
 }

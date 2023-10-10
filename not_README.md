@@ -23,7 +23,7 @@ Example response:
 ### Get brands
 URL: /api/v1/main/brand</br>
 Method: GET</br>
-Description: Retrieve a list of all car brands</br>
+Description: Retrieve a list of all transport brands</br>
 Example response:
 ```json
 [
@@ -77,7 +77,7 @@ Example response:
 ]
 ```
 ### Get new cars
-URL: /api/v1/main/newCars/{page}/{limit}</br>
+URL: /api/v1/main/newTransports/{page}/{limit}</br>
 Method: GET</br>
 Description: Retrieve a list of cars sorted desc by date of creation</br>
 Parameters:
@@ -116,7 +116,7 @@ Example response:
 ]
 ```
 ### Get popular cars
-URL: /api/v1/main/popularCars/{page}/{limit}</br>
+URL: /api/v1/main/popularTransports/{page}/{limit}</br>
 Method: GET</br>
 Description: Retrieve a list of cars sorted by users viewed</br>
 Parameters:

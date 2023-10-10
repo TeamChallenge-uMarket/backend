@@ -4,10 +4,9 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.Users;
-import com.example.securityumarket.services.security.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service

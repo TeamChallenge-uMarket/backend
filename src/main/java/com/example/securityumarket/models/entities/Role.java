@@ -16,7 +16,7 @@ public class Role extends DateAudit {
 
 
     @Enumerated(EnumType.STRING)
-    private Roles name = Roles.USER;
+    private Roles name;
 
 
     @OneToMany(mappedBy = "role")
