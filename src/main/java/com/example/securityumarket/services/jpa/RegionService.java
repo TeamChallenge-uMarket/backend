@@ -6,14 +6,24 @@ import com.example.securityumarket.models.entities.Region;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class RegionService {
 
     private final RegionDAO regionDAO;
 
-    public Region findByDescription(String region) {
-        return regionDAO.findByDescription(region)
+    public void findByDescription(String region) {
+        regionDAO.findByDescription(region)
                 .orElseThrow(() -> new DataNotFoundException(region));
+    }
+
+    public List<Region> findAll() {
+        List<Region> regions = regionDAO.findAll();
+        if (regions.isEmpty()) {
+            throw new DataNotFoundException("Any regions");
+        }
+        return regions;
     }
 }

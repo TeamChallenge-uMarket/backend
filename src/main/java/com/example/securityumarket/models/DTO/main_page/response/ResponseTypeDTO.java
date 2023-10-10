@@ -6,6 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class ResponseTypeDTO {
+
     private long typeId;
+
     private String type;
 }

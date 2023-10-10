@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-transport_galleries
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: transport_galleries
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: image_name
+                  type: VARCHAR(255)
+              - column:
+                  name: is_main
+                  type: BOOLEAN
+              - column:
+                  name: url
+                  type: VARCHAR(500)
+              - column:
+                  name: transport_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transport_galleries_transports
+                    references: transports(id)

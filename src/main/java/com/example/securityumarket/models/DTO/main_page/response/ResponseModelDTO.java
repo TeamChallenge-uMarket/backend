@@ -6,7 +6,10 @@ import lombok.Data;
 @Data
 @Builder
 public class ResponseModelDTO {
+
     private long modelId;
+
     private String brand;
+
     private String model;
 }

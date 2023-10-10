@@ -1,8 +1,8 @@
 package com.example.securityumarket.services.page_service;
 
-import com.example.securityumarket.models.DTO.main_page.request.RequestCarSearchDTO;
+import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
-import com.example.securityumarket.models.entities.Car;
+import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.*;
 import lombok.RequiredArgsConstructor;
@@ -16,87 +16,129 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class MainPageService { //TODO Return ResponseEntity<String>
+public class MainPageService {
 
-    private final CarService carService;
+    private final TransportService transportService;
 
-    private final CarFavoriteService carFavoriteService;
+    private final FavoriteTransportService favoriteTransportService;
 
-    private final CarModelService carModelService;
+    private final TransportModelService transportModelService;
 
-    private final CarViewService carViewService;
+    private final TransportViewService transportViewService;
 
-    private final CarTypeService carTypeService;
+    private final TransportTypeService transportTypeService;
 
-    private final CarBrandService carBrandService;
+    private final TransportBrandService transportBrandService;
 
     private final CityService cityService;
 
     private final UserService userService;
 
-    private ResponseEntity<List<ResponseCarDTO>> okResponseCarsDTOList(List<Car> newCars) {
-        List<ResponseCarDTO> newCarsResponse = carService.convertCarsListToDtoCarsList(newCars);
+    private final RegionService regionService;
+
+
+    private ResponseEntity<List<ResponseTransportDTO>> okResponseTransportDTOList(List<Transport> newTransports) {
+        List<ResponseTransportDTO> newCarsResponse = transportService.convertCarsListToDtoCarsList(newTransports);
         return ResponseEntity.ok(newCarsResponse);
     }
 
-    public ResponseEntity<List<ResponseCarDTO>> getNewCars(int page, int limit) {
-        List<Car> newCars = carService.findNewCars(PageRequest.of(page, limit));
-        return okResponseCarsDTOList(newCars);
+    public ResponseEntity<List<ResponseTransportDTO>> getNewTransports(int page, int limit) {
+        List<Transport> newTransports = transportService.findNewCars(PageRequest.of(page, limit));
+        return okResponseTransportDTOList(newTransports);
     }
 
-    public ResponseEntity<List<ResponseCarDTO>> getPopularCars(int page, int limit) {
-        List<Car> popularCars = carViewService.findPopularCars(PageRequest.of(page, limit));
-        return okResponseCarsDTOList(popularCars);
+    public ResponseEntity<List<ResponseTransportDTO>> getPopularTransports(int page, int limit) {
+        List<Transport> popularTransports = transportViewService.findPopularTransport(PageRequest.of(page, limit));
+        return okResponseTransportDTOList(popularTransports);
     }
 
-    public ResponseEntity<List<ResponseCarDTO>> getRecentlyViewedCars(int page, int limit) {
+    public ResponseEntity<List<ResponseTransportDTO>> getRecentlyViewedTransports(int page, int limit) {
             Users user = userService.getAuthenticatedUser();
-            List<Car> viewedCarsByUser = carViewService.findViewedCarsByRegisteredUser(user, PageRequest.of(page, limit));
-            return okResponseCarsDTOList(viewedCarsByUser);
+            List<Transport> viewedCarsByUser = transportViewService.findViewedCarsByRegisteredUser(user, PageRequest.of(page, limit));
+            return okResponseTransportDTOList(viewedCarsByUser);
     }
 
-    public ResponseEntity<List<ResponseCarDTO>> searchCarsByRequest(RequestCarSearchDTO requestSearch, int page, int limit) {
-            List<Car> searchedCars = carService.findCarsByRequest(requestSearch, PageRequest.of(page, limit));
-            return okResponseCarsDTOList(searchedCars);
+    public ResponseEntity<List<ResponseTransportDTO>> searchTransportByRequest(RequestTransportSearchDTO requestSearch, int page, int limit) {
+            List<Transport> searchedTransports = transportService.findTransportByRequest(requestSearch, PageRequest.of(page, limit));
+            return okResponseTransportDTOList(searchedTransports);
     }
 
     public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
-        return ResponseEntity.ok(carTypeService.findAll().stream().map(carType -> ResponseTypeDTO.builder()
+        return ResponseEntity.ok(transportTypeService.findAll().stream().map(carType -> ResponseTypeDTO.builder()
                 .typeId(carType.getId())
                 .type(carType.getType())
                 .build()).collect(Collectors.toList()));
     }
 
     public ResponseEntity<List<ResponseBrandDTO>> getBrandTransport() {
-        return ResponseEntity.ok(carBrandService.findAll().stream().map(carBrand -> ResponseBrandDTO.builder()
+        return ResponseEntity.ok(transportBrandService.findAll().stream().map(carBrand -> ResponseBrandDTO.builder()
                 .brandId(carBrand.getId())
                 .brand(carBrand.getBrand())
                 .build()).collect(Collectors.toList()));
     }
 
     public ResponseEntity<List<ResponseModelDTO>> getModelTransport(long brandId) {
-        return ResponseEntity.ok(carModelService.findAllByCarBrand(brandId).stream().map(carModel -> ResponseModelDTO.builder()
-                .modelId(carModel.getId())
-                .brand(carModel.getCarBrand().getBrand())
-                .model(carModel.getModel())
-                .build()).collect(Collectors.toList()));
-    }
-
-    public ResponseEntity<List<ResponseCitiesDTO>> getCities() {
-        return ResponseEntity.ok(cityService.findAll().stream().map(city -> ResponseCitiesDTO.builder()
-                        .cityId(city.getId())
-                        .city(city.getDescription())
+        return ResponseEntity.ok(transportModelService.findAllByTransportBrand(brandId).stream()
+                .map(carModel -> ResponseModelDTO.builder()
+                        .modelId(carModel.getId())
+                        .brand(carModel.getTransportTypeBrand().getTransportBrand().getBrand())
+                        .model(carModel.getModel())
                         .build())
                 .collect(Collectors.toList()));
     }
 
-    public ResponseEntity<List<ResponseCarDTO>> getFavoriteCars(int page, int limit) {
+    public ResponseEntity<List<ResponseTransportDTO>> getFavoriteTransport(int page, int limit) {
         try {
             Users user = userService.getAuthenticatedUser();
-            List<Car> viewedCarsByUser = carFavoriteService.findFavorites(user, PageRequest.of(page, limit));
-            return okResponseCarsDTOList(viewedCarsByUser);
+            List<Transport> viewedCarsByUser = favoriteTransportService.findFavorites(user, PageRequest.of(page, limit));
+            return okResponseTransportDTOList(viewedCarsByUser);
         } catch (UsernameNotFoundException exception) {
             return ResponseEntity.noContent().build();
         }
+    }
+
+    public ResponseEntity<List<ResponseBrandDTO>> getBrandsByTransportType(Long transportTypeId) {
+        if (transportTypeId == null) {
+            return getBrandTransport();
+        } else {
+            return ResponseEntity.ok(transportBrandService.findAllByTransportTypeId(transportTypeId).stream()
+                    .map(carBrand -> ResponseBrandDTO.builder()
+                            .brandId(carBrand.getId())
+                            .brand(carBrand.getBrand())
+                            .build())
+                    .collect(Collectors.toList()));
+        }
+    }
+
+    public ResponseEntity<List<ResponseModelDTO>> getModelsByTransportBrand(Long transportTypeId, Long transportBrandId) {
+        if (transportTypeId != null) {
+            return ResponseEntity.ok(transportModelService.findAllByTransportTypeAndBrand(transportBrandId, transportTypeId).stream()
+                    .map(carModel -> ResponseModelDTO.builder()
+                            .brand(carModel.getTransportTypeBrand().getTransportBrand().getBrand())
+                            .modelId(carModel.getId())
+                            .model(carModel.getModel())
+                            .build())
+                    .collect(Collectors.toList()));
+        } else {
+            return getModelTransport(transportBrandId);
+        }
+    }
+
+    public ResponseEntity<List<ResponseRegionDTO>> getRegions() {
+        return ResponseEntity.ok(regionService.findAll().stream()
+                .map(region -> ResponseRegionDTO.builder()
+                        .regionId(region.getId())
+                        .region(region.getDescription())
+                        .build())
+                .collect(Collectors.toList()));
+    }
+
+    public ResponseEntity<List<ResponseCityDTO>> getCities(Long regionId) {
+        return ResponseEntity.ok(cityService.findByRegion(regionId).stream().map(city -> ResponseCityDTO.builder()
+                        .cityId(city.getId())
+                        .city(city.getDescription())
+                        .region(city.getRegion().getDescription())
+                        .build())
+                .collect(Collectors.toList()));
     }
 }

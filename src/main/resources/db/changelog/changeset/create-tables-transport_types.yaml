@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-transport_types
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: transport_types
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: type
+                  type: VARCHAR(255)

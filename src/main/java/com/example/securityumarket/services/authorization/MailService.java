@@ -3,6 +3,7 @@ package com.example.securityumarket.services.authorization;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import lombok.Getter;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -17,22 +18,16 @@ public class MailService {
     public static final long CODE_EXPIRATION_TIME_MS = 5 * 60 * 1000; // 5 minutes
 
     private final JavaMailSender javaMailSender;
+
+    @Getter
     private String verificationCode;
 
+    @Getter
     private String userEmail;
+
+    @Getter
     private long codeCreationTime;
 
-    public String getVerificationCode() {
-        return verificationCode;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public long getCodeCreationTime() {
-        return codeCreationTime;
-    }
 
     public MailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
@@ -58,7 +53,7 @@ public class MailService {
             helper.setSubject("Verification");
             helper.setText("Your verification code: " + code, false);
         } catch (MessagingException | UnsupportedEncodingException e) {
-            e.printStackTrace();
+            e.printStackTrace(); //TODO BusinessException
         }
 
         javaMailSender.send(mimeMessage);

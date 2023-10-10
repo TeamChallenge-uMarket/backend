@@ -2,8 +2,8 @@ package com.example.securityumarket.controllers.authorization;
 
 import com.example.securityumarket.models.DTO.login_page.PasswordRequest;
 import com.example.securityumarket.services.authorization.ResetPasswordService;
-import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

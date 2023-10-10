@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-favorite_transports
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: favorite_transports
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_favorite_transports_users
+                    references: users(id)
+              - column:
+                  name: transport_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_favorite_transports_transports
+                    references: transports(id)
+              - column:
+                  name: created
+                  type: TIMESTAMP(6)
+                  constraints:
+                    nullable: false
