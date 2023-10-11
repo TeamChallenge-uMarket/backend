@@ -49,12 +49,16 @@ public class TransportService {
                         .price(car.getPrice())
                         .mileage(car.getMileage())
                         .year(car.getYear())
-                        .city(car.getCity().getDescription())
+                        .region(car.getCity().getRegion().getDescription())
                         .transmission(car.getTransmission())
                         .fuelType(car.getFuelType())
                         .imgUrl(transportGalleryService.findMainFileByTransport(car.getId()))
                         .created(car.getCreated().toString())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public Transport findTransportById(long carId) {
+        return transportDAO.findById(carId).orElseThrow();
     }
 }

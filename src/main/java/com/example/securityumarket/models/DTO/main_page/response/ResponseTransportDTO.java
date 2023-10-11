@@ -21,7 +21,7 @@ public class ResponseTransportDTO {
 
     private int mileage;
 
-    private String city;
+    private String region;
 
     private String transmission;
 
@@ -31,3 +31,5 @@ public class ResponseTransportDTO {
 
     private String created;
 }
+//TODO add extend dto to catalog page (add update time front? =/ )
+//TODO add interfaceDTO transport main characteristic
