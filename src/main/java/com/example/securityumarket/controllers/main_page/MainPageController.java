@@ -92,5 +92,3 @@ public class MainPageController {
         return mainPageService.getCities(regionId);
     }
 }
-
-//TODO add controller for catalog (add favorite endpoint)

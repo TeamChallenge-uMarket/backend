@@ -2,6 +2,7 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.FavoriteTransportDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
+import com.example.securityumarket.models.entities.FavoriteTransport;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,12 @@ public class FavoriteTransportService {
         return favoriteTransportDAO.findFavorites(user, of)
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("Favorite transport"));
+    }
+
+    public void addFavorite(Users users, Transport transport) {
+        favoriteTransportDAO.save(FavoriteTransport.builder()
+                .user(users)
+                .transport(transport)
+                .build());
     }
 }

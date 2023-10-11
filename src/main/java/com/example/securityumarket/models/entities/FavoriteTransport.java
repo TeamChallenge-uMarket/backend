@@ -1,11 +1,15 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@Builder
 @Entity
 @Table(name = "favorite_transports")
+@NoArgsConstructor
+@AllArgsConstructor
 public class FavoriteTransport extends CreatedAtAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
