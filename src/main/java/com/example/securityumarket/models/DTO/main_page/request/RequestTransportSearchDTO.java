@@ -13,7 +13,7 @@ public class RequestTransportSearchDTO {
     private long typeId;
     private long brandId;
     private long modelId;
-    private long regionId;
+    private long cityId;
     private OrderBy orderBy;
     private SortBy sortBy;
 

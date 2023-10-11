@@ -19,7 +19,6 @@ public interface TransportDAO extends JpaRepository<Transport, Long> {
             "where (:#{#requestSearch.typeId} = 0 or t.transportModel.transportTypeBrand.transportType.id =:#{#requestSearch.typeId}) " +
             "and (:#{#requestSearch.brandId} = 0 or t.transportModel.transportTypeBrand.transportBrand.id =:#{#requestSearch.brandId}) " +
             "and (:#{#requestSearch.modelId} = 0 or t.transportModel.id =:#{#requestSearch.modelId}) " +
-            "and (:#{#requestSearch.regionId} = 0 or t.city.region.id =:#{#requestSearch.regionId}) " +
             "order by " +
             "   case when lower(:#{#requestSearch.orderBy.name()}) = 'created' and lower(:#{#requestSearch.sortBy.name()}) = 'asc' then t.created end asc, " +
             "   case when lower(:#{#requestSearch.orderBy.name()}) = 'created' and lower(:#{#requestSearch.sortBy.name()}) = 'desc' then t.created end desc, " +
