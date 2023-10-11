@@ -1,7 +1,11 @@
 package com.example.securityumarket.controllers.catalog;
 
+import com.example.securityumarket.services.page_service.CatalogPageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,5 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Catalog page", description = "catalog page endpoints")
 public class CatalogController {
 
-    //TODO add favorite
+    private final CatalogPageService catalogPageService;
+
+    //can be added to my favorite only registered users
+    //TODO need to check (tested)
+    @PutMapping("/favoriteAdd/{carId}")
+    public ResponseEntity<String> addFavorite(
+            @PathVariable long carId) {
+        return catalogPageService.addFavorite(carId);
+    }
 }

@@ -57,4 +57,8 @@ public class TransportService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    public Transport findTransportById(long carId) {
+        return transportDAO.findById(carId).orElseThrow();
+    }
 }
