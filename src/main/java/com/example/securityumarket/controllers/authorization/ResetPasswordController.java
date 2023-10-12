@@ -14,32 +14,33 @@ import java.util.Map;
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
 @RequestMapping("/api/v1/authorization/reset-password")
-@Tag(name = "Reset passwords", description = "reset password endpoints")
+@Tag(name = "Reset passwords", description = "Reset password endpoints: reset-password, form, send-code, resend-code, verify account")
 public class ResetPasswordController {
 
     private ResetPasswordService resetPasswordService;
 
     @GetMapping("")
     public String getResetPasswordPage() {
-        return "";
+        return "reset-password";
     }
 
-    @GetMapping("/confirm-code")
+    @GetMapping("/form")
     public String getConfirmCodePage() {
-        return "confirm-code";
+        return "reset-password form";
+    }
+
+    @PutMapping("/send-code")
+    public ResponseEntity<String> sendCode(@RequestParam String email) {
+        return resetPasswordService.sendResetPasswordCode(email);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<String> verifyAccount(@RequestParam String email,
+                                                @RequestParam String token) {
+        return resetPasswordService.verifyAccount(email, token);
     }
 
     @PostMapping("")
-    public ResponseEntity<String> sendCode(@RequestBody Map<String, String> requestEmail) {
-        return resetPasswordService.sendResetPasswordCode(requestEmail.get("email"));
-    }
-
-    @PostMapping("/confirm-code")
-    public ResponseEntity<String> confirmCode(@RequestBody Map<String, String> requestConfirmCode) {
-        return resetPasswordService.confirmResetPasswordCode(requestConfirmCode.get("confirmCode"));
-    }
-
-    @PostMapping("/reset")
     public ResponseEntity<String> resetPassword(@RequestBody @Valid PasswordRequest passwordRequest) {
         return resetPasswordService.resetPassword(passwordRequest);
     }

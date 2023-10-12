@@ -1,6 +1,7 @@
 package com.example.securityumarket.services.authorization;
 
 import com.example.securityumarket.dao.UsersDAO;
+import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.Users;
@@ -11,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.security.auth.login.LoginException;
 
 @Service
 @AllArgsConstructor
@@ -23,7 +26,6 @@ public class LoginService {
     @Transactional
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
         Users users = authenticate(authenticationRequest);
-
         String jwtToken = jwtService.generateToken(users);
         String refreshToken = jwtService.generateRefreshToken(users);
         users.setRefreshToken(refreshToken);
@@ -41,7 +43,12 @@ public class LoginService {
                         authenticationRequest.getPassword()
                 )
         );
-        return usersDAO.findAppUserByEmail(authenticationRequest.getEmail())
+        Users user = usersDAO.findAppUserByEmail(authenticationRequest.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!user.isActive()) {
+            throw new DataNotValidException("Account not activated. Check your email and activate your account");
+        }
+        return user;
     }
 }

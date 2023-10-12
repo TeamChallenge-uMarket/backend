@@ -49,7 +49,7 @@ public class UserService {
 
     public void isUserEmailUnique(String email) {
         if (existsUsersByEmail(email)) {
-            throw new DuplicateDataException("User with " + email + "already exists");
+            throw new DuplicateDataException("User with " + email + " already exists");
         }
     }
 }
