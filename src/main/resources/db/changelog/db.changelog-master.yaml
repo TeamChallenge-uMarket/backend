@@ -34,4 +34,6 @@ databaseChangeLog:
   - include:
       file: db/changelog/changeset/create-tables-transport_views.yaml
   - include:
+      file: db/changelog/changeset/add_is_active_column_to_users.yaml
+  - include:
       file: db/changelog/changeset/execute-sql-from-file.yaml

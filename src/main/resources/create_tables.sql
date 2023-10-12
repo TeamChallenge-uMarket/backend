@@ -47,6 +47,7 @@ create table if not exists users
     password      varchar(255),
     phone         varchar(255),
     refresh_token varchar(255),
+    active        boolean not null default false,
     city          bigint,
     constraint users_pkey
         primary key (id),

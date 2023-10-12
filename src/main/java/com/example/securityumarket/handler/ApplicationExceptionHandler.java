@@ -1,9 +1,6 @@
 package com.example.securityumarket.handler;
 
-import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.exception.DataNotValidException;
-import com.example.securityumarket.exception.DuplicateDataException;
-import com.example.securityumarket.exception.InsufficientPermissionsException;
+import com.example.securityumarket.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,6 +42,12 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(DataNotValidException.class)
     public Map<String, String> handleDataNotValidException(DataNotValidException exception) {
+        return createErrorResponse(exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(EmailSendingException.class)
+    public Map<String, String> handleEmailSendingException(EmailSendingException exception) {
         return createErrorResponse(exception.getMessage());
     }
 

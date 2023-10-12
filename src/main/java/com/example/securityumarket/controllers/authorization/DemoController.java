@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/demo-controller")
 @Tag(name = "Demo", description = "demo endpoint with authorized user")
-public class DemoController { //TODO TEST CLASS
+public class DemoController { //TEST CLASS
     @GetMapping("")
     public ResponseEntity<String> home() {
         return ResponseEntity.ok("hello secure endpoint");

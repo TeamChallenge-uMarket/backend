@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-is-active-column-to-users
+      author: Oleh
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: active
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
