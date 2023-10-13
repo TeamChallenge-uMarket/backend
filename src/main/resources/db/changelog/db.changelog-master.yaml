@@ -37,3 +37,5 @@ databaseChangeLog:
       file: db/changelog/changeset/add_is_active_column_to_users.yaml
   - include:
       file: db/changelog/changeset/execute-sql-from-file.yaml
+  - include:
+      file: db/changelog/changeset/add_load-bearing-vehicle_columns_to_transports.yaml
