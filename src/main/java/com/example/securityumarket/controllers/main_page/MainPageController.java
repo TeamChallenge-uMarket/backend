@@ -2,6 +2,7 @@ package com.example.securityumarket.controllers.main_page;
 
 import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
+import com.example.securityumarket.models.DTO.transports.impl.PassengerCarDTO;
 import com.example.securityumarket.services.page_service.MainPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -90,5 +91,13 @@ public class MainPageController {
     @GetMapping("/cities")
     public ResponseEntity<List<ResponseCityDTO>> getCities(@RequestParam Long regionId) {
         return mainPageService.getCities(regionId);
+    }
+
+
+        @GetMapping("/popularPassCars/{page}/{limit}")
+    public ResponseEntity<List<PassengerCarDTO>> getPopularsCars1(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return mainPageService.getPopularTransports1(page, limit);
     }
 }

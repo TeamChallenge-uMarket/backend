@@ -2,6 +2,7 @@ package com.example.securityumarket.services.page_service;
 
 import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
+import com.example.securityumarket.models.DTO.transports.impl.PassengerCarDTO;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.*;
@@ -140,5 +141,11 @@ public class MainPageService {
                         .region(city.getRegion().getDescription())
                         .build())
                 .collect(Collectors.toList()));
+    }
+
+    public ResponseEntity<List<PassengerCarDTO>> getPopularTransports1(int page, int limit) {
+        List<Transport> popularTransports = transportViewService.findPopularTransport(PageRequest.of(page, limit));
+        List<PassengerCarDTO> passengerCarDTOS = transportService.convertTransportListToPassCarDTOList(popularTransports);
+        return ResponseEntity.ok(passengerCarDTOS);
     }
 }

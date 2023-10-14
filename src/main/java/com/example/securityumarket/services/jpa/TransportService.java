@@ -4,7 +4,10 @@ import com.example.securityumarket.dao.TransportDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.ResponseTransportDTO;
+import com.example.securityumarket.models.DTO.transports.LoadBearingVehicleDTO;
+import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
+import com.example.securityumarket.util.TransportConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ public class TransportService {
     private final TransportDAO transportDAO;
 
     private final TransportGalleryService transportGalleryService;
+
+    private final TransportConverter transportConverter;
 
 
     public Transport save(Transport transport) {
@@ -59,6 +64,40 @@ public class TransportService {
     }
 
     public Transport findTransportById(long carId) {
-        return transportDAO.findById(carId).orElseThrow();
+        return transportDAO.findById(carId)
+                .orElseThrow(() -> new DataNotFoundException("Transport by id"));
     }
+
+    public List<PassengerCarDTO> convertTransportListToPassCarDTOList(List<Transport> newTransports) {
+        return newTransports.stream()
+                .map(transportConverter::convertTransportToPassCarDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<AgriculturalDTO> convertTransportListToAgriculturalDTOList(List<Transport> newTransports) {
+        return null;//TODO
+    }
+
+    public List<SpecializedVehicleDTO> convertTransportListToSpecializedVehicleDTO(List<Transport> newTransports) {
+        return null;//TODO
+
+    }
+
+    public List<MotorcycleDTO> convertTransportListToMotorcycleDTOList(List<Transport> newTransports) {
+        return null;//TODO
+    }
+
+    public List<TruckDTO> convertTransportListToTruckDTOOList(List<Transport> newTransports) {
+        return null;//TODO
+    }
+
+    public List<WaterVehicleDTO> convertTransportListToWaterVehicleDTOList(List<Transport> newTransports) {
+        return null;//TODO
+    }
+
+
+
+
+
+
 }

@@ -15,6 +15,8 @@ public interface TransportDAO extends JpaRepository<Transport, Long> {
     @Query("select c from Transport c order by c.created desc")
     Optional<List<Transport>> findNewCars(PageRequest pageRequest);
 
+    Optional<Transport> findById(long id);
+
     @Query("select t from Transport t " +
             "where (:#{#requestSearch.typeId} = 0 or t.transportModel.transportTypeBrand.transportType.id =:#{#requestSearch.typeId}) " +
             "and (:#{#requestSearch.brandId} = 0 or t.transportModel.transportTypeBrand.transportBrand.id =:#{#requestSearch.brandId}) " +

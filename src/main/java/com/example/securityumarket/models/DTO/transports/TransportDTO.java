@@ -25,9 +25,15 @@ userId - ідентифікатор користувача, який додав 
 modelId - ідентифікатор моделі транспортного засобу.
  */
 
+import lombok.Builder;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@SuperBuilder
+@Data
 public abstract class TransportDTO {
 
     protected long id;
@@ -64,13 +70,15 @@ public abstract class TransportDTO {
 
     protected String color;
 
-    protected long regionId;
+    protected String region;
 
-    protected long cityId;
+    protected String city;
 
-    protected long galleryId;
+    protected String mainPhoto;
 
-    protected long userId;
+    protected String userName;
 
-    protected long modelId;
+    protected String model;
+
+    protected String brand;
 }

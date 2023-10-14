@@ -105,7 +105,7 @@ public class Transport extends DateAudit{
      */
 
     @Column(name = "load_capacity")
-    private int loadCapacity;
+    private Integer loadCapacity;
 
     @Column(name = "number_of_axles")
     private String numberOfAxles;

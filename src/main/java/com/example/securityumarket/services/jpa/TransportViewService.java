@@ -18,11 +18,13 @@ public class TransportViewService {
 
     public List<Transport> findPopularTransport(PageRequest of) {
         return transportViewDAO.findPopularTransport(of)
+                .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("Popular transports"));
     }
 
     public List<Transport> findViewedCarsByRegisteredUser(Users user, PageRequest of) {
         return transportViewDAO.findViewedCarsByRegisteredUser(user, of)
+                .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("Popular transports"));
     }
 }
