@@ -2,6 +2,7 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
+import com.example.securityumarket.models.DTO.catalog.MotorcycleFilterDTO;
 import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.ResponseTransportDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
@@ -103,5 +104,9 @@ public class TransportService {
         return newTransports.stream()
                 .map(transport -> (WaterVehicleDTO) transportConverter.convertTransport(transport, new WaterVehicleConversionStrategy()))
                 .collect(Collectors.toList());
+    }
+
+    public List<Transport> findMotorcyclesByFilter(MotorcycleFilterDTO motorcycleFilterDTO, PageRequest pageRequest) {
+        return transportDAO.findMotorCyclesByFilter(motorcycleFilterDTO, pageRequest);
     }
 }
