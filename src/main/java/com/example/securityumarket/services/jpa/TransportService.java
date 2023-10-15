@@ -52,7 +52,8 @@ public class TransportService {
                         .city(car.getCity().getDescription())
                         .transmission(car.getTransmission())
                         .fuelType(car.getFuelType())
-                        .imgUrl(transportGalleryService.findMainFileByTransport(car.getId()))
+//                        .imgUrl(transportGalleryService.findMainFileByTransport(car.getId()))
+                        .imgUrl("https://res.cloudinary.com/de4bysqtm/image/upload/f_auto,q_auto/l52tzjkitkoy64ttdkmx")
                         .created(car.getCreated().toString())
                         .build())
                 .collect(Collectors.toList());
