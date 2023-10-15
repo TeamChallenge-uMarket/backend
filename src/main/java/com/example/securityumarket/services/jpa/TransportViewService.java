@@ -22,9 +22,17 @@ public class TransportViewService {
                 .orElseThrow(() -> new DataNotFoundException("Popular transports"));
     }
 
+    public List<Transport> findPopularTransportByTypeId(PageRequest of, long id) {
+        return transportViewDAO.findPopularTransportByTypeId(of, id)
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new DataNotFoundException("Popular transports by type"));
+    }
+
+
+
     public List<Transport> findViewedCarsByRegisteredUser(Users user, PageRequest of) {
         return transportViewDAO.findViewedCarsByRegisteredUser(user, of)
                 .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException("Popular transports"));
+                .orElseThrow(() -> new DataNotFoundException("Popular transports by user"));
     }
 }

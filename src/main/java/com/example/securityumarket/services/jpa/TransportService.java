@@ -4,10 +4,9 @@ import com.example.securityumarket.dao.TransportDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.ResponseTransportDTO;
-import com.example.securityumarket.models.DTO.transports.LoadBearingVehicleDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.util.TransportConverter;
+import com.example.securityumarket.util.converter.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -57,8 +56,7 @@ public class TransportService {
                         .region(car.getCity().getRegion().getDescription())
                         .transmission(car.getTransmission())
                         .fuelType(car.getFuelType())
-//                        .imgUrl(transportGalleryService.findMainFileByTransport(car.getId()))
-                        .imgUrl("https://res.cloudinary.com/de4bysqtm/image/upload/f_auto,q_auto/l52tzjkitkoy64ttdkmx")
+                        .imgUrl(transportGalleryService.findMainFileByTransport(car.getId()))
                         .created(car.getCreated().toString())
                         .build())
                 .collect(Collectors.toList());
@@ -71,34 +69,39 @@ public class TransportService {
 
     public List<PassengerCarDTO> convertTransportListToPassCarDTOList(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transportConverter::convertTransportToPassCarDTO)
+                .map(transport -> (PassengerCarDTO) transportConverter.convertTransport(transport, new MotorizedFourWheeledVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
+
+
     public List<AgriculturalDTO> convertTransportListToAgriculturalDTOList(List<Transport> newTransports) {
-        return null;//TODO
+        return newTransports.stream()
+                .map(transport -> (AgriculturalDTO) transportConverter.convertTransport(transport, new LoadBearingVehicleConversionStrategy()))
+                .collect(Collectors.toList());
     }
 
     public List<SpecializedVehicleDTO> convertTransportListToSpecializedVehicleDTO(List<Transport> newTransports) {
-        return null;//TODO
-
+        return newTransports.stream()
+                .map(transport -> (SpecializedVehicleDTO) transportConverter.convertTransport(transport, new LoadBearingVehicleConversionStrategy()))
+                .collect(Collectors.toList());
     }
 
     public List<MotorcycleDTO> convertTransportListToMotorcycleDTOList(List<Transport> newTransports) {
-        return null;//TODO
+        return newTransports.stream()
+                .map(transport -> (MotorcycleDTO) transportConverter.convertTransport(transport, new MotorizedVehicleConversionStrategy()))
+                .collect(Collectors.toList());
     }
 
     public List<TruckDTO> convertTransportListToTruckDTOOList(List<Transport> newTransports) {
-        return null;//TODO
+        return newTransports.stream()
+                .map(transport -> (TruckDTO) transportConverter.convertTransport(transport, new LoadBearingVehicleConversionStrategy()))
+                .collect(Collectors.toList());
     }
 
     public List<WaterVehicleDTO> convertTransportListToWaterVehicleDTOList(List<Transport> newTransports) {
-        return null;//TODO
+        return newTransports.stream()
+                .map(transport -> (WaterVehicleDTO) transportConverter.convertTransport(transport, new WaterVehicleConversionStrategy()))
+                .collect(Collectors.toList());
     }
-
-
-
-
-
-
 }

@@ -14,7 +14,7 @@ numberOfSeats - кількість сидячих місць.
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Data
-public abstract class MotorizedFourWheeledVehicleDTO extends MotorizedVehicleDTO { //PassengerCarDTO
+public class MotorizedFourWheeledVehicleDTO extends MotorizedVehicleDTO { //PassengerCarDTO
 
     protected double fuelConsumptionCity;
 

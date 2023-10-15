@@ -13,7 +13,7 @@ wheelConfiguration - колісна формула;
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Data
-public abstract class LoadBearingVehicleDTO extends MotorizedFourWheeledVehicleDTO { //Agricultural, SpecializedVehicle, Truck
+public class LoadBearingVehicleDTO extends MotorizedFourWheeledVehicleDTO { //AgriculturalDTO, SpecializedVehicleDTO, TruckDTO
 
     protected int loadCapacity;
 

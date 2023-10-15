@@ -2,7 +2,7 @@ package com.example.securityumarket.controllers.main_page;
 
 import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
-import com.example.securityumarket.models.DTO.transports.impl.PassengerCarDTO;
+import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.services.page_service.MainPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -95,10 +95,46 @@ public class MainPageController {
     }
 
 
-        @GetMapping("/popularPassCars/{page}/{limit}")
-    public ResponseEntity<List<PassengerCarDTO>> getPopularsCars1(
+    @GetMapping("/popularPassCars/{page}/{limit}") //TEST METHOD
+    public ResponseEntity<List<PassengerCarDTO>> getPopularPassCar(
             @PathVariable int limit,
             @PathVariable int page) {
-        return mainPageService.getPopularTransports1(page, limit);
+        return mainPageService.getPopularPassCar(page, limit);
+    }
+
+    @GetMapping("/popularMotorcycles/{page}/{limit}") //TEST METHOD
+    public ResponseEntity<List<MotorcycleDTO>> getPopularMotorcycles(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return mainPageService.getPopularMotorcycle(page, limit);
+    }
+
+    @GetMapping("/popularTrucks/{page}/{limit}") //TEST METHOD
+    public ResponseEntity<List<TruckDTO>> getPopularTrucks(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return mainPageService.getPopularTrucks(page, limit);
+    }
+
+    @GetMapping("/popularSpecializedVehicles/{page}/{limit}") //TEST METHOD
+    public ResponseEntity<List<SpecializedVehicleDTO>> getPopularSpecializedVehicles(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return mainPageService.getPopularSpecializedVehicles(page, limit);
+    }
+
+
+    @GetMapping("/popularAgricultural/{page}/{limit}") //TEST METHOD
+    public ResponseEntity<List<AgriculturalDTO>> getPopularAgricultural(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return mainPageService.getPopularAgricultural(page, limit);
+    }
+
+    @GetMapping("/popularWaterVehicles/{page}/{limit}") //TEST METHOD
+    public ResponseEntity<List<WaterVehicleDTO>> getPopularWaterVehicles(
+            @PathVariable int limit,
+            @PathVariable int page) {
+        return mainPageService.getPopularWaterVehicles(page, limit);
     }
 }

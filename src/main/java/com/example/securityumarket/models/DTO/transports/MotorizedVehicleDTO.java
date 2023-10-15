@@ -1,8 +1,6 @@
 package com.example.securityumarket.models.DTO.transports;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /*
@@ -17,7 +15,7 @@ mileage - пробіг в кілометрах
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Data
-public abstract class MotorizedVehicleDTO extends TransportDTO { // MOTO
+public class MotorizedVehicleDTO extends TransportDTO { // MotorcycleDTO
 
     protected String transmission;
 

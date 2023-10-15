@@ -33,8 +33,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @SuperBuilder
+@Builder
 @Data
-public abstract class TransportDTO {
+public class TransportDTO {
 
     protected long id;
 

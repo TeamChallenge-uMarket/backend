@@ -15,7 +15,7 @@ numberOfDoors - кількість дверей.
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Data
-public abstract class WaterAbstractDTO extends TransportDTO {
+public class WaterAbstractDTO extends TransportDTO { //WaterVehicleDTO
 
     protected String fuelType;
 
