@@ -30,15 +30,17 @@ public interface TransportDAO extends JpaRepository<Transport, Long> {
             "   case when lower(:#{#requestSearch.orderBy.name()}) = 'price' and lower(:#{#requestSearch.sortBy.name()}) = 'desc' then t.price end desc")
     Optional<List<Transport>> findTransportByRequest(@Param("requestSearch") RequestTransportSearchDTO requestSearch, PageRequest pageRequest);
 
+
+    //TODO not works yet =(
     @Query("select t from Transport t " +
             "where (:#{#motorcycleFilterDTO.transportType} = t.transportModel.transportTypeBrand.transportType.type) " +
             "and (t.price between :#{#motorcycleFilterDTO.priceFrom} and :#{#motorcycleFilterDTO.priceTo})" +
-            "and (t.bodyType =:#{#motorcycleFilterDTO.bodyType}) " +
-            "and (t.fuelType =:#{#motorcycleFilterDTO.fuelType}) " +
-            "and (t.transmission =:#{#motorcycleFilterDTO.transmission}) " +
-            "and (t.color =:#{#motorcycleFilterDTO.color}) " +
-            "and (t.condition =:#{#motorcycleFilterDTO.condition}) " +
-            "and (t.driveType =:#{#motorcycleFilterDTO.driveType}) " +
+            "and (:#{#motorcycleFilterDTO.bodyType} = '' or t.bodyType =:#{#motorcycleFilterDTO.bodyType})" +
+            "and (:#{#motorcycleFilterDTO.fuelType} = '' or t.fuelType =:#{#motorcycleFilterDTO.fuelType}) " +
+            "and (:#{#motorcycleFilterDTO.transmission} = '' or t.transmission =:#{#motorcycleFilterDTO.transmission}) " +
+            "and (:#{#motorcycleFilterDTO.color} = '' or t.color =:#{#motorcycleFilterDTO.color}) " +
+            "and (:#{#motorcycleFilterDTO.condition} = '' or t.condition =:#{#motorcycleFilterDTO.condition}) " +
+            "and (:#{#motorcycleFilterDTO.driveType} = '' or t.driveType =:#{#motorcycleFilterDTO.driveType}) " +
             "and (t.mileage between :#{#motorcycleFilterDTO.mileageFrom} and :#{#motorcycleFilterDTO.mileageTo}) " +
             "and (t.enginePower between :#{#motorcycleFilterDTO.enginePowerFrom} and :#{#motorcycleFilterDTO.enginePowerTo}) " +
             "order by " +
@@ -46,5 +48,5 @@ public interface TransportDAO extends JpaRepository<Transport, Long> {
             "   case when lower(:#{#motorcycleFilterDTO.orderBy}) = 'created' and lower(:#{#motorcycleFilterDTO.sortBy}) = 'desc' then t.created end desc, " +
             "   case when lower(:#{#motorcycleFilterDTO.orderBy}) = 'price' and lower(:#{#motorcycleFilterDTO.sortBy}) = 'asc' then t.price end asc, " +
             "   case when lower(:#{#motorcycleFilterDTO.orderBy}) = 'price' and lower(:#{#motorcycleFilterDTO.sortBy}) = 'desc' then t.price end desc")
-    List<Transport> findMotorCyclesByFilter(@Param("motorcycleFilterDTO") MotorcycleFilterDTO motorcycleFilterDTO, PageRequest pageRequest);
+    Optional<List<Transport>> findMotorCyclesByFilter(@Param("motorcycleFilterDTO") MotorcycleFilterDTO motorcycleFilterDTO, PageRequest pageRequest);
 }

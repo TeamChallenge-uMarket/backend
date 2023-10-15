@@ -107,6 +107,8 @@ public class TransportService {
     }
 
     public List<Transport> findMotorcyclesByFilter(MotorcycleFilterDTO motorcycleFilterDTO, PageRequest pageRequest) {
-        return transportDAO.findMotorCyclesByFilter(motorcycleFilterDTO, pageRequest);
+        return transportDAO.findMotorCyclesByFilter(motorcycleFilterDTO, pageRequest)
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new DataNotFoundException("Motorcycles"));
     }
 }
