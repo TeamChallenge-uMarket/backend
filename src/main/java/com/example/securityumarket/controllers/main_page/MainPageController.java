@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/main")
 @RequiredArgsConstructor
 @Tag(name = "Main page", description = "main page endpoints")
