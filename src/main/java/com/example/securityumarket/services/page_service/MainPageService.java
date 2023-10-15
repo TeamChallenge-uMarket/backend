@@ -2,6 +2,7 @@ package com.example.securityumarket.services.page_service;
 
 import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
+import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.*;
@@ -140,5 +141,41 @@ public class MainPageService {
                         .region(city.getRegion().getDescription())
                         .build())
                 .collect(Collectors.toList()));
+    }
+
+    public ResponseEntity<List<PassengerCarDTO>> getPopularPassCar(int page, int limit) {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(PageRequest.of(page, limit), 1);
+        List<PassengerCarDTO> passengerCarDTOS = transportService.convertTransportListToPassCarDTOList(popularTransports);
+        return ResponseEntity.ok(passengerCarDTOS);
+    }
+
+    public ResponseEntity<List<MotorcycleDTO>> getPopularMotorcycle(int page, int limit) {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(PageRequest.of(page, limit), 2);
+        List<MotorcycleDTO> motorcycleDTOS = transportService.convertTransportListToMotorcycleDTOList(popularTransports);
+        return ResponseEntity.ok(motorcycleDTOS);
+    }
+
+    public ResponseEntity<List<TruckDTO>> getPopularTrucks(int page, int limit) {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(PageRequest.of(page, limit), 3);
+        List<TruckDTO> truckDTOS = transportService.convertTransportListToTruckDTOOList(popularTransports);
+        return ResponseEntity.ok(truckDTOS);
+    }
+
+    public ResponseEntity<List<SpecializedVehicleDTO>> getPopularSpecializedVehicles(int page, int limit) {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(PageRequest.of(page, limit), 4);
+        List<SpecializedVehicleDTO> specializedVehicleDTOS = transportService.convertTransportListToSpecializedVehicleDTO(popularTransports);
+        return ResponseEntity.ok(specializedVehicleDTOS);
+    }
+
+    public ResponseEntity<List<AgriculturalDTO>> getPopularAgricultural(int page, int limit) {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(PageRequest.of(page, limit), 5);
+        List<AgriculturalDTO> agriculturalDTOS = transportService.convertTransportListToAgriculturalDTOList(popularTransports);
+        return ResponseEntity.ok(agriculturalDTOS);
+    }
+
+    public ResponseEntity<List<WaterVehicleDTO>> getPopularWaterVehicles(int page, int limit) {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(PageRequest.of(page, limit), 6);
+        List<WaterVehicleDTO> waterVehicleDTOS = transportService.convertTransportListToWaterVehicleDTOList(popularTransports);
+        return ResponseEntity.ok(waterVehicleDTOS);
     }
 }

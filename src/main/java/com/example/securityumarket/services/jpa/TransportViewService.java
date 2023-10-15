@@ -18,11 +18,21 @@ public class TransportViewService {
 
     public List<Transport> findPopularTransport(PageRequest of) {
         return transportViewDAO.findPopularTransport(of)
+                .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("Popular transports"));
     }
 
+    public List<Transport> findPopularTransportByTypeId(PageRequest of, long id) {
+        return transportViewDAO.findPopularTransportByTypeId(of, id)
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new DataNotFoundException("Popular transports by type"));
+    }
+
+
+
     public List<Transport> findViewedCarsByRegisteredUser(Users user, PageRequest of) {
         return transportViewDAO.findViewedCarsByRegisteredUser(user, of)
-                .orElseThrow(() -> new DataNotFoundException("Popular transports"));
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new DataNotFoundException("Popular transports by user"));
     }
 }

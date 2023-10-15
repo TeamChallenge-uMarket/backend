@@ -144,7 +144,10 @@ CREATE TABLE IF NOT EXISTS transports
     user_id             BIGINT,
     city             BIGINT,
     created             TIMESTAMP(6),
-    last_update         TIMESTAMP(6)
+    last_update         TIMESTAMP(6),
+    load_capacity       INTEGER,
+    number_of_axles     VARCHAR(255),
+    wheel_configuration  VARCHAR(255)
 );
 
 ALTER TABLE transports
