@@ -33,6 +33,8 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .requestMatchers("/swagger/**")
                                 .permitAll()
+                                .requestMatchers("/api/v1/catalog/**")
+                                .permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
