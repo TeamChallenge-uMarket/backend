@@ -2,10 +2,7 @@ package com.example.securityumarket.services.authorization;
 
 import com.example.securityumarket.exception.EmailSendingException;
 import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
-import com.example.securityumarket.models.entities.City;
 import com.example.securityumarket.models.entities.Users;
-import com.example.securityumarket.services.jpa.CityService;
-import com.example.securityumarket.services.jpa.RegionService;
 import com.example.securityumarket.services.jpa.UserService;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.util.EmailUtil;
@@ -23,10 +20,6 @@ public class RegistrationService {
     private final PasswordEncoder passwordEncoder;
 
     private final UserService userService;
-
-    private final RegionService regionService;
-
-    private final CityService cityService;
 
     private final JwtService jwtService;
 
@@ -79,23 +72,6 @@ public class RegistrationService {
 
     private void validateRegisterRequest(RegisterRequest registerRequest) {
         userService.isUserEmailUnique(registerRequest.getEmail());
-        String normalizePhoneNumber = normalizePhoneNumber(registerRequest.getPhone());
-        userService.isUserPhoneUnique(normalizePhoneNumber);
-        getAddressFromRequest(registerRequest);
-    }
-
-    private City getAddressFromRequest(RegisterRequest registerRequest) {
-        if (registerRequest.getAddressDTO().isEmpty()) {
-            return null;
-        } else {
-            String region = registerRequest.getAddressDTO().getRegion();
-            String city = registerRequest.getAddressDTO().getCity();
-
-            regionService.findByDescription(region);
-            cityService.findByDescription(city);
-
-            return cityService.findByRegionDescriptionAndDescription(region, city);
-        }
     }
 
     private String normalizePhoneNumber(String inputPhoneNumber) {
@@ -118,8 +94,6 @@ public class RegistrationService {
                 .name(registerRequest.getName())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .phone(normalizePhoneNumber(registerRequest.getPhone()))
-                .city(getAddressFromRequest(registerRequest))
                 .active(false)
                 .build();
     }
