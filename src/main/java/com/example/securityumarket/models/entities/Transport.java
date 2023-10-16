@@ -96,14 +96,6 @@ public class Transport extends DateAudit{
     @Column(name = "uncleared")
     private boolean uncleared;
 
-    /*
-    Вантажівки
-
-    loadCapacity - вантажопідйомність в кілограмах.
-    numberOfAxles - кількість осей;
-    wheelConfiguration - колісна формула;
-     */
-
     @Column(name = "load_capacity")
     private Integer loadCapacity;
 

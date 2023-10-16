@@ -1,5 +1,7 @@
 package com.example.securityumarket.services.page_service;
 
+import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
+import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.FavoriteTransportService;
@@ -8,6 +10,8 @@ import com.example.securityumarket.services.jpa.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,5 +29,10 @@ public class CatalogPageService {
         favoriteTransportService.addFavorite(authenticatedUser, transport);
         return ResponseEntity.ok("added to favorite"); // may be need to refactor msg!
 
+    }
+
+    public ResponseEntity<List<ResponseSearchDTO>> searchTransports(RequestSearchDTO requestSearchDTO) {
+        List<Transport> transports = transportService.findTransportByParam(requestSearchDTO);
+        return ResponseEntity.ok(transportService.convertTransportListToTransportSearchDTO(transports));
     }
 }
