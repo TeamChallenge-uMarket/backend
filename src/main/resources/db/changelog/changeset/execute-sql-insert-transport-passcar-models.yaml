@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: execute-sql-insert-transport-passcar-models.yaml
+      author: Oleh
+      changes:
+        - sqlFile:
+            path: classpath:/changeset/sql/insert_transport-models-from-toyota-to-volvo.sql
+        - sqlFile:
+            path: classpath:/changeset/sql/insert_transport-models-from-land-rover-to-opel.sql

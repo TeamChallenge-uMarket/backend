@@ -4,6 +4,24 @@ databaseChangeLog:
   - include:
       file: db/changelog/changeset/create-tables-cities.yaml
   - include:
+      file: db/changelog/changeset/create-tables-body-types.yaml
+  - include:
+      file: db/changelog/changeset/create-tables-drive-types.yaml
+  - include:
+      file: db/changelog/changeset/create-tables-fuel-types.yaml
+  - include:
+      file: db/changelog/changeset/create-tables-number-axles.yaml
+  - include:
+      file: db/changelog/changeset/create-tables-producing-countries.yaml
+  - include:
+      file: db/changelog/changeset/create-tables-transmissions.yaml
+  - include:
+      file: db/changelog/changeset/create-tables-transport-colors.yaml
+  - include:
+      file: db/changelog/changeset/create-tables-transport-conditions.yaml
+  - include:
+      file: db/changelog/changeset/create-tables-wheel-configurations.yaml
+  - include:
       file: db/changelog/changeset/create-permissions-table.yaml
   - include:
       file: db/changelog/changeset/create-roles-table.yaml
@@ -36,6 +54,14 @@ databaseChangeLog:
   - include:
       file: db/changelog/changeset/add_is_active_column_to_users.yaml
   - include:
-      file: db/changelog/changeset/execute-sql-from-file.yaml
+      file: db/changelog/changeset/insert_roles-and-permissions.sql
   - include:
-      file: db/changelog/changeset/add_load-bearing-vehicle_columns_to_transports.yaml
+      file: db/changelog/changeset/execute-sql-insert-regions-and-cities.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-parameters.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-passcar-models.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-moto-models.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-truck-and-agricult-and-spec-and-watermodels.yaml

@@ -1,5 +1,5 @@
-INSERT INTO regions (description)
-VALUES ('Вінницька область'),
+INSERT INTO regions (id, description)
+VALUES (1,'Вінницька область'),
        ('Волинська область'),
        ('Дніпропетровська область'),
        ('Донецька область'),

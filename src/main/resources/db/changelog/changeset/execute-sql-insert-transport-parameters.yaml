@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: execute-sql-insert-transport-parameters.yaml
+      author: Oleh
+      changes:
+        - sqlFile:
+            path: classpath:/changeset/sql/insert_transport-parameters.sql

@@ -19,20 +19,11 @@ databaseChangeLog:
                   name: mileage
                   type: INTEGER
               - column:
-                  name: body_type
-                  type: VARCHAR(255)
-              - column:
                   name: vincode
                   type: VARCHAR(255)
               - column:
                   name: description
                   type: TEXT
-              - column:
-                  name: transmission
-                  type: VARCHAR(255)
-              - column:
-                  name: fuel_type
-                  type: VARCHAR(255)
               - column:
                   name: engine_displacement
                   type: DOUBLE
@@ -40,26 +31,14 @@ databaseChangeLog:
                   name: engine_power
                   type: INTEGER
               - column:
-                  name: drive_type
-                  type: VARCHAR(255)
-              - column:
                   name: number_of_doors
                   type: INTEGER
               - column:
                   name: number_of_seats
                   type: INTEGER
               - column:
-                  name: color
-                  type: VARCHAR(255)
-              - column:
-                  name: imported_from
-                  type: VARCHAR(255)
-              - column:
                   name: accident_history
                   type: BOOLEAN
-              - column:
-                  name: condition
-                  type: VARCHAR(255)
               - column:
                   name: fuel_consumption_city
                   type: DOUBLE
@@ -88,6 +67,9 @@ databaseChangeLog:
                   name: uncleared
                   type: BOOLEAN
               - column:
+                  name: load_capacity
+                  type: INTEGER
+              - column:
                   name: model_id
                   type: BIGINT
                   constraints:
@@ -106,8 +88,50 @@ databaseChangeLog:
                     foreignKeyName: fk_transports_cities
                     references: cities(id)
               - column:
-                  name: created
-                  type: TIMESTAMP(6)
+                  name: body_type
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transports_body_types
+                    references: body_types(id)
               - column:
-                  name: last_update
-                  type: TIMESTAMP(6)
+                  name: drive_type
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transports_drive_types
+                    references: drive_types(id)
+              - column:
+                  name: fuel_type
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transports_fuel_types
+                    references: fuel_types(id)
+              - column:
+                  name: producing_country
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transports_producing_countries
+                    references: producing_countries(id)
+              - column:
+                  name: transmission
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transports_transmissions
+                    references: transmissions(id)
+              - column:
+                  name: transport_color
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transports_transport_colors
+                    references: transport_colors(id)
+              - column:
+                  name: transport_condition
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transports_transport_conditions
+                    references: transport_conditions(id)
+              - column:
+                  name: wheel_configuration
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transports_wheel_configurations
+                    references: wheel_configurations(id)

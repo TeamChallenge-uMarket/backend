@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: execute-sql-insert-regions-and-cities.yaml
+      author: Oleh
+      changes:
+        - sqlFile:
+            path: classpath:/changeset/sql/insert_roles-and-permissions.sql
+        - sqlFile:
+            path: classpath:/changeset/sql/insert_users-and-permissions.sql

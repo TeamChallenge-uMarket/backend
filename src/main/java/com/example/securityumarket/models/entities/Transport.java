@@ -27,20 +27,11 @@ public class Transport extends DateAudit{
     @Column(name = "mileage")
     private int mileage;
 
-    @Column(name = "body_type")
-    private String bodyType;
-
     @Column(name = "vincode")
     private String vincode;
 
     @Column(name = "description")
     private String description;
-
-    @Column(name = "transmission")
-    private String transmission;
-
-    @Column(name = "fuel_type")
-    private String fuelType;
 
     @Column(name = "engine_displacement")
     private double engineDisplacement;
@@ -48,26 +39,14 @@ public class Transport extends DateAudit{
     @Column(name = "engine_power")
     private int enginePower;
 
-    @Column(name = "drive_type")
-    private String driveType;
-
     @Column(name = "number_of_doors")
     private int numberOfDoors;
 
     @Column(name = "number_of_seats")
     private int numberOfSeats;
 
-    @Column(name = "color")
-    private String color;
-
-    @Column(name = "imported_from")
-    private String importedFrom;
-
     @Column(name = "accident_history")
     private boolean accidentHistory;
-
-    @Column(name = "condition")
-    private String condition;
 
     @Column(name = "fuel_consumption_city")
     private double fuelConsumptionCity;
@@ -96,22 +75,8 @@ public class Transport extends DateAudit{
     @Column(name = "uncleared")
     private boolean uncleared;
 
-    /*
-    Вантажівки
-
-    loadCapacity - вантажопідйомність в кілограмах.
-    numberOfAxles - кількість осей;
-    wheelConfiguration - колісна формула;
-     */
-
     @Column(name = "load_capacity")
     private Integer loadCapacity;
-
-    @Column(name = "number_of_axles")
-    private String numberOfAxles;
-
-    @Column(name = "wheel_configuration")
-    private String wheelConfiguration;
 
 
     @OneToMany(mappedBy = "transport")
@@ -137,4 +102,36 @@ public class Transport extends DateAudit{
     @ManyToOne
     @JoinColumn(name = "city")
     private City city;
+
+    @ManyToOne
+    @JoinColumn(name = "body_type")
+    private BodyType bodyType;
+
+    @ManyToOne
+    @JoinColumn(name = "drive_type")
+    private DriveType driveType;
+
+    @ManyToOne
+    @JoinColumn(name = "fuel_type")
+    private FuelType fuelType;
+
+    @ManyToOne
+    @JoinColumn(name = "producing_country")
+    private ProducingCountry producingCountry;
+
+    @ManyToOne
+    @JoinColumn(name = "transmission")
+    private Transmission transmission;
+
+    @ManyToOne
+    @JoinColumn(name = "transport_color")
+    private TransportColor transportColor;
+
+    @ManyToOne
+    @JoinColumn(name = "transport_condition")
+    private TransportCondition transportCondition;
+
+    @ManyToOne
+    @JoinColumn(name = "wheel_configuration")
+    private WheelConfiguration wheelConfiguration;
 }
