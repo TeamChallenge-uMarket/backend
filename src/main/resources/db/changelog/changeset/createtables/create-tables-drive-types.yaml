@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-drive-types
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: drive_types
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: drive_type
+                  type: VARCHAR(255)
+              - column:
+                  name: transport_type
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_driver_types_transport_types
+                    references: transport_types(id)

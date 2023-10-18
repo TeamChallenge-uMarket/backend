@@ -1,7 +1,0 @@
-databaseChangeLog:
-  - changeSet:
-      id: execute-sql-from-file
-      author: Oleh
-      changes:
-        - sqlFile:
-            path: classpath:data_insert.sql

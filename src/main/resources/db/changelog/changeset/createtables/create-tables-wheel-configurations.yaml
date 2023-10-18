@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-wheel-configurations
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: wheel_configurations
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: wheel_configuration
+                  type: VARCHAR(255)

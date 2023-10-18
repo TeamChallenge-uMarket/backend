@@ -9,20 +9,19 @@ public class LoadBearingVehicleConversionStrategy implements TransportTypeConver
     @Override
     public LoadBearingVehicleDTO createDTO(Transport transport) {
         return LoadBearingVehicleDTO.builder()
-                .transmission(transport.getTransmission())
-                .fuelType(transport.getFuelType())
+                .transmission(transport.getTransmission().getTransmission())
+                .fuelType(transport.getFuelType().getFuelType())
                 .fuelConsumptionMixed(transport.getFuelConsumptionMixed())
                 .engineDisplacement(transport.getEngineDisplacement())
                 .enginePower(transport.getEnginePower())
-                .driveType(transport.getDriveType())
+                .driveType(transport.getDriveType().getDriveType())
                 .mileage(transport.getMileage())
                 .fuelConsumptionCity(transport.getFuelConsumptionCity())
                 .fuelConsumptionHighway(transport.getFuelConsumptionHighway())
                 .numberOfSeats(transport.getNumberOfSeats())
                 .numberOfDoors(transport.getNumberOfDoors())
                 .loadCapacity(transport.getLoadCapacity())
-                .numberOfAxles(transport.getNumberOfAxles())
-                .wheelConfiguration(transport.getWheelConfiguration())
+                .wheelConfiguration(transport.getWheelConfiguration().getWheelConfiguration())
                 .build();
     }
 }

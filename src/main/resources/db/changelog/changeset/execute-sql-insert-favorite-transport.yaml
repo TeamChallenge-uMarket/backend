@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_favorite-transport_table.sql
+      author: Oleh
+      changes:
+        - sqlFile:
+            path: classpath:db/changelog/sql/insert_favorite-transport_table.sql

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import static com.example.securityumarket.models.specifications.TransportSpecifications.*;
 
 import static com.example.securityumarket.models.repositories.TransportSpecifications.*;
 
@@ -35,18 +36,12 @@ public class TransportService {
     }
 
 
-
-    public List<Transport> findNewCars(PageRequest pageRequest) {
-        return transportDAO.findNewCars(pageRequest)
+    public List<Transport> findNewTransports() {
+        return transportDAO.findNewTransports()
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("New transports"));
     }
 
-    public List<Transport> findTransportByRequest(RequestTransportSearchDTO requestSearch, PageRequest of) {
-        return transportDAO.findTransportByRequest(requestSearch, of)
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException("Transports"));
-    }
 
     public List<ResponseTransportDTO> convertCarsListToDtoCarsList(List<Transport> newTransports) {
         return newTransports.stream()
@@ -58,8 +53,8 @@ public class TransportService {
                         .mileage(car.getMileage())
                         .year(car.getYear())
                         .region(car.getCity().getRegion().getDescription())
-                        .transmission(car.getTransmission())
-                        .fuelType(car.getFuelType())
+                        .transmission(car.getTransmission().getTransmission())
+                        .fuelType(car.getFuelType().getFuelType())
 //                        .imgUrl(transportGalleryService.findMainFileByTransport(car.getId()))
                         .imgUrl("https://res.cloudinary.com/de4bysqtm/image/upload/f_auto,q_auto/l52tzjkitkoy64ttdkmx")
                         .created(car.getCreated().toString())
@@ -77,7 +72,6 @@ public class TransportService {
                 .map(transport -> (PassengerCarDTO) transportConverter.convertTransportToTypeDTO(transport, new MotorizedFourWheeledVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
-
 
 
     public List<AgriculturalDTO> convertTransportListToAgriculturalDTOList(List<Transport> newTransports) {
@@ -119,7 +113,6 @@ public class TransportService {
     public List<Transport> findTransportByParam(RequestSearchDTO requestSearchDTO) {
         return transportDAO.findAll(
                 hasTransportType(requestSearchDTO.getTransportType())
-                        .and(hasTransportType(requestSearchDTO.getTransportType()))
                         .and(hasTransportBrand(requestSearchDTO.getBrand()))
                         .and(hasModelIn(requestSearchDTO.getModels()))
                         .and(yearFrom(requestSearchDTO.getYearsFrom()))
@@ -151,4 +144,14 @@ public class TransportService {
                         .and(hasInstallmentPayment(requestSearchDTO.getInstallmentPayment()))
         );
     }
+          
+    public List<Transport> findTransportFromMainPage(RequestTransportSearchDTO requestSearch) {
+        return transportDAO.findAll((
+                hasTransportTypeId(requestSearch.getTypeId())
+                        .and(hasBrandId(requestSearch.getBrandId()))
+                        .and(hasModelId(requestSearch.getModelId()))
+                        .and(hasRegionId(requestSearch.getRegionId()))
+                ));
+    }
+  
 }

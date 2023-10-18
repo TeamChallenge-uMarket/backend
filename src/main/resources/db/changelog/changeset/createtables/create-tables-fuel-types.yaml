@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-fuel-types
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: fuel_types
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: fuel_type
+                  type: VARCHAR(255)

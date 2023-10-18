@@ -26,33 +26,33 @@ public class TransportConverter {
                 .price(transport.getPrice())
                 .year(transport.getYear())
                 .mileage(transport.getMileage())
-                .vincode(transport.getVincode())
                 .description(transport.getDescription())
-                .transmission(transport.getTransmission())
-                .fuelType(transport.getFuelType())
+                .transmission((transport.getTransmission() != null) ? transport.getTransmission().getTransmission() : null)
+                .fuelType((transport.getFuelType() != null) ? transport.getFuelType().getFuelType() : null)
                 .engineDisplacement(transport.getEngineDisplacement())
-                .city(transport.getCity().getDescription())
+                .city((transport.getCity() != null) ? transport.getCity().getDescription() : null)
                 .created(transport.getCreated())
                 .build();
     }
+  
     private <T extends TransportDTO> T mapCommonProperties(Transport transport, T dto) {
         dto.setId(transport.getId());
-        dto.setBodyType(transport.getBodyType());
-        dto.setImportedFrom(transport.getImportedFrom());
+        dto.setBodyType(transport.getBodyType().getBodyType());
+        dto.setImportedFrom(transport.getProducingCountry().getCountry());
         dto.setYear(transport.getYear());
         dto.setPrice(transport.getPrice());
-        dto.setBargain(transport.isBargain());
-        dto.setTrade(transport.isTrade());
-        dto.setMilitary(transport.isMilitary());
-        dto.setInstallmentPayment(transport.isInstallmentPayment());
-        dto.setUncleared(transport.isUncleared());
-        dto.setCondition(transport.getCondition());
-        dto.setAccidentHistory(transport.isAccidentHistory());
+        dto.setBargain(transport.getBargain());
+        dto.setTrade(transport.getTrade());
+        dto.setMilitary(transport.getMilitary());
+        dto.setInstallmentPayment(transport.getInstallmentPayment());
+        dto.setUncleared(transport.getUncleared());
+        dto.setCondition(transport.getTransportCondition().getCondition());
+        dto.setAccidentHistory(transport.getAccidentHistory());
         dto.setVincode(transport.getVincode());
         dto.setDescription(transport.getDescription());
         dto.setCreated(transport.getCreated());
         dto.setLastUpdate(transport.getLastUpdate());
-        dto.setColor(transport.getColor());
+        dto.setColor(transport.getTransportColor().getColor());
         dto.setRegion(transport.getCity().getRegion().getDescription());
         dto.setCity(transport.getCity().getDescription());
         dto.setMainPhoto(transportGalleryService.findMainFileByTransport(transport.getId()));

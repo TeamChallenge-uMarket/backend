@@ -5,15 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RequestTransportSearchDTO {
-    private long typeId;
-    private long brandId;
-    private long modelId;
-    private long regionId;
+    private Long typeId;
+    private Long brandId;
+    private List<Long> modelId;
+    private List<Long> regionId;
     private OrderBy orderBy;
     private SortBy sortBy;
 

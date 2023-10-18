@@ -16,9 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Catalog page", description = "catalog page endpoints")
 public class CatalogController {
-
     private final CatalogPageService catalogPageService;
-
     //can be added to my favorite only registered users
     //TODO need to check (tested)
     @PutMapping("/favoriteAdd/{carId}")

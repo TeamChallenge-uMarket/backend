@@ -1,9 +1,9 @@
 package com.example.securityumarket.controllers.main_page;
 
+import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.models.DTO.transports.impl.*;
-import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.services.page_service.MainPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -44,93 +44,6 @@ public class MainPageController {
         return "add-car";
     }
 
-    @Operation(
-            summary = "Get New Transports",
-            description = "This endpoint returns a list of new transport from the page."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseTransportDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
-    })
-    @GetMapping("/newCars/{page}/{limit}")
-    public ResponseEntity<List<ResponseTransportDTO>> getNewCars(
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.getNewTransports(page, limit);
-    }
-
-    @Operation(
-            summary = "Get Popular Transports",
-            description = "This endpoint returns a list of popular transport from the page."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseTransportDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
-    })
-    @GetMapping("/popularCars/{page}/{limit}")
-    public ResponseEntity<List<ResponseTransportDTO>> getPopularsCars(
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.getPopularTransports(page, limit);
-    }
-
-    @Operation(
-            summary = "Get Recently Viewed Transports",
-            description = "This endpoint returns a list of recent view transport by authorized user from the page."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseTransportDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient Permissions", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
-    })
-    @GetMapping("/recentlyViewed/{page}/{limit}")
-    public ResponseEntity<List<ResponseTransportDTO>> getRecentlyViewedCars(
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.getRecentlyViewedTransports(page, limit);
-    }
-
-    @Operation(
-            summary = "Get list of transport by search parameters",
-            description = "This endpoint returns a list of transport by search parameters from the page."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseTransportDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
-    })
-    @GetMapping("/cars/{page}/{limit}")
-    public ResponseEntity<List<ResponseTransportDTO>> findCars(
-            @RequestBody RequestTransportSearchDTO requestSearch,
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.searchTransportByRequest(requestSearch, page, limit);
-    }
-
-    @Operation(
-            summary = "Get Favorite Transports",
-            description = "This endpoint returns a list of favorite transports by authorized user from the page."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseTransportDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient Permissions", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
-    })
-    @GetMapping("/favoriteCars/{page}/{limit}")
-    public ResponseEntity<List<ResponseTransportDTO>> getFavorites(
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.getFavoriteTransport(page, limit);
-    }
 
     @Operation(
             summary = "Retrieve types",
@@ -203,6 +116,70 @@ public class MainPageController {
         return mainPageService.getCities(regionId);
     }
 
+
+    @Operation(
+            summary = "Get New Transports",
+            description = "This endpoint returns a list of new transport from the page."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ResponseTransportDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+    })
+    @GetMapping("/new-transports")
+    public ResponseEntity<List<ResponseSearchDTO>> getNewTransports() {
+        return mainPageService.getNewTransports();
+    }
+
+    @Operation(
+            summary = "Get Popular Transports",
+            description = "This endpoint returns a list of popular transport from the page."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ResponseTransportDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+    })
+    @GetMapping("/popular-transports")
+    public ResponseEntity<List<ResponseSearchDTO>> getPopularsTransports() {
+        return mainPageService.getPopularTransports();
+    }
+
+    @Operation(
+            summary = "Get Recently Viewed Transports",
+            description = "This endpoint returns a list of recent view transport by authorized user from the page."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ResponseTransportDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient Permissions", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
+    })
+
+    @GetMapping("/recently-viewed")
+    public ResponseEntity<List<ResponseSearchDTO>> getRecentlyViewedTransports() {
+        return mainPageService.getRecentlyViewedTransports();
+    }
+
+    @Operation(
+            summary = "Get Favorite Transports",
+            description = "This endpoint returns a list of favorite transports by authorized user from the page."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ResponseTransportDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient Permissions", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
+    })
+    @GetMapping("/favorite-transports")
+    public ResponseEntity<List<ResponseSearchDTO>> getFavorites() {
+        return mainPageService.getFavoriteTransport();
+    }
+
     @Operation(
             summary = "Get Popular Passenger Cars.",
             description = "This endpoint returns a list of popular passenger cars from the page")
@@ -212,11 +189,9 @@ public class MainPageController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
     })
-    @GetMapping("/popularPassCars/{page}/{limit}") //TEST METHOD
-    public ResponseEntity<List<PassengerCarDTO>> getPopularPassCar(
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.getPopularPassCar(page, limit);
+    @GetMapping("/popular-passcars") //TEST METHOD
+    public ResponseEntity<List<PassengerCarDTO>> getPopularPassCar() {
+        return mainPageService.getPopularPassCar();
     }
 
     @Operation(
@@ -228,11 +203,9 @@ public class MainPageController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
     })
-    @GetMapping("/popularMotorcycles/{page}/{limit}") //TEST METHOD
-    public ResponseEntity<List<MotorcycleDTO>> getPopularMotorcycles(
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.getPopularMotorcycle(page, limit);
+    @GetMapping("/popular-motorcycles") //TEST METHOD
+    public ResponseEntity<List<MotorcycleDTO>> getPopularMotorcycles() {
+        return mainPageService.getPopularMotorcycle();
     }
 
     @Operation(
@@ -244,11 +217,9 @@ public class MainPageController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
     })
-    @GetMapping("/popularTrucks/{page}/{limit}") //TEST METHOD
-    public ResponseEntity<List<TruckDTO>> getPopularTrucks(
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.getPopularTrucks(page, limit);
+    @GetMapping("/popular-trucks") //TEST METHOD
+    public ResponseEntity<List<TruckDTO>> getPopularTrucks() {
+        return mainPageService.getPopularTrucks();
     }
 
     @Operation(
@@ -260,11 +231,9 @@ public class MainPageController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
     })
-    @GetMapping("/popularSpecializedVehicles/{page}/{limit}") //TEST METHOD
-    public ResponseEntity<List<SpecializedVehicleDTO>> getPopularSpecializedVehicles(
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.getPopularSpecializedVehicles(page, limit);
+    @GetMapping("/popular-specializedvehicles") //TEST METHOD
+    public ResponseEntity<List<SpecializedVehicleDTO>> getPopularSpecializedVehicles() {
+        return mainPageService.getPopularSpecializedVehicles();
     }
 
     @Operation(
@@ -276,11 +245,9 @@ public class MainPageController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
     })
-    @GetMapping("/popularAgricultural/{page}/{limit}") //TEST METHOD
-    public ResponseEntity<List<AgriculturalDTO>> getPopularAgricultural(
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.getPopularAgricultural(page, limit);
+    @GetMapping("/popular-agricultural") //TEST METHOD
+    public ResponseEntity<List<AgriculturalDTO>> getPopularAgricultural() {
+        return mainPageService.getPopularAgricultural();
     }
 
     @Operation(
@@ -292,10 +259,24 @@ public class MainPageController {
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
     })
-    @GetMapping("/popularWaterVehicles/{page}/{limit}") //TEST METHOD
-    public ResponseEntity<List<WaterVehicleDTO>> getPopularWaterVehicles(
-            @PathVariable int limit,
-            @PathVariable int page) {
-        return mainPageService.getPopularWaterVehicles(page, limit);
+    @GetMapping("/popular-watervehicles") //TEST METHOD
+    public ResponseEntity<List<WaterVehicleDTO>> getPopularWaterVehicles() {
+        return mainPageService.getPopularWaterVehicles();
+    }
+
+    @Operation(
+            summary = "Get list of transport by search parameters",
+            description = "This endpoint returns a list of transport by search parameters from the page."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = ResponseTransportDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
+    })
+    @GetMapping("/search")
+    public ResponseEntity<List<ResponseSearchDTO>> findCars(
+            @ModelAttribute RequestTransportSearchDTO requestSearch) {
+        return mainPageService.searchTransportByRequest(requestSearch);
     }
 }

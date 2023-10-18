@@ -1,6 +1,5 @@
 package com.example.securityumarket.util;
 
-import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.EmailSendingException;
 import com.example.securityumarket.models.entities.Users;
