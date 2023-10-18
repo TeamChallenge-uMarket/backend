@@ -2,6 +2,8 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
+import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
+import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.ResponseTransportDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import static com.example.securityumarket.models.specifications.TransportSpecifications.*;
 
 
 @RequiredArgsConstructor
@@ -29,7 +32,6 @@ public class TransportService {
     public Transport save(Transport transport) {
         return transportDAO.save(transport);
     }
-
 
 
     public List<Transport> findNewCars(PageRequest pageRequest) {
@@ -70,39 +72,80 @@ public class TransportService {
 
     public List<PassengerCarDTO> convertTransportListToPassCarDTOList(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (PassengerCarDTO) transportConverter.convertTransport(transport, new MotorizedFourWheeledVehicleConversionStrategy()))
+                .map(transport -> (PassengerCarDTO) transportConverter.convertTransportToTypeDTO(transport, new MotorizedFourWheeledVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
 
-
     public List<AgriculturalDTO> convertTransportListToAgriculturalDTOList(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (AgriculturalDTO) transportConverter.convertTransport(transport, new LoadBearingVehicleConversionStrategy()))
+                .map(transport -> (AgriculturalDTO) transportConverter.convertTransportToTypeDTO(transport, new LoadBearingVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
     public List<SpecializedVehicleDTO> convertTransportListToSpecializedVehicleDTO(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (SpecializedVehicleDTO) transportConverter.convertTransport(transport, new LoadBearingVehicleConversionStrategy()))
+                .map(transport -> (SpecializedVehicleDTO) transportConverter.convertTransportToTypeDTO(transport, new LoadBearingVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
     public List<MotorcycleDTO> convertTransportListToMotorcycleDTOList(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (MotorcycleDTO) transportConverter.convertTransport(transport, new MotorizedVehicleConversionStrategy()))
+                .map(transport -> (MotorcycleDTO) transportConverter.convertTransportToTypeDTO(transport, new MotorizedVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
     public List<TruckDTO> convertTransportListToTruckDTOOList(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (TruckDTO) transportConverter.convertTransport(transport, new LoadBearingVehicleConversionStrategy()))
+                .map(transport -> (TruckDTO) transportConverter.convertTransportToTypeDTO(transport, new LoadBearingVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
     public List<WaterVehicleDTO> convertTransportListToWaterVehicleDTOList(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (WaterVehicleDTO) transportConverter.convertTransport(transport, new WaterVehicleConversionStrategy()))
+                .map(transport -> (WaterVehicleDTO) transportConverter.convertTransportToTypeDTO(transport, new WaterVehicleConversionStrategy()))
                 .collect(Collectors.toList());
+    }
+
+    public List<ResponseSearchDTO> convertTransportListToTransportSearchDTO(List<Transport> transports) {
+        return transports.stream()
+                .map(transportConverter::convertTransportTransportSearchDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<Transport> findTransportByParam(RequestSearchDTO requestSearchDTO) {
+        return transportDAO.findAll(
+                hasTransportType(requestSearchDTO.getTransportType())
+                        .and(hasTransportType(requestSearchDTO.getTransportType()))
+                        .and(hasTransportBrand(requestSearchDTO.getBrand()))
+                        .and(hasModelIn(requestSearchDTO.getModels()))
+                        .and(yearFrom(requestSearchDTO.getYearsFrom()))
+                        .and(yearTo(requestSearchDTO.getYearsTo()))
+                        .and(hasRegionIn(requestSearchDTO.getRegions()))
+                        .and(hasCityIn(requestSearchDTO.getCities()))
+                        .and(priceFrom(requestSearchDTO.getPriceFrom()))
+                        .and(priceTo(requestSearchDTO.getPriceTo()))
+                        .and(hasBodyTypeIn(requestSearchDTO.getBodyTypes()))
+                        .and(hasFuelTypeIn(requestSearchDTO.getFuelTypes()))
+                        .and(hasTransmissionIn(requestSearchDTO.getTransmissions()))
+                        .and(hasColorIn(requestSearchDTO.getColors()))
+                        .and(hasConditionIn(requestSearchDTO.getConditions()))
+                        .and(hasDriveType(requestSearchDTO.getDriveTypes()))
+                        .and(mileageFrom(requestSearchDTO.getMileageFrom()))
+                        .and(mileageTo(requestSearchDTO.getMileageTo()))
+                        .and(enginePowerFrom(requestSearchDTO.getEnginePowerFrom()))
+                        .and(enginePowerTo(requestSearchDTO.getEnginePowerTo()))
+                        .and(engineDisplacementFrom(requestSearchDTO.getEngineDisplacementFrom()))
+                        .and(engineDisplacementTo(requestSearchDTO.getEngineDisplacementTo()))
+                        .and(numberOfDoorsFrom(requestSearchDTO.getNumberOfDoorsFrom()))
+                        .and(numberOfDoorsTo(requestSearchDTO.getNumberOfDoorsTo()))
+                        .and(numberOfSeatsFrom(requestSearchDTO.getNumberOfSeatsFrom()))
+                        .and(numberOfSeatsTo(requestSearchDTO.getNumberOfSeatsTo()))
+                        .and(hasTrade(requestSearchDTO.getTrade()))
+                        .and(hasMilitary(requestSearchDTO.getMilitary()))
+                        .and(hasUncleared(requestSearchDTO.getUncleared()))
+                        .and(hasBargain(requestSearchDTO.getBargain()))
+                        .and(hasInstallmentPayment(requestSearchDTO.getInstallmentPayment()))
+        );
     }
 }

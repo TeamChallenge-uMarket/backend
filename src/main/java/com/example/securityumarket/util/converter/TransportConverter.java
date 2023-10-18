@@ -1,5 +1,6 @@
 package com.example.securityumarket.util.converter;
 
+import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.services.jpa.TransportGalleryService;
@@ -12,9 +13,27 @@ public class TransportConverter {
 
     private final TransportGalleryService transportGalleryService;
 
-    public <T extends TransportDTO> T convertTransport(Transport transport, TransportTypeConversionStrategy strategy) {
+    public <T extends TransportDTO> T convertTransportToTypeDTO(Transport transport, TransportTypeConversionStrategy strategy) {
         T dto = strategy.createDTO(transport);
         return mapCommonProperties(transport, dto);
+    }
+
+    public ResponseSearchDTO convertTransportTransportSearchDTO(Transport transport) {
+        return ResponseSearchDTO.builder()
+                .id(transport.getId())
+                .brand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand())
+                .model(transport.getTransportModel().getModel())
+                .price(transport.getPrice())
+                .year(transport.getYear())
+                .mileage(transport.getMileage())
+                .vincode(transport.getVincode())
+                .description(transport.getDescription())
+                .transmission(transport.getTransmission().getTransmission())
+                .fuelType(transport.getFuelType().getFuelType())
+                .engineDisplacement(transport.getEngineDisplacement())
+                .city(transport.getCity().getDescription())
+                .created(transport.getCreated())
+                .build();
     }
 
     private <T extends TransportDTO> T mapCommonProperties(Transport transport, T dto) {
