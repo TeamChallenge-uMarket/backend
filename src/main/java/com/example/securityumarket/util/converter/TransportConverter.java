@@ -34,7 +34,7 @@ public class TransportConverter {
                 .created(transport.getCreated())
                 .build();
     }
-
+  
     private <T extends TransportDTO> T mapCommonProperties(Transport transport, T dto) {
         dto.setId(transport.getId());
         dto.setBodyType(transport.getBodyType().getBodyType());

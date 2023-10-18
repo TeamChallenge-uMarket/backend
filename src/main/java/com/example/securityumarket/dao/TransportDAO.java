@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TransportDAO extends JpaRepository<Transport, Long>, JpaSpecificationExecutor<Transport> {
-
+  
     @Query("SELECT c FROM Transport c ORDER BY c.created DESC LIMIT 20")
     Optional<List<Transport>> findNewTransports();
 

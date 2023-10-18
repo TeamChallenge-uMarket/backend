@@ -60,7 +60,6 @@ public class RequestSearchDTO {
 
     private Integer numberOfSeatsFrom;
 
-
     private Boolean trade;
 
     private Boolean military;
@@ -70,5 +69,4 @@ public class RequestSearchDTO {
     private Boolean bargain;
 
     private Boolean installmentPayment;
-
 }

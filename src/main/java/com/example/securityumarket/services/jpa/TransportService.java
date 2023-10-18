@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import static com.example.securityumarket.models.specifications.TransportSpecifications.*;
 
+import static com.example.securityumarket.models.repositories.TransportSpecifications.*;
+
 
 @RequiredArgsConstructor
 @Service
@@ -142,7 +144,7 @@ public class TransportService {
                         .and(hasInstallmentPayment(requestSearchDTO.getInstallmentPayment()))
         );
     }
-
+          
     public List<Transport> findTransportFromMainPage(RequestTransportSearchDTO requestSearch) {
         return transportDAO.findAll((
                 hasTransportTypeId(requestSearch.getTypeId())
@@ -151,20 +153,5 @@ public class TransportService {
                         .and(hasRegionId(requestSearch.getRegionId()))
                 ));
     }
-    /*
-    private Long brandId;
-    private List<Long> modelId;
-    private List<Long> regionId;
-    private OrderBy orderBy;
-    private SortBy sortBy;
-
-
-    public enum SortBy {
-        ASC, DESC
-    }
-
-    public enum OrderBy {
-        CREATED, PRICE
-    }
-     */
+  
 }
