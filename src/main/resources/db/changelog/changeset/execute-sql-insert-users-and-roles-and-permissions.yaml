@@ -4,6 +4,6 @@ databaseChangeLog:
       author: Oleh
       changes:
         - sqlFile:
-            path: classpath:/changeset/sql/insert_roles-and-permissions.sql
+            path: classpath:db/changelog/sql/insert_roles-and-permissions.sql
         - sqlFile:
-            path: classpath:/changeset/sql/insert_users-and-permissions.sql
+            path: classpath:db/changelog/sql/insert_users-and-permissions.sql

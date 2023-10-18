@@ -70,6 +70,12 @@ databaseChangeLog:
                   name: load_capacity
                   type: INTEGER
               - column:
+                  name: created
+                  type: TIMESTAMP(6)
+              - column:
+                  name: last_update
+                  type: TIMESTAMP(6)
+              - column:
                   name: model_id
                   type: BIGINT
                   constraints:
@@ -135,3 +141,9 @@ databaseChangeLog:
                   constraints:
                     foreignKeyName: fk_transports_wheel_configurations
                     references: wheel_configurations(id)
+              - column:
+                  name: number_axles
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transports_number_axles
+                    references: number_axles(id)

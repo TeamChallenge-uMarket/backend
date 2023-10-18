@@ -4,4 +4,4 @@ databaseChangeLog:
       author: Oleh
       changes:
         - sqlFile:
-            path: classpath:/changeset/sql/insert_transport-parameters.sql
+            path: classpath:db/changelog/sql/insert_transport-parameters.sql

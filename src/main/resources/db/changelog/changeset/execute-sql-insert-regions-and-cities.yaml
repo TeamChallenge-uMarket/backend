@@ -4,6 +4,6 @@ databaseChangeLog:
       author: Oleh
       changes:
         - sqlFile:
-            path: classpath:/changeset/sql/insert_regions-1_table.sql
+            path: classpath:db/changelog/sql/insert_regions-1_table.sql
         - sqlFile:
-            path: classpath:/changeset/sql/insert_regions-2_table.sql
+            path: classpath:db/changelog/sql/insert_regions-2_table.sql

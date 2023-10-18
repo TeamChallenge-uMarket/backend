@@ -134,4 +134,8 @@ public class Transport extends DateAudit{
     @ManyToOne
     @JoinColumn(name = "wheel_configuration")
     private WheelConfiguration wheelConfiguration;
+
+    @ManyToOne
+    @JoinColumn(name = "number_axles")
+    private NumberAxles numberAxles;
 }

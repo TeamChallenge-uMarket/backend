@@ -1,59 +1,81 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/changeset/create-table-regions.yaml
+      file: db/changelog/changeset/createtables/create-table-regions.yaml
   - include:
-      file: db/changelog/changeset/create-tables-cities.yaml
+      file: db/changelog/changeset/createtables/create-tables-cities.yaml
   - include:
-      file: db/changelog/changeset/create-tables-fuel-types.yaml
+      file: db/changelog/changeset/createtables/create-tables-fuel-types.yaml
   - include:
-      file: db/changelog/changeset/create-tables-number-axles.yaml
+      file: db/changelog/changeset/createtables/create-tables-number-axles.yaml
   - include:
-      file: db/changelog/changeset/create-tables-producing-countries.yaml
+      file: db/changelog/changeset/createtables/create-tables-producing-countries.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transmissions.yaml
+      file: db/changelog/changeset/createtables/create-tables-transmissions.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transport-colors.yaml
+      file: db/changelog/changeset/createtables/create-tables-transport-colors.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transport-conditions.yaml
+      file: db/changelog/changeset/createtables/create-tables-transport-conditions.yaml
   - include:
-      file: db/changelog/changeset/create-tables-wheel-configurations.yaml
+      file: db/changelog/changeset/createtables/create-tables-wheel-configurations.yaml
   - include:
-      file: db/changelog/changeset/create-permissions-table.yaml
+      file: db/changelog/changeset/createtables/create-permissions-table.yaml
   - include:
-      file: db/changelog/changeset/create-roles-table.yaml
+      file: db/changelog/changeset/createtables/create-roles-table.yaml
   - include:
-      file: db/changelog/changeset/create-role_has_permissions-table.yaml
+      file: db/changelog/changeset/createtables/create-role_has_permissions-table.yaml
   - include:
-      file: db/changelog/changeset/create-tables-users.yaml
+      file: db/changelog/changeset/createtables/create-tables-users.yaml
   - include:
-      file: db/changelog/changeset/create-user_has_permissions-table.yaml
+      file: db/changelog/changeset/createtables/create-user_has_permissions-table.yaml
   - include:
-      file: db/changelog/changeset/create-user_has_roles-table.yaml
+      file: db/changelog/changeset/createtables/create-user_has_roles-table.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transport_types.yaml
+      file: db/changelog/changeset/createtables/create-tables-transport_types.yaml
   - include:
-      file: db/changelog/changeset/create-tables-body-types.yaml
+      file: db/changelog/changeset/createtables/create-tables-body-types.yaml
   - include:
-      file: db/changelog/changeset/create-tables-drive-types.yaml
+      file: db/changelog/changeset/createtables/create-tables-drive-types.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transport_brands.yaml
+      file: db/changelog/changeset/createtables/create-tables-transport_brands.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transport_type_brands.yaml
+      file: db/changelog/changeset/createtables/create-tables-transport_type_brands.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transport_models.yaml
+      file: db/changelog/changeset/createtables/create-tables-transport_models.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transports.yaml
+      file: db/changelog/changeset/createtables/create-tables-transports.yaml
   - include:
-      file: db/changelog/changeset/create-tables-favorite_transports.yaml
+      file: db/changelog/changeset/createtables/create-tables-favorite_transports.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transport_galleries.yaml
+      file: db/changelog/changeset/createtables/create-tables-transport_galleries.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transport_reviews.yaml
+      file: db/changelog/changeset/createtables/create-tables-transport_reviews.yaml
   - include:
-      file: db/changelog/changeset/create-tables-transport_views.yaml
+      file: db/changelog/changeset/createtables/create-tables-transport_views.yaml
   - include:
       file: db/changelog/changeset/add_is_active_column_to_users.yaml
   - include:
-      file: db/changelog/changeset/insert_roles-and-permissions.sql
-  - include:
       file: db/changelog/changeset/execute-sql-insert-regions-and-cities.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-users-and-roles-and-permissions.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-parameters.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-passcar-models.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-moto-models.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-spec-models.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-truck-models.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-water-models.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-agr-models.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transports.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-favorite-transport.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-views.yaml
+  - include:
+      file: db/changelog/changeset/execute-sql-insert-transport-reviews.yaml
