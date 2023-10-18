@@ -22,10 +22,10 @@ public class Transport extends DateAudit{
 
 
     @Column(name = "year")
-    private int year;
+    private Integer year;
 
     @Column(name = "mileage")
-    private int mileage;
+    private Integer mileage;
 
     @Column(name = "vincode")
     private String vincode;
@@ -34,46 +34,46 @@ public class Transport extends DateAudit{
     private String description;
 
     @Column(name = "engine_displacement")
-    private double engineDisplacement;
+    private Double engineDisplacement;
 
     @Column(name = "engine_power")
-    private int enginePower;
+    private Integer enginePower;
 
     @Column(name = "number_of_doors")
-    private int numberOfDoors;
+    private Integer numberOfDoors;
 
     @Column(name = "number_of_seats")
-    private int numberOfSeats;
+    private Integer numberOfSeats;
 
     @Column(name = "accident_history")
-    private boolean accidentHistory;
+    private Boolean accidentHistory;
 
     @Column(name = "fuel_consumption_city")
-    private double fuelConsumptionCity;
+    private Double fuelConsumptionCity;
 
     @Column(name = "fuel_consumption_highway")
-    private double fuelConsumptionHighway;
+    private Double fuelConsumptionHighway;
 
     @Column(name = "fuel_consumption_mixed")
-    private double fuelConsumptionMixed;
+    private Double fuelConsumptionMixed;
 
     @Column(name = "price")
     private BigDecimal price;
 
     @Column(name = "bargain")
-    private boolean bargain;
+    private Boolean bargain;
 
     @Column(name = "trade")
-    private boolean trade;
+    private Boolean trade;
 
     @Column(name = "military")
-    private boolean military;
+    private Boolean military;
 
     @Column(name = "installment_payment")
-    private boolean installmentPayment;
+    private Boolean installmentPayment;
 
     @Column(name = "uncleared")
-    private boolean uncleared;
+    private Boolean uncleared;
 
     @Column(name = "load_capacity")
     private Integer loadCapacity;

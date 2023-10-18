@@ -13,12 +13,12 @@ import java.util.Optional;
 
 public interface TransportViewDAO extends JpaRepository<TransportView, Long> {
 
-    @Query("select cw.transport from TransportView cw group by cw.transport order by count(cw.transport) desc")
-    Optional<List<Transport>> findPopularTransport(PageRequest pageRequest);
+    @Query("SELECT cw.transport FROM TransportView cw GROUP BY cw.transport ORDER BY count(cw.transport) DESC LIMIT 20")
+    Optional<List<Transport>> findPopularTransport();
 
-    @Query("select cw.transport from TransportView cw where cw.user = :user order by cw.lastUpdate desc")
-    Optional<List<Transport>> findViewedCarsByRegisteredUser(@Param("user") Users user, PageRequest pageRequest);
+    @Query("SELECT cw.transport FROM TransportView cw WHERE cw.user = :user ORDER BY cw.lastUpdate DESC ")
+    Optional<List<Transport>> findViewedCarsByRegisteredUser(@Param("user") Users user);
 
-    @Query("select cw.transport from TransportView cw where cw.transport.transportModel.transportTypeBrand.transportType.id=:id group by cw.transport order by count(cw.transport) desc")
-    Optional<List<Transport>> findPopularTransportByTypeId(PageRequest pageRequest, long id);
+    @Query("SELECT cw.transport FROM TransportView cw WHERE cw.transport.transportModel.transportTypeBrand.transportType.id=:id GROUP BY cw.transport ORDER BY count(cw.transport) DESC LIMIT 20")
+    Optional<List<Transport>> findPopularTransportByTypeId(long id);
 }

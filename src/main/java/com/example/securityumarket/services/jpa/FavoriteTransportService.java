@@ -16,8 +16,8 @@ import java.util.List;
 public class FavoriteTransportService {
     private final FavoriteTransportDAO favoriteTransportDAO;
 
-    public List<Transport> findFavorites(Users user, PageRequest of) {
-        return favoriteTransportDAO.findFavorites(user, of)
+    public List<Transport> findFavorites(Users user) {
+        return favoriteTransportDAO.findFavorites(user)
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("Favorite transport"));
     }

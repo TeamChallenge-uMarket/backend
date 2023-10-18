@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public interface TransportDAO extends JpaRepository<Transport, Long>, JpaSpecificationExecutor<Transport> {
 
-    @Query("select c from Transport c order by c.created desc")
-    Optional<List<Transport>> findNewCars(PageRequest pageRequest);
+    @Query("SELECT c FROM Transport c ORDER BY c.created DESC LIMIT 20")
+    Optional<List<Transport>> findNewTransports();
 
     Optional<Transport> findById(long id);
 

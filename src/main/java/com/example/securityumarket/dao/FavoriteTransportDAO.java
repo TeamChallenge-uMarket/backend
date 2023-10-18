@@ -12,6 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FavoriteTransportDAO extends JpaRepository<FavoriteTransport, Long> {
-    @Query("select ft.transport from FavoriteTransport ft where ft.user = :user order by ft.created desc")
-    Optional<List<Transport>> findFavorites(@Param("user") Users user, PageRequest pageRequest);
+    @Query("SELECT ft.transport FROM FavoriteTransport ft WHERE ft.user = :user ORDER BY ft.created DESC")
+    Optional<List<Transport>> findFavorites(@Param("user") Users user);
 }

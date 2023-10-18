@@ -22,8 +22,6 @@ public class ResponseSearchDTO {
 
     private Integer mileage;
 
-    private String vincode;
-
     private String description;
 
     private String transmission;

@@ -26,12 +26,11 @@ public class TransportConverter {
                 .price(transport.getPrice())
                 .year(transport.getYear())
                 .mileage(transport.getMileage())
-                .vincode(transport.getVincode())
                 .description(transport.getDescription())
-                .transmission(transport.getTransmission().getTransmission())
-                .fuelType(transport.getFuelType().getFuelType())
+                .transmission((transport.getTransmission() != null) ? transport.getTransmission().getTransmission() : null)
+                .fuelType((transport.getFuelType() != null) ? transport.getFuelType().getFuelType() : null)
                 .engineDisplacement(transport.getEngineDisplacement())
-                .city(transport.getCity().getDescription())
+                .city((transport.getCity() != null) ? transport.getCity().getDescription() : null)
                 .created(transport.getCreated())
                 .build();
     }
@@ -42,13 +41,13 @@ public class TransportConverter {
         dto.setImportedFrom(transport.getProducingCountry().getCountry());
         dto.setYear(transport.getYear());
         dto.setPrice(transport.getPrice());
-        dto.setBargain(transport.isBargain());
-        dto.setTrade(transport.isTrade());
-        dto.setMilitary(transport.isMilitary());
-        dto.setInstallmentPayment(transport.isInstallmentPayment());
-        dto.setUncleared(transport.isUncleared());
+        dto.setBargain(transport.getBargain());
+        dto.setTrade(transport.getTrade());
+        dto.setMilitary(transport.getMilitary());
+        dto.setInstallmentPayment(transport.getInstallmentPayment());
+        dto.setUncleared(transport.getUncleared());
         dto.setCondition(transport.getTransportCondition().getCondition());
-        dto.setAccidentHistory(transport.isAccidentHistory());
+        dto.setAccidentHistory(transport.getAccidentHistory());
         dto.setVincode(transport.getVincode());
         dto.setDescription(transport.getDescription());
         dto.setCreated(transport.getCreated());

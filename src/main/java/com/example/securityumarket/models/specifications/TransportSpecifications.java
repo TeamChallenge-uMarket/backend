@@ -319,4 +319,54 @@ public class TransportSpecifications {
             }
         };
     }
+
+    /// main page
+    public static Specification<Transport> hasTransportTypeId(Long transportTypeId) {
+        return (root, query, cb) -> {
+            if (transportTypeId != null) {
+                Join<Object, Object> transportModelJoin = root.join("transportModel");
+                Join<Object, Object> typeBrandJoin = transportModelJoin.join("transportTypeBrand");
+                Join<Object, Object> typeJoin = typeBrandJoin.join("transportType");
+                return cb.equal(typeJoin.get("id"), transportTypeId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> hasBrandId(Long brandId) {
+        return (root, query, cb) -> {
+            if (brandId != null) {
+                Join<Object, Object> transportModelJoin = root.join("transportModel");
+                Join<Object, Object> typeBrandJoin = transportModelJoin.join("transportTypeBrand");
+                Join<Object, Object> typeJoin = typeBrandJoin.join("transportBrand");
+                return cb.equal(typeJoin.get("id"), brandId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> hasModelId(List<Long> modelId) {
+        return (root, query, cb) -> {
+            if (modelId != null) {
+                Join<Object, Object> typeJoin = root.join("transportModel");
+                return typeJoin.get("id").in(modelId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> hasRegionId(List<Long> regionId) {
+        return (root, query, cb) -> {
+            if (regionId != null) {
+                Join<Object, Object> transportModelJoin = root.join("city");
+                Join<Object, Object> typeJoin = transportModelJoin.join("region");
+                return typeJoin.get("id").in(regionId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
 }

@@ -34,17 +34,12 @@ public class TransportService {
     }
 
 
-    public List<Transport> findNewCars(PageRequest pageRequest) {
-        return transportDAO.findNewCars(pageRequest)
+    public List<Transport> findNewTransports() {
+        return transportDAO.findNewTransports()
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("New transports"));
     }
 
-    public List<Transport> findTransportByRequest(RequestTransportSearchDTO requestSearch, PageRequest of) {
-        return transportDAO.findTransportByRequest(requestSearch, of)
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException("Transports"));
-    }
 
     public List<ResponseTransportDTO> convertCarsListToDtoCarsList(List<Transport> newTransports) {
         return newTransports.stream()
@@ -116,7 +111,6 @@ public class TransportService {
     public List<Transport> findTransportByParam(RequestSearchDTO requestSearchDTO) {
         return transportDAO.findAll(
                 hasTransportType(requestSearchDTO.getTransportType())
-                        .and(hasTransportType(requestSearchDTO.getTransportType()))
                         .and(hasTransportBrand(requestSearchDTO.getBrand()))
                         .and(hasModelIn(requestSearchDTO.getModels()))
                         .and(yearFrom(requestSearchDTO.getYearsFrom()))
@@ -148,4 +142,29 @@ public class TransportService {
                         .and(hasInstallmentPayment(requestSearchDTO.getInstallmentPayment()))
         );
     }
+
+    public List<Transport> findTransportFromMainPage(RequestTransportSearchDTO requestSearch) {
+        return transportDAO.findAll((
+                hasTransportTypeId(requestSearch.getTypeId())
+                        .and(hasBrandId(requestSearch.getBrandId()))
+                        .and(hasModelId(requestSearch.getModelId()))
+                        .and(hasRegionId(requestSearch.getRegionId()))
+                ));
+    }
+    /*
+    private Long brandId;
+    private List<Long> modelId;
+    private List<Long> regionId;
+    private OrderBy orderBy;
+    private SortBy sortBy;
+
+
+    public enum SortBy {
+        ASC, DESC
+    }
+
+    public enum OrderBy {
+        CREATED, PRICE
+    }
+     */
 }
