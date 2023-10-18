@@ -13,12 +13,6 @@ CREATE TABLE IF NOT EXISTS cities
 );
 
 
-CREATE TABLE IF NOT EXISTS body_types
-(
-    id        BIGSERIAL PRIMARY KEY,
-    body_type VARCHAR(255) NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS transmissions
 (
     id           BIGSERIAL PRIMARY KEY,
@@ -29,12 +23,6 @@ CREATE TABLE IF NOT EXISTS fuel_types
 (
     id        BIGSERIAL PRIMARY KEY,
     fuel_type VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS drive_types
-(
-    id         BIGSERIAL PRIMARY KEY,
-    drive_type VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS transport_colors
@@ -143,6 +131,22 @@ CREATE TABLE IF NOT EXISTS transport_types
     type VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS body_types
+(
+    id        BIGSERIAL PRIMARY KEY,
+    body_type VARCHAR(255) NOT NULL,
+    transport_type   BIGINT,
+    FOREIGN KEY (transport_type) REFERENCES transport_types (id)
+);
+
+CREATE TABLE IF NOT EXISTS drive_types
+(
+    id         BIGSERIAL PRIMARY KEY,
+    drive_type VARCHAR(255) NOT NULL,
+    transport_type   BIGINT,
+    FOREIGN KEY (transport_type) REFERENCES transport_types (id)
+);
+
 CREATE TABLE IF NOT EXISTS transport_brands
 (
     id      BIGSERIAL PRIMARY KEY,
@@ -195,9 +199,9 @@ CREATE TABLE IF NOT EXISTS transports
     city                BIGINT,
     created             TIMESTAMP(6),
     last_update         TIMESTAMP(6),
-    body_type           BIGINT,
-    drive_type          BIGINT,
     fuel_type           BIGINT,
+    body_type           BIGINT,
+    drive_type           BIGINT,
     producing_country   BIGINT,
     transmission        BIGINT,
     transport_color     BIGINT,
@@ -219,16 +223,16 @@ ALTER TABLE transports
         FOREIGN KEY (city) REFERENCES cities (id);
 
 ALTER TABLE transports
+    ADD CONSTRAINT fk_fuel_type
+        FOREIGN KEY (fuel_type) REFERENCES fuel_types (id);
+
+ALTER TABLE transports
     ADD CONSTRAINT fk_body_type
         FOREIGN KEY (body_type) REFERENCES body_types (id);
 
 ALTER TABLE transports
     ADD CONSTRAINT fk_drive_type
         FOREIGN KEY (drive_type) REFERENCES drive_types (id);
-
-ALTER TABLE transports
-    ADD CONSTRAINT fk_fuel_type
-        FOREIGN KEY (fuel_type) REFERENCES fuel_types (id);
 
 ALTER TABLE transports
     ADD CONSTRAINT fk_producing_country

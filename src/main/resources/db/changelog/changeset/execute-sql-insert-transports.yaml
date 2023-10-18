@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: execute-sql-insert-transports.yaml
+      author: Oleh
+      changes:
+        - sqlFile:
+            path: classpath:/changeset/sql/insert_testdata_transports.sql

@@ -24,6 +24,7 @@ VALUES ('Mini', 25),
 INSERT INTO transport_models (model, type_brand_id)
 VALUES ('Roadster', 26),
        ('Model S', 26),
+       ('Model 3', 26),
        ('Model X', 26),
        ('Model Y', 26),
        ('Cybertruck', 26);

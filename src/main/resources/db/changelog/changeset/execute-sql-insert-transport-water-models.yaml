@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: execute-sql-insert-transport-water-models.yaml
+      author: Oleh
+      changes:
+        - sqlFile:
+            path: classpath:/changeset/sql/insert_transport-models-water.sql

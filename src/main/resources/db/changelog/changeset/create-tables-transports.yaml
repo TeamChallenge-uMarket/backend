@@ -88,6 +88,12 @@ databaseChangeLog:
                     foreignKeyName: fk_transports_cities
                     references: cities(id)
               - column:
+                  name: fuel_type
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_transports_fuel_types
+                    references: fuel_types(id)
+              - column:
                   name: body_type
                   type: BIGINT
                   constraints:
@@ -99,12 +105,6 @@ databaseChangeLog:
                   constraints:
                     foreignKeyName: fk_transports_drive_types
                     references: drive_types(id)
-              - column:
-                  name: fuel_type
-                  type: BIGINT
-                  constraints:
-                    foreignKeyName: fk_transports_fuel_types
-                    references: fuel_types(id)
               - column:
                   name: producing_country
                   type: BIGINT

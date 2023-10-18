@@ -3,6 +3,8 @@ package com.example.securityumarket.models.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "body_types")
@@ -16,4 +18,8 @@ public class BodyType {
 
     @Column(name = "body_type")
     private String bodyType;
+
+    @ManyToOne
+    @JoinColumn(name = "transport_type")
+    private TransportType transportType;
 }

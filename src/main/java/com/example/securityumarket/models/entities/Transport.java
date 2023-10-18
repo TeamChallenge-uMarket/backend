@@ -104,16 +104,16 @@ public class Transport extends DateAudit{
     private City city;
 
     @ManyToOne
+    @JoinColumn(name = "fuel_type")
+    private FuelType fuelType;
+
+    @ManyToOne
     @JoinColumn(name = "body_type")
     private BodyType bodyType;
 
     @ManyToOne
     @JoinColumn(name = "drive_type")
     private DriveType driveType;
-
-    @ManyToOne
-    @JoinColumn(name = "fuel_type")
-    private FuelType fuelType;
 
     @ManyToOne
     @JoinColumn(name = "producing_country")
