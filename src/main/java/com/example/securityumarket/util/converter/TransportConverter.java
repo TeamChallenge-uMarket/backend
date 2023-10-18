@@ -19,8 +19,8 @@ public class TransportConverter {
 
     private <T extends TransportDTO> T mapCommonProperties(Transport transport, T dto) {
         dto.setId(transport.getId());
-        dto.setBodyType(transport.getBodyType());
-        dto.setImportedFrom(transport.getImportedFrom());
+        dto.setBodyType(transport.getBodyType().getBodyType());
+        dto.setImportedFrom(transport.getProducingCountry().getCountry());
         dto.setYear(transport.getYear());
         dto.setPrice(transport.getPrice());
         dto.setBargain(transport.isBargain());
@@ -28,13 +28,13 @@ public class TransportConverter {
         dto.setMilitary(transport.isMilitary());
         dto.setInstallmentPayment(transport.isInstallmentPayment());
         dto.setUncleared(transport.isUncleared());
-        dto.setCondition(transport.getCondition());
+        dto.setCondition(transport.getTransportCondition().getCondition());
         dto.setAccidentHistory(transport.isAccidentHistory());
         dto.setVincode(transport.getVincode());
         dto.setDescription(transport.getDescription());
         dto.setCreated(transport.getCreated());
         dto.setLastUpdate(transport.getLastUpdate());
-        dto.setColor(transport.getColor());
+        dto.setColor(transport.getTransportColor().getColor());
         dto.setRegion(transport.getCity().getRegion().getDescription());
         dto.setCity(transport.getCity().getDescription());
         dto.setMainPhoto(transportGalleryService.findMainFileByTransport(transport.getId()));

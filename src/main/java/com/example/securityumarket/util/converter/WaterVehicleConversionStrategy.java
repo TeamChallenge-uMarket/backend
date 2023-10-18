@@ -9,7 +9,7 @@ public class WaterVehicleConversionStrategy implements TransportTypeConversionSt
     @Override
     public WaterVehicleDTO createDTO(Transport transport) {
         return WaterVehicleDTO.builder()
-                .fuelType(transport.getFuelType())
+                .fuelType(transport.getFuelType().getFuelType())
                 .engineDisplacement(transport.getEngineDisplacement())
                 .enginePower(transport.getEnginePower())
                 .mileage(transport.getMileage())

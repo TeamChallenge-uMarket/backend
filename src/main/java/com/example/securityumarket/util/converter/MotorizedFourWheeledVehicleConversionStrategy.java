@@ -9,12 +9,12 @@ public class MotorizedFourWheeledVehicleConversionStrategy implements TransportT
     @Override
     public PassengerCarDTO createDTO(Transport transport) {
         return PassengerCarDTO.builder()
-                .transmission(transport.getTransmission())
-                .fuelType(transport.getFuelType())
+                .transmission(transport.getTransmission().getTransmission())
+                .fuelType(transport.getFuelType().getFuelType())
                 .fuelConsumptionMixed(transport.getFuelConsumptionMixed())
                 .engineDisplacement(transport.getEngineDisplacement())
                 .enginePower(transport.getEnginePower())
-                .driveType(transport.getDriveType())
+                .driveType(transport.getDriveType().getDriveType())
                 .mileage(transport.getMileage())
                 .fuelConsumptionCity(transport.getFuelConsumptionCity())
                 .fuelConsumptionHighway(transport.getFuelConsumptionHighway())

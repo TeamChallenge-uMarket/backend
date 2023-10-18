@@ -9,12 +9,12 @@ public class MotorizedVehicleConversionStrategy implements TransportTypeConversi
     @Override
     public MotorcycleDTO createDTO(Transport transport) {
         return MotorcycleDTO.builder()
-                .transmission(transport.getTransmission())
-                .fuelType(transport.getFuelType())
+                .transmission(transport.getTransmission().getTransmission())
+                .fuelType(transport.getFuelType().getFuelType())
                 .fuelConsumptionMixed(transport.getFuelConsumptionMixed())
                 .engineDisplacement(transport.getEngineDisplacement())
                 .enginePower(transport.getEnginePower())
-                .driveType(transport.getDriveType())
+                .driveType(transport.getDriveType().getDriveType())
                 .mileage(transport.getMileage())
                 .build();
     }
