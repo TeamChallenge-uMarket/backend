@@ -22,13 +22,10 @@ public class Transport extends DateAudit{
 
 
     @Column(name = "year")
-    private int year;
+    private Integer year;
 
     @Column(name = "mileage")
-    private int mileage;
-
-    @Column(name = "body_type")
-    private String bodyType;
+    private Integer mileage;
 
     @Column(name = "vincode")
     private String vincode;
@@ -36,65 +33,50 @@ public class Transport extends DateAudit{
     @Column(name = "description")
     private String description;
 
-    @Column(name = "transmission")
-    private String transmission;
-
-    @Column(name = "fuel_type")
-    private String fuelType;
-
     @Column(name = "engine_displacement")
-    private double engineDisplacement;
+    private Double engineDisplacement;
 
     @Column(name = "engine_power")
-    private int enginePower;
-
-    @Column(name = "drive_type")
-    private String driveType;
+    private Integer enginePower;
 
     @Column(name = "number_of_doors")
-    private int numberOfDoors;
+    private Integer numberOfDoors;
 
     @Column(name = "number_of_seats")
-    private int numberOfSeats;
-
-    @Column(name = "color")
-    private String color;
-
-    @Column(name = "imported_from")
-    private String importedFrom;
+    private Integer numberOfSeats;
 
     @Column(name = "accident_history")
-    private boolean accidentHistory;
-
-    @Column(name = "condition")
-    private String condition;
+    private Boolean accidentHistory;
 
     @Column(name = "fuel_consumption_city")
-    private double fuelConsumptionCity;
+    private Double fuelConsumptionCity;
 
     @Column(name = "fuel_consumption_highway")
-    private double fuelConsumptionHighway;
+    private Double fuelConsumptionHighway;
 
     @Column(name = "fuel_consumption_mixed")
-    private double fuelConsumptionMixed;
+    private Double fuelConsumptionMixed;
 
     @Column(name = "price")
     private BigDecimal price;
 
     @Column(name = "bargain")
-    private boolean bargain;
+    private Boolean bargain;
 
     @Column(name = "trade")
-    private boolean trade;
+    private Boolean trade;
 
     @Column(name = "military")
-    private boolean military;
+    private Boolean military;
 
     @Column(name = "installment_payment")
-    private boolean installmentPayment;
+    private Boolean installmentPayment;
 
     @Column(name = "uncleared")
-    private boolean uncleared;
+    private Boolean uncleared;
+
+    @Column(name = "load_capacity")
+    private Integer loadCapacity;
 
 
     @OneToMany(mappedBy = "transport")
@@ -120,4 +102,40 @@ public class Transport extends DateAudit{
     @ManyToOne
     @JoinColumn(name = "city")
     private City city;
+
+    @ManyToOne
+    @JoinColumn(name = "fuel_type")
+    private FuelType fuelType;
+
+    @ManyToOne
+    @JoinColumn(name = "body_type")
+    private BodyType bodyType;
+
+    @ManyToOne
+    @JoinColumn(name = "drive_type")
+    private DriveType driveType;
+
+    @ManyToOne
+    @JoinColumn(name = "producing_country")
+    private ProducingCountry producingCountry;
+
+    @ManyToOne
+    @JoinColumn(name = "transmission")
+    private Transmission transmission;
+
+    @ManyToOne
+    @JoinColumn(name = "transport_color")
+    private TransportColor transportColor;
+
+    @ManyToOne
+    @JoinColumn(name = "transport_condition")
+    private TransportCondition transportCondition;
+
+    @ManyToOne
+    @JoinColumn(name = "wheel_configuration")
+    private WheelConfiguration wheelConfiguration;
+
+    @ManyToOne
+    @JoinColumn(name = "number_axles")
+    private NumberAxles numberAxles;
 }

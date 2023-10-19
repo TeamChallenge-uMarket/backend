@@ -1,6 +1,7 @@
 package com.example.securityumarket.models.DTO.login_page;
 
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PasswordRequest {
+
+    @Email(message = "Email should be valid")
+    private String email;
 
     @NotBlank(message = "Password is required")
     private String password;

@@ -38,6 +38,8 @@ public class Users extends DateAudit implements UserDetails {
     @Column(name = "refresh_token")
     private String refreshToken;
 
+    @Column(name = "active")
+    private boolean active;
 
     @OneToMany(mappedBy = "user")
     private List<Transport> transports;

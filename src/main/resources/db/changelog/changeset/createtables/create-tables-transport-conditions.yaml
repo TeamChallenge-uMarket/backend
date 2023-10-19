@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-transport-conditions
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: transport_conditions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: condition
+                  type: VARCHAR(255)

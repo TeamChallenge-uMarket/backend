@@ -1,14 +1,14 @@
 package com.example.securityumarket.services.page_service;
 
-import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
+import com.example.securityumarket.exception.DataNotValidException;
+import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
+import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,30 +37,25 @@ public class MainPageService {
     private final RegionService regionService;
 
 
-    private ResponseEntity<List<ResponseTransportDTO>> okResponseTransportDTOList(List<Transport> newTransports) {
-        List<ResponseTransportDTO> newCarsResponse = transportService.convertCarsListToDtoCarsList(newTransports);
-        return ResponseEntity.ok(newCarsResponse);
+    private ResponseEntity<List<ResponseSearchDTO>> getResponseTransportDTOList(List<Transport> transports) {
+        List<ResponseSearchDTO> responseSearchDTOS = transportService.convertTransportListToTransportSearchDTO(transports);
+        return ResponseEntity.ok(responseSearchDTOS);
     }
 
-    public ResponseEntity<List<ResponseTransportDTO>> getNewTransports(int page, int limit) {
-        List<Transport> newTransports = transportService.findNewCars(PageRequest.of(page, limit));
-        return okResponseTransportDTOList(newTransports);
+    public ResponseEntity<List<ResponseSearchDTO>> getNewTransports() {
+        List<Transport> newTransports = transportService.findNewTransports();
+        return getResponseTransportDTOList(newTransports);
     }
 
-    public ResponseEntity<List<ResponseTransportDTO>> getPopularTransports(int page, int limit) {
-        List<Transport> popularTransports = transportViewService.findPopularTransport(PageRequest.of(page, limit));
-        return okResponseTransportDTOList(popularTransports);
+    public ResponseEntity<List<ResponseSearchDTO>> getPopularTransports() {
+        List<Transport> popularTransports = transportViewService.findPopularTransport();
+        return getResponseTransportDTOList(popularTransports);
     }
 
-    public ResponseEntity<List<ResponseTransportDTO>> getRecentlyViewedTransports(int page, int limit) {
-            Users user = userService.getAuthenticatedUser();
-            List<Transport> viewedCarsByUser = transportViewService.findViewedCarsByRegisteredUser(user, PageRequest.of(page, limit));
-            return okResponseTransportDTOList(viewedCarsByUser);
-    }
-
-    public ResponseEntity<List<ResponseTransportDTO>> searchTransportByRequest(RequestTransportSearchDTO requestSearch, int page, int limit) {
-            List<Transport> searchedTransports = transportService.findTransportByRequest(requestSearch, PageRequest.of(page, limit));
-            return okResponseTransportDTOList(searchedTransports);
+    public ResponseEntity<List<ResponseSearchDTO>> getRecentlyViewedTransports() {
+        Users user = userService.getAuthenticatedUser();
+        List<Transport> viewedCarsByUser = transportViewService.findViewedCarsByRegisteredUser(user);
+        return getResponseTransportDTOList(viewedCarsByUser);
     }
 
     public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
@@ -87,14 +82,10 @@ public class MainPageService {
                 .collect(Collectors.toList()));
     }
 
-    public ResponseEntity<List<ResponseTransportDTO>> getFavoriteTransport(int page, int limit) {
-        try {
-            Users user = userService.getAuthenticatedUser();
-            List<Transport> viewedCarsByUser = favoriteTransportService.findFavorites(user, PageRequest.of(page, limit));
-            return okResponseTransportDTOList(viewedCarsByUser);
-        } catch (UsernameNotFoundException exception) {
-            return ResponseEntity.noContent().build();
-        }
+    public ResponseEntity<List<ResponseSearchDTO>> getFavoriteTransport() {
+        Users user = userService.getAuthenticatedUser();
+        List<Transport> viewedCarsByUser = favoriteTransportService.findFavorites(user);
+        return getResponseTransportDTOList(viewedCarsByUser);
     }
 
     public ResponseEntity<List<ResponseBrandDTO>> getBrandsByTransportType(Long transportTypeId) {
@@ -111,6 +102,9 @@ public class MainPageService {
     }
 
     public ResponseEntity<List<ResponseModelDTO>> getModelsByTransportBrand(Long transportTypeId, Long transportBrandId) {
+        if (transportBrandId == null) {
+            throw new DataNotValidException("transportBrandId required");
+        }
         if (transportTypeId != null) {
             return ResponseEntity.ok(transportModelService.findAllByTransportTypeAndBrand(transportBrandId, transportTypeId).stream()
                     .map(carModel -> ResponseModelDTO.builder()
@@ -140,5 +134,41 @@ public class MainPageService {
                         .region(city.getRegion().getDescription())
                         .build())
                 .collect(Collectors.toList()));
+    }
+
+    public ResponseEntity<List<PassengerCarDTO>> getPopularPassCar() {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId( 1);
+        List<PassengerCarDTO> passengerCarDTOS = transportService.convertTransportListToPassCarDTOList(popularTransports);
+        return ResponseEntity.ok(passengerCarDTOS);
+    }
+
+    public ResponseEntity<List<MotorcycleDTO>> getPopularMotorcycle() {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(2);
+        List<MotorcycleDTO> motorcycleDTOS = transportService.convertTransportListToMotorcycleDTOList(popularTransports);
+        return ResponseEntity.ok(motorcycleDTOS);
+    }
+
+    public ResponseEntity<List<TruckDTO>> getPopularTrucks() {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(3);
+        List<TruckDTO> truckDTOS = transportService.convertTransportListToTruckDTOOList(popularTransports);
+        return ResponseEntity.ok(truckDTOS);
+    }
+
+    public ResponseEntity<List<SpecializedVehicleDTO>> getPopularSpecializedVehicles() {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(4);
+        List<SpecializedVehicleDTO> specializedVehicleDTOS = transportService.convertTransportListToSpecializedVehicleDTO(popularTransports);
+        return ResponseEntity.ok(specializedVehicleDTOS);
+    }
+
+    public ResponseEntity<List<AgriculturalDTO>> getPopularAgricultural() {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(5);
+        List<AgriculturalDTO> agriculturalDTOS = transportService.convertTransportListToAgriculturalDTOList(popularTransports);
+        return ResponseEntity.ok(agriculturalDTOS);
+    }
+
+    public ResponseEntity<List<WaterVehicleDTO>> getPopularWaterVehicles() {
+        List<Transport> popularTransports = transportViewService.findPopularTransportByTypeId(6);
+        List<WaterVehicleDTO> waterVehicleDTOS = transportService.convertTransportListToWaterVehicleDTOList(popularTransports);
+        return ResponseEntity.ok(waterVehicleDTOS);
     }
 }

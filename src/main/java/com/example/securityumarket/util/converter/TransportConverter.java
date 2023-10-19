@@ -1,0 +1,66 @@
+package com.example.securityumarket.util.converter;
+
+import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
+import com.example.securityumarket.models.DTO.transports.TransportDTO;
+import com.example.securityumarket.models.entities.Transport;
+import com.example.securityumarket.services.jpa.TransportGalleryService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@RequiredArgsConstructor
+@Component
+public class TransportConverter {
+
+    private final TransportGalleryService transportGalleryService;
+
+    public <T extends TransportDTO> T convertTransportToTypeDTO(Transport transport, TransportTypeConversionStrategy strategy) {
+        T dto = strategy.createDTO(transport);
+        return mapCommonProperties(transport, dto);
+    }
+
+    public ResponseSearchDTO convertTransportTransportSearchDTO(Transport transport) {
+        return ResponseSearchDTO.builder()
+                .id(transport.getId())
+                .brand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand())
+                .model(transport.getTransportModel().getModel())
+                .price(transport.getPrice())
+                .year(transport.getYear())
+                .mileage(transport.getMileage())
+                .description(transport.getDescription())
+                .transmission((transport.getTransmission() != null) ? transport.getTransmission().getTransmission() : null)
+                .fuelType((transport.getFuelType() != null) ? transport.getFuelType().getFuelType() : null)
+                .engineDisplacement(transport.getEngineDisplacement())
+                .city((transport.getCity() != null) ? transport.getCity().getDescription() : null)
+                .fileUrl("https://res.cloudinary.com/de4bysqtm/image/upload/f_auto,q_auto/l52tzjkitkoy64ttdkmx")
+                .created(transport.getCreated())
+                .build();
+    }
+  
+    private <T extends TransportDTO> T mapCommonProperties(Transport transport, T dto) {
+        dto.setId(transport.getId());
+        dto.setBodyType(transport.getBodyType().getBodyType());
+        dto.setImportedFrom(transport.getProducingCountry().getCountry());
+        dto.setYear(transport.getYear());
+        dto.setPrice(transport.getPrice());
+        dto.setBargain(transport.getBargain());
+        dto.setTrade(transport.getTrade());
+        dto.setMilitary(transport.getMilitary());
+        dto.setInstallmentPayment(transport.getInstallmentPayment());
+        dto.setUncleared(transport.getUncleared());
+        dto.setCondition(transport.getTransportCondition().getCondition());
+        dto.setAccidentHistory(transport.getAccidentHistory());
+        dto.setVincode(transport.getVincode());
+        dto.setDescription(transport.getDescription());
+        dto.setCreated(transport.getCreated());
+        dto.setLastUpdate(transport.getLastUpdate());
+        dto.setColor(transport.getTransportColor().getColor());
+        dto.setRegion(transport.getCity().getRegion().getDescription());
+        dto.setCity(transport.getCity().getDescription());
+        dto.setMainPhoto(transportGalleryService.findMainFileByTransport(transport.getId()));
+        dto.setUserName(transport.getUser().getName());
+        dto.setModel(transport.getTransportModel().getModel());
+        dto.setBrand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand());
+        return dto;
+    }
+}
+

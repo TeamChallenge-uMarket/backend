@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: execute-sql-insert-regions-and-cities.yaml
+      author: Oleh
+      changes:
+        - sqlFile:
+            path: classpath:db/changelog/sql/insert_regions-1_table.sql
+        - sqlFile:
+            path: classpath:db/changelog/sql/insert_regions-2_table.sql

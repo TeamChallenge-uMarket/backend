@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-transmissions
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: transmissions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: transmission
+                  type: VARCHAR(255)

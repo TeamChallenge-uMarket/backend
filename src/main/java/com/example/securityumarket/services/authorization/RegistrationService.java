@@ -1,21 +1,19 @@
 package com.example.securityumarket.services.authorization;
 
+import com.example.securityumarket.exception.EmailSendingException;
 import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
-import com.example.securityumarket.models.entities.City;
 import com.example.securityumarket.models.entities.Users;
-import com.example.securityumarket.services.jpa.CityService;
-import com.example.securityumarket.services.jpa.RegionService;
 import com.example.securityumarket.services.jpa.UserService;
 import com.example.securityumarket.services.security.JwtService;
-import org.springframework.http.HttpStatus;
+import com.example.securityumarket.util.EmailUtil;
+import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.securityumarket.services.authorization.MailService.CODE_EXPIRATION_TIME_MS;
-
-
+@RequiredArgsConstructor
 @Service
 public class RegistrationService {
 
@@ -23,73 +21,57 @@ public class RegistrationService {
 
     private final UserService userService;
 
-    private final RegionService regionService;
-
-    private final CityService cityService;
-
     private final JwtService jwtService;
 
-    private final MailService mailService;
+    private final EmailUtil emailUtil;
 
-    private Users users;
-
-
-    public RegistrationService(PasswordEncoder passwordEncoder, UserService userService, RegionService regionService, CityService cityService, JwtService jwtService, MailService mailService) {
-        this.passwordEncoder = passwordEncoder;
-        this.userService = userService;
-        this.regionService = regionService;
-        this.cityService = cityService;
-        this.jwtService = jwtService;
-        this.mailService = mailService;
-    }
 
     @Transactional
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
         validateRegisterRequest(registerRequest);
+        Users user = buildUserFromRequest(registerRequest);
 
-        users = buildUserFromRequest(registerRequest);
-        jwtService.generateToken(users);
-        String refreshToken = jwtService.generateRefreshToken(users);
-        users.setRefreshToken(refreshToken);
-
-        mailService.sendCode(users.getEmail());
-
-        return ResponseEntity.ok("Verification code sent successfully");
+        return sendEmailAndSaveUser(user);
     }
+
+    public ResponseEntity<String> resendCode(String email) {
+        Users user = userService.findAppUserByEmail(email);
+        return sendEmailAndSaveUser(user);
+    }
+
+
+    private ResponseEntity<String> sendEmailAndSaveUser(Users user) {
+        String email = user.getEmail();
+        String token = jwtService.generateRefreshToken(user);
+
+        try {
+            emailUtil.sendRegistrationEmail(email, token);
+        } catch (MessagingException e) {
+            throw new EmailSendingException();
+        }
+
+        user.setRefreshToken(token);
+        userService.save(user);
+        return ResponseEntity.ok("Email sent. Please verify account within 5 minutes");
+    }
+
+    public ResponseEntity<String> verifyAccount(String email, String token) {
+        Users user = userService.findAppUserByEmail(email);
+        if (emailUtil.verifyAccount(user, token)) {
+            if (user.isActive()) {
+                return ResponseEntity.ok("Your account is already active! You can login.");
+            }
+            user.setActive(true);
+            userService.save(user);
+            return ResponseEntity.ok("Account verified! You can login.");
+        } else {
+            return ResponseEntity.status(422).body("Token has expired. Please regenerate token and try again");
+        }
+    }
+
 
     private void validateRegisterRequest(RegisterRequest registerRequest) {
         userService.isUserEmailUnique(registerRequest.getEmail());
-        String normalizePhoneNumber = normalizePhoneNumber(registerRequest.getPhone());
-        userService.isUserPhoneUnique(normalizePhoneNumber);
-        getAddressFromRequest(registerRequest);
-    }
-
-    private City getAddressFromRequest(RegisterRequest registerRequest) {
-        if (registerRequest.getAddressDTO().isEmpty()) {
-            return null;
-        } else {
-            String region = registerRequest.getAddressDTO().getRegion();
-            String city = registerRequest.getAddressDTO().getCity();
-
-            regionService.findByDescription(region);
-            cityService.findByDescription(city);
-
-            return cityService.findByRegionDescriptionAndDescription(region, city);
-        }
-    }
-
-    public ResponseEntity<String> confirmRegistration(String codeConfirm) {
-        long currentTime = System.currentTimeMillis();
-        long elapsedTime = currentTime - mailService.getCodeCreationTime();
-        if (elapsedTime > CODE_EXPIRATION_TIME_MS) {
-            return ResponseEntity.status(HttpStatus.GONE).body("Code has expired");
-        }
-        if (mailService.getVerificationCode().equals(codeConfirm)) {
-            userService.save(users);
-            return ResponseEntity.ok("Code confirmed successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body("Invalid code");
-        }
     }
 
     private String normalizePhoneNumber(String inputPhoneNumber) {
@@ -112,8 +94,7 @@ public class RegistrationService {
                 .name(registerRequest.getName())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .phone(normalizePhoneNumber(registerRequest.getPhone()))
-                .city(getAddressFromRequest(registerRequest))
+                .active(false)
                 .build();
     }
 }

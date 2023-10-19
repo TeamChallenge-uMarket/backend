@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-producing-countries
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: producing_countries
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: country
+                  type: VARCHAR(255)

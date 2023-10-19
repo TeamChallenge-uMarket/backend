@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-transport-colors
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: transport_colors
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: color
+                  type: VARCHAR(255)

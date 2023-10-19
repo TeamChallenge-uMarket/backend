@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-tables-number-axles
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: number_axles
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: number_axles
+                  type: VARCHAR(255)

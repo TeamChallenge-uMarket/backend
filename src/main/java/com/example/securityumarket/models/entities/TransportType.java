@@ -21,4 +21,10 @@ public class TransportType {
 
     @OneToMany(mappedBy = "transportType")
     private List<TransportTypeBrand> transportTypeBrands;
+
+    @OneToMany(mappedBy = "transportType")
+    private List<BodyType> bodyTypes;
+
+    @OneToMany(mappedBy = "transportType")
+    private List<DriveType> driveTypes;
 }

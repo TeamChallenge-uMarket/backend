@@ -1,6 +1,8 @@
 package com.example.securityumarket.services.authorization;
 
 import com.example.securityumarket.dao.UsersDAO;
+import com.example.securityumarket.exception.DataNotFoundException;
+import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.Users;
@@ -23,7 +25,6 @@ public class LoginService {
     @Transactional
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
         Users users = authenticate(authenticationRequest);
-
         String jwtToken = jwtService.generateToken(users);
         String refreshToken = jwtService.generateRefreshToken(users);
         users.setRefreshToken(refreshToken);
@@ -35,13 +36,20 @@ public class LoginService {
     }
 
     protected Users authenticate(AuthenticationRequest authenticationRequest) {
+
+        Users user = usersDAO.findAppUserByEmail(authenticationRequest.getEmail())
+                .orElseThrow(() -> new DataNotFoundException("User with this email"));
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.getEmail(),
                         authenticationRequest.getPassword()
                 )
         );
-        return usersDAO.findAppUserByEmail(authenticationRequest.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        if (!user.isActive()) {
+            throw new DataNotValidException("Account not activated. Check your email and activate your account");
+        }
+        return user;
     }
 }
