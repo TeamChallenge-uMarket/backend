@@ -10,33 +10,41 @@ import java.util.List;
 @Data
 public class RequestSearchDTO {
 
-    private String transportType;
+    private Long transportTypeId;
 
-    private String brand;
+    private List<Long> brandId;
 
-    private List<String> models;
+    private List<Long> modelId;
 
-    private Integer yearsFrom;
+    private List<Long> regionId;
 
-    private Integer yearsTo;
+    private List<Long> cityId;
 
-    private List<String> regions;
+    private List<Long> bodyTypeId;
 
-    private List<String> cities;
+    private List<Long> fuelTypeId;
+
+    private List<Long> driveTypeId;
+
+    private List<Long> transmissionId;
+
+    private List<Long> colorId;
+
+    private List<Long> conditionId;
+
+    private List<Long> numberAxlesId;
+
+    private List<Long> producingCountryId;
+
+    private List<Long> wheelConfigurationId;
 
     private BigDecimal priceFrom;
 
     private BigDecimal priceTo;
 
-    private List<String> bodyTypes;
+    private Integer yearsFrom;
 
-    private List<String> fuelTypes;
-
-    private List<String> transmissions;
-
-    private List<String> colors;
-
-    private List<String> conditions;
+    private Integer yearsTo;
 
     private Integer mileageFrom;
 
@@ -46,19 +54,21 @@ public class RequestSearchDTO {
 
     private Integer enginePowerTo;
 
-    private Integer engineDisplacementFrom;
+    private Double engineDisplacementFrom;
 
-    private Integer engineDisplacementTo;
-
-    private List<String> driveTypes;
+    private Double engineDisplacementTo;
 
     private Integer numberOfDoorsFrom;
 
     private Integer numberOfDoorsTo;
 
+    private Integer numberOfSeatsFrom;
+
     private Integer numberOfSeatsTo;
 
-    private Integer numberOfSeatsFrom;
+    private Integer loadCapacityFrom;
+
+    private Integer loadCapacityTo;
 
     private Boolean trade;
 
@@ -69,4 +79,16 @@ public class RequestSearchDTO {
     private Boolean bargain;
 
     private Boolean installmentPayment;
+
+    private OrderBy orderBy;
+
+    private SortBy sortBy;
+
+    public enum SortBy {
+        ASC, DESC
+    }
+
+    public enum OrderBy {
+        CREATED, PRICE, MILEAGE
+    }
 }

@@ -90,11 +90,6 @@ public class MainPageService {
         return getResponseTransportDTOList(viewedCarsByUser);
     }
 
-    public ResponseEntity<List<ResponseSearchDTO>> searchTransportByRequest(RequestTransportSearchDTO requestSearch) {
-        List<Transport> searchedTransports = transportService.findTransportFromMainPage(requestSearch);
-        return getResponseTransportDTOList(searchedTransports);
-    }
-
     public ResponseEntity<List<ResponseBrandDTO>> getBrandsByTransportType(Long transportTypeId) {
         if (transportTypeId == null) {
             return getBrandTransport();

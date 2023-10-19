@@ -8,6 +8,7 @@ import com.example.securityumarket.services.jpa.FavoriteTransportService;
 import com.example.securityumarket.services.jpa.TransportService;
 import com.example.securityumarket.services.jpa.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +32,8 @@ public class CatalogPageService {
 
     }
 
-    public ResponseEntity<List<ResponseSearchDTO>> searchTransports(RequestSearchDTO requestSearchDTO) {
-        List<Transport> transports = transportService.findTransportByParam(requestSearchDTO);
+    public ResponseEntity<List<ResponseSearchDTO>> searchTransports(int page, int limit, RequestSearchDTO requestSearchDTO) {
+        List<Transport> transports = transportService.findTransportByParam(requestSearchDTO, PageRequest.of(page, limit));
         return ResponseEntity.ok(transportService.convertTransportListToTransportSearchDTO(transports));
     }
 }

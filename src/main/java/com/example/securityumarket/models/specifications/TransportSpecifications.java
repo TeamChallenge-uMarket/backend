@@ -7,83 +7,164 @@ import org.springframework.data.jpa.domain.Specification;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.OrderBy;
+import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.SortBy;
+
 public class TransportSpecifications {
 
-    public static Specification<Transport> hasTransportType(String transportType) {
+    public static Specification<Transport> hasTransportTypeId(Long transportTypeId) {
         return (root, query, cb) -> {
-            if (transportType != null) {
+            if (transportTypeId != null) {
                 Join<Object, Object> transportModelJoin = root.join("transportModel");
                 Join<Object, Object> typeBrandJoin = transportModelJoin.join("transportTypeBrand");
                 Join<Object, Object> typeJoin = typeBrandJoin.join("transportType");
-                return cb.equal(typeJoin.get("type"), transportType);
+                return cb.equal(typeJoin.get("id"), transportTypeId);
             } else {
                 return cb.isTrue(cb.literal(true));
             }
         };
     }
 
-    public static Specification<Transport> hasTransportBrand(String transportBrand) {
+    public static Specification<Transport> hasBrandId(List<Long> brandId) {
         return (root, query, cb) -> {
-            if (transportBrand != null) {
+            if (brandId != null) {
                 Join<Object, Object> transportModelJoin = root.join("transportModel");
                 Join<Object, Object> typeBrandJoin = transportModelJoin.join("transportTypeBrand");
-                Join<Object, Object> brandJoin = typeBrandJoin.join("transportBrand");
-                return cb.equal(brandJoin.get("brand"), transportBrand);
+                Join<Object, Object> typeJoin = typeBrandJoin.join("transportBrand");
+                return typeJoin.get("id").in(brandId);
             } else {
                 return cb.isTrue(cb.literal(true));
             }
         };
     }
 
-    public static Specification<Transport> hasModelIn(List<String> models) {
+    public static Specification<Transport> hasModelId(List<Long> modelId) {
         return (root, query, cb) -> {
-            if (models != null) {
+            if (modelId != null) {
                 Join<Object, Object> transportModelJoin = root.join("transportModel");
-                return transportModelJoin.get("model").in(models);
+                return transportModelJoin.get("id").in(modelId);
             } else {
                 return cb.isTrue(cb.literal(true));
             }
         };
     }
 
-    public static Specification<Transport> yearFrom(Integer yearFrom) {
+    public static Specification<Transport> hasRegionId(List<Long> regionId) {
         return (root, query, cb) -> {
-            if (yearFrom != null) {
-                return cb.greaterThanOrEqualTo(root.get("year"), yearFrom);
+            if (regionId != null) {
+                Join<Object, Object> transportJoin = root.join("city");
+                Join<Object, Object> typeJoin = transportJoin.join("region");
+                return typeJoin.get("id").in(regionId);
             } else {
                 return cb.isTrue(cb.literal(true));
             }
         };
     }
 
-    public static Specification<Transport> yearTo(Integer yearTo) {
-
+    public static Specification<Transport> hasCityId(List<Long> cityId) {
         return (root, query, cb) -> {
-            if (yearTo != null) {
-                return cb.lessThanOrEqualTo(root.get("year"), yearTo);
+            if (cityId != null) {
+                Join<Object, Object> transportJoin = root.join("city");
+                return transportJoin.get("id").in(cityId);
             } else {
                 return cb.isTrue(cb.literal(true));
             }
         };
     }
 
-    public static Specification<Transport> hasRegionIn(List<String> regions) {
+    public static Specification<Transport> hasBodyTypeId(List<Long> bodyTypeId) {
         return (root, query, cb) -> {
-            if (regions != null) {
-                Join<Object, Object> transportCityJoin = root.join("city");
-                Join<Object, Object> regionJoin = transportCityJoin.join("region");
-                return regionJoin.get("description").in(regions);
+            if (bodyTypeId != null) {
+                Join<Object, Object> transportJoin = root.join("bodyType");
+                return transportJoin.get("id").in(bodyTypeId);
             } else {
                 return cb.isTrue(cb.literal(true));
             }
         };
     }
 
-    public static Specification<Transport> hasCityIn(List<String> city) {
+    public static Specification<Transport> hasFuelTypeId(List<Long> fuelTypeId) {
         return (root, query, cb) -> {
-            if (city != null) {
-                Join<Object, Object> transportCityJoin = root.join("city");
-                return transportCityJoin.get("description").in(city);
+            if (fuelTypeId != null) {
+                Join<Object, Object> transportJoin = root.join("fuelType");
+                return transportJoin.get("id").in(fuelTypeId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> hasDriveTypeId(List<Long> driveTypeId) {
+        return (root, query, cb) -> {
+            if (driveTypeId != null) {
+                Join<Object, Object> transportJoin = root.join("driveType");
+                return transportJoin.get("id").in(driveTypeId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> hasTransmissionId(List<Long> transmissionId) {
+        return (root, query, cb) -> {
+            if (transmissionId != null) {
+                Join<Object, Object> transportJoin = root.join("transmission");
+                return transportJoin.get("id").in(transmissionId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> hasColorId(List<Long> colorId) {
+        return (root, query, cb) -> {
+            if (colorId != null) {
+                Join<Object, Object> transportJoin = root.join("transportColor");
+                return transportJoin.get("id").in(colorId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> hasConditionId(List<Long> conditionId) {
+        return (root, query, cb) -> {
+            if (conditionId != null) {
+                Join<Object, Object> transportJoin = root.join("transportCondition");
+                return transportJoin.get("id").in(conditionId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> hasNumberAxlesId(List<Long> numberAxlesId) {
+        return (root, query, cb) -> {
+            if (numberAxlesId != null) {
+                Join<Object, Object> transportJoin = root.join("numberAxles");
+                return transportJoin.get("id").in(numberAxlesId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> hasProducingCountryId(List<Long> producingCountryId) {
+        return (root, query, cb) -> {
+            if (producingCountryId != null) {
+                Join<Object, Object> transportJoin = root.join("producingCountry");
+                return transportJoin.get("id").in(producingCountryId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> hasWheelConfigurationId(List<Long> wheelConfigurationId) {
+        return (root, query, cb) -> {
+            if (wheelConfigurationId != null) {
+                Join<Object, Object> transportJoin = root.join("wheelConfiguration");
+                return transportJoin.get("id").in(wheelConfigurationId);
             } else {
                 return cb.isTrue(cb.literal(true));
             }
@@ -110,60 +191,21 @@ public class TransportSpecifications {
         };
     }
 
-    public static Specification<Transport> hasBodyTypeIn(List<String> bodyTypes) {
+
+    public static Specification<Transport> yearFrom(Integer yearsFrom) {
         return (root, query, cb) -> {
-            if (bodyTypes != null) {
-                return root.get("bodyType").in(bodyTypes);
+            if (yearsFrom != null) {
+                return cb.greaterThanOrEqualTo(root.get("year"), yearsFrom);
             } else {
                 return cb.isTrue(cb.literal(true));
             }
         };
     }
 
-    public static Specification<Transport> hasFuelTypeIn(List<String> fuelTypes) {
+    public static Specification<Transport> yearTo(Integer yearsTo) {
         return (root, query, cb) -> {
-            if (fuelTypes != null) {
-                return root.get("fuelType").in(fuelTypes);
-            } else {
-                return cb.isTrue(cb.literal(true));
-            }
-        };
-    }
-
-    public static Specification<Transport> hasTransmissionIn(List<String> transmissions) {
-        return (root, query, cb) -> {
-            if (transmissions != null) {
-                return root.get("transmission").in(transmissions);
-            } else {
-                return cb.isTrue(cb.literal(true));
-            }
-        };
-    }
-
-    public static Specification<Transport> hasColorIn(List<String> colors) {
-        return (root, query, cb) -> {
-            if (colors != null) {
-                return root.get("color").in(colors);
-            } else {
-                return cb.isTrue(cb.literal(true));
-            }
-        };
-    }
-
-    public static Specification<Transport> hasConditionIn(List<String> conditions) {
-        return (root, query, cb) -> {
-            if (conditions != null) {
-                return root.get("condition").in(conditions);
-            } else {
-                return cb.isTrue(cb.literal(true));
-            }
-        };
-    }
-
-    public static Specification<Transport> hasDriveType(List<String> driveTypes) {
-        return (root, query, cb) -> {
-            if (driveTypes != null) {
-                return root.get("driveType").in(driveTypes);
+            if (yearsTo != null) {
+                return cb.lessThanOrEqualTo(root.get("year"), yearsTo);
             } else {
                 return cb.isTrue(cb.literal(true));
             }
@@ -210,7 +252,7 @@ public class TransportSpecifications {
         };
     }
 
-    public static Specification<Transport> engineDisplacementFrom(Integer engineDisplacementFrom) {
+    public static Specification<Transport> engineDisplacementFrom(Double engineDisplacementFrom) {
         return (root, query, cb) -> {
             if (engineDisplacementFrom != null) {
                 return cb.greaterThanOrEqualTo(root.get("engineDisplacement"), engineDisplacementFrom);
@@ -220,7 +262,7 @@ public class TransportSpecifications {
         };
     }
 
-    public static Specification<Transport> engineDisplacementTo(Integer engineDisplacementTo) {
+    public static Specification<Transport> engineDisplacementTo(Double engineDisplacementTo) {
         return (root, query, cb) -> {
             if (engineDisplacementTo != null) {
                 return cb.lessThanOrEqualTo(root.get("engineDisplacement"), engineDisplacementTo);
@@ -269,6 +311,28 @@ public class TransportSpecifications {
             }
         };
     }
+
+
+    public static Specification<Transport> loadCapacityFrom(Integer loadCapacityFrom) {
+        return (root, query, cb) -> {
+            if (loadCapacityFrom != null) {
+                return cb.greaterThanOrEqualTo(root.get("loadCapacity"), loadCapacityFrom);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
+    public static Specification<Transport> loadCapacityTo(Integer loadCapacityTo) {
+        return (root, query, cb) -> {
+            if (loadCapacityTo != null) {
+                return cb.lessThanOrEqualTo(root.get("loadCapacity"), loadCapacityTo);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
 
     public static Specification<Transport> hasTrade(Boolean trade) {
         return (root, query, cb) -> {
@@ -320,53 +384,16 @@ public class TransportSpecifications {
         };
     }
 
-    /// main page
-    public static Specification<Transport> hasTransportTypeId(Long transportTypeId) {
+    public static Specification<Transport> sortBy(SortBy sortBy, OrderBy orderBy) {
         return (root, query, cb) -> {
-            if (transportTypeId != null) {
-                Join<Object, Object> transportModelJoin = root.join("transportModel");
-                Join<Object, Object> typeBrandJoin = transportModelJoin.join("transportTypeBrand");
-                Join<Object, Object> typeJoin = typeBrandJoin.join("transportType");
-                return cb.equal(typeJoin.get("id"), transportTypeId);
-            } else {
-                return cb.isTrue(cb.literal(true));
+            if (sortBy != null && orderBy != null) {
+                if (sortBy == SortBy.ASC) {
+                    query.orderBy(cb.asc(root.get(orderBy.toString().toLowerCase())));
+                } else if (sortBy == SortBy.DESC) {
+                    query.orderBy(cb.desc(root.get(orderBy.toString().toLowerCase())));
+                }
             }
-        };
-    }
-
-    public static Specification<Transport> hasBrandId(Long brandId) {
-        return (root, query, cb) -> {
-            if (brandId != null) {
-                Join<Object, Object> transportModelJoin = root.join("transportModel");
-                Join<Object, Object> typeBrandJoin = transportModelJoin.join("transportTypeBrand");
-                Join<Object, Object> typeJoin = typeBrandJoin.join("transportBrand");
-                return cb.equal(typeJoin.get("id"), brandId);
-            } else {
-                return cb.isTrue(cb.literal(true));
-            }
-        };
-    }
-
-    public static Specification<Transport> hasModelId(List<Long> modelId) {
-        return (root, query, cb) -> {
-            if (modelId != null) {
-                Join<Object, Object> typeJoin = root.join("transportModel");
-                return typeJoin.get("id").in(modelId);
-            } else {
-                return cb.isTrue(cb.literal(true));
-            }
-        };
-    }
-
-    public static Specification<Transport> hasRegionId(List<Long> regionId) {
-        return (root, query, cb) -> {
-            if (regionId != null) {
-                Join<Object, Object> transportModelJoin = root.join("city");
-                Join<Object, Object> typeJoin = transportModelJoin.join("region");
-                return typeJoin.get("id").in(regionId);
-            } else {
-                return cb.isTrue(cb.literal(true));
-            }
+            return cb.isTrue(cb.literal(true));
         };
     }
 }

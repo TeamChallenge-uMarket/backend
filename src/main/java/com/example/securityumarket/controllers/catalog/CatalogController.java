@@ -17,17 +17,18 @@ import java.util.List;
 @Tag(name = "Catalog page", description = "catalog page endpoints")
 public class CatalogController {
     private final CatalogPageService catalogPageService;
-    //can be added to my favorite only registered users
-    //TODO need to check (tested)
+
     @PutMapping("/favoriteAdd/{carId}")
     public ResponseEntity<String> addFavorite(
             @PathVariable long carId) {
         return catalogPageService.addFavorite(carId);
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<ResponseSearchDTO>> findByMotorcycleFilter(
+    @GetMapping("/search/page/{page}/limit/{limit}/")
+    public ResponseEntity<List<ResponseSearchDTO>> searchTransports(
+            @PathVariable int page,
+            @PathVariable int limit,
             @ModelAttribute RequestSearchDTO requestSearchDTO) {
-        return catalogPageService.searchTransports(requestSearchDTO);
+        return catalogPageService.searchTransports(page, limit, requestSearchDTO);
     }
 }

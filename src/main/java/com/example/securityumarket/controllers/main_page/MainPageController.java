@@ -263,20 +263,4 @@ public class MainPageController {
     public ResponseEntity<List<WaterVehicleDTO>> getPopularWaterVehicles() {
         return mainPageService.getPopularWaterVehicles();
     }
-
-    @Operation(
-            summary = "Get list of transport by search parameters",
-            description = "This endpoint returns a list of transport by search parameters from the page."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseTransportDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
-    })
-    @GetMapping("/search")
-    public ResponseEntity<List<ResponseSearchDTO>> findCars(
-            @ModelAttribute RequestTransportSearchDTO requestSearch) {
-        return mainPageService.searchTransportByRequest(requestSearch);
-    }
 }
