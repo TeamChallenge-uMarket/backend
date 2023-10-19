@@ -31,6 +31,7 @@ public class TransportConverter {
                 .fuelType((transport.getFuelType() != null) ? transport.getFuelType().getFuelType() : null)
                 .engineDisplacement(transport.getEngineDisplacement())
                 .city((transport.getCity() != null) ? transport.getCity().getDescription() : null)
+                .fileUrl("https://res.cloudinary.com/de4bysqtm/image/upload/f_auto,q_auto/l52tzjkitkoy64ttdkmx")
                 .created(transport.getCreated())
                 .build();
     }

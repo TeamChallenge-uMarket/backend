@@ -22,9 +22,9 @@ public class FavoriteTransportService {
                 .orElseThrow(() -> new DataNotFoundException("Favorite transport"));
     }
 
-    public void addFavorite(Users users, Transport transport) {
+    public void addFavorite(Users authenticatedUser, Transport transport) {
         favoriteTransportDAO.save(FavoriteTransport.builder()
-                .user(users)
+                .user(authenticatedUser)
                 .transport(transport)
                 .build());
     }

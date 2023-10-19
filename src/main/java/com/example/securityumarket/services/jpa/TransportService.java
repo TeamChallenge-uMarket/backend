@@ -4,8 +4,6 @@ import com.example.securityumarket.dao.TransportDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
-import com.example.securityumarket.models.DTO.main_page.response.ResponseTransportDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.util.converter.*;
@@ -39,26 +37,6 @@ public class TransportService {
         return transportDAO.findNewTransports()
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("New transports"));
-    }
-
-
-    public List<ResponseTransportDTO> convertCarsListToDtoCarsList(List<Transport> newTransports) {
-        return newTransports.stream()
-                .map(car -> ResponseTransportDTO.builder()
-                        .transportId(car.getId())
-                        .transportModel(car.getTransportModel().getModel())
-                        .transportBrand(car.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand())
-                        .price(car.getPrice())
-                        .mileage(car.getMileage())
-                        .year(car.getYear())
-                        .region(car.getCity().getRegion().getDescription())
-                        .transmission(car.getTransmission().getTransmission())
-                        .fuelType(car.getFuelType().getFuelType())
-//                        .imgUrl(transportGalleryService.findMainFileByTransport(car.getId()))
-                        .imgUrl("https://res.cloudinary.com/de4bysqtm/image/upload/f_auto,q_auto/l52tzjkitkoy64ttdkmx")
-                        .created(car.getCreated().toString())
-                        .build())
-                .collect(Collectors.toList());
     }
 
     public Transport findTransportById(long carId) {
@@ -142,7 +120,6 @@ public class TransportService {
                         .and(numberOfSeatsTo(requestSearchDTO.getNumberOfSeatsTo()))
                         .and(loadCapacityFrom(requestSearchDTO.getLoadCapacityFrom()))
                         .and(loadCapacityTo(requestSearchDTO.getLoadCapacityTo()))
-
                         .and(hasTrade(requestSearchDTO.getTrade()))
                         .and(hasMilitary(requestSearchDTO.getMilitary()))
                         .and(hasUncleared(requestSearchDTO.getUncleared()))

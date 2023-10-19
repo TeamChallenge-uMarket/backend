@@ -33,4 +33,6 @@ public class ResponseSearchDTO {
     private String city;
 
     private LocalDateTime created;
+
+    private String fileUrl;
 }

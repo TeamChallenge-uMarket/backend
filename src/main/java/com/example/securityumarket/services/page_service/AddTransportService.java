@@ -37,7 +37,7 @@ public class AddTransportService {
         return cityService.findByRegionDescriptionAndDescription(region, city);
     }
 
-    private Transport buildCarFromRequestAddCarDTO(RequestAddTransportDTO requestAddTransportDTO) {
+    private Transport buildCarFromRequestAddCarDTO(RequestAddTransportDTO requestAddTransportDTO) { //TODO
         return Transport.builder()
                 .user(getUser())
                 .transportModel(getTransportModelFromRequestAddTransportDTO(requestAddTransportDTO.getModel()))

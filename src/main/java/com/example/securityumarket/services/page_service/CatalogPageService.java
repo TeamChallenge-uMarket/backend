@@ -28,7 +28,7 @@ public class CatalogPageService {
         Users authenticatedUser = userService.getAuthenticatedUser();
         Transport transport = transportService.findTransportById(carId);
         favoriteTransportService.addFavorite(authenticatedUser, transport);
-        return ResponseEntity.ok("added to favorite"); // may be need to refactor msg!
+        return ResponseEntity.ok("added to favorite");
 
     }
 

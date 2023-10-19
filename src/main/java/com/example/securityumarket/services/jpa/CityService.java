@@ -20,11 +20,6 @@ public class CityService {
                 .orElseThrow(() -> new DataNotFoundException(address));
     }
 
-    public void findByDescription(String city) {
-        cityDAO.findByDescription(city)
-                .orElseThrow(() -> new DataNotFoundException(city));
-    }
-
     public List<City> findByRegion(Long regionId) {
         return cityDAO.findAllByRegionId(regionId)
                 .filter(cities -> !cities.isEmpty())

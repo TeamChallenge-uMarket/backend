@@ -3,13 +3,13 @@ package com.example.securityumarket.models.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
 @Builder
-@Entity
-@Table(name = "favorite_transports")
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "favorite_transports")
 public class FavoriteTransport extends CreatedAtAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

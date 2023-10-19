@@ -2,14 +2,12 @@ package com.example.securityumarket.services.page_service;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

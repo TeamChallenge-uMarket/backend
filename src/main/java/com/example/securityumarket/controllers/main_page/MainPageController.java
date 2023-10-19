@@ -1,7 +1,6 @@
 package com.example.securityumarket.controllers.main_page;
 
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.main_page.request.RequestTransportSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.services.page_service.MainPageService;
@@ -123,7 +122,7 @@ public class MainPageController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseTransportDTO.class))),
+                    schema = @Schema(implementation = ResponseSearchDTO.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
     })
@@ -138,7 +137,7 @@ public class MainPageController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseTransportDTO.class))),
+                    schema = @Schema(implementation = ResponseSearchDTO.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
     })
@@ -153,7 +152,7 @@ public class MainPageController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseTransportDTO.class))),
+                    schema = @Schema(implementation = ResponseSearchDTO.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient Permissions", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
@@ -170,7 +169,7 @@ public class MainPageController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseTransportDTO.class))),
+                    schema = @Schema(implementation = ResponseSearchDTO.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient Permissions", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
