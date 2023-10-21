@@ -77,7 +77,7 @@ public class EmailUtil {
         LocalDateTime lastUpdate = user.getLastUpdate();
         if (lastUpdate != null) {
             LocalDateTime now = LocalDateTime.now().minus(CODE_EXPIRATION_TIME_MS, ChronoUnit.MILLIS);
-            return user.getRefreshToken().equals(token) &&   now.isBefore(lastUpdate);
+            return user.getRefreshToken().equals(token) && now.isBefore(lastUpdate);
         } else {
             throw new DataNotValidException("No recent updates for the user");
         }

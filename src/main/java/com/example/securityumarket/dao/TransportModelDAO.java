@@ -17,5 +17,5 @@ public interface TransportModelDAO extends JpaRepository<TransportModel, Long> {
     @Query("select cm from TransportModel cm where cm.transportTypeBrand.transportBrand.id =:brandId")
     Optional<List<TransportModel>> findAllByTransportBrand(@Param("brandId") long brandId);
 
-    Optional<TransportModel> findByModel(String model);
+    Optional<TransportModel> findById(Long id);
 }

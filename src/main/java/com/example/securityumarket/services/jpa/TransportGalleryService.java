@@ -6,6 +6,7 @@ import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.TransportGallery;
 import com.example.securityumarket.services.page_service.StorageService;
+import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,15 @@ public class TransportGalleryService {
 
     private final TransportGalleryDAO transportGalleryDAO;
 
-    private final StorageService storageService;
+    private final CloudinaryService cloudinaryService;
+
+//    private final StorageService storageService;
 
     public void uploadFiles(MultipartFile[] files, Transport transport) {
         for (int i = 0; i < files.length; i++) {
             MultipartFile file = files[i];
-            String fileName = storageService.uploadFileWithPublicRead(file).substring(16);
-            String fileUrl = storageService.getFileUrlFromPublicRead(fileName);
+            String fileName = cloudinaryService.uploadFileWithPublicRead(file);
+            String fileUrl = cloudinaryService.getOriginalUrl(fileName);
             boolean isMain = (i == 0);
             TransportGallery transportGallery = buildCarGallery(fileName, fileUrl, transport, isMain);
             save(transportGallery);
@@ -43,7 +46,7 @@ public class TransportGalleryService {
                         .url(fileUrl)
                         .isMain(isMain)
                         .build();
-            } else throw new DataNotValidException("The file name must not be empty and longer than 100 characters");
+            } else throw new DataNotValidException("Url must not be empty and longer than 500 characters");
         } else throw new DataNotValidException("The file name must not be empty and longer than 100 characters");
     }
 
@@ -55,9 +58,12 @@ public class TransportGalleryService {
 
     public String findMainFileByTransport(long carId) {
         return transportGalleryDAO.findMainFileByTransport(carId)
-                .orElse("The main photo of the transport was not found");//TODO Add file with this name
+                .orElse(getUrlImageNotFound());
     }
 
+    private String getUrlImageNotFound(){
+        return "https://res.cloudinary.com/de4bysqtm/image/upload/v1697906978/czkhxykmkfn92deqncp5.jpg";
+    }
     private void save(TransportGallery transportGallery) {
         transportGalleryDAO.save(transportGallery);
     }

@@ -181,7 +181,7 @@ public class MainPageController {
     }
 
     @Operation(
-            summary = "Get Popular Passenger Cars.",
+            summary = "TEST METHOD Get Popular Passenger Cars.",
             description = "This endpoint returns a list of popular passenger cars from the page")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
@@ -209,7 +209,7 @@ public class MainPageController {
     }
 
     @Operation(
-            summary = "Get Popular Trucks.",
+            summary = "TEST METHOD Get Popular Trucks.",
             description = "This endpoint returns a list of popular trucks from the page")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
@@ -223,7 +223,7 @@ public class MainPageController {
     }
 
     @Operation(
-            summary = "Get Popular Specialized Vehicles.",
+            summary = "TEST METHOD Get Popular Specialized Vehicles.",
             description = "This endpoint returns a list of popular specialized vehicles from the page")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
@@ -237,7 +237,7 @@ public class MainPageController {
     }
 
     @Operation(
-            summary = "Get Popular Agricultural Vehicles.",
+            summary = "TEST METHOD Get Popular Agricultural Vehicles.",
             description = "This endpoint returns a list of popular agricultural vehicles from the page")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
@@ -251,7 +251,7 @@ public class MainPageController {
     }
 
     @Operation(
-            summary = "Get Popular Water Vehicles.",
+            summary = "TEST METHOD Get Popular Water Vehicles.",
             description = "This endpoint returns a list of popular water vehicles from the page")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
