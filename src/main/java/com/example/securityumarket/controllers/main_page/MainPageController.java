@@ -74,7 +74,7 @@ public class MainPageController {
 
     @Operation(
             summary = "Retrieve models",
-            description = "Get a type of vehicle. The response is List of Transport models with id, brand,and description and status.")
+            description = "Get a type of vehicle. The response is List of Trans port models with id, brand,and description and status.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ResponseModelDTO.class))),
@@ -83,7 +83,8 @@ public class MainPageController {
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
     })
     @GetMapping("models")
-    public ResponseEntity<List<ResponseModelDTO>> getModelsByBrand(@RequestParam(required = false) Long transportTypeId, @RequestParam Long transportBrandId) {
+    public ResponseEntity<List<ResponseModelDTO>> getModelsByBrand(@RequestParam(required = false) Long transportTypeId,
+                                                                   @RequestParam Long transportBrandId) {
         return mainPageService.getModelsByTransportBrand(transportTypeId, transportBrandId);
     }
 
