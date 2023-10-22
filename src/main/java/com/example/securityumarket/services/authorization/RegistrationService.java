@@ -1,5 +1,6 @@
 package com.example.securityumarket.services.authorization;
 
+import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.EmailSendingException;
 import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
 import com.example.securityumarket.models.entities.Users;
@@ -36,7 +37,11 @@ public class RegistrationService {
 
     public ResponseEntity<String> resendCode(String email) {
         Users user = userService.findAppUserByEmail(email);
-        return sendEmailAndSaveUser(user);
+        if (user.isActive()) {
+            throw new DataNotValidException("Account with this email: " + email + "has already activated. You can login.");
+        } else {
+            return sendEmailAndSaveUser(user);
+        }
     }
 
 

@@ -8,6 +8,7 @@ import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,16 @@ public class FavoriteTransportService {
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("Favorite transport"));
     }
+
+    public Boolean isFavoriteByUser(Users user, Transport transport) {
+        return favoriteTransportDAO.existsByUserAndTransport(user, transport);
+    }
+
+    @Transactional
+    public void deleteByUserAndTransport(Users user, Transport transport) {
+        favoriteTransportDAO.deleteByUserAndTransport(user, transport);
+    }
+
 
     public void addFavorite(Users authenticatedUser, Transport transport) {
         favoriteTransportDAO.save(FavoriteTransport.builder()

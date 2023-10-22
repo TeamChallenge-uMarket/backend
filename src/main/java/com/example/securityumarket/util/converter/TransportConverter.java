@@ -3,7 +3,10 @@ package com.example.securityumarket.util.converter;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.entities.Transport;
+import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.services.jpa.FavoriteTransportService;
 import com.example.securityumarket.services.jpa.TransportGalleryService;
+import com.example.securityumarket.services.jpa.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +15,10 @@ import org.springframework.stereotype.Component;
 public class TransportConverter {
 
     private final TransportGalleryService transportGalleryService;
+
+    private final FavoriteTransportService favoriteTransportService;
+
+    private final UserService userService;
 
     public <T extends TransportDTO> T convertTransportToTypeDTO(Transport transport, TransportTypeConversionStrategy strategy) {
         T dto = strategy.createDTO(transport);
@@ -32,6 +39,7 @@ public class TransportConverter {
                 .engineDisplacement(transport.getEngineDisplacement())
                 .city((transport.getCity() != null) ? transport.getCity().getDescription() : null)
                 .fileUrl(transportGalleryService.findMainFileByTransport(transport.getId()))
+                .isFavorite(isFavoriteTransport(transport))
                 .created(transport.getCreated())
                 .build();
     }
@@ -61,6 +69,16 @@ public class TransportConverter {
         dto.setModel(transport.getTransportModel().getModel());
         dto.setBrand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand());
         return dto;
+    }
+
+    private boolean isFavoriteTransport(Transport transport) {
+        if (userService.isUserAuthenticated()) {
+            Users authenticatedUser = userService.getAuthenticatedUser();
+           return favoriteTransportService.isFavoriteByUser(authenticatedUser, transport);
+        }
+        else {
+            return false;
+        }
     }
 }
 
