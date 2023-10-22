@@ -22,7 +22,7 @@ import java.time.temporal.ChronoUnit;
 public class EmailUtil {
 
     public static final long CODE_EXPIRATION_TIME_MS = 5 * 60 * 1000; // 5 minutes
-    private static final String BASE_URL = "http://localhost:8080";
+    private static final String BASE_URL = "https://backend-production-7a95.up.railway.app";
     private static final String REQUEST_MAPPING_URL = "/api/v1/authorization";
 
 

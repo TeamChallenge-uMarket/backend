@@ -3,7 +3,6 @@ package com.example.securityumarket.services.page_service;
 import com.example.securityumarket.models.DTO.main_page.request.RequestAddTransportDTO;
 import com.example.securityumarket.models.entities.*;
 import com.example.securityumarket.services.jpa.*;
-import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
