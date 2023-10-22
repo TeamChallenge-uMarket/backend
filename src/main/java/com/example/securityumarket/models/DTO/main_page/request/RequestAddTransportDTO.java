@@ -15,77 +15,79 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class RequestAddTransportDTO {
 
-    @NotBlank(message = "model is required")
-    private String model;
+    @NotNull(message = "model is required")
+    private Long model;
 
     @Min(value = 1968, message = "year should not be earlier than 1968")
     @Max(value = 2023, message = "year should not be later than 2023")
     @NotNull(message = "year is required")
-    private int year;
+    private Integer year;
 
-    private int mileage;
+    private Integer mileage;
 
-    private String bodyType;
+    private Long bodyType;
 
-    @NotBlank(message = "city is required")
-    private String city;
+    @NotNull(message = "city is required")
+    private Long city;
 
-    @NotBlank(message = "region is required")
-    private String region;
-
-
-    @Pattern(regexp = "(^[0-9]{17}$)|^$", message = "Invalid vincode")
+    @Pattern(regexp = "(^[A-Z0-9]{17}$)|^$", message = "Invalid vincode")
     private String vincode;
 
     @Size(max = 2000, message
             = "the text should be no more than 2000 characters")
     private String description;
 
-    private String transmission;
+    private Long transmission;
 
-    private String fuelType;
+    private Long fuelType;
 
     @Min(value = 0, message = "fuel consumption in city should be a non-negative value")
     @Max(value = 50, message = "fuel consumption in city should be less then 50l per 100km")
-    private double consumptionCity;
+    private Double consumptionCity;
 
     @Min(value = 0, message = "fuel consumption on highway should be a non-negative value")
     @Max(value = 50, message = "fuel consumption on highway should be less then 50l per 100km")
-    private double consumptionHighway;
+    private Double consumptionHighway;
 
     @Min(value = 0, message = "fuel consumption in mixed should be a non-negative value")
     @Max(value = 50, message = "fuel consumption in mixed should be less then 50l per 100km")
-    private double consumptionMixed;
+    private Double consumptionMixed;
 
-    private double engineDisplacement;
+    private Double engineDisplacement;
 
-    private int enginePower;
+    private Integer enginePower;
 
-    private String driveType;
+    private Long driveType;
 
-    private int numberOfDoors;
+    private Integer numberOfDoors;
 
-    private int numberOfSeats;
+    private Integer numberOfSeats;
 
-    private String color;
+    private Long color;
 
-    private String importedFrom;
+    private Boolean accidentHistory;
 
-    private boolean accidentHistory;
-
-    private String condition;
+    private Long condition;
 
     @NotNull(message = "price is required")
     @Min(value = 0, message = "price should be a non-negative value")
     private BigDecimal price;
 
-    private boolean bargain;
+    private Boolean bargain;
 
-    private boolean trade;
+    private Boolean trade;
 
-    private boolean military;
+    private Boolean military;
 
-    private boolean installmentPayment;
+    private Boolean installmentPayment;
 
-    private boolean uncleared;
+    private Boolean uncleared;
+
+    private Integer loadCapacity;
+
+    private Long producingCountry;
+
+    private Long wheelConfiguration;
+
+    private Long numberAxles;
 }

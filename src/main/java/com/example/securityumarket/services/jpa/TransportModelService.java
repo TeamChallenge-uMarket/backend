@@ -14,9 +14,9 @@ public class TransportModelService {
 
     private final TransportModelDAO transportModelDAO;
 
-    public TransportModel findByModel(String model) {
-       return transportModelDAO.findByModel(model)
-                .orElseThrow(() -> new DataNotFoundException(model));
+    public TransportModel findById(Long modelId) {
+       return transportModelDAO.findById(modelId)
+                .orElseThrow(() -> new DataNotFoundException("Model"));
     }
 
     public List<TransportModel> findAllByTransportTypeAndBrand(long brandId, long typeId) {

@@ -85,7 +85,7 @@ public class RegistrationController {
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
             @ApiResponse(responseCode = "422", description = "Unprocessable Entity", content = @Content)
     })
-    @PutMapping("/verify-account")
+    @GetMapping("/verify-account")
     public ResponseEntity<String> verifyAccount(@RequestParam String email,
                                                 @RequestParam String token) {
         return registrationService.verifyAccount(email, token);

@@ -74,7 +74,7 @@ public class MainPageController {
 
     @Operation(
             summary = "Retrieve models",
-            description = "Get a type of vehicle. The response is List of Transport models with id, brand,and description and status.")
+            description = "Get a type of vehicle. The response is List of Trans port models with id, brand,and description and status.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ResponseModelDTO.class))),
@@ -83,7 +83,8 @@ public class MainPageController {
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
     })
     @GetMapping("models")
-    public ResponseEntity<List<ResponseModelDTO>> getModelsByBrand(@RequestParam(required = false) Long transportTypeId, @RequestParam Long transportBrandId) {
+    public ResponseEntity<List<ResponseModelDTO>> getModelsByBrand(@RequestParam(required = false) Long transportTypeId,
+                                                                   @RequestParam Long transportBrandId) {
         return mainPageService.getModelsByTransportBrand(transportTypeId, transportBrandId);
     }
 
@@ -180,7 +181,7 @@ public class MainPageController {
     }
 
     @Operation(
-            summary = "Get Popular Passenger Cars.",
+            summary = "TEST METHOD Get Popular Passenger Cars.",
             description = "This endpoint returns a list of popular passenger cars from the page")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
@@ -208,7 +209,7 @@ public class MainPageController {
     }
 
     @Operation(
-            summary = "Get Popular Trucks.",
+            summary = "TEST METHOD Get Popular Trucks.",
             description = "This endpoint returns a list of popular trucks from the page")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
@@ -222,7 +223,7 @@ public class MainPageController {
     }
 
     @Operation(
-            summary = "Get Popular Specialized Vehicles.",
+            summary = "TEST METHOD Get Popular Specialized Vehicles.",
             description = "This endpoint returns a list of popular specialized vehicles from the page")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
@@ -236,7 +237,7 @@ public class MainPageController {
     }
 
     @Operation(
-            summary = "Get Popular Agricultural Vehicles.",
+            summary = "TEST METHOD Get Popular Agricultural Vehicles.",
             description = "This endpoint returns a list of popular agricultural vehicles from the page")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
@@ -250,7 +251,7 @@ public class MainPageController {
     }
 
     @Operation(
-            summary = "Get Popular Water Vehicles.",
+            summary = "TEST METHOD Get Popular Water Vehicles.",
             description = "This endpoint returns a list of popular water vehicles from the page")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
