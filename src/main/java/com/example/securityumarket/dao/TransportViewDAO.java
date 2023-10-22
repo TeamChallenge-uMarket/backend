@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface TransportViewDAO extends JpaRepository<TransportView, Long> {
 
-    @Query("SELECT cw.transport FROM TransportView cw GROUP BY cw.transport ORDER BY count(cw.transport) DESC LIMIT 20")
+    @Query("SELECT cw.transport FROM TransportView cw GROUP BY cw.transport ORDER BY count(cw.transport) DESC LIMIT 54")
     Optional<List<Transport>> findPopularTransport();
 
     @Query("SELECT cw.transport FROM TransportView cw WHERE cw.user = :user ORDER BY cw.lastUpdate DESC ")

@@ -12,8 +12,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @CrossOrigin(origins = "*")
 @AllArgsConstructor
@@ -27,7 +25,7 @@ public class ResetPasswordController {
             summary = "Get Reset Password Page",
             description = "This endpoint returns the reset password page for the application."
     )
-    @GetMapping("")
+    @GetMapping("/page")
     public String getResetPasswordPage() {
         return "reset-password";
     }
@@ -65,7 +63,7 @@ public class ResetPasswordController {
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
             @ApiResponse(responseCode = "422", description = "Unprocessable Entity", content = @Content)
     })
-    @PutMapping("")
+    @GetMapping("")
     public ResponseEntity<String> verifyAccount(@RequestParam String email,
                                                 @RequestParam String token) {
         return resetPasswordService.verifyAccount(email, token);
