@@ -35,4 +35,6 @@ public class ResponseSearchDTO {
     private LocalDateTime created;
 
     private String fileUrl;
+
+    private Boolean isFavorite;
 }

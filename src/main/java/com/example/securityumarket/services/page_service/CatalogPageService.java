@@ -28,12 +28,19 @@ public class CatalogPageService {
         Users authenticatedUser = userService.getAuthenticatedUser();
         Transport transport = transportService.findTransportById(carId);
         favoriteTransportService.addFavorite(authenticatedUser, transport);
-        return ResponseEntity.ok("added to favorite");
+        return ResponseEntity.ok("added to favorites");
 
     }
 
     public ResponseEntity<List<ResponseSearchDTO>> searchTransports(int page, int limit, RequestSearchDTO requestSearchDTO) {
         List<Transport> transports = transportService.findTransportByParam(requestSearchDTO, PageRequest.of(page, limit));
         return ResponseEntity.ok(transportService.convertTransportListToTransportSearchDTO(transports));
+    }
+
+    public ResponseEntity<String> removeFavorite(long carId) {
+        Users user = userService.getAuthenticatedUser();
+        Transport transport = transportService.findTransportById(carId);
+        favoriteTransportService.deleteByUserAndTransport(user,transport);
+        return ResponseEntity.ok("removed from favorites");
     }
 }

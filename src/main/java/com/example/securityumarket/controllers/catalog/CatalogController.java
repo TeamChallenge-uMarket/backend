@@ -18,10 +18,16 @@ import java.util.List;
 public class CatalogController {
     private final CatalogPageService catalogPageService;
 
-    @PutMapping("/favoriteAdd/{carId}")
+    @PutMapping("/favorite-add/{carId}")
     public ResponseEntity<String> addFavorite(
             @PathVariable long carId) {
         return catalogPageService.addFavorite(carId);
+    }
+
+    @DeleteMapping("/favorite-remove/{carId}")
+    public ResponseEntity<String> removeFavorite(
+            @PathVariable long carId) {
+        return catalogPageService.removeFavorite(carId);
     }
 
     @GetMapping("/search/page/{page}/limit/{limit}/")

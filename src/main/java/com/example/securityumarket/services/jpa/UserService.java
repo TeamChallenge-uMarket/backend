@@ -41,6 +41,11 @@ public class UserService {
         return usersDAO.existsUsersByPhone(email);
     }
 
+    public boolean isUserAuthenticated() {
+        String authenticatedUserEmail = getAuthenticatedUserEmail();
+        return !authenticatedUserEmail.equals("anonymousUser");
+    }
+
     public void isUserPhoneUnique(String phone) {
         if (existsUsersByPhone(phone)) {
             throw new DuplicateDataException("User with " + phone + " already exists");
