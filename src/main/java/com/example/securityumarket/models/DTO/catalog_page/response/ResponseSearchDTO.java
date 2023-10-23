@@ -36,5 +36,4 @@ public class ResponseSearchDTO {
 
     private String fileUrl;
 
-    private Boolean isFavorite;
 }

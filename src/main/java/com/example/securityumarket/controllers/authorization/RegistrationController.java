@@ -62,7 +62,12 @@ public class RegistrationController {
     public ResponseEntity<String> register(@RequestBody
                                                @Valid
                                                @Parameter(description = "The request provided by the user to perform a registration",
-                                                       examples = @ExampleObject(value = "{\"username\": \"JohnDoe\"}"))
+                                                       examples = @ExampleObject(value = "{" +
+                                                               "\"username\": \"JohnDoe\"" +
+                                                               "\"email\": \"test@gmail.com\"" +
+                                                               "\"password\": \"Password11\"" +
+                                                               "\"confirmPassword\": \"Password11\"" +
+                                                               "}"))
                                                RegisterRequest registerRequest) {
         return registrationService.register(registerRequest);
     }

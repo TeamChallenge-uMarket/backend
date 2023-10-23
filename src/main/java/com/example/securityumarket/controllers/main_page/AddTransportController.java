@@ -33,9 +33,14 @@ public class AddTransportController {
     private final CloudinaryService cloudinaryService;
 
 
+    @Operation(description = "This endpoint allows users to add transport")
+    @ApiResponse(responseCode = "200", description = "The vehicle has been added successfully",
+            content = @Content(mediaType = "application/json"))
     @PostMapping("")
     public ResponseEntity<String> addTransportCloudinary(
+            @Parameter(description = "The file which contains the photo of the vehicle")
             @RequestPart("multipartFiles") MultipartFile[] multipartFiles,
+            @Parameter(description = "The details of the transport to be added")
             @ModelAttribute @Valid RequestAddTransportDTO requestAddTransportDTO) {
         return addTransportService.addCar(requestAddTransportDTO, multipartFiles);
     }

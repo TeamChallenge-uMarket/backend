@@ -84,7 +84,7 @@ public class ResetPasswordController {
     @PostMapping("")
     public ResponseEntity<String> resetPassword(@Parameter(description = "The request for resetting the user password," +
             " which contains the necessary credentials", examples = @ExampleObject
-            (value = "{\"email\": \"john_doe@gmail.com\", \"password\": \"12345\", confirmPassword: \"12345\"}"))
+            (value = "{\"email\": \"john_doe@gmail.com\", \"password\": \"NewPassword11\", confirmPassword: \"NewPassword11\"}"))
                                                 @RequestBody @Valid PasswordRequest passwordRequest) {
         return resetPasswordService.resetPassword(passwordRequest);
     }
