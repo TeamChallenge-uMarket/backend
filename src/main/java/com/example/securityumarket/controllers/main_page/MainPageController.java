@@ -191,85 +191,34 @@ public class MainPageController {
         return mainPageService.getFavoriteTransport();
     }
 
-    @Operation(
-            summary = "TEST METHOD Get Popular Passenger Cars.",
-            description = "This endpoint returns a list of popular passenger cars from the page")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = PassengerCarDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
-    })
+
     @GetMapping("/popular-passcars") //TEST METHOD
     public ResponseEntity<List<PassengerCarDTO>> getPopularPassCar() {
         return mainPageService.getPopularPassCar();
     }
 
-    @Operation(
-            summary = "Get Popular Motorcycles.",
-            description = "This endpoint returns a list of popular motorcycles from the page")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = MotorcycleDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
-    })
+
     @GetMapping("/popular-motorcycles") //TEST METHOD
     public ResponseEntity<List<MotorcycleDTO>> getPopularMotorcycles() {
         return mainPageService.getPopularMotorcycle();
     }
 
-    @Operation(
-            summary = "TEST METHOD Get Popular Trucks.",
-            description = "This endpoint returns a list of popular trucks from the page")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = TruckDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
-    })
     @GetMapping("/popular-trucks") //TEST METHOD
     public ResponseEntity<List<TruckDTO>> getPopularTrucks() {
         return mainPageService.getPopularTrucks();
     }
 
-    @Operation(
-            summary = "TEST METHOD Get Popular Specialized Vehicles.",
-            description = "This endpoint returns a list of popular specialized vehicles from the page")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = SpecializedVehicleDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
-    })
+
     @GetMapping("/popular-specializedvehicles") //TEST METHOD
     public ResponseEntity<List<SpecializedVehicleDTO>> getPopularSpecializedVehicles() {
         return mainPageService.getPopularSpecializedVehicles();
     }
 
-    @Operation(
-            summary = "TEST METHOD Get Popular Agricultural Vehicles.",
-            description = "This endpoint returns a list of popular agricultural vehicles from the page")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = AgriculturalDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
-    })
     @GetMapping("/popular-agricultural") //TEST METHOD
     public ResponseEntity<List<AgriculturalDTO>> getPopularAgricultural() {
         return mainPageService.getPopularAgricultural();
     }
 
-    @Operation(
-            summary = "TEST METHOD Get Popular Water Vehicles.",
-            description = "This endpoint returns a list of popular water vehicles from the page")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = WaterVehicleDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
-    })
     @GetMapping("/popular-watervehicles") //TEST METHOD
     public ResponseEntity<List<WaterVehicleDTO>> getPopularWaterVehicles() {
         return mainPageService.getPopularWaterVehicles();

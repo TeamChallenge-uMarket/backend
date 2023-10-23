@@ -70,12 +70,7 @@ public class LoginController {
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
     })
     @PostMapping("/refresh")  //TEST METHOD
-    public ResponseEntity<AuthenticationResponse> refreshToken(
-            @Parameter(description = "The refresh request provided by the user to get new access" +
-                    " and refresh tokens based on the old ones after their validity time expires.",
-                    examples = @ExampleObject(value =
-                            "{\"token\":\"N5UOXWodDyvXeqn6iE7-zyUeXOQyVjNssB_7TtMqLSY\", \"refreshToken\": \"jYmbaB6eAwDzbrSsPdROmbNfuhNcd5ONBGJd7DdUv9I\"}"))
-            @RequestBody Map<String, String> refreshRequest) {
+    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody Map<String, String> refreshRequest) {
         return ResponseEntity.ok(tokenRefreshService.refreshTokens(refreshRequest.get("refreshToken")));
     }
 }
