@@ -192,33 +192,39 @@ public class MainPageController {
     }
 
 
+    @Operation(hidden = true)
     @GetMapping("/popular-passcars") //TEST METHOD
     public ResponseEntity<List<PassengerCarDTO>> getPopularPassCar() {
         return mainPageService.getPopularPassCar();
     }
 
 
+    @Operation(hidden = true)
     @GetMapping("/popular-motorcycles") //TEST METHOD
     public ResponseEntity<List<MotorcycleDTO>> getPopularMotorcycles() {
         return mainPageService.getPopularMotorcycle();
     }
 
+    @Operation(hidden = true)
     @GetMapping("/popular-trucks") //TEST METHOD
     public ResponseEntity<List<TruckDTO>> getPopularTrucks() {
         return mainPageService.getPopularTrucks();
     }
 
 
+    @Operation(hidden = true)
     @GetMapping("/popular-specializedvehicles") //TEST METHOD
     public ResponseEntity<List<SpecializedVehicleDTO>> getPopularSpecializedVehicles() {
         return mainPageService.getPopularSpecializedVehicles();
     }
 
+    @Operation(hidden = true)
     @GetMapping("/popular-agricultural") //TEST METHOD
     public ResponseEntity<List<AgriculturalDTO>> getPopularAgricultural() {
         return mainPageService.getPopularAgricultural();
     }
 
+    @Operation(hidden = true)
     @GetMapping("/popular-watervehicles") //TEST METHOD
     public ResponseEntity<List<WaterVehicleDTO>> getPopularWaterVehicles() {
         return mainPageService.getPopularWaterVehicles();

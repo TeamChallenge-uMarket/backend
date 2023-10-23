@@ -58,6 +58,7 @@ public class LoginController {
         return ResponseEntity.ok(loginService.login(authenticationRequest));
     }
 
+    @Operation(hidden = true)
     @PostMapping("/refresh")  //TEST METHOD
     public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody Map<String, String> refreshRequest) {
         return ResponseEntity.ok(tokenRefreshService.refreshTokens(refreshRequest.get("refreshToken")));
