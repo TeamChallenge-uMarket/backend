@@ -24,16 +24,16 @@ public class EmailUtil {
 
 
     @Value("${mail.code.expiration.time}")
-    public static long CODE_EXPIRATION_TIME_MS;
+    public long CODE_EXPIRATION_TIME_MS;
 
     @Value("${mail.base.url}")
-    private static String BASE_URL;
+    private String BASE_URL;
 
     @Value("${mail.request.login-page.url}")
-    private static String REQUEST_LOGIN_MAPPING_URL;
+    private String REQUEST_LOGIN_MAPPING_URL;
 
     @Value("${mail.request.recover-password-page.url}")
-    private static String REQUEST_RECOVER_PASSWORD_MAPPING_URL;
+    private String REQUEST_RECOVER_PASSWORD_MAPPING_URL;
 
 
     private final JavaMailSender javaMailSender;
