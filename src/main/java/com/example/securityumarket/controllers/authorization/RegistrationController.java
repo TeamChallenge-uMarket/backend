@@ -2,13 +2,11 @@ package com.example.securityumarket.controllers.authorization;
 
 
 import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
-import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.services.authorization.RegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,23 +24,6 @@ public class RegistrationController {
 
     private final RegistrationService registrationService;
 
-    @Operation(
-            summary = "Get Registration Page",
-            description = "This endpoint returns the registration page for the application."
-    )
-    @GetMapping("")
-    public String getRegistrationPage() {
-        return "register";
-    }
-
-    @Operation(
-            summary = "Get Confirm Code Page",
-            description = "This endpoint returns the confirmation code page for the application."
-    )
-    @GetMapping("/resend-code")
-    public String getConfirmCodePage() {
-        return "resend-code";
-    }
 
     @Operation(
             summary = "User Registration",

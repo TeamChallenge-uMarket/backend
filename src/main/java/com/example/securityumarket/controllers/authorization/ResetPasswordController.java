@@ -23,23 +23,6 @@ import org.springframework.web.bind.annotation.*;
 public class ResetPasswordController {
     private ResetPasswordService resetPasswordService;
 
-    @Operation(
-            summary = "Get Reset Password Page",
-            description = "This endpoint returns the reset password page for the application."
-    )
-    @GetMapping("/page")
-    public String getResetPasswordPage() {
-        return "reset-password";
-    }
-
-    @Operation(
-            summary = "Get Reset Password Form Page",
-            description = "This endpoint returns the reset password form page for the application."
-    )
-    @GetMapping("/form")
-    public String getConfirmCodePage() {
-        return "reset-password form";
-    }
 
     @Operation(
             summary = "Send Reset Password Code",

@@ -27,24 +27,6 @@ public class MainPageController {
 
     private final MainPageService mainPageService;
 
-    @Operation(
-            summary = "Get Login Page",
-            description = "This endpoint redirects users to the login page."
-    )
-    @GetMapping("/login")
-    public String getLoginPage() {
-        return "redirect:/api/v1/authorization/login";
-    }
-
-    @Operation(
-            summary = "Get Add Car Page",
-            description = "This endpoint returns the 'add car' page for the application."
-    )
-    @GetMapping("/add-car")
-    public String getAddCarPage() {
-        return "add-car";
-    }
-
 
     @Operation(
             summary = "Retrieve types",

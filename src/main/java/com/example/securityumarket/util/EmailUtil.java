@@ -7,6 +7,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -21,9 +22,18 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class EmailUtil {
 
-    public static final long CODE_EXPIRATION_TIME_MS = 5 * 60 * 1000; // 5 minutes
-    private static final String BASE_URL = "https://backend-production-7a95.up.railway.app";
-    private static final String REQUEST_MAPPING_URL = "/api/v1/authorization";
+
+    @Value("${mail.code.expiration.time}")
+    public static long CODE_EXPIRATION_TIME_MS;
+
+    @Value("${mail.base.url}")
+    private static String BASE_URL;
+
+    @Value("${mail.request.login-page.url}")
+    private static String REQUEST_LOGIN_MAPPING_URL;
+
+    @Value("${mail.request.recover-password-page.url}")
+    private static String REQUEST_RECOVER_PASSWORD_MAPPING_URL;
 
 
     private final JavaMailSender javaMailSender;
@@ -35,8 +45,8 @@ public class EmailUtil {
         String senderName = "uAuto";
         String subject = "Verify account";
         String messageText = String.format(
-                "<div><a href=\"%s%s/register/verify-account?email=%s&token=%s\" target=\"_blank\">click link to verify</a></div>",
-                BASE_URL,REQUEST_MAPPING_URL, email, token
+                "<div><a href=\"%s%s?email=%s&token=%s\" target=\"_blank\">click link to verify</a></div>",
+                BASE_URL,REQUEST_LOGIN_MAPPING_URL, email, token
         );
 
         MimeMessage mimeMessage = createAndConfigureMimeMessage(email, senderEmail, senderName, subject, messageText);
@@ -49,8 +59,8 @@ public class EmailUtil {
         String senderName = "uAuto";
         String subject = "Reset password account";
         String messageText = String.format(
-                "<div><a href=\"%s%s/reset-password?email=%s&token=%s\" target=\"_blank\">click link to reset password</a></div>",
-                BASE_URL,REQUEST_MAPPING_URL, email, token
+                "<div><a href=\"%s%s?email=%s&token=%s\" target=\"_blank\">click link to reset password</a></div>",
+                BASE_URL,REQUEST_RECOVER_PASSWORD_MAPPING_URL, email, token
         );
 
         MimeMessage mimeMessage = createAndConfigureMimeMessage(email, senderEmail, senderName, subject, messageText);

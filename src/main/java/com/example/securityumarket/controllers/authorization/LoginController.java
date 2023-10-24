@@ -7,7 +7,6 @@ import com.example.securityumarket.services.security.TokenRefreshService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,14 +27,6 @@ public class LoginController {
 
     private final TokenRefreshService tokenRefreshService; //TEST VARIABLE
 
-    @Operation(
-            summary = "Get Login Page",
-            description = "This endpoint returns the login page for the application."
-    )
-    @GetMapping("")
-    public String getLoginPage() {
-        return "login";
-    }
 
     @Operation(
             summary = "User Login",
