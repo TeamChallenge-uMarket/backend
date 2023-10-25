@@ -2,18 +2,27 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.DuplicateDataException;
 import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UsersDAO usersDAO;
+
+    @Value("${mail.code.expiration.time}")
+    private long codeExpirationTimeMs;
+
 
     private String getAuthenticatedUserEmail() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
@@ -57,4 +66,12 @@ public class UserService {
             throw new DuplicateDataException("User with " + email + " already exists");
         }
     }
+
+    @Scheduled(cron = "0 0/30 * * * *")
+    @Transactional
+    public void deleteInactiveUsers() {
+        LocalDateTime thirtyMinutesAgo = LocalDateTime.now().minus(codeExpirationTimeMs, ChronoUnit.MILLIS);
+        usersDAO.deleteByActiveFalseAndCreatedDateBefore(thirtyMinutesAgo);
+    }
+
 }
