@@ -6,6 +6,8 @@ import com.example.securityumarket.models.entities.WheelConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class WheelConfigurationService {
@@ -15,5 +17,9 @@ public class WheelConfigurationService {
     public WheelConfiguration findById(Long wheelConfigurationId) {
        return wheelConfigurationDAO.findById(wheelConfigurationId)
                 .orElseThrow(() -> new DataNotFoundException("Wheel configuration by id"));
+    }
+
+    public List<WheelConfiguration> findAll() {
+        return wheelConfigurationDAO.findAll();
     }
 }
