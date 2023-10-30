@@ -1,14 +1,14 @@
-package com.example.securityumarket.util.converter;
+package com.example.securityumarket.util.converter.transposrt_type;
 
-import com.example.securityumarket.models.DTO.transports.LoadBearingVehicleDTO;
+import com.example.securityumarket.models.DTO.transports.impl.PassengerCarDTO;
 import com.example.securityumarket.models.entities.Transport;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LoadBearingVehicleConversionStrategy implements TransportTypeConversionStrategy {
+public class MotorizedFourWheeledVehicleConversionStrategy implements TransportTypeConversionStrategy {
     @Override
-    public LoadBearingVehicleDTO createDTO(Transport transport) {
-        return LoadBearingVehicleDTO.builder()
+    public PassengerCarDTO createDTO(Transport transport) {
+        return PassengerCarDTO.builder()
                 .transmission(transport.getTransmission().getTransmission())
                 .fuelType(transport.getFuelType().getFuelType())
                 .fuelConsumptionMixed(transport.getFuelConsumptionMixed())
@@ -20,8 +20,6 @@ public class LoadBearingVehicleConversionStrategy implements TransportTypeConver
                 .fuelConsumptionHighway(transport.getFuelConsumptionHighway())
                 .numberOfSeats(transport.getNumberOfSeats())
                 .numberOfDoors(transport.getNumberOfDoors())
-                .loadCapacity(transport.getLoadCapacity())
-                .wheelConfiguration(transport.getWheelConfiguration().getWheelConfiguration())
                 .build();
     }
 }

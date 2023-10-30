@@ -4,6 +4,7 @@ import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.models.DTO.transports.impl.*;
+import com.example.securityumarket.models.entities.City;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.*;
@@ -127,8 +128,8 @@ public class MainPageService {
                 .collect(Collectors.toList()));
     }
 
-    public ResponseEntity<List<ResponseCityDTO>> getCities(Long regionId) {
-        return ResponseEntity.ok(cityService.findByRegion(regionId).stream().map(city -> ResponseCityDTO.builder()
+    public ResponseEntity<List<ResponseCityDTO>> getCities(List<Long> regionId) {
+        return ResponseEntity.ok(cityService.findAllByRegionId(regionId).stream().map(city -> ResponseCityDTO.builder()
                         .cityId(city.getId())
                         .city(city.getDescription())
                         .region(city.getRegion().getDescription())

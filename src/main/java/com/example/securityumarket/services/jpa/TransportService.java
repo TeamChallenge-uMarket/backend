@@ -6,12 +6,13 @@ import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearch
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.util.converter.*;
+import com.example.securityumarket.util.converter.transposrt_type.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import static com.example.securityumarket.models.specifications.TransportSpecifications.*;

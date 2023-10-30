@@ -4,6 +4,7 @@ import com.example.securityumarket.dao.TransportBrandDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.entities.Region;
 import com.example.securityumarket.models.entities.TransportBrand;
+import com.example.securityumarket.models.specifications.TransportBrandSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +28,8 @@ public class TransportBrandService {
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("Transport brands by type"));
     }
- }
+
+    public List<TransportBrand> findAllSpecification(Long transportTypeId) {
+        return transportBrandDAO.findAll(TransportBrandSpecifications.hasTransportTypeId(transportTypeId));
+    }
+}

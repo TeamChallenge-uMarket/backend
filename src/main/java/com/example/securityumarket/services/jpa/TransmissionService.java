@@ -6,6 +6,9 @@ import com.example.securityumarket.models.entities.Transmission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class TransmissionService {
@@ -17,4 +20,7 @@ public class TransmissionService {
                 .orElseThrow(() -> new DataNotFoundException("Transmission by id"));
     }
 
+    public List<Transmission> findAll() {
+        return transmissionDAO.findAll();
+    }
 }
