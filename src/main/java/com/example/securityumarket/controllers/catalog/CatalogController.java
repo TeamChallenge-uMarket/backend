@@ -4,6 +4,7 @@ import com.example.securityumarket.models.DTO.catalog_page.request.RequestFilter
 import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseDefaultTransportParameter;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
+import com.example.securityumarket.models.DTO.catalog_page.response.impl.ResponseLoadBearingVehicleParameter;
 import com.example.securityumarket.services.page_service.CatalogPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -61,8 +62,11 @@ public class CatalogController {
     }
 
     @Operation(description = "This endpoint returns a list of values for a vehicle search filter using different filter queries")
-    @ApiResponse(responseCode = "200", description = "list of parameters retrieved successfully",
-            content = @Content(schema = @Schema(implementation = RequestSearchDTO.class)))
+    @ApiResponse(responseCode = "200", description = "List of parameters retrieved successfully",
+            content = @Content(schema = @Schema(oneOf = {
+                    ResponseDefaultTransportParameter.class,
+                    ResponseLoadBearingVehicleParameter.class
+            })))
     @GetMapping("/get-param")
     public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(@ModelAttribute RequestFilterParam requestFilterParam) {
         return catalogPageService.getFilterParameters(requestFilterParam);
