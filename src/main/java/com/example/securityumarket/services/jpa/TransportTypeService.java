@@ -21,4 +21,9 @@ public class TransportTypeService {
         }
         return transportTypes;
     }
+
+    public TransportType findById(long transportTypeId) {
+        return transportTypeDAO.findById(transportTypeId)
+                .orElseThrow(() -> new DataNotFoundException("Transport type by id"));
+    }
 }

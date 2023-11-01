@@ -105,7 +105,8 @@ public class MainPageController {
     })
     @GetMapping("/cities")
     public ResponseEntity<List<ResponseCityDTO>> getCities(
-            @Parameter(description = "The ID of the region") @RequestParam Long regionId) {
+            @Parameter(description = "The ID of the region")
+            @RequestParam (required = false) List<Long> regionId) {
         return mainPageService.getCities(regionId);
     }
 

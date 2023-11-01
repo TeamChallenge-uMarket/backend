@@ -6,6 +6,9 @@ import com.example.securityumarket.models.entities.ProducingCountry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class ProducingCountryService {
@@ -15,5 +18,9 @@ public class ProducingCountryService {
     public ProducingCountry findById(Long producingCountryId) {
         return producingCountryDAO.findById(producingCountryId)
                 .orElseThrow(() -> new DataNotFoundException("Country by id"));
+    }
+
+    public List<ProducingCountry> findAll() {
+        return producingCountryDAO.findAll();
     }
 }

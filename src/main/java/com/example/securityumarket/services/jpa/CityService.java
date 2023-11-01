@@ -3,6 +3,7 @@ package com.example.securityumarket.services.jpa;
 import com.example.securityumarket.dao.CityDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.entities.City;
+import com.example.securityumarket.models.specifications.CitySpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +29,9 @@ public class CityService {
     public City findById(Long cityId) {
         return cityDAO.findById(cityId)
                 .orElseThrow(() -> new DataNotFoundException("City by id"));
+    }
+
+    public List<City> findAllByRegionId(List<Long> regionId) {
+        return cityDAO.findAll(CitySpecifications.hasRegionId(regionId));
     }
 }

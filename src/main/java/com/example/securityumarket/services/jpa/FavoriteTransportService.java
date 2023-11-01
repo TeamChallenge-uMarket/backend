@@ -6,7 +6,6 @@ import com.example.securityumarket.models.entities.FavoriteTransport;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +27,7 @@ public class FavoriteTransportService {
     }
 
     @Transactional
-    public void deleteByUserAndTransport(Users user, Transport transport) {
+    public void deleteFromFavoriteByUserAndTransport(Users user, Transport transport) {
         favoriteTransportDAO.deleteByUserAndTransport(user, transport);
     }
 

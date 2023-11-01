@@ -1,6 +1,8 @@
 package com.example.securityumarket.controllers.catalog;
 
+import com.example.securityumarket.models.DTO.catalog_page.request.RequestFilterParam;
 import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
+import com.example.securityumarket.models.DTO.catalog_page.response.ResponseDefaultTransportParameter;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.services.page_service.CatalogPageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,7 +47,7 @@ public class CatalogController {
 
     @Operation(description = "This endpoint allows to search for vehicles using various filtering queries")
     @ApiResponse(responseCode = "200", description = "list of vehicles retrieved successfully",
-            content = @Content(schema = @Schema(implementation = RequestSearchDTO.class)))
+            content = @Content(schema = @Schema(implementation = ResponseSearchDTO.class)))
     @GetMapping("/search/page/{page}/limit/{limit}/")
     public ResponseEntity<List<ResponseSearchDTO>> searchTransports(
             @Parameter(description = "The number of the page to be displayed")
@@ -56,5 +58,13 @@ public class CatalogController {
                     examples = @ExampleObject(value = ""))
             @ModelAttribute RequestSearchDTO requestSearchDTO) {
         return catalogPageService.searchTransports(page, limit, requestSearchDTO);
+    }
+
+    @Operation(description = "This endpoint returns a list of values for a vehicle search filter using different filter queries")
+    @ApiResponse(responseCode = "200", description = "list of parameters retrieved successfully",
+            content = @Content(schema = @Schema(implementation = RequestSearchDTO.class)))
+    @GetMapping("/get-param")
+    public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(@ModelAttribute RequestFilterParam requestFilterParam) {
+        return catalogPageService.getFilterParameters(requestFilterParam);
     }
 }
