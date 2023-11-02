@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -22,12 +23,16 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource("classpath:application-test.properties")
 class LoginControllerTest {
+
     @LocalServerPort
     private int port;
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static final String LOGIN_URL = "/api/v1/authorization/login";
+    @Value("${localhost.url}")
+    private String LOCALHOST_URL;
+    @Value("${login.url}")
+    private String LOGIN_URL;
 
     @Container
     @ServiceConnection
@@ -44,7 +49,7 @@ class LoginControllerTest {
     @Sql(value = {"delete_users.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void loginWithValidCredentials_Ok() {
-        String url = "http://localhost:" + port + LOGIN_URL;
+        String url = LOCALHOST_URL + port + LOGIN_URL;
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
         authenticationRequest.setEmail("dmytro@gmail.com");
         authenticationRequest.setPassword("ABCDE12345");
@@ -56,7 +61,7 @@ class LoginControllerTest {
     @Sql(value = {"delete_users.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     void loginWithInvalidCredentials_Failure() {
-        String url = "http://localhost:" + port + LOGIN_URL;
+        String url = LOCALHOST_URL + port + LOGIN_URL;
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
         authenticationRequest.setEmail("dmytro@gmail.com");
         authenticationRequest.setPassword("wrong_password");

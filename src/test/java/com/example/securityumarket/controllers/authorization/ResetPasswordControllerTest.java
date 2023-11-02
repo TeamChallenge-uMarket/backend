@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -31,7 +32,12 @@ class ResetPasswordControllerTest {
     private TestRestTemplate restTemplate;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    private static final String RESET_PASSWORD_URL = "/api/v1/authorization/reset-password";
+
+    @Value("${localhost.url}")
+    private String LOCALHOST_URL;
+
+    @Value("${reset-password.url}")
+    private String RESET_PASSWORD_URL;
 
     @Container
     @ServiceConnection
@@ -48,7 +54,7 @@ class ResetPasswordControllerTest {
     @Test
     public void sendCode_Ok() {
         String email = "dmytro@gmail.com";
-        String url = "http://localhost:" + port + RESET_PASSWORD_URL + "/send-code" + "?email=" + email;
+        String url = LOCALHOST_URL + port + RESET_PASSWORD_URL + "/send-code" + "?email=" + email;
         HttpEntity<String> requestEntity = new HttpEntity<>(email);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -66,7 +72,7 @@ class ResetPasswordControllerTest {
     @Test
     public void sendCodeNonExistentUser_Failure() {
         String email = "petro@gmail.com";
-        String url = "http://localhost:" + port + RESET_PASSWORD_URL + "/send-code" + "?email=" + email;
+        String url = LOCALHOST_URL + port + RESET_PASSWORD_URL + "/send-code" + "?email=" + email;
         HttpEntity<String> requestEntity = new HttpEntity<>(email);
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -82,7 +88,7 @@ class ResetPasswordControllerTest {
     @Sql(value = {"delete_users.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void resetPassword_Ok() {
-        String url = "http://localhost:" + port + RESET_PASSWORD_URL;
+        String url = LOCALHOST_URL + port + RESET_PASSWORD_URL;
 
         PasswordRequest passwordRequest = new PasswordRequest();
         passwordRequest.setEmail("dmytro@gmail.com");
@@ -96,7 +102,7 @@ class ResetPasswordControllerTest {
     @Sql(value = {"delete_users.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void resetPasswordWeakPassword_Failure() {
-        String url = "http://localhost:" + port + RESET_PASSWORD_URL;
+        String url = LOCALHOST_URL + port + RESET_PASSWORD_URL;
 
         PasswordRequest passwordRequest = new PasswordRequest();
         passwordRequest.setEmail("dmytro@gmail.com");
@@ -110,7 +116,7 @@ class ResetPasswordControllerTest {
     @Sql(value = {"delete_users.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     @Test
     public void resetPasswordNonExistentEmail_Failure() {
-        String url = "http://localhost:" + port + RESET_PASSWORD_URL;
+        String url = LOCALHOST_URL + port + RESET_PASSWORD_URL;
 
         PasswordRequest passwordRequest = new PasswordRequest();
         passwordRequest.setEmail("petro@gmail.com");

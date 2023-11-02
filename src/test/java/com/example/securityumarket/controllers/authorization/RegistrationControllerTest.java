@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -26,7 +27,12 @@ class RegistrationControllerTest {
     private int port;
     @Autowired
     private TestRestTemplate restTemplate;
-    private static final String URL = "/api/v1/authorization/register";
+
+    @Value("${localhost.url}")
+    private String LOCALHOST_URL;
+
+    @Value("${register.url}")
+    private String REGISTER_URL;
 
     @Container
     @ServiceConnection
@@ -41,7 +47,7 @@ class RegistrationControllerTest {
     @Test
     @Rollback
     void validDataRegister_Ok() {
-        String url = "http://localhost:" + port + URL;
+        String url = LOCALHOST_URL + port + REGISTER_URL;
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setName("Dmytro");
         registerRequest.setEmail("dmytro@gmail.com");
@@ -54,7 +60,7 @@ class RegistrationControllerTest {
     @Test
     @Rollback
     void duplicateDataRegister_Failure() {
-        String url = "http://localhost:" + port + URL;
+        String url = LOCALHOST_URL + port + REGISTER_URL;
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setName("Dmytro");
         registerRequest.setEmail("dmytro@gmail.com");
@@ -67,7 +73,7 @@ class RegistrationControllerTest {
 
     @Test
     void invalidDataRegister_Failure() {
-        String url = "http://localhost:" + port + URL;
+        String url = LOCALHOST_URL + port + REGISTER_URL;
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setName("Dmytro");
         registerRequest.setEmail("dmytro@gmail.com");
