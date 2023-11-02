@@ -15,6 +15,9 @@ databaseChangeLog:
         - addNotNullConstraint:
             columnName: password
             tableName: users
+        - addUniqueConstraint:
+            columnNames: phone
+            tableName: users
         - addNotNullConstraint:
-            columnName: phone
+            columnName: refresh_token
             tableName: users
