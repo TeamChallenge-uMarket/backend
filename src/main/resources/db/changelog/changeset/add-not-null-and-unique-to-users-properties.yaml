@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-not-null-to-users-properties
+      author: Dmytro
+      changes:
+        - addNotNullConstraint:
+            columnName: id
+            tableName: users
+        - addNotNullConstraint:
+            columnName: name
+            tableName: users
+        - addNotNullConstraint:
+            columnName: email
+            tableName: users
+        - addNotNullConstraint:
+            columnName: password
+            tableName: users
+        - addNotNullConstraint:
+            columnName: phone
+            tableName: users
