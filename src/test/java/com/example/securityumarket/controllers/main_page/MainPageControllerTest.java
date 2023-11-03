@@ -3,6 +3,7 @@ package com.example.securityumarket.controllers.main_page;
 import com.example.securityumarket.TestBean;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -82,6 +83,71 @@ class MainPageControllerTest {
     void testGetBrandsByTransportType_NotFound(Long transportTypeId) throws Exception {
         this.mockMvc.perform(get(MAIN_URL + "/brands")
                         .param("transportTypeId", String.valueOf(transportTypeId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testGetModelsByBrand() throws Exception {
+        this.mockMvc.perform(get(MAIN_URL + "/models")
+                        .param("transportBrandId", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(get(MAIN_URL + "/models")
+                        .param("transportBrandId", "1")
+                        .param("transportTypeId", "invalid_type_id")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(get(MAIN_URL + "/models")
+                        .param("transportBrandId", "122")
+                        .param("transportTypeId", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @CsvSource({
+            "1, 1",
+            "1, 2",
+            "1, 3",
+            "1, 10",
+            "1, 40"
+    })
+    @ParameterizedTest
+    void testGetModelsByBrand(Long transportTypeId, Long transportBrandId) throws Exception {
+        mockMvc.perform(get(MAIN_URL + "/models")
+                        .param("transportTypeId", String.valueOf(transportTypeId))
+                        .param("transportBrandId", String.valueOf(transportBrandId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @CsvSource({
+            "1,",
+            "2,"
+    })
+    @ParameterizedTest
+    void testGetModelsByBrand_BadRequest(Long transportTypeId, Long transportBrandId) throws Exception {
+        mockMvc.perform(get(MAIN_URL + "/models")
+                        .param("transportTypeId", String.valueOf(transportTypeId))
+                        .param("transportBrandId", String.valueOf(transportBrandId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+    @CsvSource({
+            "1, 100",
+            "2, 30",
+            "3, 30",
+            "4, 30"
+    })
+    @ParameterizedTest
+    void testGetModelsByBrand_NotFound(Long transportTypeId, Long transportBrandId) throws Exception {
+        mockMvc.perform(get(MAIN_URL + "/models")
+                        .param("transportTypeId", String.valueOf(transportTypeId))
+                        .param("transportBrandId", String.valueOf(transportBrandId))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
