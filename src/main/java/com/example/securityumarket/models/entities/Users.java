@@ -34,7 +34,7 @@ public class Users extends DateAudit implements UserDetails {
     @Column(name = "phone", unique = true)
     private String phone;
 
-    @Column(name = "refresh_token", nullable = false)
+    @Column(name = "refresh_token")
     private String refreshToken;
 
     @Column(name = "active", nullable = false)

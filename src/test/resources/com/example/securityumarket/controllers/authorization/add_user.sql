@@ -1,2 +1,2 @@
-INSERT INTO users (name, email, password, active, created, refresh_token)
-VALUES ('Dmytro', 'dmytro@gmail.com', '$2a$10$vbncBqmJYd44egkrPKiFnOVzmoFjxqeCxeLlv0xmrqpln6lkjAusq', TRUE, NOW(), 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaW1vbnR5MjAwM0BnbWFpbC5jb20iLCJpYXQiOjE2OTg5NTg0OTcsImV4cCI6MTY5OTA0NDg5N30.pQ_Wnvr00Z5dJ2zAkJAWJzeHIQjhZfCWVy6btfTBLrg');
+INSERT INTO users (name, email, password, active, created)
+VALUES ('Dmytro', 'dmytro@gmail.com', '$2a$10$vbncBqmJYd44egkrPKiFnOVzmoFjxqeCxeLlv0xmrqpln6lkjAusq', TRUE, NOW()/*, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaW1vbnR5MjAwM0BnbWFpbC5jb20iLCJpYXQiOjE2OTg5NTg0OTcsImV4cCI6MTY5OTA0NDg5N30.pQ_Wnvr00Z5dJ2zAkJAWJzeHIQjhZfCWVy6btfTBLrg'*/);

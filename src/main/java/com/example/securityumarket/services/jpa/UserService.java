@@ -4,17 +4,15 @@ import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DuplicateDataException;
 import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
-import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
-import com.example.securityumarket.models.entities.UserRole;
 import com.example.securityumarket.models.entities.Users;
 import java.util.Optional;
+
+import com.example.securityumarket.services.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +24,7 @@ import java.time.temporal.ChronoUnit;
 public class UserService {
     private final UsersDAO usersDAO;
     private final CityService cityService;
+    private final JwtService jwtService;
 
     @Value("${mail.code.expiration.time}")
     private long codeExpirationTimeMs;
@@ -83,49 +82,49 @@ public class UserService {
 
         Users user = usersOptional.get();
 
-        return ResponseEntity.ok(toDto(user));
-    }
-
-    private Users getCurrentUser() {
-        return usersDAO.findAppUserByEmail(getAuthenticatedUserEmail())
-            .orElseThrow();
+        return ResponseEntity.ok(buildUserDetailsDTOFromUser(user));
     }
 
     public ResponseEntity<String> updateUserDetails(UserDetailsDTO dto) {
-        Users currentUser = getCurrentUser();
-
-        Users users = fromDto(dto);
+        Users currentUser = getAuthenticatedUser();
+        Users users = buildUserFromUserDetailsDTO(dto);
         users.setId(currentUser.getId());
         users.setPassword(currentUser.getPassword());
-        users.setRefreshToken(currentUser.getRefreshToken());
-
+        jwtService.generateToken(currentUser);
+        String refreshToken = jwtService.generateRefreshToken(currentUser);
+        users.setRefreshToken(refreshToken);
 
         usersDAO.save(users);
         return ResponseEntity.ok("User details updated successfully");
     }
 
-    private Users fromDto(UserDetailsDTO dto) {
+    private Users buildUserFromUserDetailsDTO(UserDetailsDTO dto) {
         return Users.builder()
-            .id(dto.getId())
             .name(dto.getName())
             .email(dto.getEmail())
             .city((dto.getCityId() != null) ? (cityService.findById(dto.getCityId())) : null)
-            .photoUrl(dto.getPhotoUrl())
-            .phone(normalizePhoneNumber(dto.getPhone()))
+            .photoUrl(dto.getPhotoUrl())//TODO
+            .phone((dto.getPhone() != null) ? normalizePhoneNumber(dto.getPhone()) : null)
+            .active(true)
             .build();
     }
 
-    private UserDetailsDTO toDto(Users user) {
+    private UserDetailsDTO buildUserDetailsDTOFromUser(Users user) {
+//        return UserDetailsDTO.builder()
+//                .id(user.getId())
+//                .name(user.getName())
+//                .email(user.getEmail())
+//                .cityId((user.getCity() != null) ? (user.getCity().getId()) : null)
+//                .photoUrl(user.getPhotoUrl())//TODO
+//                .phone(user.getPhone())
+//                .build();
         UserDetailsDTO dto = new UserDetailsDTO();
         dto.setId(user.getId());
-        if (user.getCity() != null) {
-            dto.setCityId(user.getCity().getId());
-        }
-        dto.setPhone(user.getPhone());
-        dto.setPhotoUrl(user.getPhotoUrl());
-        dto.setEmail(user.getEmail());
         dto.setName(user.getName());
-
+        dto.setEmail(user.getEmail());
+        dto.setCityId((user.getCity() != null) ? (user.getCity().getId()) : null);
+        dto.setPhone(dto.getPhone());
+        dto.setPhotoUrl(user.getPhotoUrl());
         return dto;
     }
 

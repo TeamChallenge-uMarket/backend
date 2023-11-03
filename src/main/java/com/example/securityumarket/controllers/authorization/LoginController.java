@@ -23,6 +23,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/authorization/login")
 @Tag(name = "Login", description = "This controller contains login page endpoints, such as: login, refresh-token")
 public class LoginController {
+
     private final LoginService loginService;
 
     private final TokenRefreshService tokenRefreshService; //TEST VARIABLE
