@@ -86,8 +86,20 @@ public class UserService {
         return ResponseEntity.ok(toDto(user));
     }
 
+    private Users getCurrentUser() {
+        return usersDAO.findAppUserByEmail(getAuthenticatedUserEmail())
+            .orElseThrow();
+    }
+
     public ResponseEntity<String> updateUserDetails(UserDetailsDTO dto) {
+        Users currentUser = getCurrentUser();
+
         Users users = fromDto(dto);
+        users.setId(currentUser.getId());
+        users.setPassword(currentUser.getPassword());
+        users.setRefreshToken(currentUser.getRefreshToken());
+
+
         usersDAO.save(users);
         return ResponseEntity.ok("User details updated successfully");
     }
@@ -97,7 +109,7 @@ public class UserService {
             .id(dto.getId())
             .name(dto.getName())
             .email(dto.getEmail())
-            .city(cityService.findById(dto.getCityId()))
+            .city((dto.getCityId() != null) ? (cityService.findById(dto.getCityId())) : null)
             .photoUrl(dto.getPhotoUrl())
             .phone(normalizePhoneNumber(dto.getPhone()))
             .build();
@@ -106,8 +118,10 @@ public class UserService {
     private UserDetailsDTO toDto(Users user) {
         UserDetailsDTO dto = new UserDetailsDTO();
         dto.setId(user.getId());
-        dto.setCityId(user.getCity().getId());
-        dto.setPhone(dto.getPhone());
+        if (user.getCity() != null) {
+            dto.setCityId(user.getCity().getId());
+        }
+        dto.setPhone(user.getPhone());
         dto.setPhotoUrl(user.getPhotoUrl());
         dto.setEmail(user.getEmail());
         dto.setName(user.getName());
