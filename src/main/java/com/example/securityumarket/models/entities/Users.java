@@ -19,26 +19,25 @@ import java.util.List;
 public class Users extends DateAudit implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
-
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "phone")
+    @Column(name = "phone", unique = true)
     private String phone;
 
     @Column(name = "refresh_token")
     private String refreshToken;
 
-    @Column(name = "active")
+    @Column(name = "active", nullable = false)
     private boolean active;
 
     @OneToMany(mappedBy = "user")
@@ -63,6 +62,8 @@ public class Users extends DateAudit implements UserDetails {
     @JoinColumn(name = "city")
     private City city;
 
+    @Column(insertable = false, name = "photo_url", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'https://res.cloudinary.com/de4bysqtm/image/upload/v1697906978/czkhxykmkfn92deqncp5.jpg'")
+    private String photoUrl;
 
     @Override
     public String getUsername() {
@@ -88,7 +89,6 @@ public class Users extends DateAudit implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
