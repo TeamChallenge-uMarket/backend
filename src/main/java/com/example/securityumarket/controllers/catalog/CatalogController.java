@@ -61,8 +61,11 @@ public class CatalogController {
     }
 
     @Operation(description = "This endpoint returns a list of values for a vehicle search filter using different filter queries")
-    @ApiResponse(responseCode = "200", description = "list of parameters retrieved successfully",
-            content = @Content(schema = @Schema(implementation = RequestSearchDTO.class)))
+    @ApiResponse(responseCode = "200", description = "List of parameters retrieved successfully",
+            content = @Content(schema = @Schema(oneOf = {
+                    ResponseDefaultTransportParameter.class,
+                    ResponseLoadBearingVehicleParameter.class
+            })))
     @GetMapping("/get-param")
     public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(@ModelAttribute RequestFilterParam requestFilterParam) {
         return catalogPageService.getFilterParameters(requestFilterParam);
