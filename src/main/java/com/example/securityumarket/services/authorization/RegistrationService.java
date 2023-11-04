@@ -78,21 +78,6 @@ public class RegistrationService {
         userService.isUserEmailUnique(registerRequest.getEmail());
     }
 
-    private String normalizePhoneNumber(String inputPhoneNumber) {
-        String digitsAndParentheses = inputPhoneNumber.replaceAll("[^\\d()]", "");
-
-        String digitsOnly = digitsAndParentheses.replaceAll("[()]", "");
-
-        String normalizedNumber;
-        if (digitsOnly.startsWith("38")) {
-            normalizedNumber = "+" + digitsOnly;
-        } else {
-            normalizedNumber = "+38" + digitsOnly;
-        }
-
-        return normalizedNumber;
-    }
-
     private Users buildUserFromRequest(RegisterRequest registerRequest) {
         return Users.builder()
                 .name(registerRequest.getName())

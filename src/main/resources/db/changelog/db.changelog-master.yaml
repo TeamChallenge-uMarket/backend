@@ -79,3 +79,7 @@ databaseChangeLog:
       file: db/changelog/changeset/execute-sql-insert-transport-views.yaml
   - include:
       file: db/changelog/changeset/execute-sql-insert-transport-reviews.yaml
+  - include:
+      file: db/changelog/changeset/add-not-null-and-unique-to-users-properties.yaml
+  - include:
+      file: db/changelog/changeset/add-photo-url-column-to-users.yaml

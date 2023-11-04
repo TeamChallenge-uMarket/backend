@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-photo-url-column-to-users
+      author: Dmytro
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: photo_url
+                  type: VARCHAR(255)
+                  defaultValue: 'https://res.cloudinary.com/de4bysqtm/image/upload/v1697906978/czkhxykmkfn92deqncp5.jpg'
+                  constraints:
+                    nullable: false
