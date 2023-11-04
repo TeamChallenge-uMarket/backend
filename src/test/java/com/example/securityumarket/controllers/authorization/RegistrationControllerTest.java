@@ -1,85 +1,111 @@
 package com.example.securityumarket.controllers.authorization;
 
+import com.example.securityumarket.TestBean;
 import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
-import org.junit.jupiter.api.Assertions;
+import com.example.securityumarket.services.authorization.RegistrationService;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.Rollback;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-@RunWith(SpringRunner.class)
-@Testcontainers
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @TestPropertySource("classpath:application-test.properties")
+@AutoConfigureMockMvc
+@SpringBootTest(classes = TestBean.class)
 class RegistrationControllerTest {
-    @LocalServerPort
-    private int port;
-    @Autowired
-    private TestRestTemplate restTemplate;
 
-    @Value("${localhost.url}")
-    private String LOCALHOST_URL;
+    @Autowired
+    MockMvc mockMvc;
 
     @Value("${register.url}")
     private String REGISTER_URL;
 
-    @Container
-    @ServiceConnection
-    private final static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.0");
-
+    @Transactional
     @Test
-    void connectionEstablished() {
-        Assertions.assertTrue(postgres.isCreated());
-        Assertions.assertTrue(postgres.isRunning());
-    }
-
-    @Test
-    @Rollback
-    void validDataRegister_Ok() {
-        String url = LOCALHOST_URL + port + REGISTER_URL;
+    void testRegister() throws Exception {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setName("Dmytro");
-        registerRequest.setEmail("dmytro@gmail.com");
+        registerRequest.setName("temp");
+        registerRequest.setEmail("tempmail@gmail.com");
         registerRequest.setPassword("ABCDE12345");
         registerRequest.setConfirmPassword("ABCDE12345");
-        ResponseEntity<String> response = restTemplate.postForEntity(url, registerRequest, String.class);
-        Assertions.assertEquals(200, response.getStatusCode().value());
+        mockMvc.perform(post(REGISTER_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(registerRequest)))
+                .andExpect(status().isOk());
     }
 
     @Test
-    @Rollback
-    void duplicateDataRegister_Failure() {
-        String url = LOCALHOST_URL + port + REGISTER_URL;
+    void duplicateDataRegister_Duplicate() throws Exception {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setName("Dmytro");
-        registerRequest.setEmail("dmytro@gmail.com");
+        registerRequest.setName("Oleh");
+        registerRequest.setEmail("praice07@gmail.com");
         registerRequest.setPassword("ABCDE12345");
         registerRequest.setConfirmPassword("ABCDE12345");
-        restTemplate.postForEntity(url, registerRequest, String.class);
-        ResponseEntity<String> response = restTemplate.postForEntity(url, registerRequest, String.class);
-        Assertions.assertEquals(409, response.getStatusCode().value());
+        mockMvc.perform(post(REGISTER_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(registerRequest)))
+                .andExpect(status().isConflict());
     }
 
     @Test
-    void invalidDataRegister_Failure() {
-        String url = LOCALHOST_URL + port + REGISTER_URL;
+    void invalidDataRegister_UnprocessableEntity() throws Exception {
         RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.setName("Dmytro");
-        registerRequest.setEmail("dmytro@gmail.com");
+        registerRequest.setName("temp");
+        registerRequest.setEmail("tempmail@gmail.com");
         registerRequest.setPassword("12345");
         registerRequest.setConfirmPassword("12345");
-        ResponseEntity<String> response = restTemplate.postForEntity(url, registerRequest, String.class);
-        Assertions.assertEquals(422, response.getStatusCode().value());
+        mockMvc.perform(post(REGISTER_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(registerRequest)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Transactional
+    @Sql(value = {"add_inactive_user.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @ValueSource(strings = {"tempmail@gmail.com"})
+    @ParameterizedTest
+    void testResendCode(String email) throws Exception {
+        mockMvc.perform(put(REGISTER_URL + "/resend-code")
+                        .param("email", String.valueOf(email)))
+                .andExpect(status().isOk());
+    }
+
+    @Transactional
+    @Sql(value = {"add_active_user.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @ValueSource(strings = {"tempmail@gmail.com"})
+    @ParameterizedTest
+    void testResendCode_UnprocessableEntity(String email) throws Exception {
+        mockMvc.perform(put(REGISTER_URL + "/resend-code")
+                        .param("email", String.valueOf(email)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @ValueSource(strings = {"nonexistent@gmail.com"})
+    @ParameterizedTest
+    void testResendCode_NotFound(String email) throws Exception {
+        mockMvc.perform(put(REGISTER_URL + "/resend-code")
+                        .param("email", String.valueOf(email)))
+                .andExpect(status().isNotFound());
+    }
+
+    private static String asJsonString(Object object) {
+        try {
+            return new ObjectMapper().writeValueAsString(object);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

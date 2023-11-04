@@ -3,6 +3,7 @@ package com.example.securityumarket.services.jpa;
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DuplicateDataException;
+import com.example.securityumarket.exception.UnauthenticatedException;
 import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,9 @@ public class UserService {
 
     public Users getAuthenticatedUser() {
         String email = getAuthenticatedUserEmail();
+        if (email.equals("anonymousUser")) {
+            throw new UnauthenticatedException();
+        }
         return findAppUserByEmail(email);
     }
 

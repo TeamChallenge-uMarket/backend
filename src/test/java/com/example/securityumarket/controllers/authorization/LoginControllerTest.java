@@ -1,72 +1,81 @@
 package com.example.securityumarket.controllers.authorization;
 
+import com.example.securityumarket.TestBean;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-@RunWith(SpringRunner.class)
-@Testcontainers
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 @TestPropertySource("classpath:application-test.properties")
+@AutoConfigureMockMvc
+@SpringBootTest(classes = TestBean.class)
 class LoginControllerTest {
 
-    @LocalServerPort
-    private int port;
     @Autowired
-    private TestRestTemplate restTemplate;
+    MockMvc mockMvc;
 
-    @Value("${localhost.url}")
-    private String LOCALHOST_URL;
     @Value("${login.url}")
     private String LOGIN_URL;
 
-    @Container
-    @ServiceConnection
-    private final static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.0");
-
-
+    @Transactional
+    @Sql(value = {"add_active_user.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Test
-    void connectionEstablished() {
-        Assertions.assertTrue(postgres.isCreated());
-        Assertions.assertTrue(postgres.isRunning());
-    }
-
-    @Sql(value = {"add_user.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = {"delete_users.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    @Test
-    void loginWithValidCredentials_Ok() {
-        String url = LOCALHOST_URL + port + LOGIN_URL;
+    void testLogin() throws Exception {
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-        authenticationRequest.setEmail("dmytro@gmail.com");
+        authenticationRequest.setEmail("tempmail@gmail.com");
         authenticationRequest.setPassword("ABCDE12345");
-        ResponseEntity<String> response = restTemplate.postForEntity(url, authenticationRequest, String.class);
-        Assertions.assertEquals(200, response.getStatusCode().value());
+        mockMvc.perform(post(LOGIN_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(authenticationRequest)))
+                .andExpect(status().isOk());
     }
 
-    @Sql(value = {"add_user.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(value = {"delete_users.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+    @Transactional
+    @Sql(value = {"add_active_user.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Test
-    void loginWithInvalidCredentials_Failure() {
-        String url = LOCALHOST_URL + port + LOGIN_URL;
+    void testLogin_Unauthorized() throws Exception {
         AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-        authenticationRequest.setEmail("dmytro@gmail.com");
+        authenticationRequest.setEmail("tempmail@gmail.com");
         authenticationRequest.setPassword("wrong_password");
-        ResponseEntity<String> response = restTemplate.postForEntity(url, authenticationRequest, String.class);
-        Assertions.assertEquals(403, response.getStatusCode().value());
+        mockMvc.perform(post(LOGIN_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(authenticationRequest)))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void testLogin_NotFound() throws Exception {
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setEmail("wrong_email@gmail.com");
+        authenticationRequest.setPassword("ValidPassword1");
+        mockMvc.perform(post(LOGIN_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(authenticationRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+
+
+    private static String asJsonString(Object object) {
+        try {
+            return new ObjectMapper().writeValueAsString(object);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
