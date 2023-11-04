@@ -1,14 +1,9 @@
 package com.example.securityumarket.models.DTO.entities.user;
 
-import com.example.securityumarket.models.entities.City;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.experimental.SuperBuilder;
-import org.hibernate.validator.constraints.Length;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

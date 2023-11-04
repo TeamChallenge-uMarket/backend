@@ -4,7 +4,12 @@ import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DuplicateDataException;
 import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
+import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
+import com.example.securityumarket.models.DTO.login_page.PasswordRequest;
+import com.example.securityumarket.models.entities.Transport;
+import com.example.securityumarket.models.entities.TransportGallery;
 import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.services.storage.CloudinaryService;
 import java.util.Optional;
 
 import com.example.securityumarket.services.security.JwtService;
@@ -13,11 +18,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
@@ -25,6 +32,8 @@ public class UserService {
     private final UsersDAO usersDAO;
     private final CityService cityService;
     private final JwtService jwtService;
+    private final CloudinaryService cloudinaryService;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${mail.code.expiration.time}")
     private long codeExpirationTimeMs;
@@ -85,7 +94,7 @@ public class UserService {
         return ResponseEntity.ok(buildUserDetailsDTOFromUser(user));
     }
 
-    public ResponseEntity<String> updateUserDetails(UserDetailsDTO dto) {
+    public ResponseEntity<String> updateUserDetails(UserDetailsDTO dto, MultipartFile photo) {
         Users currentUser = getAuthenticatedUser();
         Users users = buildUserFromUserDetailsDTO(dto);
         users.setId(currentUser.getId());
@@ -93,6 +102,8 @@ public class UserService {
         jwtService.generateToken(currentUser);
         String refreshToken = jwtService.generateRefreshToken(currentUser);
         users.setRefreshToken(refreshToken);
+
+        users.setPhotoUrl(uploadUserPhoto(photo));
 
         usersDAO.save(users);
         return ResponseEntity.ok("User details updated successfully");
@@ -103,7 +114,7 @@ public class UserService {
             .name(dto.getName())
             .email(dto.getEmail())
             .city((dto.getCityId() != null) ? (cityService.findById(dto.getCityId())) : null)
-            .photoUrl(dto.getPhotoUrl())//TODO
+            // .photoUrl(dto.getPhotoUrl())//TODO
             .phone((dto.getPhone() != null) ? normalizePhoneNumber(dto.getPhone()) : null)
             .active(true)
             .build();
@@ -141,6 +152,23 @@ public class UserService {
         }
 
         return normalizedNumber;
+    }
+
+    public ResponseEntity<String> updateUserSecurityDetails(UserSecurityDetailsDTO securityDetailsDTO) {
+        Users currentUser = getAuthenticatedUser();
+        if (!passwordEncoder.matches(securityDetailsDTO.getOldPassword(), currentUser.getPassword())) {
+             //
+        }
+
+        currentUser.setPassword(passwordEncoder.encode(securityDetailsDTO.getPassword()));
+        usersDAO.save(currentUser);
+
+        return ResponseEntity.ok("User password changed successfully");
+    }
+
+    private String uploadUserPhoto(MultipartFile photo) {
+        String fileName = cloudinaryService.uploadFileWithPublicRead(photo);
+        return cloudinaryService.getOriginalUrl(fileName);
     }
 
     @Scheduled(cron = "0 0/30 * * * *")
