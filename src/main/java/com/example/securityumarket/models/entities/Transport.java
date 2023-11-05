@@ -78,7 +78,7 @@ public class Transport extends DateAudit{
     @Column(name = "load_capacity")
     private Integer loadCapacity;
 
-    @Column(insertable = false, name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'INACTIVE'")
+    @Column(insertable = false, name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
 

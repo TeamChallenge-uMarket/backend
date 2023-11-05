@@ -33,6 +33,12 @@ public class ApplicationExceptionHandler {
         return createErrorResponse(exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadRequestException.class)
+    public Map<String, String> handleBadRequestException(BadRequestException exception) {
+        return createErrorResponse(exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(DataNotFoundException.class)
     public Map<String, String> handleDataNotFoundException(DataNotFoundException exception) {

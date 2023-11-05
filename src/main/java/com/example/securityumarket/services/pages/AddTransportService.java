@@ -101,7 +101,7 @@ public class AddTransportService {
                         requestAddTransportDTO.getWheelConfiguration(), wheelConfigurationService::findById))
                 .numberAxles(getEntityFromRequest(
                         requestAddTransportDTO.getNumberAxles(), numberAxlesService::findById))
-                .status(Transport.Status.ACTIVE)//TODO Change to PENDING
+                .status(Transport.Status.PENDING)
                 .build();
     }
 

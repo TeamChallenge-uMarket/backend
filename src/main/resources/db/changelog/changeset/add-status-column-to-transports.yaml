@@ -9,6 +9,6 @@ databaseChangeLog:
               - column:
                   name: status
                   type: VARCHAR(255)
-                  defaultValue: 'INACTIVE'
+                  defaultValue: 'ACTIVE'
                   constraints:
                     nullable: false

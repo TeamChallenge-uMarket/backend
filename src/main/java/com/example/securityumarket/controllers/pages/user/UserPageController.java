@@ -1,20 +1,17 @@
 package com.example.securityumarket.controllers.pages.user;
 
+import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
+import com.example.securityumarket.services.jpa.TransportService;
 import com.example.securityumarket.services.jpa.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -23,6 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserPageController {
 
     private final UserService userService;
+
+    private final TransportService transportService;
+
 
     @GetMapping
     public ResponseEntity<UserDetailsDTO> getUserDetails() {
@@ -37,5 +37,10 @@ public class UserPageController {
     @PutMapping("/security-info")
     public ResponseEntity<String> updateSecurityInformation(@Valid @RequestBody UserSecurityDetailsDTO securityDetailsDTO) {
         return userService.updateUserSecurityDetails(securityDetailsDTO);
+    }
+
+    @GetMapping("/my-transports/{status}")
+    public ResponseEntity<List<ResponseSearchDTO>> getMyTransports(@PathVariable String status) {
+        return transportService.getMyTransportsByStatus(status);
     }
 }

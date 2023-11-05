@@ -7,14 +7,9 @@ import com.example.securityumarket.exception.DuplicateDataException;
 import com.example.securityumarket.exception.UnauthenticatedException;
 import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
-import com.example.securityumarket.models.DTO.login_page.PasswordRequest;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportGallery;
 import com.example.securityumarket.models.entities.Users;
-import com.example.securityumarket.services.storage.CloudinaryService;
-import java.util.Optional;
-
 import com.example.securityumarket.services.security.JwtService;
+import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -23,19 +18,25 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
+
     private final UsersDAO usersDAO;
+
     private final CityService cityService;
+
     private final JwtService jwtService;
+
     private final CloudinaryService cloudinaryService;
+
     private final PasswordEncoder passwordEncoder;
+
 
     @Value("${mail.code.expiration.time}")
     private long codeExpirationTimeMs;

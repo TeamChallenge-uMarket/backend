@@ -1,20 +1,27 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportDAO;
+import com.example.securityumarket.exception.BadRequestException;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
+import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.util.converter.transposrt_type.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.OrderBy;
+import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.SortBy;
 import static com.example.securityumarket.models.specifications.TransportSpecifications.*;
 
 
@@ -28,16 +35,49 @@ public class TransportService {
 
     private final TransportConverter transportConverter;
 
+    private final UserService userService;
 
-    public Transport save(Transport transport) {
-        return transportDAO.save(transport);
+
+    public void save(Transport transport) {
+        transportDAO.save(transport);
     }
 
 
     public List<Transport> findNewTransports() {
-        return transportDAO.findNewTransports()
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException("New transports"));
+        Pageable pageable = PageRequest.of(0, 20);
+        Specification<Transport> specification = isActive()
+                .and(sortBy(Transport.class, SortBy.DESC, OrderBy.CREATED));
+        Page<Transport> page = transportDAO.findAll(specification, pageable);
+        return page.getContent();
+    }
+
+    public List<Transport> findPopularTransport() {
+        Pageable pageable = PageRequest.of(0, 54);
+        Specification<Transport> specification = isActive()
+                .and(sortPopularTransports());
+        Page<Transport> page = transportDAO.findAll(specification, pageable);
+        return page.getContent();
+    }
+
+    public List<Transport> findViewedTransportsByRegisteredUser(Users user) {
+        Pageable pageable = PageRequest.of(0, 20);
+        Specification<Transport> specification = isActive()
+                .and(findTransportViewedByUser(user));
+        Page<Transport> page = transportDAO.findAll(specification, pageable);
+        return page.getContent();
+    }
+
+    public List<Transport> findFavoriteTransportsByRegisteredUser(Users user) {
+        Specification<Transport> specification = isActive()
+                .and(findFavoriteTransportsByUser(user))
+                .and(sortBy(Transport.class, SortBy.DESC, OrderBy.CREATED));
+        return transportDAO.findAll(specification);
+    }
+
+    public List<Transport> findTransportByUserAndStatus(Users user, Transport.Status status) { //TODO Change to PageRequest
+        Specification<Transport> specification = findByUser(user)
+                .and(hasStatus(status));
+        return transportDAO.findAll(specification);
     }
 
     public Transport findTransportById(long carId) {
@@ -51,6 +91,16 @@ public class TransportService {
                 .collect(Collectors.toList());
     }
 
+    public ResponseEntity<List<ResponseSearchDTO>> getMyTransportsByStatus(String status) {
+        Users authenticatedUser = userService.getAuthenticatedUser();
+        try {
+            Transport.Status transportStatus = Transport.Status.valueOf(status.toUpperCase());
+            List<Transport> transportByUserAndStatus = findTransportByUserAndStatus(authenticatedUser, transportStatus);
+            return ResponseEntity.ok(convertTransportListToTransportSearchDTO(transportByUserAndStatus));
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid status");
+        }
+    }
 
     public List<AgriculturalDTO> convertTransportListToAgriculturalDTOList(List<Transport> newTransports) {
         return newTransports.stream()
@@ -90,7 +140,8 @@ public class TransportService {
 
     public List<Transport> findTransportByParam(RequestSearchDTO requestSearchDTO, PageRequest pageRequest) {
         Page<Transport> transportPage = transportDAO.findAll(
-                hasTransportTypeId(requestSearchDTO.getTransportTypeId())
+                isActive()
+                        .and(hasTransportTypeId(requestSearchDTO.getTransportTypeId()))
                         .and(hasBrandId(requestSearchDTO.getBrandId()))
                         .and(hasModelId(requestSearchDTO.getModelId()))
                         .and(hasRegionId(requestSearchDTO.getRegionId()))
@@ -126,7 +177,7 @@ public class TransportService {
                         .and(hasUncleared(requestSearchDTO.getUncleared()))
                         .and(hasBargain(requestSearchDTO.getBargain()))
                         .and(hasInstallmentPayment(requestSearchDTO.getInstallmentPayment()))
-                        .and(sortBy(requestSearchDTO.getSortBy(), requestSearchDTO.getOrderBy()))
+                        .and(sortBy(Transport.class, requestSearchDTO.getSortBy(), requestSearchDTO.getOrderBy()))
                 , pageRequest);
         return transportPage.getContent();
     }

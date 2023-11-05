@@ -70,7 +70,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (ExpiredJwtException e) {
-            throw new UnauthenticatedException();
+            throw new UnauthenticatedException("The access token has expired");
         }
         filterChain.doFilter(request, response);
     }

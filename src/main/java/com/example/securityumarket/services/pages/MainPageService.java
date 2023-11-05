@@ -35,7 +35,6 @@ public class MainPageService {
 
     private final RegionService regionService;
 
-
     private ResponseEntity<List<ResponseSearchDTO>> getResponseTransportDTOList(List<Transport> transports) {
         List<ResponseSearchDTO> responseSearchDTOS = transportService.convertTransportListToTransportSearchDTO(transports);
         return ResponseEntity.ok(responseSearchDTOS);
@@ -47,13 +46,19 @@ public class MainPageService {
     }
 
     public ResponseEntity<List<ResponseSearchDTO>> getPopularTransports() {
-        List<Transport> popularTransports = transportViewService.findPopularTransport();
+        List<Transport> popularTransports = transportService.findPopularTransport();
         return getResponseTransportDTOList(popularTransports);
     }
 
     public ResponseEntity<List<ResponseSearchDTO>> getRecentlyViewedTransports() {
         Users user = userService.getAuthenticatedUser();
-        List<Transport> viewedCarsByUser = transportViewService.findViewedCarsByRegisteredUser(user);
+        List<Transport> viewedCarsByUser = transportService.findViewedTransportsByRegisteredUser(user);
+        return getResponseTransportDTOList(viewedCarsByUser);
+    }
+
+    public ResponseEntity<List<ResponseSearchDTO>> getFavoriteTransport() {
+        Users user = userService.getAuthenticatedUser();
+        List<Transport> viewedCarsByUser = transportService.findFavoriteTransportsByRegisteredUser(user);
         return getResponseTransportDTOList(viewedCarsByUser);
     }
 
@@ -79,12 +84,6 @@ public class MainPageService {
                         .model(carModel.getModel())
                         .build())
                 .collect(Collectors.toList()));
-    }
-
-    public ResponseEntity<List<ResponseSearchDTO>> getFavoriteTransport() {
-        Users user = userService.getAuthenticatedUser();
-        List<Transport> viewedCarsByUser = favoriteTransportService.findFavorites(user);
-        return getResponseTransportDTOList(viewedCarsByUser);
     }
 
     public ResponseEntity<List<ResponseBrandDTO>> getBrandsByTransportType(Long transportTypeId) {
