@@ -1,4 +1,4 @@
-package com.example.securityumarket.services.page_service;
+package com.example.securityumarket.services.storage;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;

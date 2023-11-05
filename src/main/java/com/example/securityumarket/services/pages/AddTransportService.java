@@ -1,4 +1,4 @@
-package com.example.securityumarket.services.page_service;
+package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.models.DTO.main_page.request.RequestAddTransportDTO;
 import com.example.securityumarket.models.entities.*;
@@ -101,6 +101,7 @@ public class AddTransportService {
                         requestAddTransportDTO.getWheelConfiguration(), wheelConfigurationService::findById))
                 .numberAxles(getEntityFromRequest(
                         requestAddTransportDTO.getNumberAxles(), numberAxlesService::findById))
+                .status(Transport.Status.ACTIVE)//TODO Change to PENDING
                 .build();
     }
 

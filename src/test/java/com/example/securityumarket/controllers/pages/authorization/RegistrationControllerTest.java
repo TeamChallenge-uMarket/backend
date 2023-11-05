@@ -1,12 +1,10 @@
-package com.example.securityumarket.controllers.authorization;
+package com.example.securityumarket.controllers.pages.authorization;
 
 import com.example.securityumarket.TestBean;
 import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
-import com.example.securityumarket.services.authorization.RegistrationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

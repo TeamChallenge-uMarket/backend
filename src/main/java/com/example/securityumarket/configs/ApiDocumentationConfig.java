@@ -21,7 +21,6 @@ public class ApiDocumentationConfig {
     @Value("${swagger.value.prod-url}")
     private String prodUrl;
 
-    //TODO refactor all text need to off
     @Bean
     public OpenAPI uAutoAPI() {
         Server devServer = new Server();

@@ -1,4 +1,4 @@
-package com.example.securityumarket.services.page_service;
+package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.models.DTO.catalog_page.request.RequestFilterParam;
@@ -8,7 +8,6 @@ import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSear
 import com.example.securityumarket.models.DTO.catalog_page.response.impl.ResponseLoadBearingVehicleParameter;
 import com.example.securityumarket.models.DTO.entities.*;
 import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportBrand;
 import com.example.securityumarket.models.entities.TransportType;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.*;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

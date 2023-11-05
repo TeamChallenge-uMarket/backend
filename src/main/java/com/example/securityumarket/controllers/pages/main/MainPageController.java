@@ -1,9 +1,9 @@
-package com.example.securityumarket.controllers.main_page;
+package com.example.securityumarket.controllers.pages.main;
 
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.main_page.response.*;
 import com.example.securityumarket.models.DTO.transports.impl.*;
-import com.example.securityumarket.services.page_service.MainPageService;
+import com.example.securityumarket.services.pages.MainPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

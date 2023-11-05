@@ -78,6 +78,14 @@ public class Transport extends DateAudit{
     @Column(name = "load_capacity")
     private Integer loadCapacity;
 
+    @Column(insertable = false, name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'INACTIVE'")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    public enum Status {
+        ACTIVE, PENDING, INACTIVE, DELETED
+    }
+
 
     @OneToMany(mappedBy = "transport")
     private List<TransportReview> transportReviews;

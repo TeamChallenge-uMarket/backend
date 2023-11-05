@@ -1,8 +1,7 @@
-package com.example.securityumarket.controllers.user_page;
+package com.example.securityumarket.controllers.pages.user;
 
 import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
-import com.example.securityumarket.models.DTO.login_page.PasswordRequest;
 import com.example.securityumarket.services.jpa.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

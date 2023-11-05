@@ -1,9 +1,10 @@
 package com.example.securityumarket.filters;
 
+import com.example.securityumarket.exception.UnauthenticatedException;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.services.security.TokenRefreshService;
-import com.example.securityumarket.services.authorization.UserDetailsServiceImpl;
+import com.example.securityumarket.services.pages.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -69,7 +70,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (ExpiredJwtException e) {
-            //TODO
+            throw new UnauthenticatedException();
         }
         filterChain.doFilter(request, response);
     }

@@ -5,7 +5,6 @@ import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.TransportGallery;
-import com.example.securityumarket.services.page_service.StorageService;
 import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

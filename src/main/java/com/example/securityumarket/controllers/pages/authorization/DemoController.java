@@ -1,4 +1,4 @@
-package com.example.securityumarket.controllers.authorization;
+package com.example.securityumarket.controllers.pages.authorization;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

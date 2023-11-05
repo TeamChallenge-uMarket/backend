@@ -1,7 +1,7 @@
-package com.example.securityumarket.controllers.main_page;
+package com.example.securityumarket.controllers.pages.main;
 
 import com.example.securityumarket.models.DTO.main_page.request.RequestAddTransportDTO;
-import com.example.securityumarket.services.page_service.AddTransportService;
+import com.example.securityumarket.services.pages.AddTransportService;
 import com.example.securityumarket.services.storage.CloudinaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

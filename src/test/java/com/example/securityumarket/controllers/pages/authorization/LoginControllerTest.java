@@ -1,4 +1,4 @@
-package com.example.securityumarket.controllers.authorization;
+package com.example.securityumarket.controllers.pages.authorization;
 
 import com.example.securityumarket.TestBean;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;

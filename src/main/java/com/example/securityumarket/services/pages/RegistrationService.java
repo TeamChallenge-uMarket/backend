@@ -1,4 +1,4 @@
-package com.example.securityumarket.services.authorization;
+package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.EmailSendingException;

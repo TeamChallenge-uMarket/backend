@@ -1,8 +1,8 @@
-package com.example.securityumarket.controllers.authorization;
+package com.example.securityumarket.controllers.pages.authorization;
 
 
 import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
-import com.example.securityumarket.services.authorization.RegistrationService;
+import com.example.securityumarket.services.pages.RegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
