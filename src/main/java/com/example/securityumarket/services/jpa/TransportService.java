@@ -15,8 +15,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -180,5 +186,12 @@ public class TransportService {
                         .and(sortBy(Transport.class, requestSearchDTO.getSortBy(), requestSearchDTO.getOrderBy()))
                 , pageRequest);
         return transportPage.getContent();
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
+    public void deleteDeletedTransportsOlderThanOneMonth() {
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+        transportDAO.deleteDeletedTransportsOlderThanOneMonth(oneMonthAgo);
     }
 }
