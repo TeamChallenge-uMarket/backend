@@ -4,6 +4,7 @@ import com.example.securityumarket.models.DTO.catalog_page.request.RequestFilter
 import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseDefaultTransportParameter;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
+import com.example.securityumarket.models.DTO.catalog_page.response.impl.ResponseLoadBearingVehicleParameter;
 import com.example.securityumarket.services.page_service.CatalogPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

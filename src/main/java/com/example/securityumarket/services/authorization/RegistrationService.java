@@ -31,7 +31,6 @@ public class RegistrationService {
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
         validateRegisterRequest(registerRequest);
         Users user = buildUserFromRequest(registerRequest);
-
         return sendEmailAndSaveUser(user);
     }
 

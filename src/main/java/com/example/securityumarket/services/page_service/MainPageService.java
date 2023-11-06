@@ -104,7 +104,7 @@ public class MainPageService {
 
     public ResponseEntity<List<ResponseModelDTO>> getModelsByTransportBrand(Long transportTypeId, Long transportBrandId) {
         if (transportBrandId == null) {
-            throw new DataNotValidException("transportBrandId required");
+            ResponseEntity.badRequest().body("transportBrandId required");
         }
         if (transportTypeId != null) {
             return ResponseEntity.ok(transportModelService.findAllByTransportTypeAndBrand(transportBrandId, transportTypeId).stream()

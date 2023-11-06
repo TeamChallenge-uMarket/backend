@@ -2,7 +2,7 @@ package com.example.securityumarket.services.authorization;
 
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.models.entities.Users;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,15 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+@RequiredArgsConstructor
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UsersDAO usersDAO;
-
-    @Autowired
-    public UserDetailsServiceImpl(UsersDAO usersDAO) {
-        this.usersDAO = usersDAO;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

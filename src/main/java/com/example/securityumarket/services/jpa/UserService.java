@@ -2,7 +2,9 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
+import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.DuplicateDataException;
+import com.example.securityumarket.exception.UnauthenticatedException;
 import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
 import com.example.securityumarket.models.DTO.login_page.PasswordRequest;
@@ -45,6 +47,9 @@ public class UserService {
 
     public Users getAuthenticatedUser() {
         String email = getAuthenticatedUserEmail();
+        if (email.equals("anonymousUser")) {
+            throw new UnauthenticatedException();
+        }
         return findAppUserByEmail(email);
     }
 
@@ -83,14 +88,7 @@ public class UserService {
     }
 
     public ResponseEntity<UserDetailsDTO> getUserDetails() {
-        String authenticatedEmail = getAuthenticatedUserEmail();
-        Optional<Users> usersOptional = usersDAO.findAppUserByEmail(authenticatedEmail);
-        if (usersOptional.isEmpty()) {
-            throw new RuntimeException("User with email: " + authenticatedEmail + " does not exist");
-        }
-
-        Users user = usersOptional.get();
-
+        Users user = getAuthenticatedUser();
         return ResponseEntity.ok(buildUserDetailsDTOFromUser(user));
     }
 
@@ -114,21 +112,12 @@ public class UserService {
             .name(dto.getName())
             .email(dto.getEmail())
             .city((dto.getCityId() != null) ? (cityService.findById(dto.getCityId())) : null)
-            // .photoUrl(dto.getPhotoUrl())//TODO
             .phone((dto.getPhone() != null) ? normalizePhoneNumber(dto.getPhone()) : null)
             .active(true)
             .build();
     }
 
     private UserDetailsDTO buildUserDetailsDTOFromUser(Users user) {
-//        return UserDetailsDTO.builder()
-//                .id(user.getId())
-//                .name(user.getName())
-//                .email(user.getEmail())
-//                .cityId((user.getCity() != null) ? (user.getCity().getId()) : null)
-//                .photoUrl(user.getPhotoUrl())//TODO
-//                .phone(user.getPhone())
-//                .build();
         UserDetailsDTO dto = new UserDetailsDTO();
         dto.setId(user.getId());
         dto.setName(user.getName());
@@ -157,7 +146,7 @@ public class UserService {
     public ResponseEntity<String> updateUserSecurityDetails(UserSecurityDetailsDTO securityDetailsDTO) {
         Users currentUser = getAuthenticatedUser();
         if (!passwordEncoder.matches(securityDetailsDTO.getOldPassword(), currentUser.getPassword())) {
-             //
+             throw new DataNotValidException("The old password is incorrect");
         }
 
         currentUser.setPassword(passwordEncoder.encode(securityDetailsDTO.getPassword()));
