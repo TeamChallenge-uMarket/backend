@@ -27,13 +27,12 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(matcherRegistry ->
                         matcherRegistry
-                                .requestMatchers("/api/v1/authorization/**")
-                                .permitAll()
-                                .requestMatchers("/api/v1/main/**")
-                                .permitAll()
-                                .requestMatchers("/swagger/**")
-                                .permitAll()
-                                .requestMatchers("/api/v1/catalog/**")
+                                .requestMatchers(
+                                        "/api/v1/authorization/**",
+                                        "/api/v1/main/**",
+                                        "/swagger/**",
+                                        "/api/v1/catalog/**",
+                                        "/api/v1/user-page/**")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )

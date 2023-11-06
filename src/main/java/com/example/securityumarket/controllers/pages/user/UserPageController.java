@@ -43,4 +43,12 @@ public class UserPageController {
     public ResponseEntity<List<ResponseSearchDTO>> getMyTransports(@PathVariable String status) {
         return transportService.getMyTransportsByStatus(status);
     }
+
+    @PutMapping("/my-transports/{transport-id}/update-status/{status}")
+    public ResponseEntity<String> updateTransportStutus(
+            @PathVariable("transport-id") Long transportId,
+            @PathVariable("status") String status) {
+        return transportService.updateTransportStatusByTransportIdAndStatus(transportId, status);
+    }
+
 }

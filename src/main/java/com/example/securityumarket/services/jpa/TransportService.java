@@ -3,6 +3,7 @@ package com.example.securityumarket.services.jpa;
 import com.example.securityumarket.dao.TransportDAO;
 import com.example.securityumarket.exception.BadRequestException;
 import com.example.securityumarket.exception.DataNotFoundException;
+import com.example.securityumarket.exception.InsufficientPermissionsException;
 import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
@@ -20,9 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,12 +89,6 @@ public class TransportService {
                 .orElseThrow(() -> new DataNotFoundException("Transport by id"));
     }
 
-    public List<PassengerCarDTO> convertTransportListToPassCarDTOList(List<Transport> newTransports) {
-        return newTransports.stream()
-                .map(transport -> (PassengerCarDTO) transportConverter.convertTransportToTypeDTO(transport, new MotorizedFourWheeledVehicleConversionStrategy()))
-                .collect(Collectors.toList());
-    }
-
     public ResponseEntity<List<ResponseSearchDTO>> getMyTransportsByStatus(String status) {
         Users authenticatedUser = userService.getAuthenticatedUser();
         try {
@@ -108,33 +100,93 @@ public class TransportService {
         }
     }
 
+    @Transactional
+    public ResponseEntity<String> updateTransportStatusByTransportIdAndStatus(Long transportId, String status) {
+        try {
+            Users authenticatedUser = userService.getAuthenticatedUser();
+            Transport transportById = findTransportById(transportId);
+            Transport.Status transportStatus = Transport.Status.valueOf(status.toUpperCase());
+
+            if (isUserHasAdminOrModeratorRole(authenticatedUser)) {
+                updateStatusByTransportIdAndStatus(transportById, transportStatus);
+            } else if (isUserHasUserRole(authenticatedUser)
+                    && isValidStatusChange(transportStatus, transportById.getStatus())) {
+                updateStatusByTransportIdAndStatus(transportById, transportStatus);
+            } else {
+                throw new InsufficientPermissionsException("to update the transport status");
+            }
+            return ResponseEntity.ok("The status of the transport has been successfully updated");
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Invalid status");
+        }
+    }
+
+    private boolean isUserHasAdminOrModeratorRole(Users authenticatedUser) {
+        return authenticatedUser.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN")
+                        || authority.getAuthority().equals("MODERATOR"));
+    }
+
+    private boolean isUserHasUserRole(Users authenticatedUser) {
+        return authenticatedUser.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("USER"));
+    }
+
+    private boolean isValidStatusChange(Transport.Status newStatus, Transport.Status currentStatus) {
+        if (newStatus == Transport.Status.PENDING
+                && (currentStatus == Transport.Status.INACTIVE || currentStatus == Transport.Status.DELETED)) {
+            return true;
+        }
+        if (newStatus == Transport.Status.DELETED && currentStatus == Transport.Status.ACTIVE) {
+            return true;
+        }
+        return newStatus == Transport.Status.INACTIVE && currentStatus == Transport.Status.ACTIVE;
+    }
+
+    public void updateStatusByTransportIdAndStatus(Transport transportById, Transport.Status status) {
+        transportById.setStatus(status);
+        save(transportById);
+    }
+
+    public List<PassengerCarDTO> convertTransportListToPassCarDTOList(List<Transport> newTransports) {
+        return newTransports.stream()
+                .map(transport -> (PassengerCarDTO) transportConverter.convertTransportToTypeDTO(
+                        transport, new MotorizedFourWheeledVehicleConversionStrategy()))
+                .collect(Collectors.toList());
+    }
+
     public List<AgriculturalDTO> convertTransportListToAgriculturalDTOList(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (AgriculturalDTO) transportConverter.convertTransportToTypeDTO(transport, new LoadBearingVehicleConversionStrategy()))
+                .map(transport -> (AgriculturalDTO) transportConverter.convertTransportToTypeDTO(
+                        transport, new LoadBearingVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
     public List<SpecializedVehicleDTO> convertTransportListToSpecializedVehicleDTO(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (SpecializedVehicleDTO) transportConverter.convertTransportToTypeDTO(transport, new LoadBearingVehicleConversionStrategy()))
+                .map(transport -> (SpecializedVehicleDTO) transportConverter.convertTransportToTypeDTO(
+                        transport, new LoadBearingVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
     public List<MotorcycleDTO> convertTransportListToMotorcycleDTOList(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (MotorcycleDTO) transportConverter.convertTransportToTypeDTO(transport, new MotorizedVehicleConversionStrategy()))
+                .map(transport -> (MotorcycleDTO) transportConverter.convertTransportToTypeDTO(
+                        transport, new MotorizedVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
     public List<TruckDTO> convertTransportListToTruckDTOOList(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (TruckDTO) transportConverter.convertTransportToTypeDTO(transport, new LoadBearingVehicleConversionStrategy()))
+                .map(transport -> (TruckDTO) transportConverter.convertTransportToTypeDTO(
+                        transport, new LoadBearingVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
     public List<WaterVehicleDTO> convertTransportListToWaterVehicleDTOList(List<Transport> newTransports) {
         return newTransports.stream()
-                .map(transport -> (WaterVehicleDTO) transportConverter.convertTransportToTypeDTO(transport, new WaterVehicleConversionStrategy()))
+                .map(transport -> (WaterVehicleDTO) transportConverter.convertTransportToTypeDTO(
+                        transport, new WaterVehicleConversionStrategy()))
                 .collect(Collectors.toList());
     }
 
