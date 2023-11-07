@@ -6,6 +6,8 @@ import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.InsufficientPermissionsException;
 import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
+import com.example.securityumarket.models.DTO.main_page.request.RequestAddTransportDTO;
+import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
@@ -246,4 +248,31 @@ public class TransportService {
         LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
         transportDAO.deleteDeletedTransportsOlderThanOneMonth(oneMonthAgo);
     }
+
+    public ResponseEntity<String> updateTransport(Long transportId, RequestAddTransportDTO requestAddTransportDTO) {
+        return null;
+    }
+
+    public ResponseEntity<? extends TransportDTO> getTransportDetails(Long transportId) {
+        Transport transportById = findTransportById(transportId);
+        return convertTransportToTypeDTO(transportById);
+    }
+
+    private ResponseEntity<? extends TransportDTO> convertTransportToTypeDTO(Transport transport) {
+        Long transportTypeId = transport.getTransportModel().getTransportTypeBrand().getTransportType().getId();
+        return switch (transportTypeId.intValue()) {
+            case 1 -> ResponseEntity.ok(transportConverter.convertTransportToTypeDTO(
+                    transport, new MotorizedFourWheeledVehicleConversionStrategy()));
+            case 2 -> ResponseEntity.ok(transportConverter.convertTransportToTypeDTO(
+                    transport, new MotorizedVehicleConversionStrategy()));
+            case 3, 4, 5 -> ResponseEntity.ok(transportConverter.convertTransportToTypeDTO(
+                    transport, new LoadBearingVehicleConversionStrategy()));
+            case 6 -> ResponseEntity.ok(transportConverter.convertTransportToTypeDTO(
+                    transport, new WaterVehicleConversionStrategy()));
+            default -> throw new DataNotFoundException("Transport type id");
+        };
+    }
+
+
+
 }

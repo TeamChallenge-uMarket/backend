@@ -387,19 +387,6 @@ public class TransportSpecifications {
         };
     }
 
-//    public static Specification<Transport> sortBy(SortBy sortBy, OrderBy orderBy) {
-//        return (root, query, cb) -> {
-//            if (sortBy != null && orderBy != null) {
-//                if (sortBy == SortBy.ASC) {
-//                    query.orderBy(cb.asc(root.get(orderBy.toString().toLowerCase())));
-//                } else if (sortBy == SortBy.DESC) {
-//                    query.orderBy(cb.desc(root.get(orderBy.toString().toLowerCase())));
-//                }
-//            }
-//            return cb.isTrue(cb.literal(true));
-//        };
-//    }
-
     public static Specification<Transport> isActive() {
         return (root, query, cb) -> cb.equal(root.get("status"), Transport.Status.ACTIVE);
     }
