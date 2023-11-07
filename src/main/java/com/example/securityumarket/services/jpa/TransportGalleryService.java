@@ -66,4 +66,14 @@ public class TransportGalleryService {
     private void save(TransportGallery transportGallery) {
         transportGalleryDAO.save(transportGallery);
     }
+
+    public List<TransportGallery> findAllByTransportId(Long id) {
+        return getTransportGalleryDAO().findAllByTransportId(id)
+                .orElseThrow(() -> new DataNotFoundException("Gallery"));
+    }
+
+    public List<String> findAllUrlByTransportId(Long transportId) {
+        List<TransportGallery> allByTransportId = findAllByTransportId(transportId);
+        return allByTransportId.stream().map(TransportGallery::getUrl).toList();
+    }
 }

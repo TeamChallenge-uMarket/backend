@@ -12,9 +12,12 @@ import java.util.Optional;
 @Repository
 public interface TransportGalleryDAO extends JpaRepository<TransportGallery, Long> {
 
-    @Query("select c.url from TransportGallery c where c.transport.id = :transportId and c.isMain = true")
+    @Query("select tg.url from TransportGallery tg where tg.transport.id = :transportId and tg.isMain = true")
     Optional<String> findMainFileByTransport(@Param("transportId") long transportId);
 
-    @Query("SELECT cg FROM TransportGallery cg WHERE cg.imageName IN (:imageNames)")
+    @Query("SELECT tg FROM TransportGallery tg WHERE tg.imageName IN (:imageNames)")
     Optional<List<TransportGallery>> findCarGalleriesByImageNames(@Param("imageNames") List<String> imageNames);
+
+    @Query("SELECT tg FROM TransportGallery tg WHERE tg.transport.id = :transportId")
+    Optional<List<TransportGallery>> findAllByTransportId(Long transportId);
 }

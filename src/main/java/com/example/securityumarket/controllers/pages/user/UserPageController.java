@@ -1,6 +1,5 @@
 package com.example.securityumarket.controllers.pages.user;
 
-import com.example.securityumarket.models.DTO.catalog_page.response.ResponseDefaultTransportParameter;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
@@ -10,6 +9,7 @@ import com.example.securityumarket.services.jpa.TransportService;
 import com.example.securityumarket.services.jpa.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,12 +63,11 @@ public class UserPageController {
         return transportService.getTransportDetails(transportId);
     }
 
-
-    @PutMapping("/my-transports/update/{transport-id}")
-    public ResponseEntity<String> updateTransport(
-            @RequestBody RequestAddTransportDTO requestAddTransportDTO,
-            @PathVariable ("transport-id") Long transportId) {
-        return transportService.updateTransport(transportId, requestAddTransportDTO);
+    @PutMapping("/my-transports/update-details/{transport-id}")
+    public ResponseEntity<String> updateTransportDetails(
+            @PathVariable ("transport-id") Long transportId,
+            @RequestPart("multipartFiles") MultipartFile[] multipartFiles,
+            @RequestBody @Valid RequestAddTransportDTO requestAddTransportDTO) {
+        return transportService.updateTransportDetails(transportId, requestAddTransportDTO, multipartFiles);
     }
-
 }

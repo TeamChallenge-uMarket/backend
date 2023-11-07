@@ -10,6 +10,7 @@ import com.example.securityumarket.models.DTO.main_page.request.RequestAddTransp
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
+import com.example.securityumarket.models.entities.TransportGallery;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.util.converter.transposrt_type.*;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -249,13 +251,15 @@ public class TransportService {
         transportDAO.deleteDeletedTransportsOlderThanOneMonth(oneMonthAgo);
     }
 
-    public ResponseEntity<String> updateTransport(Long transportId, RequestAddTransportDTO requestAddTransportDTO) {
+    public ResponseEntity<String> updateTransportDetails(Long transportId, RequestAddTransportDTO requestAddTransportDTO, MultipartFile[] multipartFiles) {
+        Transport transport = findTransportById(transportId);
+
         return null;
     }
 
     public ResponseEntity<? extends TransportDTO> getTransportDetails(Long transportId) {
-        Transport transportById = findTransportById(transportId);
-        return convertTransportToTypeDTO(transportById);
+        Transport transport = findTransportById(transportId);
+        return convertTransportToTypeDTO(transport);
     }
 
     private ResponseEntity<? extends TransportDTO> convertTransportToTypeDTO(Transport transport) {
@@ -272,7 +276,4 @@ public class TransportService {
             default -> throw new DataNotFoundException("Transport type id");
         };
     }
-
-
-
 }
