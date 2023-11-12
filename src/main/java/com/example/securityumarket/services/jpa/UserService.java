@@ -7,6 +7,7 @@ import com.example.securityumarket.exception.DuplicateDataException;
 import com.example.securityumarket.exception.UnauthenticatedException;
 import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
+import com.example.securityumarket.models.entities.City;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.services.storage.CloudinaryService;
@@ -22,6 +23,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 @Service
@@ -59,27 +62,23 @@ public class UserService {
             .orElseThrow(() -> new DataNotFoundException("User with email " + email));
     }
 
-    public Users save(Users users) {
-        return usersDAO.save(users);
+    public void save(Users users) {
+        usersDAO.save(users);
     }
 
     public boolean existsUsersByEmail(String email) {
         return usersDAO.existsUsersByEmail(email);
     }
 
-    public boolean existsUsersByPhone(String email) {
-        return usersDAO.existsUsersByPhone(email);
+    public void existsUsersByPhone(String phone) {
+        usersDAO.findUserByPhone(phone).ifPresent(users -> {
+            throw new DuplicateDataException("User with " + phone + " already exists");
+        });
     }
 
     public boolean isUserAuthenticated() {
         String authenticatedUserEmail = getAuthenticatedUserEmail();
         return !authenticatedUserEmail.equals("anonymousUser");
-    }
-
-    public void isUserPhoneUnique(String phone) {
-        if (existsUsersByPhone(phone)) {
-            throw new DuplicateDataException("User with " + phone + " already exists");
-        }
     }
 
     public void isUserEmailUnique(String email) {
@@ -93,29 +92,66 @@ public class UserService {
         return ResponseEntity.ok(buildUserDetailsDTOFromUser(user));
     }
 
-    public ResponseEntity<String> updateUserDetails(UserDetailsDTO dto, MultipartFile photo) {
+    @Transactional
+    public ResponseEntity<String> updateUserDetails(UserDetailsDTO userDetailsDTO, MultipartFile photo) {
         Users currentUser = getAuthenticatedUser();
-        Users users = buildUserFromUserDetailsDTO(dto);
-        users.setId(currentUser.getId());
-        users.setPassword(currentUser.getPassword());
+        updateUserFields(userDetailsDTO, photo, currentUser);
         jwtService.generateToken(currentUser);
         String refreshToken = jwtService.generateRefreshToken(currentUser);
-        users.setRefreshToken(refreshToken);
-
-        users.setPhotoUrl(uploadUserPhoto(photo));
-
-        usersDAO.save(users);
+        currentUser.setRefreshToken(refreshToken);
+        usersDAO.save(currentUser);
         return ResponseEntity.ok("User details updated successfully");
     }
 
-    private Users buildUserFromUserDetailsDTO(UserDetailsDTO dto) {
-        return Users.builder()
-            .name(dto.getName())
-            .email(dto.getEmail())
-            .city((dto.getCityId() != null) ? (cityService.findById(dto.getCityId())) : null)
-            .phone((dto.getPhone() != null) ? normalizePhoneNumber(dto.getPhone()) : null)
-            .active(true)
-            .build();
+    public ResponseEntity<String> updateUserSecurityDetails(UserSecurityDetailsDTO securityDetailsDTO) {
+        Users currentUser = getAuthenticatedUser();
+        if (!passwordEncoder.matches(securityDetailsDTO.getOldPassword(), currentUser.getPassword())) {
+             throw new DataNotValidException("The old password is incorrect");
+        }
+
+        currentUser.setPassword(passwordEncoder.encode(securityDetailsDTO.getPassword()));
+        usersDAO.save(currentUser);
+
+        return ResponseEntity.ok("User password changed successfully");
+    }
+
+    @Scheduled(cron = "0 0/30 * * * *")
+    @Transactional
+    public void deleteInactiveUsers() {
+        LocalDateTime thirtyMinutesAgo = LocalDateTime.now().minus(codeExpirationTimeMs, ChronoUnit.MILLIS);
+        usersDAO.deleteByActiveFalseAndCreatedDateBefore(thirtyMinutesAgo);
+    }
+
+
+    private String uploadUserPhoto(MultipartFile photo) {
+        String fileName = cloudinaryService.uploadFileWithPublicRead(photo);
+        return cloudinaryService.getOriginalUrl(fileName);
+    }
+
+    private <T> void updateFieldIfPresent(T newValue, Consumer<T> updateFunction) {
+        Optional.ofNullable(newValue)
+                .ifPresent(updateFunction);
+    }
+
+    private void updateUserFields(UserDetailsDTO userDetailsDTO, MultipartFile photo, Users currentUser) {
+        updateFieldIfPresent(userDetailsDTO.getName(), currentUser::setName);
+        updateFieldIfPresent(userDetailsDTO.getPhone(), phone -> {
+            String normalizePhoneNumber = normalizePhoneNumber(phone);
+            existsUsersByPhone(normalizePhoneNumber);
+            currentUser.setPhone(normalizePhoneNumber);
+        });
+        updateFieldIfPresent(userDetailsDTO.getCityId(), cityId -> {
+            City city = cityService.findById(cityId);
+            currentUser.setCity(city);
+        });
+        updateFieldIfPresent(photo, url -> {
+            String urlFile = uploadUserPhoto(photo);
+            currentUser.setPhotoUrl(urlFile);
+        });
+        updateFieldIfPresent(userDetailsDTO.getEmail(), email -> {
+            isUserEmailUnique(email);
+            currentUser.setEmail(email);
+        });
     }
 
     private UserDetailsDTO buildUserDetailsDTOFromUser(Users user) {
@@ -142,29 +178,5 @@ public class UserService {
         }
 
         return normalizedNumber;
-    }
-
-    public ResponseEntity<String> updateUserSecurityDetails(UserSecurityDetailsDTO securityDetailsDTO) {
-        Users currentUser = getAuthenticatedUser();
-        if (!passwordEncoder.matches(securityDetailsDTO.getOldPassword(), currentUser.getPassword())) {
-             throw new DataNotValidException("The old password is incorrect");
-        }
-
-        currentUser.setPassword(passwordEncoder.encode(securityDetailsDTO.getPassword()));
-        usersDAO.save(currentUser);
-
-        return ResponseEntity.ok("User password changed successfully");
-    }
-
-    private String uploadUserPhoto(MultipartFile photo) {
-        String fileName = cloudinaryService.uploadFileWithPublicRead(photo);
-        return cloudinaryService.getOriginalUrl(fileName);
-    }
-
-    @Scheduled(cron = "0 0/30 * * * *")
-    @Transactional
-    public void deleteInactiveUsers() {
-        LocalDateTime thirtyMinutesAgo = LocalDateTime.now().minus(codeExpirationTimeMs, ChronoUnit.MILLIS);
-        usersDAO.deleteByActiveFalseAndCreatedDateBefore(thirtyMinutesAgo);
     }
 }

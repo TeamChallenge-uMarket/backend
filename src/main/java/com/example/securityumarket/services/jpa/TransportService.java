@@ -6,13 +6,12 @@ import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.InsufficientPermissionsException;
 import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.main_page.request.RequestAddTransportDTO;
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportGallery;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.models.DTO.user_page.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.models.entities.*;
 import com.example.securityumarket.util.converter.transposrt_type.*;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.OrderBy;
@@ -39,12 +40,31 @@ public class TransportService {
 
     private final TransportDAO transportDAO;
 
-    private final TransportGalleryService transportGalleryService;
-
     private final TransportConverter transportConverter;
 
     private final UserService userService;
 
+    private final BodyTypeService bodyTypeService;
+
+    private final CityService cityService;
+
+    private final TransmissionService transmissionService;
+
+    private final FuelTypeService fuelTypeService;
+
+    private final DriveTypeService driveTypeService;
+
+    private final NumberAxlesService numberAxlesService;
+
+    private final TransportColorService transportColorService;
+
+    private final TransportConditionService transportConditionService;
+
+    private final ProducingCountryService producingCountryService;
+
+    private final WheelConfigurationService wheelConfigurationService;
+
+    private final TransportGalleryService transportGalleryService;
 
     public void save(Transport transport) {
         transportDAO.save(transport);
@@ -251,11 +271,123 @@ public class TransportService {
         transportDAO.deleteDeletedTransportsOlderThanOneMonth(oneMonthAgo);
     }
 
-    public ResponseEntity<String> updateTransportDetails(Long transportId, RequestAddTransportDTO requestAddTransportDTO, MultipartFile[] multipartFiles) {
+    @Transactional
+    public ResponseEntity<String> updateTransportDetails(
+            Long transportId,
+            @Valid RequestUpdateTransportDetails transportDetailsDTO,
+            MultipartFile[] multipartFiles) {
         Transport transport = findTransportById(transportId);
+        updateTransportFields(transportDetailsDTO, multipartFiles, transport);
 
-        return null;
+        if (transport.getStatus().equals(Transport.Status.ACTIVE)) {
+            transport.setStatus(Transport.Status.PENDING);
+        }
+
+        save(transport);
+        return ResponseEntity.ok("Transport details updated successfully");
     }
+
+    private <T> void updateFieldIfPresent(T newValue, Consumer<T> updateFunction) {
+        Optional.ofNullable(newValue)
+                .ifPresent(updateFunction);
+    }
+
+    private void updateTransportFields(
+            RequestUpdateTransportDetails transportDetailsDTO,
+            MultipartFile[] multipartFiles, Transport currentTransport) {
+        updateFieldIfPresent(transportDetailsDTO.getYear(), currentTransport::setYear);
+
+        updateFieldIfPresent(transportDetailsDTO.getMileage(), currentTransport::setMileage);
+
+        updateFieldIfPresent(transportDetailsDTO.getPrice(), currentTransport::setPrice);
+
+        updateFieldIfPresent(transportDetailsDTO.getBargain(), currentTransport::setBargain);
+
+        updateFieldIfPresent(transportDetailsDTO.getTrade(), currentTransport::setTrade);
+
+        updateFieldIfPresent(transportDetailsDTO.getMilitary(), currentTransport::setMilitary);
+
+        updateFieldIfPresent(transportDetailsDTO.getInstallmentPayment(), currentTransport::setInstallmentPayment);
+
+        updateFieldIfPresent(transportDetailsDTO.getUncleared(), currentTransport::setUncleared);
+
+        updateFieldIfPresent(transportDetailsDTO.getLoadCapacity(), currentTransport::setLoadCapacity);
+
+        updateFieldIfPresent(transportDetailsDTO.getAccidentHistory(), currentTransport::setAccidentHistory);
+
+        updateFieldIfPresent(transportDetailsDTO.getNumberOfDoors(), currentTransport::setNumberOfDoors);
+
+        updateFieldIfPresent(transportDetailsDTO.getNumberOfSeats(), currentTransport::setNumberOfSeats);
+
+        updateFieldIfPresent(transportDetailsDTO.getConsumptionCity(), currentTransport::setFuelConsumptionCity);
+
+        updateFieldIfPresent(transportDetailsDTO.getConsumptionHighway(), currentTransport::setFuelConsumptionHighway);
+
+        updateFieldIfPresent(transportDetailsDTO.getConsumptionMixed(), currentTransport::setFuelConsumptionMixed);
+
+        updateFieldIfPresent(transportDetailsDTO.getEngineDisplacement(), currentTransport::setEngineDisplacement);
+
+        updateFieldIfPresent(transportDetailsDTO.getEnginePower(), currentTransport::setEnginePower);
+
+        updateFieldIfPresent(transportDetailsDTO.getVincode(), currentTransport::setVincode);
+
+        updateFieldIfPresent(transportDetailsDTO.getDescription(), currentTransport::setDescription);
+
+
+        updateFieldIfPresent(transportDetailsDTO.getBodyType(), bodyType -> {
+            bodyTypeService.findById(bodyType);
+            currentTransport.setId(bodyType);
+        });
+
+        updateFieldIfPresent(transportDetailsDTO.getCity(), cityId -> {
+            City city = cityService.findById(cityId);
+            currentTransport.setCity(city);
+        });
+
+        updateFieldIfPresent(transportDetailsDTO.getTransmission(), transmissionId -> {
+            Transmission transmission = transmissionService.findById(transmissionId);
+            currentTransport.setTransmission(transmission);
+        });
+
+        updateFieldIfPresent(transportDetailsDTO.getFuelType(), fuelTypeId -> {
+            FuelType fuelType = fuelTypeService.findById(fuelTypeId);
+            currentTransport.setFuelType(fuelType);
+        });
+
+        updateFieldIfPresent(transportDetailsDTO.getDriveType(), driveTypeId -> {
+            DriveType driveType = driveTypeService.findById(driveTypeId);
+            currentTransport.setDriveType(driveType);
+        });
+
+        updateFieldIfPresent(transportDetailsDTO.getNumberAxles(), numberAxlesId -> {
+            NumberAxles numberAxles = numberAxlesService.findById(numberAxlesId);
+            currentTransport.setNumberAxles(numberAxles);
+        });
+
+        updateFieldIfPresent(transportDetailsDTO.getColor(), colorId -> {
+            TransportColor color = transportColorService.findById(colorId);
+            currentTransport.setTransportColor(color);
+        });
+
+        updateFieldIfPresent(transportDetailsDTO.getCondition(), conditionId -> {
+            TransportCondition condition = transportConditionService.findById(conditionId);
+            currentTransport.setTransportCondition(condition);
+        });
+
+        updateFieldIfPresent(transportDetailsDTO.getProducingCountry(), countryId -> {
+            ProducingCountry country = producingCountryService.findById(countryId);
+            currentTransport.setProducingCountry(country);
+        });
+
+        updateFieldIfPresent(transportDetailsDTO.getWheelConfiguration(), wheelConfigurationId -> {
+            WheelConfiguration wheelConfiguration = wheelConfigurationService.findById(wheelConfigurationId);
+            currentTransport.setWheelConfiguration(wheelConfiguration);
+        });
+
+        updateFieldIfPresent(multipartFiles, files -> transportGalleryService.uploadFiles(
+                files, transportDetailsDTO.getMainPhoto(), currentTransport));
+    }
+
 
     public ResponseEntity<? extends TransportDTO> getTransportDetails(Long transportId) {
         Transport transport = findTransportById(transportId);

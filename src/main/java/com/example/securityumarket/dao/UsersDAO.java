@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -18,7 +17,8 @@ public interface UsersDAO extends JpaRepository<Users, Long> {
 
     boolean existsUsersByEmail(String email);
 
-    boolean existsUsersByPhone(String phone);
+    @Query("SELECT u FROM Users u WHERE u.phone = :phone")
+    Optional<Users> findUserByPhone(@Param("phone")String phone);
 
     @Modifying
     @Query("DELETE FROM Users u WHERE u.active = false AND u.created < :date")

@@ -15,9 +15,9 @@ public interface TransportGalleryDAO extends JpaRepository<TransportGallery, Lon
     @Query("select tg.url from TransportGallery tg where tg.transport.id = :transportId and tg.isMain = true")
     Optional<String> findMainFileByTransport(@Param("transportId") long transportId);
 
-    @Query("SELECT tg FROM TransportGallery tg WHERE tg.imageName IN (:imageNames)")
-    Optional<List<TransportGallery>> findCarGalleriesByImageNames(@Param("imageNames") List<String> imageNames);
-
     @Query("SELECT tg FROM TransportGallery tg WHERE tg.transport.id = :transportId")
-    Optional<List<TransportGallery>> findAllByTransportId(Long transportId);
+    Optional<List<TransportGallery>> findAllByTransportId(@Param("transportId")Long id);
+
+    @Query("select tg from TransportGallery tg where tg.transport.id = :transportId and tg.isMain = true")
+    Optional<TransportGallery> findMainTransportGalleryByTransportId(@Param("transportId")Long id);
 }

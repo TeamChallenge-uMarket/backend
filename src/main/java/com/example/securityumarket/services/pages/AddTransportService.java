@@ -48,18 +48,14 @@ public class AddTransportService {
                                          MultipartFile[] multipartFiles) {
             Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
             transportService.save(transport);
-            uploadFilesFromRequest(multipartFiles, transport);
+            transportGalleryService.uploadFiles(
+                    multipartFiles, requestAddTransportDTO.getMainPhoto(), transport);
             return ResponseEntity.ok("The ad with your transport has been successfully added.");
     }
 
-    private void uploadFilesFromRequest(MultipartFile[] files, Transport transport) {
-        transportGalleryService.uploadFiles(files, transport);
-    }
-
-
-    private Transport buildCarFromRequestAddCarDTO(RequestAddTransportDTO requestAddTransportDTO) {
+    public Transport buildCarFromRequestAddCarDTO(RequestAddTransportDTO requestAddTransportDTO) {
         return Transport.builder()
-                .user(getAuthenticatedUser())
+                .user(userService.getAuthenticatedUser())
                 .transportModel(getEntityFromRequest(
                         requestAddTransportDTO.getModel(), transportModelService::findById))
                 .year(requestAddTransportDTO.getYear())
@@ -111,10 +107,5 @@ public class AddTransportService {
             return serviceMethod.apply(entityId);
         }
         return null;
-    }
-
-
-    private Users getAuthenticatedUser() {
-        return userService.getAuthenticatedUser();
     }
 }
