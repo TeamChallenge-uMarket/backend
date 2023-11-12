@@ -26,6 +26,7 @@ import java.util.List;
 @Tag(name = "Catalog page", description = "This controller contains the catalog page endpoints, such as: " +
         "add favorite, remove favorite, searchTransports")
 public class CatalogController {
+
     private final CatalogPageService catalogPageService;
 
     @Operation(description = "This endpoint allows the user to add a vehicle to favorites by its ID")

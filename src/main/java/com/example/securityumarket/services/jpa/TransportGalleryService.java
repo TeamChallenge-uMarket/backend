@@ -8,11 +8,13 @@ import com.example.securityumarket.models.entities.TransportGallery;
 import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Getter
@@ -22,6 +24,9 @@ public class TransportGalleryService {
     private final TransportGalleryDAO transportGalleryDAO;
 
     private final CloudinaryService cloudinaryService;
+
+    @Value("${cloudinary.default.not-found-photo}")
+    private String DEFAULT_PHOTO;
 
 //    private final StorageService storageService;
 
@@ -49,11 +54,6 @@ public class TransportGalleryService {
         save(transportGallery);
     }
 
-    public void updateMainPhoto(Transport transport, String mainPhoto) {
-        deactivateMainPhoto(transport);
-        activateMainPhoto(transport, mainPhoto);
-    }
-
     private TransportGallery findTransportGalleryByTransportAndImageName(Transport transport, String imageName) {
         List<TransportGallery> allByTransportId = findAllByTransportId(transport.getId());
         for (TransportGallery gallery : allByTransportId) {
@@ -64,14 +64,24 @@ public class TransportGalleryService {
         throw new DataNotFoundException("Gallery by image name");
     }
 
-    private TransportGallery findMainTransportGalleryByTransportId(Long id) {
-        return transportGalleryDAO.findMainTransportGalleryByTransportId(id)
-                .orElseThrow(() -> new DataNotFoundException("Gallery"));
-    }
-
     private String extractTimeExpFromImageName(String imageName) {
         int atIndex = imageName.indexOf('_');
         return (atIndex != -1) ? imageName.substring(atIndex + 1) : imageName;
+    }
+
+    public TransportGallery findById(Long id) {
+        return transportGalleryDAO.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("Gallery by id"));
+    }
+
+    public void updateMainPhoto(Transport transport, String mainPhoto) {
+        deactivateMainPhoto(transport);
+        activateMainPhoto(transport, mainPhoto);
+    }
+
+    private TransportGallery findMainTransportGalleryByTransportId(Long id) {
+        return transportGalleryDAO.findMainTransportGalleryByTransportId(id)
+                .orElseThrow(() -> new DataNotFoundException("Gallery"));
     }
 
     private TransportGallery buildCarGallery(String fileName, String fileUrl, Transport transport) {
@@ -93,7 +103,7 @@ public class TransportGalleryService {
     }
 
     private String getUrlImageNotFound(){
-        return "https://res.cloudinary.com/de4bysqtm/image/upload/v1697906978/czkhxykmkfn92deqncp5.jpg";
+        return DEFAULT_PHOTO;
     }
     private void save(TransportGallery transportGallery) {
         transportGalleryDAO.save(transportGallery);
@@ -104,8 +114,13 @@ public class TransportGalleryService {
                 .orElseThrow(() -> new DataNotFoundException("Gallery"));
     }
 
-    public List<String> findAllUrlByTransportId(Long transportId) {
-        List<TransportGallery> allByTransportId = findAllByTransportId(transportId);
-        return allByTransportId.stream().map(TransportGallery::getUrl).toList();
+    @Transactional
+    public ResponseEntity<String> deleteGalleryTransportByGalleryId(List<Long> galleriesId) {
+        for (Long galleryId : galleriesId) {
+            TransportGallery gallery = findById(galleryId);
+            cloudinaryService.deleteFile(gallery.getImageName());
+            transportGalleryDAO.deleteTransportGalleryById(gallery.getId());
+        }
+        return ResponseEntity.ok("The files have been successfully deleted");
     }
 }

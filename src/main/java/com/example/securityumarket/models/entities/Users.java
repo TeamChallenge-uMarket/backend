@@ -62,7 +62,8 @@ public class Users extends DateAudit implements UserDetails {
     @JoinColumn(name = "city")
     private City city;
 
-    @Column(insertable = false, name = "photo_url", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'https://res.cloudinary.com/de4bysqtm/image/upload/v1697906978/czkhxykmkfn92deqncp5.jpg'")
+    @Column(insertable = false, name = "photo_url", nullable = false,
+            columnDefinition = "VARCHAR(255) DEFAULT 'https://res.cloudinary.com/de4bysqtm/image/upload/v1697906978/czkhxykmkfn92deqncp5.jpg'")
     private String photoUrl;
 
     @Override

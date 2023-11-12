@@ -25,6 +25,7 @@ userId - ідентифікатор користувача, який додав 
 modelId - ідентифікатор моделі транспортного засобу.
  */
 
+import com.example.securityumarket.models.DTO.entities.TransportGalleryDTO;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -84,5 +85,5 @@ public class TransportDTO {
 
     protected String brand;
 
-    protected List<String> galleries;
+    protected List<TransportGalleryDTO> galleries;
 }
