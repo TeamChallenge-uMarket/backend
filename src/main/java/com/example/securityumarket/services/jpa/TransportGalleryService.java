@@ -26,7 +26,7 @@ public class TransportGalleryService {
     private final CloudinaryService cloudinaryService;
 
     @Value("${cloudinary.default.not-found-photo}")
-    private String PHOTO_NOT_FOUND;
+    private String DEFAULT_PHOTO;
 
 //    private final StorageService storageService;
 
@@ -103,7 +103,7 @@ public class TransportGalleryService {
     }
 
     private String getUrlImageNotFound(){
-        return PHOTO_NOT_FOUND;
+        return DEFAULT_PHOTO;
     }
     private void save(TransportGallery transportGallery) {
         transportGalleryDAO.save(transportGallery);

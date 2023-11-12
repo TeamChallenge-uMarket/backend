@@ -41,6 +41,11 @@ public class UserPageController {
         return userService.updateUserDetails(userDetailsDTO, multipartFile);
     }
 
+    @DeleteMapping("/delete-photo")
+    public ResponseEntity<String> deleteUserPhoto() {
+        return userService.deleteUserPhoto();
+    }
+
     @PutMapping("/security-info")
     public ResponseEntity<String> updateSecurityInformation(
             @Valid @RequestBody UserSecurityDetailsDTO securityDetailsDTO) {

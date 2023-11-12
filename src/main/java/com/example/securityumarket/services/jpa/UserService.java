@@ -41,6 +41,10 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
 
+    @Value("${cloudinary.default.not-found-photo}")
+    private String DEFAULT_PHOTO;
+
+
     @Value("${mail.code.expiration.time}")
     private long codeExpirationTimeMs;
 
@@ -178,5 +182,12 @@ public class UserService {
         }
 
         return normalizedNumber;
+    }
+
+    public ResponseEntity<String> deleteUserPhoto() {
+        Users authenticatedUser = getAuthenticatedUser();
+        authenticatedUser.setPhotoUrl(DEFAULT_PHOTO);
+        save(authenticatedUser);
+        return ResponseEntity.ok("The user photo has been deleted");
     }
 }
