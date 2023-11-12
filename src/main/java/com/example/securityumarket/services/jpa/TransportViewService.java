@@ -15,6 +15,7 @@ public class TransportViewService {
 
     private final TransportViewDAO transportViewDAO;
 
+
     public List<Transport> findPopularTransport() {
         return transportViewDAO.findPopularTransport()
                 .filter(list -> !list.isEmpty())
@@ -26,8 +27,6 @@ public class TransportViewService {
                 .filter(list -> !list.isEmpty())
                 .orElseThrow(() -> new DataNotFoundException("Popular transports by type"));
     }
-
-
 
     public List<Transport> findViewedCarsByRegisteredUser(Users user) {
         return transportViewDAO.findViewedCarsByRegisteredUser(user)

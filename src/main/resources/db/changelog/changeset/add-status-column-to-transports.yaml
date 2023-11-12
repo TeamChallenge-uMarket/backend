@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-status-column-to-transports
+      author: Oleh
+      changes:
+        - addColumn:
+            tableName: transports
+            columns:
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+                  defaultValue: 'ACTIVE'
+                  constraints:
+                    nullable: false

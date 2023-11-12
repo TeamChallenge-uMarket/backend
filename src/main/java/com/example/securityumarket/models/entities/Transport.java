@@ -1,14 +1,12 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -77,6 +75,14 @@ public class Transport extends DateAudit{
 
     @Column(name = "load_capacity")
     private Integer loadCapacity;
+
+    @Column(insertable = false, name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'ACTIVE'")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    public enum Status {
+        ACTIVE, PENDING, INACTIVE, DELETED
+    }
 
 
     @OneToMany(mappedBy = "transport")

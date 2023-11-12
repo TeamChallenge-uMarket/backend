@@ -90,4 +90,6 @@ public class RequestAddTransportDTO {
     private Long wheelConfiguration;
 
     private Long numberAxles;
+
+    private String mainPhoto;
 }

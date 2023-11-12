@@ -20,6 +20,7 @@ public class TransportConverter {
 
     private final UserService userService;
 
+
     public <T extends TransportDTO> T convertTransportToTypeDTO(Transport transport, TransportTypeConversionStrategy strategy) {
         T dto = strategy.createDTO(transport);
         return mapCommonProperties(transport, dto);
@@ -68,6 +69,7 @@ public class TransportConverter {
         dto.setUserName(transport.getUser().getName());
         dto.setModel(transport.getTransportModel().getModel());
         dto.setBrand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand());
+        dto.setGalleries(transportGalleryService.findAllUrlByTransportId(transport.getId()));
         return dto;
     }
 

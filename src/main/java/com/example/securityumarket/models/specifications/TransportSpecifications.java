@@ -1,6 +1,9 @@
 package com.example.securityumarket.models.specifications;
 
 import com.example.securityumarket.models.entities.Transport;
+import com.example.securityumarket.models.entities.TransportView;
+import com.example.securityumarket.models.entities.Users;
+import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -384,7 +387,44 @@ public class TransportSpecifications {
         };
     }
 
-    public static Specification<Transport> sortBy(SortBy sortBy, OrderBy orderBy) {
+    public static Specification<Transport> isActive() {
+        return (root, query, cb) -> cb.equal(root.get("status"), Transport.Status.ACTIVE);
+    }
+
+    public static Specification<Transport> sortPopularTransports() {
+        return (root, query, cb) -> {
+            Join<Object, Object> transportViewsJoin = root.join("transportViews");
+            query.groupBy(root.get("id"));
+            Expression<Long> viewCount = cb.count(transportViewsJoin);
+            query.orderBy(cb.desc(viewCount));
+            return null;
+        };
+    }
+
+    public static Specification<Transport> findTransportViewedByUser(Users user) {
+        return (root, query, cb) -> {
+            Join<Transport, TransportView> transportViewsJoin = root.join("transportViews");
+            query.orderBy(cb.desc(transportViewsJoin.get("lastUpdate")));
+            return cb.equal(transportViewsJoin.get("user"), user);
+        };
+    }
+
+    public static Specification<Transport> findFavoriteTransportsByUser(Users user) {
+        return (root, query, cb) -> {
+            Join<Transport, TransportView> transportFavoritesJoin = root.join("transportFavorites");
+            return cb.equal(transportFavoritesJoin.get("user"), user);
+        };
+    }
+
+    public static Specification<Transport> findByUser(Users user) {
+        return (root, query, cb) -> cb.equal(root.get("user"), user);
+    }
+
+    public static Specification<Transport> hasStatus(Transport.Status status) {
+        return (root, query, cb) -> cb.equal(root.get("status"), status);
+    }
+
+    public static <T> Specification<T> sortBy(Class<T> entityClass, SortBy sortBy, OrderBy orderBy) {
         return (root, query, cb) -> {
             if (sortBy != null && orderBy != null) {
                 if (sortBy == SortBy.ASC) {

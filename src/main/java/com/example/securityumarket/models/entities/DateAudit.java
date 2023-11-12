@@ -1,5 +1,6 @@
 package com.example.securityumarket.models.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -15,5 +16,6 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class DateAudit extends CreatedAtAudit {
     @LastModifiedDate
+    @Column(nullable = false, updatable = false, name = "last_update")
     private LocalDateTime lastUpdate;
 }
