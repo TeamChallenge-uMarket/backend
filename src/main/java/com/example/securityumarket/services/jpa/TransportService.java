@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -276,8 +277,24 @@ public class TransportService {
             Long transportId,
             @Valid RequestUpdateTransportDetails transportDetailsDTO,
             MultipartFile[] multipartFiles) {
+
         Transport transport = findTransportById(transportId);
-        updateTransportFields(transportDetailsDTO, multipartFiles, transport);
+
+        if (transportDetailsDTO != null) {
+            updateTransportFields(transportDetailsDTO, transport);
+        }
+
+        if (multipartFiles != null) {
+            updateFieldIfPresent(multipartFiles, files -> {
+                if (transportDetailsDTO != null) {
+                    transportGalleryService.uploadFiles(
+                            files, transportDetailsDTO.getMainPhoto(), transport);
+                } else {
+                    transportGalleryService.uploadFiles(
+                            files, null, transport);
+                }
+            });
+        }
 
         if (transport.getStatus().equals(Transport.Status.ACTIVE)) {
             transport.setStatus(Transport.Status.PENDING);
@@ -293,8 +310,7 @@ public class TransportService {
     }
 
     private void updateTransportFields(
-            RequestUpdateTransportDetails transportDetailsDTO,
-            MultipartFile[] multipartFiles, Transport currentTransport) {
+            RequestUpdateTransportDetails transportDetailsDTO, Transport currentTransport) {
         updateFieldIfPresent(transportDetailsDTO.getYear(), currentTransport::setYear);
 
         updateFieldIfPresent(transportDetailsDTO.getMileage(), currentTransport::setMileage);
@@ -383,9 +399,6 @@ public class TransportService {
             WheelConfiguration wheelConfiguration = wheelConfigurationService.findById(wheelConfigurationId);
             currentTransport.setWheelConfiguration(wheelConfiguration);
         });
-
-        updateFieldIfPresent(multipartFiles, files -> transportGalleryService.uploadFiles(
-                files, transportDetailsDTO.getMainPhoto(), currentTransport));
     }
 
 

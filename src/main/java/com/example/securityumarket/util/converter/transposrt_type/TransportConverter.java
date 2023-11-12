@@ -1,14 +1,19 @@
 package com.example.securityumarket.util.converter.transposrt_type;
 
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
+import com.example.securityumarket.models.DTO.entities.TransportGalleryDTO;
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.entities.Transport;
+import com.example.securityumarket.models.entities.TransportGallery;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.FavoriteTransportService;
 import com.example.securityumarket.services.jpa.TransportGalleryService;
 import com.example.securityumarket.services.jpa.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
@@ -69,8 +74,16 @@ public class TransportConverter {
         dto.setUserName(transport.getUser().getName());
         dto.setModel(transport.getTransportModel().getModel());
         dto.setBrand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand());
-        dto.setGalleries(transportGalleryService.findAllUrlByTransportId(transport.getId()));
+        dto.setGalleries(buildTransportGalleryDTO(transport));
         return dto;
+    }
+
+    private List<TransportGalleryDTO> buildTransportGalleryDTO(Transport transport) {
+        List<TransportGallery> transportGalleries = transportGalleryService.findAllByTransportId(transport.getId());
+        return transportGalleries.stream().map(galleryList -> TransportGalleryDTO.builder()
+                .transportGalleryId(galleryList.getId())
+                .transportGalleryUrl(galleryList.getUrl())
+                .build()).collect(Collectors.toList());
     }
 
     private boolean isFavoriteTransport(Transport transport) {

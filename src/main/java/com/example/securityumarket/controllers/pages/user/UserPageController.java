@@ -5,6 +5,7 @@ import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.DTO.user_page.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.services.jpa.TransportGalleryService;
 import com.example.securityumarket.services.jpa.TransportService;
 import com.example.securityumarket.services.jpa.UserService;
 import jakarta.validation.Valid;
@@ -24,6 +25,8 @@ public class UserPageController {
     private final UserService userService;
 
     private final TransportService transportService;
+
+    private final TransportGalleryService transportGalleryService;
 
 
     @GetMapping
@@ -66,7 +69,13 @@ public class UserPageController {
     public ResponseEntity<String> updateTransportDetails(
             @PathVariable ("transport-id") Long transportId,
             @RequestPart(value = "multipartFiles", required = false) MultipartFile[] multipartFiles,
-            @RequestPart(value = "body") @Valid RequestUpdateTransportDetails updateTransportDetails) {
+            @RequestPart(value = "body", required = false) @Valid RequestUpdateTransportDetails updateTransportDetails) {
         return transportService.updateTransportDetails(transportId, updateTransportDetails, multipartFiles);
+    }
+
+    @DeleteMapping("/my-transports/delete-files/")
+    public ResponseEntity<String> deleteGalleryFiles(
+            @RequestParam List<Long> galleryId) {
+        return transportGalleryService.deleteGalleryTransportByGalleryId(galleryId);
     }
 }

@@ -36,11 +36,17 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )
+                .logout(logoutConfigurer -> {
+                    logoutConfigurer
+                            .logoutUrl("/api/v1/authorization/logout")
+                            .logoutSuccessUrl("/api/v1/authorization/login")
+                            .invalidateHttpSession(true)
+                            .clearAuthentication(true)
+                            .deleteCookies("JSESSIONID");
+                })
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .logout(logoutConfigurer ->
-                        logoutConfigurer.logoutSuccessUrl("/api/v1/authorization/login"))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
