@@ -3,6 +3,7 @@ package com.example.securityumarket.services.storage;
 import com.amazonaws.util.IOUtils;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.example.securityumarket.exception.CloudinaryException;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DataNotValidException;
 import lombok.RequiredArgsConstructor;
@@ -45,11 +46,10 @@ public class CloudinaryService {
                     Map uploadResult = cloudinary.uploader().upload(fileObj, Map.of("public_id", fileName));
                     return uploadResult.get("public_id").toString();
                 } catch (IOException e) {
-                    log.error("Error uploading multipartFile", e);
+                    throw new CloudinaryException();
                 } finally {
                     fileObj.delete();
                 }
-                return "File uploaded : " + fileName;
             } else {
                 throw new DataNotValidException("Unsupported file type. Please upload photos or videos.");
             }
@@ -63,7 +63,6 @@ public class CloudinaryService {
         try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
             fos.write(file.getBytes());
         } catch (IOException e) {
-            log.error("Error converting multipartFile to file", e);
             throw new DataNotValidException("multipartFile is not valid");
         }
         return convertedFile;
@@ -74,7 +73,6 @@ public class CloudinaryService {
             Map resourceInfo = cloudinary.api().resource(fileName, ObjectUtils.emptyMap());
             return (String) resourceInfo.get("url");
         } catch (Exception e) {
-            log.error("Error getOriginalUrl" + e.getMessage());
             throw new DataNotFoundException("File with the name " + fileName);
         }
     }
@@ -86,8 +84,7 @@ public class CloudinaryService {
             InputStream inputStream = url.openStream();
             return IOUtils.toByteArray(inputStream);
         } catch (IOException e) {
-            log.error("FAILED to download the file: " + fileName);
-            throw new DataNotFoundException("FAILED to download the file: " + fileName);
+            throw new CloudinaryException("FAILED to download the file: " + fileName);
 
         }
     }
@@ -109,7 +106,6 @@ public class CloudinaryService {
             Map result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
             if (result.get("result").equals("ok")) {
                 String text = String.format("File with publicId %s has been successfully deleted.", publicId);
-                log.info(text);
                 return ResponseEntity.ok(text);
             } else {
                 String text = String.format("Failed to delete file with %s", publicId);
@@ -118,8 +114,7 @@ public class CloudinaryService {
             }
         } catch (Exception e) {
             String text = String.format("Error deleting file with publicId %s %s", publicId, e);
-            log.error(text);
-            throw new DataNotValidException(text);
+            throw new CloudinaryException(text);
         }
     }
 }

@@ -9,10 +9,10 @@ VALUES ('Test-User',
         NOW(),
         true);
 
-INSERT INTO users(id, created, last_update,
+INSERT INTO users (created, last_update,
                   email, name, password, phone,
                   refresh_token, city, active)
-VALUES (2, '2023-09-27 01:02:29.892836', '2023-10-03 17:37:59.276989',
+VALUES ('2023-09-27 01:02:29.892836', '2023-10-03 17:37:59.276989',
         'praice07@gmail.com', 'Oleh11',
         '$2a$10$/SZVOFuQwjD0CGuubIzi../AaUmkcFYbMdLfAvnWVBmcvxlZJZDKq', '+380982704401',
         'refresh_token_value',

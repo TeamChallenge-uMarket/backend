@@ -27,6 +27,18 @@ public class ApplicationExceptionHandler {
         return createErrorResponse(exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UnauthenticatedException.class)
+    public Map<String, String> handleUnauthenticatedException(UnauthenticatedException exception) {
+        return createErrorResponse(exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BadRequestException.class)
+    public Map<String, String> handleBadRequestException(BadRequestException exception) {
+        return createErrorResponse(exception.getMessage());
+    }
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(DataNotFoundException.class)
     public Map<String, String> handleDataNotFoundException(DataNotFoundException exception) {
@@ -46,8 +58,8 @@ public class ApplicationExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(EmailSendingException.class)
-    public Map<String, String> handleEmailSendingException(EmailSendingException exception) {
+    @ExceptionHandler({EmailSendingException.class, CloudinaryException.class})
+    public Map<String, String> handleException(Exception exception) {
         return createErrorResponse(exception.getMessage());
     }
 
