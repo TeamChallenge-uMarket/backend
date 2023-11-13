@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
@@ -186,8 +189,24 @@ public class UserService {
 
     public ResponseEntity<String> deleteUserPhoto() {
         Users authenticatedUser = getAuthenticatedUser();
+        if ((authenticatedUser.getPhotoUrl() != null)
+                && (!authenticatedUser.getPassword().equals(DEFAULT_PHOTO))) {
+            String fileName = extractFileNameFromUrl(authenticatedUser.getPhotoUrl());
+            cloudinaryService.deleteFile(fileName);
+        }
         authenticatedUser.setPhotoUrl(DEFAULT_PHOTO);
         save(authenticatedUser);
         return ResponseEntity.ok("The user photo has been deleted");
+    }
+
+    private static String extractFileNameFromUrl(String url) {
+        try {
+            URL imageUrl = new URL(url);
+            Path path = Paths.get(imageUrl.getPath());
+            String fileNameAndFormat = path.getFileName().toString();
+            return fileNameAndFormat.substring(0, fileNameAndFormat.length()-4);
+        } catch (Exception e) {
+            throw new DataNotValidException("Url file is not valid");
+        }
     }
 }
