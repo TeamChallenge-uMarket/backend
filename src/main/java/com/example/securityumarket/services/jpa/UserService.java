@@ -167,7 +167,7 @@ public class UserService {
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setCityId((user.getCity() != null) ? (user.getCity().getId()) : null);
-        dto.setPhone(dto.getPhone());
+        dto.setPhone(user.getPhone());
         dto.setPhotoUrl(user.getPhotoUrl());
         return dto;
     }
