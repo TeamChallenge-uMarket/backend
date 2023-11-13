@@ -3,4 +3,4 @@
 http://localhost:8080/swagger/swagger-ui/index.html
 
 #### For remote server
-http://138.68.113.54:8080/swagger/swagger-ui/index.html
+http://134.209.230.247:8080/swagger/swagger-ui/index.html
