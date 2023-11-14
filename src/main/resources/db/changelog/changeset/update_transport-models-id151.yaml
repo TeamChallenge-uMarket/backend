@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: update_transport-models-id151.yaml
+      author: Oleh
+      changes:
+        - sqlFile:
+            path: classpath:db/changelog/sql/update_transport-models-id151.sql
