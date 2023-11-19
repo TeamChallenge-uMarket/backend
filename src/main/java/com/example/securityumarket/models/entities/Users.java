@@ -46,7 +46,7 @@ public class Users extends DateAudit implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<UserPermission> userPermissions;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
 
     @OneToMany(mappedBy = "user")

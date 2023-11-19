@@ -24,4 +24,6 @@ public interface TransportViewDAO extends JpaRepository<TransportView, Long> {
 
     @Query("SELECT cw.transport FROM TransportView cw WHERE cw.transport.transportModel.transportTypeBrand.transportType.id=:id GROUP BY cw.transport ORDER BY count(cw.transport) DESC LIMIT 20")
     Optional<List<Transport>> findPopularTransportByTypeId(long id);
+
+    Integer countAllByTransport(Transport transport);
 }

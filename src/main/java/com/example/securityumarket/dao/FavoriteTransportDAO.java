@@ -23,4 +23,7 @@ public interface FavoriteTransportDAO extends JpaRepository<FavoriteTransport, L
     @Modifying
     @Query("DELETE FROM FavoriteTransport ft WHERE ft.user = :user AND ft.transport = :transport")
     void deleteByUserAndTransport(@Param("user") Users user, @Param("transport") Transport transport);
+
+
+    Integer countAllByTransport(Transport transport);
 }

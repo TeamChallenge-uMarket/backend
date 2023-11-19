@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class FavoriteTransportService {
+
     private final FavoriteTransportDAO favoriteTransportDAO;
 
     public List<Transport> findFavorites(Users user) {
@@ -31,6 +32,9 @@ public class FavoriteTransportService {
         favoriteTransportDAO.deleteByUserAndTransport(user, transport);
     }
 
+    public Integer countByTransport(Transport transport) {
+        return favoriteTransportDAO.countAllByTransport(transport);
+    }
 
     public void addFavorite(Users authenticatedUser, Transport transport) {
         favoriteTransportDAO.save(FavoriteTransport.builder()
