@@ -9,6 +9,7 @@ import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSear
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.DTO.user_page.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.models.DTO.user_page.response.TransportByStatusResponse;
 import com.example.securityumarket.models.entities.*;
 import com.example.securityumarket.util.converter.transposrt_type.*;
 import jakarta.validation.Valid;
@@ -114,12 +115,12 @@ public class TransportService {
                 .orElseThrow(() -> new DataNotFoundException("Transport by id"));
     }
 
-    public ResponseEntity<List<ResponseSearchDTO>> getMyTransportsByStatus(String status) {
+    public ResponseEntity<List<TransportByStatusResponse>> getMyTransportsByStatus(String status) {
         Users authenticatedUser = userService.getAuthenticatedUser();
         try {
             Transport.Status transportStatus = Transport.Status.valueOf(status.toUpperCase());
             List<Transport> transportByUserAndStatus = findTransportByUserAndStatus(authenticatedUser, transportStatus);
-            return ResponseEntity.ok(convertTransportListToTransportSearchDTO(transportByUserAndStatus));
+            return ResponseEntity.ok(convertTransportListToTransportByStatusResponse(transportByUserAndStatus));
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid status");
         }
@@ -218,6 +219,13 @@ public class TransportService {
     public List<ResponseSearchDTO> convertTransportListToTransportSearchDTO(List<Transport> transports) {
         return transports.stream()
                 .map(transportConverter::convertTransportTransportSearchDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    public List<TransportByStatusResponse> convertTransportListToTransportByStatusResponse(List<Transport> transports) {
+        return transports.stream()
+                .map(transportConverter::convertTransportToTransportByStatusResponse)
                 .collect(Collectors.toList());
     }
 
