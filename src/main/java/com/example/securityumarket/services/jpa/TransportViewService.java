@@ -16,6 +16,10 @@ public class TransportViewService {
     private final TransportViewDAO transportViewDAO;
 
 
+    public Integer countByTransport(Transport transport) {
+        return transportViewDAO.countAllByTransport(transport);
+    }
+
     public List<Transport> findPopularTransport() {
         return transportViewDAO.findPopularTransport()
                 .filter(list -> !list.isEmpty())

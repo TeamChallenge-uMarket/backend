@@ -22,6 +22,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Users users = usersDAO.findAppUserByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + username));
 
-        return new User(users.getEmail(), users.getPassword(), new ArrayList<>());
+        return new User(users.getEmail(), users.getPassword(), users.getAuthorities());
     }
 }
