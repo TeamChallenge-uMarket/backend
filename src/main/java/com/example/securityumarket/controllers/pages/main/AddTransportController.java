@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/main/add-transport")
 @RequiredArgsConstructor
 @Tag(name = "Add transport", description = "Add transport endpoints")

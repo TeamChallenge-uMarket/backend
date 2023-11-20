@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @AllArgsConstructor
 @RequestMapping("/api/v1/authorization/reset-password")
 @Tag(name = "Reset passwords", description = "This controller contains the following endpoints: reset password endpoints: reset-password, form, send-code," +
