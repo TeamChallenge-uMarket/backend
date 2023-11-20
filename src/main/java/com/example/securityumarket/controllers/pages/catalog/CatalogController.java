@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/catalog")
 @RequiredArgsConstructor
 @Tag(name = "Catalog page", description = "This controller contains the catalog page endpoints, such as: " +
