@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-//@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/user-page")
 @RequiredArgsConstructor
 public class UserPageController {
