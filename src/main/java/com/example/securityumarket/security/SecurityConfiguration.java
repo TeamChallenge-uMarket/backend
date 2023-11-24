@@ -17,7 +17,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.io.ObjectInputFilter;
 import java.util.List;
 
 @RequiredArgsConstructor

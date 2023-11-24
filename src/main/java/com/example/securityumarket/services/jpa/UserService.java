@@ -26,6 +26,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -208,5 +211,20 @@ public class UserService {
         } catch (Exception e) {
             throw new DataNotValidException("Url file is not valid");
         }
+    }
+
+    public void setUserStatusOnline(Users user) {
+        user.setStatus(Users.Status.ONLINE);
+        save(user);
+    }
+
+    public void setUserStatusOffline(Users user) {
+        Users userByEmail = findAppUserByEmail(user.getEmail());
+        userByEmail.setStatus(Users.Status.OFFLINE);
+        save(userByEmail);
+    }
+
+    public List<Users> findAllByStatus(Users.Status status) {
+        return usersDAO.findAllByStatus(status).orElse(Collections.emptyList());
     }
 }
