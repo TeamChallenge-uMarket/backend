@@ -1,4 +1,4 @@
-package com.example.securityumarket.models.DTO.catalog_page.response;
+package com.example.securityumarket.models.DTO.user_page.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseSearchDTO {
+public class TransportByStatusResponse {
 
     private Long id;
 
@@ -25,7 +25,7 @@ public class ResponseSearchDTO {
     private BigDecimal price;
 
     private Integer mileage;
-  
+
     private String description;
 
     private String transmission;
@@ -41,4 +41,12 @@ public class ResponseSearchDTO {
     private String fileUrl;
 
     private Boolean isFavorite;
+
+    private Integer viewCount;
+
+    private Integer openedPhoneCount;
+
+    private Integer addedFavoriteCount;
+
+    private LocalDateTime lastUpdated;
 }

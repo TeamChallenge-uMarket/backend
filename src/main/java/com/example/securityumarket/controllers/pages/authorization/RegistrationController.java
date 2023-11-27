@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*")
 @AllArgsConstructor
 @RequestMapping("/api/v1/authorization/register")
 @Tag(name = "Registration", description = "This controller contains registration page endpoints, such as: registration, verify-account, resend-code")
@@ -85,5 +84,10 @@ public class RegistrationController {
                                                 @Parameter(description = "The confirmation token")
                                                 @RequestParam String token) {
         return registrationService.verifyAccount(email, token);
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "test page";
     }
 }

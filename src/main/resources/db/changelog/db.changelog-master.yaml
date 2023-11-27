@@ -87,3 +87,11 @@ databaseChangeLog:
       file: db/changelog/changeset/add-status-column-to-transports.yaml
   - include:
       file: db/changelog/changeset/execute-sql-insert-transport-gallery.yaml
+  - include:
+      file: db/changelog/changeset/update_transport-models-id151.yaml
+  - include:
+      file: db/changelog/changeset/add-status-column-to-users.yaml
+  - include:
+      file: db/changelog/changeset/createtables/create-chat-rooms-table.yaml
+  - include:
+      file: db/changelog/changeset/createtables/create-chat-messages-table.yaml

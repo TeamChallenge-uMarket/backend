@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-status-column-to-users
+      author: Oleh
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  defaultValue: 'OFFLINE'
+                  name: status
+                  type: VARCHAR(255)

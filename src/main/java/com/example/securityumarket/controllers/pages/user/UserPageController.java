@@ -5,6 +5,7 @@ import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.DTO.user_page.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.models.DTO.user_page.response.TransportByStatusResponse;
 import com.example.securityumarket.services.jpa.TransportGalleryService;
 import com.example.securityumarket.services.jpa.TransportService;
 import com.example.securityumarket.services.jpa.UserService;
@@ -26,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequestMapping("/api/v1/user-page")
 @RequiredArgsConstructor
 public class UserPageController {
@@ -62,7 +62,7 @@ public class UserPageController {
     }
 
     @GetMapping("/my-transports/{status}")
-    public ResponseEntity<List<ResponseSearchDTO>> getMyTransports(@PathVariable String status) {
+    public ResponseEntity<List<TransportByStatusResponse>> getMyTransports(@PathVariable String status) {
         return transportService.getMyTransportsByStatus(status);
     }
 

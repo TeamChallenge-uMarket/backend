@@ -2,6 +2,7 @@ package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,13 +41,23 @@ public class Users extends DateAudit implements UserDetails {
     @Column(name = "active", nullable = false)
     private boolean active;
 
+    @Column(name = "status", nullable = false)
+    @ColumnDefault("'OFFLINE'")
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    public enum Status {
+        ONLINE,
+        OFFLINE
+    }
+
     @OneToMany(mappedBy = "user")
     private List<Transport> transports;
 
     @OneToMany(mappedBy = "user")
     private List<UserPermission> userPermissions;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<UserRole> userRoles;
 
     @OneToMany(mappedBy = "user")

@@ -21,8 +21,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -170,7 +176,7 @@ public class UserService {
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setCityId((user.getCity() != null) ? (user.getCity().getId()) : null);
-        dto.setPhone(dto.getPhone());
+        dto.setPhone(user.getPhone());
         dto.setPhotoUrl(user.getPhotoUrl());
         return dto;
     }
@@ -201,5 +207,31 @@ public class UserService {
         } else {
             return ResponseEntity.ok("The user photo is already deleted");
         }
+    }
+
+    private static String extractFileNameFromUrl(String url) {
+        try {
+            URL imageUrl = new URL(url);
+            Path path = Paths.get(imageUrl.getPath());
+            String fileNameAndFormat = path.getFileName().toString();
+            return fileNameAndFormat.substring(0, fileNameAndFormat.length()-4);
+        } catch (Exception e) {
+            throw new DataNotValidException("Url file is not valid");
+        }
+    }
+
+    public void setUserStatusOnline(Users user) {
+        user.setStatus(Users.Status.ONLINE);
+        save(user);
+    }
+
+    public void setUserStatusOffline(Users user) {
+        Users userByEmail = findAppUserByEmail(user.getEmail());
+        userByEmail.setStatus(Users.Status.OFFLINE);
+        save(userByEmail);
+    }
+
+    public List<Users> findAllByStatus(Users.Status status) {
+        return usersDAO.findAllByStatus(status).orElse(Collections.emptyList());
     }
 }

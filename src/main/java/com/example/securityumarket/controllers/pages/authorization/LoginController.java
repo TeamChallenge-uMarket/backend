@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*")
 @AllArgsConstructor
 @RequestMapping("/api/v1/authorization/login")
 @Tag(name = "Login", description = "This controller contains login page endpoints, such as: login, refresh-token")

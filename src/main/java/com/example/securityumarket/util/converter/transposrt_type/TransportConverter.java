@@ -3,11 +3,13 @@ package com.example.securityumarket.util.converter.transposrt_type;
 import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.entities.TransportGalleryDTO;
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
+import com.example.securityumarket.models.DTO.user_page.response.TransportByStatusResponse;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.TransportGallery;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.FavoriteTransportService;
 import com.example.securityumarket.services.jpa.TransportGalleryService;
+import com.example.securityumarket.services.jpa.TransportViewService;
 import com.example.securityumarket.services.jpa.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,6 +25,8 @@ public class TransportConverter {
 
     private final FavoriteTransportService favoriteTransportService;
 
+    private final TransportViewService transportViewService;
+
     private final UserService userService;
 
 
@@ -33,6 +37,29 @@ public class TransportConverter {
 
     public ResponseSearchDTO convertTransportTransportSearchDTO(Transport transport) {
         return ResponseSearchDTO.builder()
+                .id(transport.getId())
+                .brand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand())
+                .model(transport.getTransportModel().getModel())
+                .price(transport.getPrice())
+                .year(transport.getYear())
+                .mileage(transport.getMileage())
+                .description(transport.getDescription())
+                .transmission((transport.getTransmission() != null) ? transport.getTransmission().getTransmission() : null)
+                .fuelType((transport.getFuelType() != null) ? transport.getFuelType().getFuelType() : null)
+                .engineDisplacement(transport.getEngineDisplacement())
+                .city((transport.getCity() != null) ? transport.getCity().getDescription() : null)
+                .fileUrl(transportGalleryService.findMainFileByTransport(transport.getId()))
+                .isFavorite(isFavoriteTransport(transport))
+                .created(transport.getCreated())
+                .build();
+    }
+
+    public TransportByStatusResponse convertTransportToTransportByStatusResponse(Transport transport) {
+        return  TransportByStatusResponse.builder()
+                .lastUpdated(transport.getLastUpdate())
+                .addedFavoriteCount(favoriteTransportService.countByTransport(transport))
+                .openedPhoneCount(null)//TODO openedPhoneCount
+                .viewCount(transportViewService.countByTransport(transport))
                 .id(transport.getId())
                 .brand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand())
                 .model(transport.getTransportModel().getModel())

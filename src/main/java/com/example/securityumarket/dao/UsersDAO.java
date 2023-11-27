@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +24,6 @@ public interface UsersDAO extends JpaRepository<Users, Long> {
     @Modifying
     @Query("DELETE FROM Users u WHERE u.active = false AND u.created < :date")
     void deleteByActiveFalseAndCreatedDateBefore(@Param("date")LocalDateTime created_date);
+
+    Optional<List<Users>> findAllByStatus(Users.Status status);
 }
