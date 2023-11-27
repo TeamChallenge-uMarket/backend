@@ -1,0 +1,1 @@
+DELETE FROM TRANSPORTS WHERE descprion = 'test-transport'

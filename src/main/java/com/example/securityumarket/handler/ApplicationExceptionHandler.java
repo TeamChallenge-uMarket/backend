@@ -24,6 +24,7 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateDataException.class)
     public Map<String, String> handleDuplicateDataException(DuplicateDataException exception) {
+        exception.printStackTrace();
         return createErrorResponse(exception.getMessage());
     }
 
