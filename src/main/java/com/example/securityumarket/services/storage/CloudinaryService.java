@@ -117,4 +117,10 @@ public class CloudinaryService {
             throw new CloudinaryException(text);
         }
     }
+
+    public static String getPhotoPublicIdFromUrl(String photoUrl) {
+        photoUrl = photoUrl.substring(photoUrl.lastIndexOf('/'));
+        String publicId = photoUrl.substring(photoUrl.lastIndexOf('/')+ 1);
+        return publicId.substring(0, publicId.lastIndexOf('.'));
+    }
 }

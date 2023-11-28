@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-chat-rooms-table
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: chat_rooms
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: chat_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sender_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: recipient_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP(6)
