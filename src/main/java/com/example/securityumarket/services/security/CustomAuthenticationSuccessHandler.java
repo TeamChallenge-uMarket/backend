@@ -38,7 +38,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
-
     }
 
     private AuthenticationResponse generateAuthenticationResponse(Users user) {

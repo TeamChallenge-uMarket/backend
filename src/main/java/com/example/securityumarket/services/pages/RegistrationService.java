@@ -84,6 +84,7 @@ public class RegistrationService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .active(false)
+                .status(Users.Status.OFFLINE)
                 .build();
     }
 }
