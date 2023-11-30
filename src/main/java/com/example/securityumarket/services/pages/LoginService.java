@@ -2,6 +2,7 @@ package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.UnauthenticatedException;
+import com.example.securityumarket.models.DTO.login_page.OAuth2Request;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.Users;
@@ -23,15 +24,7 @@ public class LoginService {
 
     @Transactional
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
-        Users users = authenticate(authenticationRequest);
-        String jwtToken = jwtService.generateToken(users);
-        String refreshToken = jwtService.generateRefreshToken(users);
-        users.setRefreshToken(refreshToken);
-        userService.save(users);
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
+        return getAuthenticationResponse(authenticationRequest);
     }
 
     protected Users authenticate(AuthenticationRequest authenticationRequest) {
@@ -52,5 +45,42 @@ public class LoginService {
             throw new DataNotValidException("Account not activated. Check your email and activate your account");
         }
         return user;
+    }
+
+    @Transactional
+    public AuthenticationResponse loginOAuth2(OAuth2Request oAuth2Request) {
+        if (!userService.existsUsersByEmail(oAuth2Request.email())) {
+            Users user = buildUserByOAuth2Request(oAuth2Request);
+            userService.save(user);
+        }
+
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest(oAuth2Request.email(), oAuth2Request.password());
+
+        return getAuthenticationResponse(authenticationRequest);
+    }
+
+    private AuthenticationResponse getAuthenticationResponse(AuthenticationRequest authenticationRequest) {
+        Users users = authenticate(authenticationRequest);
+
+        String jwtToken = jwtService.generateToken(users);
+        String refreshToken = jwtService.generateRefreshToken(users);
+        users.setRefreshToken(refreshToken);
+        userService.save(users);
+
+        return AuthenticationResponse.builder()
+                .token(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    private Users buildUserByOAuth2Request(OAuth2Request oAuth2Request) {
+        return Users.builder()
+                .status(Users.Status.OFFLINE)
+                .active(true)
+                .password(oAuth2Request.password())
+                .name(oAuth2Request.name())
+                .photoUrl(oAuth2Request.picture())
+                .email(oAuth2Request.email())
+                .build();
     }
 }

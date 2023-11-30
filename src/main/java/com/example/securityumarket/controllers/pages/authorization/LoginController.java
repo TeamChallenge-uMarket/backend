@@ -1,5 +1,6 @@
 package com.example.securityumarket.controllers.pages.authorization;
 
+import com.example.securityumarket.models.DTO.login_page.OAuth2Request;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.services.pages.LoginService;
@@ -47,6 +48,12 @@ public class LoginController {
                     "an authentication token. It contains the necessary credentials to perform authentication")
             @RequestBody AuthenticationRequest authenticationRequest) {
         return ResponseEntity.ok(loginService.login(authenticationRequest));
+    }
+
+    @PostMapping("/oauth2")
+    public ResponseEntity<AuthenticationResponse> loginOAuth2(
+            @RequestBody OAuth2Request oAuth2Request) {
+        return ResponseEntity.ok(loginService.loginOAuth2(oAuth2Request));
     }
 
     @Operation(hidden = true)
