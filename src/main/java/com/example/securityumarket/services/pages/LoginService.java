@@ -11,6 +11,7 @@ import com.example.securityumarket.services.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ public class LoginService {
     private final UserService userService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
@@ -77,7 +79,7 @@ public class LoginService {
         return Users.builder()
                 .status(Users.Status.OFFLINE)
                 .active(true)
-                .password(oAuth2Request.password())
+                .password(passwordEncoder.encode(oAuth2Request.password()))
                 .name(oAuth2Request.name())
                 .photoUrl(oAuth2Request.picture())
                 .email(oAuth2Request.email())
