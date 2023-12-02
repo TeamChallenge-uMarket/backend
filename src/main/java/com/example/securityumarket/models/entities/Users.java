@@ -41,6 +41,10 @@ public class Users extends DateAudit implements UserDetails {
     @Column(name = "active", nullable = false)
     private boolean active;
 
+    @Column(insertable = false, name = "photo_url", nullable = false,
+            columnDefinition = "VARCHAR(255) DEFAULT 'https://res.cloudinary.com/de4bysqtm/image/upload/v1697906978/czkhxykmkfn92deqncp5.jpg'")
+    private String photoUrl;
+
     @Column(name = "status", nullable = false)
     @ColumnDefault("'OFFLINE'")
     @Enumerated(EnumType.STRING)
@@ -49,8 +53,8 @@ public class Users extends DateAudit implements UserDetails {
     public enum Status {
         ONLINE,
         OFFLINE
-    }
 
+    }
     @OneToMany(mappedBy = "user")
     private List<Transport> transports;
 
@@ -73,9 +77,6 @@ public class Users extends DateAudit implements UserDetails {
     @JoinColumn(name = "city")
     private City city;
 
-    @Column(insertable = false, name = "photo_url", nullable = false,
-            columnDefinition = "VARCHAR(255) DEFAULT 'https://res.cloudinary.com/de4bysqtm/image/upload/v1697906978/czkhxykmkfn92deqncp5.jpg'")
-    private String photoUrl;
 
     @Override
     public String getUsername() {
@@ -105,8 +106,10 @@ public class Users extends DateAudit implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (UserRole userRole : userRoles) {
-            authorities.add(new SimpleGrantedAuthority(userRole.getRole().getName().toString()));
+        if (userRoles != null) {
+            for (UserRole userRole : userRoles) {
+                authorities.add(new SimpleGrantedAuthority(userRole.getRole().getName().toString()));
+            }
         }
         return authorities;
     }

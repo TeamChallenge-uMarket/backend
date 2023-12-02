@@ -32,7 +32,6 @@ public class LoginService {
     protected Users authenticate(AuthenticationRequest authenticationRequest) {
 
         Users user = userService.findAppUserByEmail(authenticationRequest.getEmail());
-
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -41,6 +40,7 @@ public class LoginService {
                     )
             );
         } catch (Exception e) {
+            e.printStackTrace();
             throw new UnauthenticatedException();
         }
         if (!user.isActive()) {
@@ -56,12 +56,16 @@ public class LoginService {
             userService.save(user);
         }
 
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest(oAuth2Request.email(), oAuth2Request.password());
+        AuthenticationRequest authenticationRequest =  AuthenticationRequest.builder()
+                .email(oAuth2Request.email())
+                .password(oAuth2Request.password())
+                .build();
 
         return getAuthenticationResponse(authenticationRequest);
     }
 
     private AuthenticationResponse getAuthenticationResponse(AuthenticationRequest authenticationRequest) {
+
         Users users = authenticate(authenticationRequest);
 
         String jwtToken = jwtService.generateToken(users);

@@ -3,7 +3,10 @@ package com.example.securityumarket.services.pages;
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.EmailSendingException;
 import com.example.securityumarket.models.DTO.login_page.RegisterRequest;
+import com.example.securityumarket.models.entities.Role;
 import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.services.jpa.RoleService;
+import com.example.securityumarket.services.jpa.UserRoleService;
 import com.example.securityumarket.services.jpa.UserService;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.util.EmailUtil;
@@ -26,11 +29,20 @@ public class RegistrationService {
 
     private final EmailUtil emailUtil;
 
+    private final UserRoleService userRoleService;
+
+    private final RoleService roleService;
+
 
     @Transactional
     public ResponseEntity<String> register(RegisterRequest registerRequest) {
         validateRegisterRequest(registerRequest);
         Users user = buildUserFromRequest(registerRequest);
+
+        Role role = roleService.findRoleByName(Role.Roles.USER);
+        userRoleService.addUseRole(user, role);
+        userService.save(user);
+
         return sendEmailAndSaveUser(user);
     }
 

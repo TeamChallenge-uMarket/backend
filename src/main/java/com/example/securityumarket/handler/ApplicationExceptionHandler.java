@@ -24,7 +24,6 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(DuplicateDataException.class)
     public Map<String, String> handleDuplicateDataException(DuplicateDataException exception) {
-        exception.printStackTrace();
         return createErrorResponse(exception.getMessage());
     }
 
@@ -35,6 +34,7 @@ public class ApplicationExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+
     @ExceptionHandler(BadRequestException.class)
     public Map<String, String> handleBadRequestException(BadRequestException exception) {
         return createErrorResponse(exception.getMessage());

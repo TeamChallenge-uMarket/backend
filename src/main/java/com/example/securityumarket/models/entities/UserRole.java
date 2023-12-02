@@ -1,10 +1,15 @@
 package com.example.securityumarket.models.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.*;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Getter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "user_has_roles")
 public class UserRole extends DateAudit {
     @Id
