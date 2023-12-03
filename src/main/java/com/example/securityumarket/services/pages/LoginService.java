@@ -26,27 +26,8 @@ public class LoginService {
 
     @Transactional
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
-        return getAuthenticationResponse(authenticationRequest);
-    }
-
-    protected Users authenticate(AuthenticationRequest authenticationRequest) {
-
-        Users user = userService.findAppUserByEmail(authenticationRequest.getEmail());
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            authenticationRequest.getEmail(),
-                            authenticationRequest.getPassword()
-                    )
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new UnauthenticatedException();
-        }
-        if (!user.isActive()) {
-            throw new DataNotValidException("Account not activated. Check your email and activate your account");
-        }
-        return user;
+        Users user = authenticate(authenticationRequest, false);
+        return getAuthenticationResponse(user);
     }
 
     @Transactional
@@ -56,22 +37,51 @@ public class LoginService {
             userService.save(user);
         }
 
-        AuthenticationRequest authenticationRequest =  AuthenticationRequest.builder()
+        AuthenticationRequest authenticationRequest = AuthenticationRequest.builder()
                 .email(oAuth2Request.email())
                 .password(oAuth2Request.password())
                 .build();
 
-        return getAuthenticationResponse(authenticationRequest);
+        Users user = authenticate(authenticationRequest, true);
+
+        return getAuthenticationResponse(user);
     }
 
-    private AuthenticationResponse getAuthenticationResponse(AuthenticationRequest authenticationRequest) {
+    protected Users authenticate(AuthenticationRequest authenticationRequest, boolean isGoogleAuthorization) {
+        Users user = userService.findAppUserByEmail(authenticationRequest.getEmail());
 
-        Users users = authenticate(authenticationRequest);
+        if (isGoogleAuthorization) {
+            if (!user.getEmail().equals(authenticationRequest.getEmail()) ||
+                    !passwordEncoder.matches(authenticationRequest.getPassword(), user.getGoogleAccountPassword())) {
+                throw new UnauthenticatedException("Account is not authenticated. Reset your password");
+            }
+        } else {
+            try {
+                authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                authenticationRequest.getEmail(),
+                                authenticationRequest.getPassword()
+                        )
+                );
+            } catch (Exception e) {
+                throw new UnauthenticatedException("Account is not authenticated. Check your email and password");
+            }
+        }
 
-        String jwtToken = jwtService.generateToken(users);
-        String refreshToken = jwtService.generateRefreshToken(users);
-        users.setRefreshToken(refreshToken);
-        userService.save(users);
+        if (!user.isActive()) {
+            throw new DataNotValidException("Account not activated. Check your email and activate your account");
+        }
+
+        return user;
+    }
+
+
+    private AuthenticationResponse getAuthenticationResponse(Users user) {
+
+        String jwtToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        user.setRefreshToken(refreshToken);
+        userService.save(user);
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -83,7 +93,7 @@ public class LoginService {
         return Users.builder()
                 .status(Users.Status.OFFLINE)
                 .active(true)
-                .password(passwordEncoder.encode(oAuth2Request.password()))
+                .googleAccountPassword(passwordEncoder.encode(oAuth2Request.password()))
                 .name(oAuth2Request.name())
                 .photoUrl(oAuth2Request.picture())
                 .email(oAuth2Request.email())

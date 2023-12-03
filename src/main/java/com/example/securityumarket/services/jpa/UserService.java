@@ -106,19 +106,23 @@ public class UserService {
     public ResponseEntity<String> updateUserDetails(UserDetailsDTO userDetailsDTO, MultipartFile photo) {
         Users currentUser = getAuthenticatedUser();
         updateUserFields(userDetailsDTO, photo, currentUser);
+
         jwtService.generateToken(currentUser);
         String refreshToken = jwtService.generateRefreshToken(currentUser);
         currentUser.setRefreshToken(refreshToken);
         usersDAO.save(currentUser);
+
         return ResponseEntity.ok("User details updated successfully");
     }
 
     public ResponseEntity<String> updateUserSecurityDetails(UserSecurityDetailsDTO securityDetailsDTO) {
         Users currentUser = getAuthenticatedUser();
-        if (!passwordEncoder.matches(securityDetailsDTO.getOldPassword(), currentUser.getPassword())) {
-             throw new DataNotValidException("The old password is incorrect");
-        }
 
+        if (currentUser.getPassword() != null) {
+            if (!passwordEncoder.matches(securityDetailsDTO.getOldPassword(), currentUser.getPassword())) {
+                throw new DataNotValidException("The old password is incorrect");
+            }
+        }
         currentUser.setPassword(passwordEncoder.encode(securityDetailsDTO.getPassword()));
         usersDAO.save(currentUser);
 

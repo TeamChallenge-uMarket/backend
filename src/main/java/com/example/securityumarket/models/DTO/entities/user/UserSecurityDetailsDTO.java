@@ -8,6 +8,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class UserSecurityDetailsDTO extends PasswordRequest {
-    @NotNull
     private String oldPassword;
 }

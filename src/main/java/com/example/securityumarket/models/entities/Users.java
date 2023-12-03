@@ -29,8 +29,11 @@ public class Users extends DateAudit implements UserDetails {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "google_account_password")
+    private String googleAccountPassword;
 
     @Column(name = "phone", unique = true)
     private String phone;
@@ -81,6 +84,11 @@ public class Users extends DateAudit implements UserDetails {
     @Override
     public String getUsername() {
         return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
