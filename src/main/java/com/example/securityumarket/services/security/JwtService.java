@@ -19,10 +19,10 @@ import java.util.function.Function;
 public class JwtService {
 
     @Value("${jwt.access.token.expiration}")
-    private static final long ACCESS_TOKEN_EXPIRATION = 60 * 60 * 1000;
+    private long ACCESS_TOKEN_EXPIRATION;
 
     @Value("${jwt.refresh.token.expiration}")
-    private static final long REFRESH_TOKEN_EXPIRATION = 24 * 60 * 60 * 1000;
+    private long REFRESH_TOKEN_EXPIRATION;
 
     @Value("${jwt.secret-key}")
     private String SECRETE_KEY;
