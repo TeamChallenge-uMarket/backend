@@ -76,6 +76,9 @@ public class Users extends DateAudit implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<TransportView> transportViews;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserSearchHistory> userSearchHistories;
+
     @ManyToOne
     @JoinColumn(name = "city")
     private City city;

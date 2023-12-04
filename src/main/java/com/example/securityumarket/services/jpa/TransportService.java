@@ -1,6 +1,8 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportDAO;
+import com.example.securityumarket.enums.SearchOrderBy;
+import com.example.securityumarket.enums.SearchSortBy;
 import com.example.securityumarket.exception.BadRequestException;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.InsufficientPermissionsException;
@@ -26,13 +28,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.OrderBy;
-import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.SortBy;
 import static com.example.securityumarket.models.specifications.TransportSpecifications.*;
 
 
@@ -76,7 +75,7 @@ public class TransportService {
     public List<Transport> findNewTransports() {
         Pageable pageable = PageRequest.of(0, 20);
         Specification<Transport> specification = isActive()
-                .and(sortBy(Transport.class, SortBy.DESC, OrderBy.CREATED));
+                .and(sortBy(Transport.class, SearchSortBy.DESC, SearchOrderBy.CREATED));
         Page<Transport> page = transportDAO.findAll(specification, pageable);
         return page.getContent();
     }
@@ -100,7 +99,7 @@ public class TransportService {
     public List<Transport> findFavoriteTransportsByRegisteredUser(Users user) {
         Specification<Transport> specification = isActive()
                 .and(findFavoriteTransportsByUser(user))
-                .and(sortBy(Transport.class, SortBy.DESC, OrderBy.CREATED));
+                .and(sortBy(Transport.class, SearchSortBy.DESC, SearchOrderBy.CREATED));
         return transportDAO.findAll(specification);
     }
 

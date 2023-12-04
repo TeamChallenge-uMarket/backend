@@ -1,5 +1,7 @@
 package com.example.securityumarket.models.specifications;
 
+import com.example.securityumarket.enums.SearchOrderBy;
+import com.example.securityumarket.enums.SearchSortBy;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.TransportView;
 import com.example.securityumarket.models.entities.Users;
@@ -9,9 +11,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
 import java.util.List;
-
-import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.OrderBy;
-import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.SortBy;
 
 public class TransportSpecifications {
 
@@ -424,12 +423,12 @@ public class TransportSpecifications {
         return (root, query, cb) -> cb.equal(root.get("status"), status);
     }
 
-    public static <T> Specification<T> sortBy(Class<T> entityClass, SortBy sortBy, OrderBy orderBy) {
+    public static <T> Specification<T> sortBy(Class<T> entityClass, SearchSortBy sortBy, SearchOrderBy orderBy) {
         return (root, query, cb) -> {
             if (sortBy != null && orderBy != null) {
-                if (sortBy == SortBy.ASC) {
+                if (sortBy == SearchSortBy.ASC) {
                     query.orderBy(cb.asc(root.get(orderBy.toString().toLowerCase())));
-                } else if (sortBy == SortBy.DESC) {
+                } else if (sortBy == SearchSortBy.DESC) {
                     query.orderBy(cb.desc(root.get(orderBy.toString().toLowerCase())));
                 }
             }

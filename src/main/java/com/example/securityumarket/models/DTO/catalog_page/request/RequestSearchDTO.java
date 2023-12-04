@@ -1,5 +1,7 @@
 package com.example.securityumarket.models.DTO.catalog_page.request;
 
+import com.example.securityumarket.enums.SearchOrderBy;
+import com.example.securityumarket.enums.SearchSortBy;
 import lombok.Builder;
 import lombok.Data;
 
@@ -80,15 +82,7 @@ public class RequestSearchDTO {
 
     private Boolean installmentPayment;
 
-    private OrderBy orderBy;
+    private SearchOrderBy orderBy;
 
-    private SortBy sortBy;
-
-    public enum SortBy {
-        ASC, DESC
-    }
-
-    public enum OrderBy {
-        CREATED, PRICE, MILEAGE
-    }
+    private SearchSortBy sortBy;
 }
