@@ -1,7 +1,6 @@
-package com.example.securityumarket.security;
+package com.example.securityumarket.configs;
 
 import com.example.securityumarket.filters.JwtAuthenticationFilter;
-import com.example.securityumarket.services.security.CustomAuthenticationSuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +25,6 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -46,8 +44,6 @@ public class SecurityConfiguration {
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )
-                .oauth2Login(oAuth2LoginConfigurer -> oAuth2LoginConfigurer
-                        .successHandler(customAuthenticationSuccessHandler))
                 .logout(logoutConfigurer -> logoutConfigurer
                         .logoutUrl("/api/v1/authorization/logout")
                         .permitAll()
