@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransportPageController {
     private final TransportPageService transportPageService;
 
+
     @Operation(
             summary = "Get transport",
             description = "This endpoint returns a transport params by transport id."
