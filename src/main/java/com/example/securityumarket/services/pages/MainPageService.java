@@ -1,7 +1,7 @@
 package com.example.securityumarket.services.pages;
 
-import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.main_page.response.*;
+import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseSearchDTO;
+import com.example.securityumarket.models.DTO.pages.main.response.*;
 import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;

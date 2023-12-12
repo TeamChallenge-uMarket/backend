@@ -1,6 +1,6 @@
 package com.example.securityumarket.services.pages;
 
-import com.example.securityumarket.models.DTO.main_page.request.RequestAddTransportDTO;
+import com.example.securityumarket.models.DTO.pages.main.request.RequestAddTransportDTO;
 import com.example.securityumarket.models.entities.*;
 import com.example.securityumarket.services.jpa.*;
 import lombok.RequiredArgsConstructor;

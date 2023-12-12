@@ -4,12 +4,12 @@ import com.example.securityumarket.dao.TransportDAO;
 import com.example.securityumarket.exception.BadRequestException;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.InsufficientPermissionsException;
-import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
-import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
+import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.DTO.transports.impl.*;
-import com.example.securityumarket.models.DTO.user_page.request.RequestUpdateTransportDetails;
-import com.example.securityumarket.models.DTO.user_page.response.TransportByStatusResponse;
+import com.example.securityumarket.models.DTO.pages.user.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.models.DTO.pages.user.response.TransportByStatusResponse;
 import com.example.securityumarket.models.entities.*;
 import com.example.securityumarket.util.converter.transposrt_type.*;
 import jakarta.validation.Valid;
@@ -26,13 +26,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.OrderBy;
-import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.SortBy;
+import static com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO.OrderBy;
+import static com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO.SortBy;
 import static com.example.securityumarket.models.specifications.TransportSpecifications.*;
 
 

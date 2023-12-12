@@ -1,25 +1,33 @@
-package com.example.securityumarket.models.DTO.user_page.request;
+package com.example.securityumarket.models.DTO.pages.main.request;
 
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 
-@Builder
 @Data
-public class RequestUpdateTransportDetails {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class RequestAddTransportDTO {
+
+    @NotNull(message = "model is required")
+    private Long model;
 
     @Min(value = 1968, message = "year should not be earlier than 1968")
     @Max(value = 2023, message = "year should not be later than 2023")
+    @NotNull(message = "year is required")
     private Integer year;
 
-    @Min(value = 0, message = "mileage should be a non-negative value")
     private Integer mileage;
 
     private Long bodyType;
 
+    @NotNull(message = "city is required")
     private Long city;
 
     @Pattern(regexp = "(^[A-Z0-9]{17}$)|^$", message = "Invalid vincode")
@@ -61,6 +69,7 @@ public class RequestUpdateTransportDetails {
 
     private Long condition;
 
+    @NotNull(message = "price is required")
     @Min(value = 0, message = "price should be a non-negative value")
     private BigDecimal price;
 

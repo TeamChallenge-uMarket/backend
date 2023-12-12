@@ -1,6 +1,6 @@
 package com.example.securityumarket.controllers.pages.authorization;
 
-import com.example.securityumarket.models.DTO.login_page.OAuth2Request;
+import com.example.securityumarket.models.DTO.pages.login.OAuth2Request;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.services.pages.LoginService;

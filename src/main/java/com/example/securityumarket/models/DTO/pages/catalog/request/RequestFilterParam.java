@@ -1,4 +1,4 @@
-package com.example.securityumarket.models.DTO.catalog_page.request;
+package com.example.securityumarket.models.DTO.pages.catalog.request;
 
 import lombok.Builder;
 import lombok.Data;
