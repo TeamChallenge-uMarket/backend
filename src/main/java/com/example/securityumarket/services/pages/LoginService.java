@@ -2,7 +2,7 @@ package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.UnauthenticatedException;
-import com.example.securityumarket.models.DTO.login_page.OAuth2Request;
+import com.example.securityumarket.models.DTO.pages.login.OAuth2Request;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.entities.Users;

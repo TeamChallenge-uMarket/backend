@@ -1,11 +1,10 @@
 package com.example.securityumarket.controllers.pages.user;
 
-import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
-import com.example.securityumarket.models.DTO.user_page.request.RequestUpdateTransportDetails;
-import com.example.securityumarket.models.DTO.user_page.response.TransportByStatusResponse;
+import com.example.securityumarket.models.DTO.pages.user.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.models.DTO.pages.user.response.TransportByStatusResponse;
 import com.example.securityumarket.services.jpa.TransportGalleryService;
 import com.example.securityumarket.services.jpa.TransportService;
 import com.example.securityumarket.services.jpa.UserService;
@@ -14,7 +13,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
