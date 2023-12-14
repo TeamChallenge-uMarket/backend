@@ -1,7 +1,7 @@
 package com.example.securityumarket.controllers.pages.catalog;
 
 import com.example.securityumarket.TestBean;
-import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
+import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;

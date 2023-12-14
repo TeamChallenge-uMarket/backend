@@ -1,6 +1,6 @@
-package com.example.securityumarket.models.DTO.catalog_page.response.impl;
+package com.example.securityumarket.models.DTO.pages.catalog.response.impl;
 
-import com.example.securityumarket.models.DTO.catalog_page.response.ResponseDefaultTransportParameter;
+import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseDefaultTransportParameter;
 import com.example.securityumarket.models.DTO.entities.NumberAxlesDTO;
 import com.example.securityumarket.models.DTO.entities.WheelConfigurationDTO;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.example.securityumarket.models.DTO.login_page;
+package com.example.securityumarket.models.DTO.pages.login;
 
 import lombok.Data;
 

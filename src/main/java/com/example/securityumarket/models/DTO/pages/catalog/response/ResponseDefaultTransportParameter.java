@@ -1,7 +1,6 @@
-package com.example.securityumarket.models.DTO.catalog_page.response;
+package com.example.securityumarket.models.DTO.pages.catalog.response;
 
 import com.example.securityumarket.models.DTO.entities.*;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 

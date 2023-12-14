@@ -1,4 +1,4 @@
-package com.example.securityumarket.models.DTO.main_page.response;
+package com.example.securityumarket.models.DTO.pages.main.response;
 
 import lombok.Builder;
 import lombok.Data;

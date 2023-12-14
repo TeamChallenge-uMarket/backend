@@ -1,11 +1,11 @@
 package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.exception.DataNotValidException;
-import com.example.securityumarket.models.DTO.catalog_page.request.RequestFilterParam;
-import com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO;
-import com.example.securityumarket.models.DTO.catalog_page.response.ResponseDefaultTransportParameter;
-import com.example.securityumarket.models.DTO.catalog_page.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.catalog_page.response.impl.ResponseLoadBearingVehicleParameter;
+import com.example.securityumarket.models.DTO.pages.catalog.request.RequestFilterParam;
+import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseDefaultTransportParameter;
+import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseSearchDTO;
+import com.example.securityumarket.models.DTO.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
 import com.example.securityumarket.models.DTO.entities.*;
 import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.TransportType;

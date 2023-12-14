@@ -38,9 +38,9 @@ public class SecurityConfiguration {
                                         "/login/**",
                                         "/api/v1/authorization/**",
                                         "/api/v1/main/**",
+                                        "/api/v1/transport/**",
                                         "/swagger/**",
-                                        "/api/v1/catalog/**",
-                                        "/api/v1/user-page/**")
+                                        "/api/v1/catalog/**")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )

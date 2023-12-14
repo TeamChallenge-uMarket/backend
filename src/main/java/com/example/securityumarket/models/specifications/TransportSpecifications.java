@@ -10,8 +10,8 @@ import org.springframework.data.jpa.domain.Specification;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.OrderBy;
-import static com.example.securityumarket.models.DTO.catalog_page.request.RequestSearchDTO.SortBy;
+import static com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO.OrderBy;
+import static com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO.SortBy;
 
 public class TransportSpecifications {
 
