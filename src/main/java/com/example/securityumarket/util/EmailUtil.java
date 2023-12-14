@@ -46,7 +46,7 @@ public class EmailUtil {
         String subject = "Verify account";
         String messageText = String.format(
                 "<div><a href=\"%s%s?email=%s&token=%s\" target=\"_blank\">click link to verify</a></div>",
-                BASE_URL,REQUEST_LOGIN_MAPPING_URL, email, token
+                BASE_URL+"/login", REQUEST_LOGIN_MAPPING_URL, email, token
         );
 
         MimeMessage mimeMessage = createAndConfigureMimeMessage(email, senderEmail, senderName, subject, messageText);
