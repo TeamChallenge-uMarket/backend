@@ -1,94 +1,95 @@
-package com.example.securityumarket.models.DTO.pages.catalog.request;
+    package com.example.securityumarket.models.DTO.pages.catalog.request;
 
-import lombok.Builder;
-import lombok.Data;
+    import lombok.Builder;
+    import lombok.Data;
 
-import java.math.BigDecimal;
-import java.util.List;
+    import java.io.Serializable;
+    import java.math.BigDecimal;
+    import java.util.List;
 
-@Builder
-@Data
-public class RequestSearchDTO {
+    @Builder
+    @Data
+    public class RequestSearchDTO implements Serializable {
 
-    private Long transportTypeId;
+        private Long transportTypeId;
 
-    private List<Long> brandId;
+        private List<Long> brandId;
 
-    private List<Long> modelId;
+        private List<Long> modelId;
 
-    private List<Long> regionId;
+        private List<Long> regionId;
 
-    private List<Long> cityId;
+        private List<Long> cityId;
 
-    private List<Long> bodyTypeId;
+        private List<Long> bodyTypeId;
 
-    private List<Long> fuelTypeId;
+        private List<Long> fuelTypeId;
 
-    private List<Long> driveTypeId;
+        private List<Long> driveTypeId;
 
-    private List<Long> transmissionId;
+        private List<Long> transmissionId;
 
-    private List<Long> colorId;
+        private List<Long> colorId;
 
-    private List<Long> conditionId;
+        private List<Long> conditionId;
 
-    private List<Long> numberAxlesId;
+        private List<Long> numberAxlesId;
 
-    private List<Long> producingCountryId;
+        private List<Long> producingCountryId;
 
-    private List<Long> wheelConfigurationId;
+        private List<Long> wheelConfigurationId;
 
-    private BigDecimal priceFrom;
+        private BigDecimal priceFrom;
 
-    private BigDecimal priceTo;
+        private BigDecimal priceTo;
 
-    private Integer yearsFrom;
+        private Integer yearsFrom;
 
-    private Integer yearsTo;
+        private Integer yearsTo;
 
-    private Integer mileageFrom;
+        private Integer mileageFrom;
 
-    private Integer mileageTo;
+        private Integer mileageTo;
 
-    private Integer enginePowerFrom;
+        private Integer enginePowerFrom;
 
-    private Integer enginePowerTo;
+        private Integer enginePowerTo;
 
-    private Double engineDisplacementFrom;
+        private Double engineDisplacementFrom;
 
-    private Double engineDisplacementTo;
+        private Double engineDisplacementTo;
 
-    private Integer numberOfDoorsFrom;
+        private Integer numberOfDoorsFrom;
 
-    private Integer numberOfDoorsTo;
+        private Integer numberOfDoorsTo;
 
-    private Integer numberOfSeatsFrom;
+        private Integer numberOfSeatsFrom;
 
-    private Integer numberOfSeatsTo;
+        private Integer numberOfSeatsTo;
 
-    private Integer loadCapacityFrom;
+        private Integer loadCapacityFrom;
 
-    private Integer loadCapacityTo;
+        private Integer loadCapacityTo;
 
-    private Boolean trade;
+        private Boolean trade;
 
-    private Boolean military;
+        private Boolean military;
 
-    private Boolean uncleared;
+        private Boolean uncleared;
 
-    private Boolean bargain;
+        private Boolean bargain;
 
-    private Boolean installmentPayment;
+        private Boolean installmentPayment;
 
-    private OrderBy orderBy;
+        private OrderBy orderBy;
 
-    private SortBy sortBy;
+        private SortBy sortBy;
 
-    public enum SortBy {
-        ASC, DESC
+        public enum SortBy {
+            ASC, DESC
+        }
+
+        public enum OrderBy {
+            CREATED, PRICE, MILEAGE
+        }
     }
-
-    public enum OrderBy {
-        CREATED, PRICE, MILEAGE
-    }
-}

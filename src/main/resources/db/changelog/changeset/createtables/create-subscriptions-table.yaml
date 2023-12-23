@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-subscriptions-table
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: subscriptions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: parameters
+                  type: jsonb
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create-user_has_subscriptions-table
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: user_has_subscriptions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP(6)
+              - column:
+                  name: last_update
+                  type: TIMESTAMP(6)
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subscription_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: user_has_subscriptions
+            baseColumnNames: user_id
+            constraintName: fk_user_has_subscriptions_user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: user_has_subscriptions
+            baseColumnNames: subscription_id
+            constraintName: fk_user_has_subscriptions_subscription_id
+            referencedTableName: subscriptions
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE

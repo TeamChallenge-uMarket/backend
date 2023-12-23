@@ -67,6 +67,8 @@ public class TransportService {
 
     private final TransportGalleryService transportGalleryService;
 
+    private final SubscriptionService subscriptionService;
+
     public void save(Transport transport) {
         transportDAO.save(transport);
     }
@@ -134,12 +136,14 @@ public class TransportService {
 
             if (isUserHasAdminOrModeratorRole(authenticatedUser)) {
                 updateStatusByTransportIdAndStatus(transportById, transportStatus);
-            } else if (isUserHasUserRole(authenticatedUser)
-                    && isValidStatusChange(transportStatus, transportById.getStatus())) {
+            } else if (transportStatus.equals(Transport.Status.ACTIVE)) {
+                updateStatusByTransportIdAndStatus(transportById, Transport.Status.PENDING);
+            } else if (isUserHasUserRole(authenticatedUser)) {
                 updateStatusByTransportIdAndStatus(transportById, transportStatus);
             } else {
                 throw new InsufficientPermissionsException("to update the transport status");
             }
+
             return ResponseEntity.ok("The status of the transport has been successfully updated");
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid status");
@@ -157,20 +161,12 @@ public class TransportService {
                 .anyMatch(authority -> authority.getAuthority().equals("USER"));
     }
 
-    private boolean isValidStatusChange(Transport.Status newStatus, Transport.Status currentStatus) {
-        if (newStatus == Transport.Status.PENDING
-                && (currentStatus == Transport.Status.INACTIVE || currentStatus == Transport.Status.DELETED)) {
-            return true;
+    public void updateStatusByTransportIdAndStatus(Transport transport, Transport.Status status) {
+        transport.setStatus(status);
+        if (status.equals(Transport.Status.ACTIVE)) {
+//            subscriptionService.notifyUsers(transport);
         }
-        if (newStatus == Transport.Status.DELETED && currentStatus == Transport.Status.ACTIVE) {
-            return true;
-        }
-        return newStatus == Transport.Status.INACTIVE && currentStatus == Transport.Status.ACTIVE;
-    }
-
-    public void updateStatusByTransportIdAndStatus(Transport transportById, Transport.Status status) {
-        transportById.setStatus(status);
-        save(transportById);
+        save(transport);
     }
 
     public List<PassengerCarDTO> convertTransportListToPassCarDTOList(List<Transport> newTransports) {

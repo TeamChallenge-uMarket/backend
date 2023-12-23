@@ -34,11 +34,12 @@ public class SecurityConfiguration {
                         .configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(matcherRegistry ->
                         matcherRegistry
-                                .requestMatchers(
+                                .requestMatchers(   //TODO remove unnecessary code
                                         "/login/**",
                                         "/api/v1/authorization/**",
                                         "/api/v1/main/**",
                                         "/api/v1/transport/**",
+                                        "/api/v1/subscription/**",
                                         "/swagger/**",
                                         "/api/v1/catalog/**")
                                 .permitAll()
