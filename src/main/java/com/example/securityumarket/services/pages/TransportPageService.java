@@ -3,7 +3,6 @@ package com.example.securityumarket.services.pages;
 import com.example.securityumarket.models.DTO.pages.transport.TransportDetailsResponse;
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportView;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.FavoriteTransportService;
 import com.example.securityumarket.services.jpa.TransportService;
@@ -14,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +21,7 @@ public class TransportPageService {
     private final TransportService transportService;
     private final TransportViewService transportViewService;
     private final FavoriteTransportService favoriteTransportService;
+    private final UserPageService userPageService;
     private final UserService userService;
 
     @Transactional
@@ -30,7 +29,7 @@ public class TransportPageService {
         if (userService.isUserAuthenticated()) {
             addTransportView(transportId);
         }
-        return transportService.getTransportDetails(transportId);
+        return userPageService.getTransportDetails(transportId);
     }
 
     public TransportDetailsResponse getTransportDetails(Long transportId) {

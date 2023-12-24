@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Transport page", description = "This controller contains transport page endpoints")
 public class TransportPageController {
-    private final TransportPageService transportPageService;
 
+    private final TransportPageService transportPageService;
 
     @Operation(
             summary = "Get transport",

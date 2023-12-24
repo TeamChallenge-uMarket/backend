@@ -11,7 +11,7 @@ import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.DTO.pages.user.request.RequestUpdateTransportDetails;
 import com.example.securityumarket.models.DTO.pages.user.response.TransportByStatusResponse;
 import com.example.securityumarket.models.entities.*;
-import com.example.securityumarket.services.NotificationService;
+import com.example.securityumarket.services.pages.SubscriptionPageService;
 import com.example.securityumarket.util.converter.transposrt_type.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +68,6 @@ public class TransportService {
 
     private final TransportGalleryService transportGalleryService;
 
-    private final NotificationService notificationService;
 
 
     public void save(Transport transport) {
@@ -166,7 +165,7 @@ public class TransportService {
     public void updateStatusByTransportIdAndStatus(Transport transport, Transport.Status status) {
         transport.setStatus(status);
         if (status.equals(Transport.Status.ACTIVE)) {
-            notificationService.notifyUsers(transport);//TODO
+            //TODO notify users
         }
         save(transport);
     }
@@ -386,6 +385,12 @@ public class TransportService {
 
     public List<Transport> findTransportByParam(RequestSearchDTO requestSearchDTO, PageRequest pageRequest) {
         Page<Transport> transportPage = transportDAO.findAll(
+                getSpecificationParam(requestSearchDTO), pageRequest);
+        return transportPage.getContent();
+    }
+
+    public Specification<Transport> getSpecificationParam(RequestSearchDTO requestSearchDTO) {
+        return Specification.allOf(
                 isActive()
                         .and(hasTransportTypeId(requestSearchDTO.getTransportTypeId()))
                         .and(hasBrandId(requestSearchDTO.getBrandId()))
@@ -424,8 +429,7 @@ public class TransportService {
                         .and(hasBargain(requestSearchDTO.getBargain()))
                         .and(hasInstallmentPayment(requestSearchDTO.getInstallmentPayment()))
                         .and(sortBy(Transport.class, requestSearchDTO.getSortBy(), requestSearchDTO.getOrderBy()))
-                , pageRequest);
-        return transportPage.getContent();
+        );
     }
 
     public List<Transport> findAll(Specification<Transport> specification) {

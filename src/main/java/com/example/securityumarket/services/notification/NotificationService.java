@@ -17,6 +17,6 @@ public class NotificationService implements Observer{
 
     @Override
     public void handleEven(List<Transport> transportList) {
-        г
+
     }
 }

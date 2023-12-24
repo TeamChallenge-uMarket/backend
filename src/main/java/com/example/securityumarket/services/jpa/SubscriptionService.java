@@ -74,4 +74,12 @@ public class SubscriptionService {
     private Optional<List<Subscription>> findAllByTransport(Transport transport) {
         return Optional.empty();//TODO
     }
+
+    public Optional<Subscription> findById(Long subscriptionId) {
+        return subscriptionDAO.findById(subscriptionId);
+    }
+
+    public void delete(Subscription subscription) {
+        subscriptionDAO.delete(subscription);
+    }
 }
