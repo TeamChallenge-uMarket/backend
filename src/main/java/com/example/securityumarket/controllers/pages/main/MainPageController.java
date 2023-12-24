@@ -39,7 +39,7 @@ public class MainPageController {
     })
     @GetMapping("/types")
     public ResponseEntity<List<ResponseTypeDTO>> getTypeTransport() {
-        return mainPageService.getTypeTransport();
+        return ResponseEntity.ok(mainPageService.getTypeTransport());
     }
 
     @Operation(
@@ -56,7 +56,7 @@ public class MainPageController {
     public ResponseEntity<List<ResponseBrandDTO>> getBrandsByTransportType(
             @Parameter(description = "ID of transport type")
             @RequestParam(required = false) Long transportTypeId) {
-        return mainPageService.getBrandsByTransportType(transportTypeId);
+        return ResponseEntity.ok(mainPageService.getBrandsByTransportType(transportTypeId));
     }
 
     @Operation(
@@ -75,7 +75,7 @@ public class MainPageController {
                                                                        @RequestParam(required = false) Long transportTypeId,
                                                                    @Parameter(description = "the brand ID   of the transport type")
                                                                    @RequestParam Long transportBrandId) {
-        return mainPageService.getModelsByTransportBrand(transportTypeId, transportBrandId);
+        return ResponseEntity.ok(mainPageService.getModelsByTransportBrand(transportTypeId, transportBrandId));
     }
 
     @Operation(
@@ -90,7 +90,7 @@ public class MainPageController {
     })
     @GetMapping("/regions")
     public ResponseEntity<List<ResponseRegionDTO>> getRegions() {
-        return mainPageService.getRegions();
+        return ResponseEntity.ok(mainPageService.getRegions());
     }
 
     @Operation(
@@ -106,7 +106,7 @@ public class MainPageController {
     public ResponseEntity<List<ResponseCityDTO>> getCities(
             @Parameter(description = "The ID of the region")
             @RequestParam (required = false) List<Long> regionId) {
-        return mainPageService.getCities(regionId);
+        return ResponseEntity.ok(mainPageService.getCities(regionId));
     }
 
 
@@ -122,7 +122,7 @@ public class MainPageController {
     })
     @GetMapping("/new-transports")
     public ResponseEntity<List<ResponseSearchDTO>> getNewTransports() {
-        return mainPageService.getNewTransports();
+        return ResponseEntity.ok(mainPageService.getNewTransports());
     }
 
     @Operation(
@@ -137,7 +137,7 @@ public class MainPageController {
     })
     @GetMapping("/popular-transports")
     public ResponseEntity<List<ResponseSearchDTO>> getPopularsTransports() {
-        return mainPageService.getPopularTransports();
+        return ResponseEntity.ok(mainPageService.getPopularTransports());
     }
 
     @Operation(
@@ -154,7 +154,7 @@ public class MainPageController {
 
     @GetMapping("/recently-viewed")
     public ResponseEntity<List<ResponseSearchDTO>> getRecentlyViewedTransports() {
-        return mainPageService.getRecentlyViewedTransports();
+        return ResponseEntity.ok(mainPageService.getRecentlyViewedTransports());
     }
 
     @Operation(
@@ -170,45 +170,6 @@ public class MainPageController {
     })
     @GetMapping("/favorite-transports")
     public ResponseEntity<List<ResponseSearchDTO>> getFavorites() {
-        return mainPageService.getFavoriteTransport();
-    }
-
-
-    @Operation(hidden = true)
-    @GetMapping("/popular-passcars") //TEST METHOD
-    public ResponseEntity<List<PassengerCarDTO>> getPopularPassCar() {
-        return mainPageService.getPopularPassCar();
-    }
-
-
-    @Operation(hidden = true)
-    @GetMapping("/popular-motorcycles") //TEST METHOD
-    public ResponseEntity<List<MotorcycleDTO>> getPopularMotorcycles() {
-        return mainPageService.getPopularMotorcycle();
-    }
-
-    @Operation(hidden = true)
-    @GetMapping("/popular-trucks") //TEST METHOD
-    public ResponseEntity<List<TruckDTO>> getPopularTrucks() {
-        return mainPageService.getPopularTrucks();
-    }
-
-
-    @Operation(hidden = true)
-    @GetMapping("/popular-specializedvehicles") //TEST METHOD
-    public ResponseEntity<List<SpecializedVehicleDTO>> getPopularSpecializedVehicles() {
-        return mainPageService.getPopularSpecializedVehicles();
-    }
-
-    @Operation(hidden = true)
-    @GetMapping("/popular-agricultural") //TEST METHOD
-    public ResponseEntity<List<AgriculturalDTO>> getPopularAgricultural() {
-        return mainPageService.getPopularAgricultural();
-    }
-
-    @Operation(hidden = true)
-    @GetMapping("/popular-watervehicles") //TEST METHOD
-    public ResponseEntity<List<WaterVehicleDTO>> getPopularWaterVehicles() {
-        return mainPageService.getPopularWaterVehicles();
+        return ResponseEntity.ok(mainPageService.getFavoriteTransport());
     }
 }

@@ -34,7 +34,8 @@ public class CatalogController {
     public ResponseEntity<String> addFavorite(
             @Parameter(description = "The ID of the vehicle to be added to favorites")
             @PathVariable long carId) {
-        return catalogPageService.addFavorite(carId);
+        catalogPageService.addFavorite(carId);
+        return ResponseEntity.ok("Transport added to favorites");
     }
 
     @Operation(description = "This endpoint allows the user to remove a vehicle from favorites by its ID")
@@ -43,7 +44,8 @@ public class CatalogController {
     public ResponseEntity<String> removeFavorite(
             @Parameter(description = "The ID of the vehicle to be removed from favorites")
             @PathVariable long carId) {
-        return catalogPageService.removeFavorite(carId);
+        catalogPageService.removeFavorite(carId);
+        return ResponseEntity.ok("Transport removed from favorites");
     }
 
     @Operation(description = "This endpoint allows to search for vehicles using various filtering queries")
@@ -58,7 +60,7 @@ public class CatalogController {
             @Parameter(description = "The request which contains filter parameters",
                     examples = @ExampleObject(value = ""))
             @ModelAttribute RequestSearchDTO requestSearchDTO) {
-        return catalogPageService.searchTransports(page, limit, requestSearchDTO);
+        return ResponseEntity.ok(catalogPageService.searchTransports(page, limit, requestSearchDTO));
     }
 
     @Operation(description = "This endpoint returns a list of values for a vehicle search filter using different filter queries")

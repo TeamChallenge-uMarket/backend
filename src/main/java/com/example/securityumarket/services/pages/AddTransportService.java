@@ -44,13 +44,12 @@ public class AddTransportService {
     private final NumberAxlesService numberAxlesService;
 
     @Transactional
-    public ResponseEntity<String> addCar(RequestAddTransportDTO requestAddTransportDTO,
-                                         MultipartFile[] multipartFiles) {
-            Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
-            transportService.save(transport);
-            transportGalleryService.uploadFiles(
-                    multipartFiles, requestAddTransportDTO.getMainPhoto(), transport);
-            return ResponseEntity.ok("The ad with your transport has been successfully added.");
+    public void addCar(RequestAddTransportDTO requestAddTransportDTO,
+                       MultipartFile[] multipartFiles) {
+        Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
+        transportService.save(transport);
+        transportGalleryService.uploadFiles(
+                multipartFiles, requestAddTransportDTO.getMainPhoto(), transport);
     }
 
     public Transport buildCarFromRequestAddCarDTO(RequestAddTransportDTO requestAddTransportDTO) {

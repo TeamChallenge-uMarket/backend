@@ -31,8 +31,8 @@ public class SubscribeNotificationService implements Observed{
 
     @Override
     public void notifyObservers() {
-        for (Observer observer : "підписники") {
-            observer.handleEven("Список вакансій");
-        }
+//        for (Observer observer : "підписники") {
+//            observer.handleEven("Список вакансій");
+//        }
     }
 }

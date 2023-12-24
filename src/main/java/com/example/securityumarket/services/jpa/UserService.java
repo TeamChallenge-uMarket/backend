@@ -103,32 +103,7 @@ public class UserService {
         }
     }
 
-    @Transactional
-    public ResponseEntity<String> updateUserDetails(UserDetailsDTO userDetailsDTO, MultipartFile photo) {
-        Users currentUser = getAuthenticatedUser();
-        updateUserFields(userDetailsDTO, photo, currentUser);
 
-        jwtService.generateToken(currentUser);
-        String refreshToken = jwtService.generateRefreshToken(currentUser);
-        currentUser.setRefreshToken(refreshToken);
-        usersDAO.save(currentUser);
-
-        return ResponseEntity.ok("User details updated successfully");
-    }
-
-    public ResponseEntity<String> updateUserSecurityDetails(UserSecurityDetailsDTO securityDetailsDTO) {
-        Users currentUser = getAuthenticatedUser();
-
-        if (currentUser.getPassword() != null) {
-            if (!passwordEncoder.matches(securityDetailsDTO.getOldPassword(), currentUser.getPassword())) {
-                throw new DataNotValidException("The old password is incorrect");
-            }
-        }
-        currentUser.setPassword(passwordEncoder.encode(securityDetailsDTO.getPassword()));
-        usersDAO.save(currentUser);
-
-        return ResponseEntity.ok("User password changed successfully");
-    }
 
     @Scheduled(cron = "0 0/30 * * * *")
     @Transactional
@@ -175,7 +150,6 @@ public class UserService {
         });
     }
 
-
     private String normalizePhoneNumber(String inputPhoneNumber) {
         String digitsAndParentheses = inputPhoneNumber.replaceAll("[^\\d()]", "");
 
@@ -191,18 +165,6 @@ public class UserService {
         return normalizedNumber;
     }
 
-    public ResponseEntity<String> deleteUserPhoto() {
-        Users authenticatedUser = getAuthenticatedUser();
-        if (!authenticatedUser.getPhotoUrl().equals(DEFAULT_PHOTO)) {
-            String photoUrl = authenticatedUser.getPhotoUrl();
-            cloudinaryService.deleteFile(CloudinaryService.getPhotoPublicIdFromUrl(photoUrl));
-            authenticatedUser.setPhotoUrl(DEFAULT_PHOTO);
-            save(authenticatedUser);
-            return ResponseEntity.ok("The user photo has been deleted");
-        } else {
-            return ResponseEntity.ok("The user photo is already deleted");
-        }
-    }
 
     private static String extractFileNameFromUrl(String url) {
         try {

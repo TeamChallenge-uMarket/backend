@@ -123,4 +123,8 @@ public class TransportGalleryService {
         }
         return ResponseEntity.ok("The files have been successfully deleted");
     }
+
+    public void deleteTransportGalleryById(Long id) {
+        transportGalleryDAO.deleteTransportGalleryById(id);
+    }
 }

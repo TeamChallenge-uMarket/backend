@@ -14,6 +14,7 @@ import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -58,24 +59,21 @@ public class CatalogPageService {
     private final TransportModelService transportModelService;
 
 
-    public ResponseEntity<String> addFavorite(long carId) {
+    public void addFavorite(long carId) {
         Users authenticatedUser = userService.getAuthenticatedUser();
         Transport transport = transportService.findTransportById(carId);
         favoriteTransportService.addFavorite(authenticatedUser, transport);
-        return ResponseEntity.ok("added to favorites");
-
     }
 
-    public ResponseEntity<List<ResponseSearchDTO>> searchTransports(int page, int limit, RequestSearchDTO requestSearchDTO) {
+    public List<ResponseSearchDTO> searchTransports(int page, int limit, RequestSearchDTO requestSearchDTO) {
         List<Transport> transports = transportService.findTransportByParam(requestSearchDTO, PageRequest.of(page, limit));
-        return ResponseEntity.ok(transportService.convertTransportListToTransportSearchDTO(transports));
+        return transportService.convertTransportListToTransportSearchDTO(transports);
     }
 
-    public ResponseEntity<String> removeFavorite(long carId) {
+    public void removeFavorite(long carId) {
         Users user = userService.getAuthenticatedUser();
         Transport transport = transportService.findTransportById(carId);
         favoriteTransportService.deleteFromFavoriteByUserAndTransport(user, transport);
-        return ResponseEntity.ok("removed from favorites");
     }
 
     public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(RequestFilterParam requestFilterParam) {

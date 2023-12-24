@@ -24,10 +24,6 @@ public class AddTransportController {
 
     private final AddTransportService addTransportService;
 
-
-    private final CloudinaryService cloudinaryService;
-
-
     @Operation(description = "This endpoint allows users to add transport")
     @ApiResponse(responseCode = "200", description = "The vehicle has been added successfully",
             content = @Content(mediaType = "application/json"))
@@ -37,30 +33,7 @@ public class AddTransportController {
             @RequestPart("multipartFiles") MultipartFile[] multipartFiles,
             @Parameter(description = "The details of the transport to be added")
             @ModelAttribute @Valid RequestAddTransportDTO requestAddTransportDTO) {
-        return addTransportService.addCar(requestAddTransportDTO, multipartFiles);
-    }
-
-    @Operation(hidden = true)
-    @PostMapping("/cloudinary/upload/") //TEST METHOD
-    public ResponseEntity<String> uploadFileCloudinary(@RequestParam(value = "file") MultipartFile file) {
-        return new ResponseEntity<>(cloudinaryService.uploadFileWithPublicRead(file), HttpStatus.OK);
-    }
-
-    @Operation(hidden = true)
-    @GetMapping("/cloudinary/download/{fileName}") //TEST METHOD
-    public ResponseEntity<ByteArrayResource> downloadFileCloudinary(@PathVariable String fileName) {
-       return cloudinaryService.downloadFileCloudinary(fileName);
-    }
-
-    @Operation(hidden = true)
-    @GetMapping("/cloudinary/get-url/{fileName}") //TEST METHOD
-    public ResponseEntity<String> getOriginalUrl(@PathVariable String fileName) {
-        return ResponseEntity.ok(cloudinaryService.getOriginalUrl(fileName));
-    }
-
-    @Operation(hidden = true)
-    @DeleteMapping("/cloudinary/delete/{fileName}") //TEST METHOD
-    public ResponseEntity<String> deleteFileCloudinary(@PathVariable String fileName) {
-        return cloudinaryService.deleteFile(fileName);
+        addTransportService.addCar(requestAddTransportDTO, multipartFiles);
+        return ResponseEntity.ok("The ad with your transport has been successfully added.");
     }
 }

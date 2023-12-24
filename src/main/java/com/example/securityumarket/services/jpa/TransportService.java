@@ -427,4 +427,8 @@ public class TransportService {
                 , pageRequest);
         return transportPage.getContent();
     }
+
+    public List<Transport> findAll(Specification<Transport> specification) {
+        return transportDAO.findAll(specification);
+    }
 }
