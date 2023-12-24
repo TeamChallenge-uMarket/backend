@@ -12,11 +12,15 @@ import com.example.securityumarket.models.entities.TransportType;
 import com.example.securityumarket.models.entities.Users;
 import com.example.securityumarket.services.jpa.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.example.securityumarket.models.specifications.TransportSpecifications.*;
 
 @Service
 @RequiredArgsConstructor

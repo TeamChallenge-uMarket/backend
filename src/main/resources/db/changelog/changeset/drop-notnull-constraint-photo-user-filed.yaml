@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-notnull-constraint-photo-user-filed
+      author: Oleh
+      changes:
+        - dropNotNullConstraint:
+            tableName: users
+            columnName: password

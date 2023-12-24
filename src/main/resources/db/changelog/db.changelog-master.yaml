@@ -98,4 +98,4 @@ databaseChangeLog:
   - include:
       file: db/changelog/changeset/add-google-account-password-column-to-users.yaml
   - include:
-      file: db/changelog/changeset/createtables/create-subscriptions-table.yaml
+      file: db/changelog/changeset/createtables/create-table-subscriptions.yaml

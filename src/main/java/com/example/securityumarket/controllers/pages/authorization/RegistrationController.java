@@ -43,7 +43,7 @@ public class RegistrationController {
                                                @Valid
                                                @Parameter(description = "The request provided by the user to perform a registration",
                                                        examples = @ExampleObject(value = "{" +
-                                                               "\"username\": \"JohnDoe\"" +
+                                                               "\"name\": \"JohnDoe\"" +
                                                                "\"email\": \"test@gmail.com\"" +
                                                                "\"password\": \"Password11\"" +
                                                                "\"confirmPassword\": \"Password11\"" +

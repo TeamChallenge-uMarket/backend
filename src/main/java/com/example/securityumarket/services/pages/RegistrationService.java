@@ -12,6 +12,7 @@ import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.util.EmailUtil;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,9 @@ public class RegistrationService {
     private final UserRoleService userRoleService;
 
     private final RoleService roleService;
+
+    @Value("${cloudinary.default.not-found-photo}")
+    private String defaultPhoto;
 
 
     @Transactional
@@ -97,6 +101,7 @@ public class RegistrationService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .active(false)
                 .status(Users.Status.OFFLINE)
+                .photoUrl(defaultPhoto)
                 .build();
     }
 }

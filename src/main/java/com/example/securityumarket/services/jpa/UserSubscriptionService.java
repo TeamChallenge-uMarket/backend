@@ -28,6 +28,10 @@ public class UserSubscriptionService {
         userSubscriptionDAO.save(userSubscription);
     }
 
+    public Optional<UserSubscription> findBySubscriptionAndUser(Subscription subscription, Users user) {
+        return userSubscriptionDAO.findBySubscriptionAndUser(subscription, user);
+    }
+
     public UserSubscription buildUserSubscription(Users user, Subscription subscription) {
         return UserSubscription.builder()
                 .user(user)
@@ -36,7 +40,7 @@ public class UserSubscriptionService {
     }
 
     public void deleteBySubscriptionAndUser(Subscription subscription, Users user) {
-        UserSubscription bySubscriptionAndUser = userSubscriptionDAO.findBySubscriptionAndUser(subscription, user)
+        UserSubscription bySubscriptionAndUser = findBySubscriptionAndUser(subscription, user)
                 .orElseThrow(() -> new DataNotFoundException("UserSubscription by subscription and user"));
         userSubscriptionDAO.delete(bySubscriptionAndUser);
     }

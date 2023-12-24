@@ -72,8 +72,12 @@ public class UserService {
             .orElseThrow(() -> new DataNotFoundException("User with email " + email));
     }
 
-    public void save(Users users) {
-        usersDAO.save(users);
+    public void save(Users user) {
+        usersDAO.save(user);
+    }
+
+    public void saveAndFlush(Users user) {
+        usersDAO.saveAndFlush(user);
     }
 
     public boolean existsUsersByEmail(String email) {

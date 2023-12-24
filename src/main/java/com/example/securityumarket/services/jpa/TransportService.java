@@ -67,7 +67,6 @@ public class TransportService {
 
     private final TransportGalleryService transportGalleryService;
 
-    private final SubscriptionService subscriptionService;
 
     public void save(Transport transport) {
         transportDAO.save(transport);
@@ -164,7 +163,7 @@ public class TransportService {
     public void updateStatusByTransportIdAndStatus(Transport transport, Transport.Status status) {
         transport.setStatus(status);
         if (status.equals(Transport.Status.ACTIVE)) {
-            subscriptionService.notifyUsers(transport);
+//            subscriptionService.notifyUsers(transport);
         }
         save(transport);
     }
