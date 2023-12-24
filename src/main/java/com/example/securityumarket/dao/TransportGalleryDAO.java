@@ -23,8 +23,6 @@ public interface TransportGalleryDAO extends JpaRepository<TransportGallery, Lon
     @Query("select tg from TransportGallery tg where tg.transport.id = :transportId and tg.isMain = true")
     Optional<TransportGallery> findMainTransportGalleryByTransportId(@Param("transportId")Long id);
 
-    Optional<TransportGallery> findById(Long id);
-
     @Modifying
     @Query("DELETE FROM TransportGallery tg WHERE tg.id = :id")
     void deleteTransportGalleryById(@Param("id") Long transportGalleryId);

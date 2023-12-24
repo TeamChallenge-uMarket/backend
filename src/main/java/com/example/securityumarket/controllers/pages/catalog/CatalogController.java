@@ -9,7 +9,6 @@ import com.example.securityumarket.services.pages.CatalogPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -57,8 +56,6 @@ public class CatalogController {
             @PathVariable int page,
             @Parameter(description = "The number of the vehicles to be displayed on one page")
             @PathVariable int limit,
-            @Parameter(description = "The request which contains filter parameters",
-                    examples = @ExampleObject(value = ""))
             @ModelAttribute RequestSearchDTO requestSearchDTO) {
         return ResponseEntity.ok(catalogPageService.searchTransports(page, limit, requestSearchDTO));
     }

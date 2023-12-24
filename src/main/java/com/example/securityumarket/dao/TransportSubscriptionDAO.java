@@ -11,6 +11,4 @@ import java.util.Optional;
 
 @Repository
 public interface TransportSubscriptionDAO extends JpaRepository<TransportSubscription, Long> {
-    boolean existsByTransport(Transport transport);
-    Optional<TransportSubscription> findAllBySubscription(Subscription subscription);
 }

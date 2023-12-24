@@ -12,5 +12,4 @@ import java.util.Optional;
 
 @Repository
 public interface BodyTypeDAO  extends JpaRepository<BodyType, Long>, JpaSpecificationExecutor<BodyType> {
-    Optional<List<BodyType>> findAllByTransportTypeId(Long transportTypeId);
 }

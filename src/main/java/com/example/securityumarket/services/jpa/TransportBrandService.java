@@ -2,7 +2,6 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportBrandDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.Region;
 import com.example.securityumarket.models.entities.TransportBrand;
 import com.example.securityumarket.models.specifications.TransportBrandSpecifications;
 import lombok.RequiredArgsConstructor;

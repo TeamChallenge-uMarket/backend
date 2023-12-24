@@ -9,5 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface TransportTypeDAO extends JpaRepository<TransportType, Long> {
-    Optional<TransportType> findById(long id);
 }

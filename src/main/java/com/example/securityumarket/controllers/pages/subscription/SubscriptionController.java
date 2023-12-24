@@ -2,9 +2,6 @@ package com.example.securityumarket.controllers.pages.subscription;
 
 
 import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
-import com.example.securityumarket.models.entities.Users;
-import com.example.securityumarket.services.jpa.SubscriptionService;
-import com.example.securityumarket.services.jpa.UserService;
 import com.example.securityumarket.services.pages.SubscriptionPageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -18,9 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class SubscriptionController {
 
     private final SubscriptionPageService subscriptionPageService;
-
-    private final SubscriptionService subscriptionService;
-    private final UserService userService;
 
     @PostMapping()
     public ResponseEntity<String> addSubscription(@ModelAttribute RequestSearchDTO requestSearchDTO) {

@@ -23,7 +23,6 @@ public class ChatController {
 
     private final ChatService chatService;
 
-
     @MessageMapping("/user.addUser")
     @SendTo("/user/public")
     public Users addUser(@Payload Users users) {
@@ -42,7 +41,6 @@ public class ChatController {
     public ResponseEntity<List<Users>> findConnectedUsers() {
         return ResponseEntity.ok(chatService.findConnectedUsers());
     }
-
 
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessage chatMessage) {

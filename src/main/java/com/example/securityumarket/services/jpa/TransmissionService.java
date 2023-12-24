@@ -6,7 +6,6 @@ import com.example.securityumarket.models.entities.Transmission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor

@@ -101,12 +101,12 @@ public class CloudinaryService {
     }
 
 
-    public ResponseEntity<String> deleteFile(String publicId) {
+    public void deleteFile(String publicId) {
         try {
             Map result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
             if (result.get("result").equals("ok")) {
                 String text = String.format("File with publicId %s has been successfully deleted.", publicId);
-                return ResponseEntity.ok(text);
+                ResponseEntity.ok(text);
             } else {
                 String text = String.format("Failed to delete file with %s", publicId);
                 log.error(text);

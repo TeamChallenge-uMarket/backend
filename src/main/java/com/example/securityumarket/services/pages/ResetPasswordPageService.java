@@ -9,7 +9,6 @@ import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.util.EmailUtil;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

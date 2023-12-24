@@ -18,6 +18,7 @@ import java.util.List;
 public class SubscriptionPageService {
 
     private final UserService userService;
+    private final CatalogPageService catalogPageService;
     private final TransportService transportService;
     private final SubscriptionService subscriptionService;
     private final UserSubscriptionService userSubscriptionService;
@@ -50,9 +51,6 @@ public class SubscriptionPageService {
         }
     }
 
-    public void notifyUsers(Transport transport) {
-        //TODO
-    }
 
     private void saveUserSubscription(Subscription subscription) {
         Users authenticatedUser = userService.getAuthenticatedUser();
@@ -60,7 +58,7 @@ public class SubscriptionPageService {
     }
 
     private void saveTransportSubscription(Subscription subscription) {
-        Specification<Transport> specificationParam = transportService.getSpecificationParam(subscription.getParameters());
+        Specification<Transport> specificationParam = catalogPageService.getSpecificationParam(subscription.getParameters());
         List<Transport> transports = transportService.findAll(specificationParam);
         for (Transport transport : transports) {
             transportSubscriptionService.save(transport, subscription);

@@ -9,9 +9,7 @@ import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -27,8 +25,6 @@ public class TransportGalleryService {
 
     @Value("${cloudinary.default.not-found-photo}")
     private String DEFAULT_PHOTO;
-
-//    private final StorageService storageService;
 
     public void uploadFiles(MultipartFile[] files, String mainPhoto, Transport transport) {
         for (MultipartFile file : files) {
@@ -112,16 +108,6 @@ public class TransportGalleryService {
     public List<TransportGallery> findAllByTransportId(Long id) {
         return getTransportGalleryDAO().findAllByTransportId(id)
                 .orElseThrow(() -> new DataNotFoundException("Gallery"));
-    }
-
-    @Transactional
-    public ResponseEntity<String> deleteGalleryTransportByGalleryId(List<Long> galleriesId) {
-        for (Long galleryId : galleriesId) {
-            TransportGallery gallery = findById(galleryId);
-            cloudinaryService.deleteFile(gallery.getImageName());
-            transportGalleryDAO.deleteTransportGalleryById(gallery.getId());
-        }
-        return ResponseEntity.ok("The files have been successfully deleted");
     }
 
     public void deleteTransportGalleryById(Long id) {

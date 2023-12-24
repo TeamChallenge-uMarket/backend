@@ -5,9 +5,6 @@ import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsD
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.DTO.pages.user.request.RequestUpdateTransportDetails;
 import com.example.securityumarket.models.DTO.pages.user.response.TransportByStatusResponse;
-import com.example.securityumarket.services.jpa.TransportGalleryService;
-import com.example.securityumarket.services.jpa.TransportService;
-import com.example.securityumarket.services.jpa.UserService;
 import com.example.securityumarket.services.pages.UserPageService;
 import jakarta.validation.Valid;
 import java.util.List;

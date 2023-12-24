@@ -2,55 +2,26 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.DuplicateDataException;
 import com.example.securityumarket.exception.UnauthenticatedException;
-import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
-import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
-import com.example.securityumarket.models.entities.City;
-import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
-import com.example.securityumarket.services.notification.Observer;
-import com.example.securityumarket.services.security.JwtService;
-import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UsersDAO usersDAO;
-
-    private final CityService cityService;
-
-    private final JwtService jwtService;
-
-    private final CloudinaryService cloudinaryService;
-
-    private final PasswordEncoder passwordEncoder;
-
-
-    @Value("${cloudinary.default.not-found-photo}")
-    private String DEFAULT_PHOTO;
 
 
     @Value("${mail.code.expiration.time}")
@@ -71,15 +42,11 @@ public class UserService {
 
     public Users findAppUserByEmail(String email) {
         return usersDAO.findAppUserByEmail(email)
-            .orElseThrow(() -> new DataNotFoundException("User with email " + email));
+                .orElseThrow(() -> new DataNotFoundException("User with email " + email));
     }
 
     public void save(Users user) {
         usersDAO.save(user);
-    }
-
-    public void saveAndFlush(Users user) {
-        usersDAO.saveAndFlush(user);
     }
 
     public boolean existsUsersByEmail(String email) {
@@ -103,78 +70,11 @@ public class UserService {
         }
     }
 
-
-
     @Scheduled(cron = "0 0/30 * * * *")
     @Transactional
     public void deleteInactiveUsers() {
         LocalDateTime thirtyMinutesAgo = LocalDateTime.now().minus(codeExpirationTimeMs, ChronoUnit.MILLIS);
         usersDAO.deleteByActiveFalseAndCreatedDateBefore(thirtyMinutesAgo);
-    }
-
-
-    private String uploadUserPhoto(MultipartFile photo) {
-        String fileName = cloudinaryService.uploadFileWithPublicRead(photo);
-        return cloudinaryService.getOriginalUrl(fileName);
-    }
-
-    private <T> void updateFieldIfPresent(T newValue, Consumer<T> updateFunction) {
-        Optional.ofNullable(newValue)
-                .ifPresent(updateFunction);
-    }
-
-    private void updateUserFields(UserDetailsDTO userDetailsDTO, MultipartFile photo, Users currentUser) {
-        updateFieldIfPresent(userDetailsDTO.getName(), currentUser::setName);
-        updateFieldIfPresent(userDetailsDTO.getPhone(), phone -> {
-            String normalizePhoneNumber = normalizePhoneNumber(phone);
-            existsUsersByPhone(normalizePhoneNumber);
-            currentUser.setPhone(normalizePhoneNumber);
-        });
-        updateFieldIfPresent(userDetailsDTO.getCityId(), cityId -> {
-            City city = cityService.findById(cityId);
-            currentUser.setCity(city);
-        });
-        updateFieldIfPresent(photo, url -> {
-            String oldUrl = currentUser.getPhotoUrl();
-
-            String urlFile = uploadUserPhoto(photo);
-            currentUser.setPhotoUrl(urlFile);
-
-            if (!oldUrl.equals(DEFAULT_PHOTO)) {
-                cloudinaryService.deleteFile(CloudinaryService.getPhotoPublicIdFromUrl(oldUrl));
-            }
-        });
-        updateFieldIfPresent(userDetailsDTO.getEmail(), email -> {
-            isUserEmailUnique(email);
-            currentUser.setEmail(email);
-        });
-    }
-
-    private String normalizePhoneNumber(String inputPhoneNumber) {
-        String digitsAndParentheses = inputPhoneNumber.replaceAll("[^\\d()]", "");
-
-        String digitsOnly = digitsAndParentheses.replaceAll("[()]", "");
-
-        String normalizedNumber;
-        if (digitsOnly.startsWith("38")) {
-            normalizedNumber = "+" + digitsOnly;
-        } else {
-            normalizedNumber = "+38" + digitsOnly;
-        }
-
-        return normalizedNumber;
-    }
-
-
-    private static String extractFileNameFromUrl(String url) {
-        try {
-            URL imageUrl = new URL(url);
-            Path path = Paths.get(imageUrl.getPath());
-            String fileNameAndFormat = path.getFileName().toString();
-            return fileNameAndFormat.substring(0, fileNameAndFormat.length()-4);
-        } catch (Exception e) {
-            throw new DataNotValidException("Url file is not valid");
-        }
     }
 
     public void setUserStatusOnline(Users user) {
