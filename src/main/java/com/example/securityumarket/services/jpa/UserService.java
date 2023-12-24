@@ -28,10 +28,6 @@ public class UserService {
     private long codeExpirationTimeMs;
 
 
-    private String getAuthenticatedUserEmail() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
-    }
-
     public Users getAuthenticatedUser() {
         String email = getAuthenticatedUserEmail();
         if (email.equals("anonymousUser")) {
@@ -90,5 +86,9 @@ public class UserService {
 
     public List<Users> findAllByStatus(Users.Status status) {
         return usersDAO.findAllByStatus(status).orElse(Collections.emptyList());
+    }
+
+    private String getAuthenticatedUserEmail() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

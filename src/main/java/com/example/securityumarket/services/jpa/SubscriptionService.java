@@ -6,6 +6,7 @@ import com.example.securityumarket.models.entities.Subscription;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -30,5 +31,9 @@ public class SubscriptionService {
 
     public void delete(Subscription subscription) {
         subscriptionDAO.delete(subscription);
+    }
+
+    public List<Subscription> findAll() {
+        return subscriptionDAO.findAll();
     }
 }

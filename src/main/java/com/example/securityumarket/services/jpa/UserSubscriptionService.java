@@ -8,6 +8,7 @@ import com.example.securityumarket.models.entities.Users;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -45,5 +46,9 @@ public class UserSubscriptionService {
 
     public boolean existsBySubscription(Subscription subscription) {
         return userSubscriptionDAO.existsBySubscription(subscription);
+    }
+
+    public Optional<List<UserSubscription>> findAllBySubscription(Subscription subscription) {
+        return userSubscriptionDAO.findAllBySubscription(subscription);
     }
 }

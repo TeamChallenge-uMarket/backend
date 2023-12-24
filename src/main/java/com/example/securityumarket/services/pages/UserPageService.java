@@ -11,6 +11,7 @@ import com.example.securityumarket.models.DTO.pages.user.response.TransportBySta
 import com.example.securityumarket.models.DTO.transports.TransportDTO;
 import com.example.securityumarket.models.entities.*;
 import com.example.securityumarket.services.jpa.*;
+import com.example.securityumarket.services.notification.Observer;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.services.storage.CloudinaryService;
 import com.example.securityumarket.util.converter.transposrt_type.*;
@@ -35,6 +36,8 @@ import static com.example.securityumarket.models.specifications.TransportSpecifi
 @RequiredArgsConstructor
 @Service
 public class UserPageService {
+
+    private final SubscriptionPageService subscriptionPageService;
 
     private final UserService userService;
 
@@ -69,6 +72,7 @@ public class UserPageService {
     private final ProducingCountryService producingCountryService;
 
     private final WheelConfigurationService wheelConfigurationService;
+
 
 
     @Value("${cloudinary.default.not-found-photo}")
@@ -199,7 +203,7 @@ public class UserPageService {
     public void updateStatusByTransportIdAndStatus(Transport transport, Transport.Status status) {
         transport.setStatus(status);
         if (status.equals(Transport.Status.ACTIVE)) {
-            //TODO NOTIFY USERS
+            subscriptionPageService.addTransport(transport);
         }
         transportService.save(transport);
     }
@@ -389,4 +393,5 @@ public class UserPageService {
         String fileName = cloudinaryService.uploadFileWithPublicRead(photo);
         return cloudinaryService.getOriginalUrl(fileName);
     }
+
 }

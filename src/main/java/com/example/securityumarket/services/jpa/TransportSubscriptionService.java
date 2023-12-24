@@ -7,6 +7,8 @@ import com.example.securityumarket.models.entities.TransportSubscription;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class TransportSubscriptionService {
@@ -26,4 +28,9 @@ public class TransportSubscriptionService {
     public void delete(TransportSubscription transportSubscription) {
         transportSubscriptionDAO.delete(transportSubscription);
     }
+
+    public List<TransportSubscription> findAllByTransport(Transport transport) {
+        return transportSubscriptionDAO.findAllByTransport(transport);
+    }
+
 }

@@ -2,7 +2,9 @@ package com.example.securityumarket.util;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.EmailSendingException;
+import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.services.notification.Observer;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -91,5 +94,35 @@ public class EmailUtil {
         } else {
             throw new DataNotValidException("No recent updates for the user");
         }
+    }
+
+    public void sendNotification(List<Users> users, Transport transport) {
+        String notificationMessage = buildNotificationMessage(transport);
+
+        users.forEach(user -> {
+            try {
+                sendNotificationEmail(user.getEmail(), "Новий транспорт", notificationMessage);
+            } catch (MessagingException e) {
+                throw new EmailSendingException();
+            }
+        });
+    }
+
+    @Async
+    public void sendNotificationEmail(String email, String subject, String messageText) throws MessagingException {
+        String senderEmail = "authenticator.umarket@gmail.com";
+        String senderName = "uAuto";
+
+        MimeMessage mimeMessage = createAndConfigureMimeMessage(email, senderEmail, senderName, subject, messageText);
+        javaMailSender.send(mimeMessage);
+    }
+
+
+    private String buildNotificationMessage(Transport transport) {
+        return String.format("Додано новий транспорт:%s%s \n" +
+                        "Посилання на автомобіль http://localhost:8081/api/v1/transport/%s",
+                transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand(),
+                transport.getTransportModel().getModel(),
+                transport.getId());
     }
 }
