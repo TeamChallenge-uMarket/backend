@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -42,5 +43,17 @@ public class UserSubscriptionService {
 
     public boolean existsBySubscription(Subscription subscription) {
         return userSubscriptionDAO.existsBySubscription(subscription);
+    }
+
+    public Optional<List<UserSubscription>> findAllBySubscription(Subscription subscription) {
+        return userSubscriptionDAO.findAllBySubscription(subscription);
+    }
+
+    public Optional<List<Users>> findUsersBySubscription(Subscription subscription) {
+        Optional<List<UserSubscription>> allBySubscription = findAllBySubscription(subscription);
+        return allBySubscription.map(userSubscriptions -> userSubscriptions
+                .stream()
+                .map(UserSubscription::getUser)
+                .toList());
     }
 }

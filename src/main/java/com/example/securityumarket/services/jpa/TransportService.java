@@ -164,7 +164,7 @@ public class TransportService {
     public void updateStatusByTransportIdAndStatus(Transport transport, Transport.Status status) {
         transport.setStatus(status);
         if (status.equals(Transport.Status.ACTIVE)) {
-//            subscriptionService.notifyUsers(transport);
+            subscriptionService.notifyUsers(transport);
         }
         save(transport);
     }

@@ -6,12 +6,10 @@ import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.TransportView;
 import com.example.securityumarket.models.entities.Users;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -23,11 +21,11 @@ public class TransportViewService {
         return transportViewDAO.save(transportView);
     }
 
-    public TransportView findByUserAndTransport(Users user, Transport transport) {
+    public void findByUserAndTransport(Users user, Transport transport) {
         TransportView transportView = transportViewDAO.findByUserAndTransport(user, transport)
                 .orElse(buildTransportView(user, transport));
         updateLastUpdated(transportView.getId(), LocalDateTime.now());
-        return save(transportView);
+        save(transportView);
     }
 
     private TransportView buildTransportView(Users user, Transport transport) {

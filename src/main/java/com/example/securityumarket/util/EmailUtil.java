@@ -2,6 +2,7 @@ package com.example.securityumarket.util;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.EmailSendingException;
+import com.example.securityumarket.models.entities.Subscription;
 import com.example.securityumarket.models.entities.Users;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -91,5 +92,9 @@ public class EmailUtil {
         } else {
             throw new DataNotValidException("No recent updates for the user");
         }
+    }
+
+    public void sendSubscriptionNotify(Users user, Subscription subscription) {
+        //TODO
     }
 }
