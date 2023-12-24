@@ -8,6 +8,7 @@ import com.example.securityumarket.models.DTO.pages.user.response.TransportBySta
 import com.example.securityumarket.services.jpa.TransportGalleryService;
 import com.example.securityumarket.services.jpa.TransportService;
 import com.example.securityumarket.services.jpa.UserService;
+import com.example.securityumarket.services.pages.UserPageService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UserPageController {
 
+    private final UserPageService userPageService;
+
+
     private final UserService userService;
 
     private final TransportService transportService;
@@ -38,13 +42,14 @@ public class UserPageController {
 
     @GetMapping
     public ResponseEntity<UserDetailsDTO> getUserDetails() {
-        return userService.getUserDetails();
+        return ResponseEntity.ok(userPageService.getUserDetails());
     }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateUserDetails(
             @RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile,
             @RequestPart(value = "body") @Valid UserDetailsDTO userDetailsDTO) {
+        userPageService.updateUserDetails(userDetailsDTO, multipartFile);
         return userService.updateUserDetails(userDetailsDTO, multipartFile);
     }
 

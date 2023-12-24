@@ -5,8 +5,8 @@ import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
 import com.example.securityumarket.models.entities.Subscription;
 import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportSubscription;
 import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.services.pages.CatalogPageService;
 import com.example.securityumarket.util.EmailUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -23,8 +23,6 @@ public class SubscriptionService {
 
     private final SubscriptionDAO subscriptionDAO;
     private final UserSubscriptionService userSubscriptionService;
-    private final TransportSubscriptionService transportSubscriptionService;
-    private final TransportService transportService;
     private final EmailUtil emailUtil;
 
     @Transactional
@@ -32,10 +30,6 @@ public class SubscriptionService {
         Subscription subscription = findByParameters(requestSearchDTO).orElseGet(() -> buildSubscriptionByRequestSearchDTO(requestSearchDTO));
         if (subscriptionDAO.findByParameters(subscription.getParameters()).isEmpty()) {
             save(subscription);
-            List<Transport> transportByParam = transportService.findTransportByParam(subscription.getParameters(), PageRequest.of(0, Integer.MAX_VALUE));
-            for (Transport transport : transportByParam) {
-                transportSubscriptionService.save(transport, subscription);
-            }
         }
         userSubscriptionService.save(user, subscription);
     }

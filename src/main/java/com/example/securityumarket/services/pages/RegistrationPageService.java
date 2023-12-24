@@ -13,14 +13,13 @@ import com.example.securityumarket.util.EmailUtil;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class RegistrationService {
+public class RegistrationPageService {
 
     private final PasswordEncoder passwordEncoder;
 
@@ -39,7 +38,7 @@ public class RegistrationService {
 
 
     @Transactional
-    public ResponseEntity<String> register(RegisterRequest registerRequest) {
+    public void register(RegisterRequest registerRequest) {
         validateRegisterRequest(registerRequest);
         Users user = buildUserFromRequest(registerRequest);
 
@@ -47,20 +46,20 @@ public class RegistrationService {
         userRoleService.addUseRole(user, role);
         userService.save(user);
 
-        return sendEmailAndSaveUser(user);
+        sendEmailAndSaveUser(user);
     }
 
-    public ResponseEntity<String> resendCode(String email) {
+    public void resendCode(String email) {
         Users user = userService.findAppUserByEmail(email);
         if (user.isActive()) {
             throw new DataNotValidException("Account with this email: " + email + "has already activated. You can login.");
         } else {
-            return sendEmailAndSaveUser(user);
+            sendEmailAndSaveUser(user);
         }
     }
 
 
-    private ResponseEntity<String> sendEmailAndSaveUser(Users user) {
+    private void sendEmailAndSaveUser(Users user) {
         String email = user.getEmail();
         String token = jwtService.generateRefreshToken(user);
 
@@ -72,20 +71,15 @@ public class RegistrationService {
 
         user.setRefreshToken(token);
         userService.save(user);
-        return ResponseEntity.ok("Email sent. Please verify account within 5 minutes");
     }
 
-    public ResponseEntity<String> verifyAccount(String email, String token) {
+    public void verifyAccount(String email, String token) {
         Users user = userService.findAppUserByEmail(email);
         if (emailUtil.verifyAccount(user, token)) {
-            if (user.isActive()) {
-                return ResponseEntity.ok("Your account is already active! You can login.");
-            }
             user.setActive(true);
             userService.save(user);
-            return ResponseEntity.ok("Account verified! You can login.");
         } else {
-            return ResponseEntity.status(422).body("Token has expired. Please regenerate token and try again");
+            throw new DataNotValidException("Token has expired. Please regenerate token and try again");
         }
     }
 

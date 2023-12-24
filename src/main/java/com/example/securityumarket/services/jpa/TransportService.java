@@ -11,6 +11,7 @@ import com.example.securityumarket.models.DTO.transports.impl.*;
 import com.example.securityumarket.models.DTO.pages.user.request.RequestUpdateTransportDetails;
 import com.example.securityumarket.models.DTO.pages.user.response.TransportByStatusResponse;
 import com.example.securityumarket.models.entities.*;
+import com.example.securityumarket.services.NotificationService;
 import com.example.securityumarket.util.converter.transposrt_type.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +67,8 @@ public class TransportService {
     private final WheelConfigurationService wheelConfigurationService;
 
     private final TransportGalleryService transportGalleryService;
+
+    private final NotificationService notificationService;
 
 
     public void save(Transport transport) {
@@ -163,7 +166,7 @@ public class TransportService {
     public void updateStatusByTransportIdAndStatus(Transport transport, Transport.Status status) {
         transport.setStatus(status);
         if (status.equals(Transport.Status.ACTIVE)) {
-//            subscriptionService.notifyUsers(transport);
+            notificationService.notifyUsers(transport);//TODO
         }
         save(transport);
     }
@@ -223,49 +226,6 @@ public class TransportService {
                 .collect(Collectors.toList());
     }
 
-    public List<Transport> findTransportByParam(RequestSearchDTO requestSearchDTO, PageRequest pageRequest) {
-        Page<Transport> transportPage = transportDAO.findAll(
-                isActive()
-                        .and(hasTransportTypeId(requestSearchDTO.getTransportTypeId()))
-                        .and(hasBrandId(requestSearchDTO.getBrandId()))
-                        .and(hasModelId(requestSearchDTO.getModelId()))
-                        .and(hasRegionId(requestSearchDTO.getRegionId()))
-                        .and(hasCityId(requestSearchDTO.getCityId()))
-                        .and(hasBodyTypeId(requestSearchDTO.getBodyTypeId()))
-                        .and(hasFuelTypeId(requestSearchDTO.getFuelTypeId()))
-                        .and(hasDriveTypeId(requestSearchDTO.getDriveTypeId()))
-                        .and(hasTransmissionId(requestSearchDTO.getTransmissionId()))
-                        .and(hasColorId(requestSearchDTO.getColorId()))
-                        .and(hasConditionId(requestSearchDTO.getConditionId()))
-                        .and(hasNumberAxlesId(requestSearchDTO.getNumberAxlesId()))
-                        .and(hasProducingCountryId(requestSearchDTO.getProducingCountryId()))
-                        .and(hasWheelConfigurationId(requestSearchDTO.getWheelConfigurationId()))
-
-                        .and(priceFrom(requestSearchDTO.getPriceFrom()))
-                        .and(priceTo(requestSearchDTO.getPriceTo()))
-                        .and(yearFrom(requestSearchDTO.getYearsFrom()))
-                        .and(yearTo(requestSearchDTO.getYearsTo()))
-                        .and(mileageFrom(requestSearchDTO.getMileageFrom()))
-                        .and(mileageTo(requestSearchDTO.getMileageTo()))
-                        .and(enginePowerFrom(requestSearchDTO.getEnginePowerFrom()))
-                        .and(enginePowerTo(requestSearchDTO.getEnginePowerTo()))
-                        .and(engineDisplacementFrom(requestSearchDTO.getEngineDisplacementFrom()))
-                        .and(engineDisplacementTo(requestSearchDTO.getEngineDisplacementTo()))
-                        .and(numberOfDoorsFrom(requestSearchDTO.getNumberOfDoorsFrom()))
-                        .and(numberOfDoorsTo(requestSearchDTO.getNumberOfDoorsTo()))
-                        .and(numberOfSeatsFrom(requestSearchDTO.getNumberOfSeatsFrom()))
-                        .and(numberOfSeatsTo(requestSearchDTO.getNumberOfSeatsTo()))
-                        .and(loadCapacityFrom(requestSearchDTO.getLoadCapacityFrom()))
-                        .and(loadCapacityTo(requestSearchDTO.getLoadCapacityTo()))
-                        .and(hasTrade(requestSearchDTO.getTrade()))
-                        .and(hasMilitary(requestSearchDTO.getMilitary()))
-                        .and(hasUncleared(requestSearchDTO.getUncleared()))
-                        .and(hasBargain(requestSearchDTO.getBargain()))
-                        .and(hasInstallmentPayment(requestSearchDTO.getInstallmentPayment()))
-                        .and(sortBy(Transport.class, requestSearchDTO.getSortBy(), requestSearchDTO.getOrderBy()))
-                , pageRequest);
-        return transportPage.getContent();
-    }
 
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
@@ -422,5 +382,49 @@ public class TransportService {
                     transport, new WaterVehicleConversionStrategy()));
             default -> throw new DataNotFoundException("Transport type id");
         };
+    }
+
+    public List<Transport> findTransportByParam(RequestSearchDTO requestSearchDTO, PageRequest pageRequest) {
+        Page<Transport> transportPage = transportDAO.findAll(
+                isActive()
+                        .and(hasTransportTypeId(requestSearchDTO.getTransportTypeId()))
+                        .and(hasBrandId(requestSearchDTO.getBrandId()))
+                        .and(hasModelId(requestSearchDTO.getModelId()))
+                        .and(hasRegionId(requestSearchDTO.getRegionId()))
+                        .and(hasCityId(requestSearchDTO.getCityId()))
+                        .and(hasBodyTypeId(requestSearchDTO.getBodyTypeId()))
+                        .and(hasFuelTypeId(requestSearchDTO.getFuelTypeId()))
+                        .and(hasDriveTypeId(requestSearchDTO.getDriveTypeId()))
+                        .and(hasTransmissionId(requestSearchDTO.getTransmissionId()))
+                        .and(hasColorId(requestSearchDTO.getColorId()))
+                        .and(hasConditionId(requestSearchDTO.getConditionId()))
+                        .and(hasNumberAxlesId(requestSearchDTO.getNumberAxlesId()))
+                        .and(hasProducingCountryId(requestSearchDTO.getProducingCountryId()))
+                        .and(hasWheelConfigurationId(requestSearchDTO.getWheelConfigurationId()))
+
+                        .and(priceFrom(requestSearchDTO.getPriceFrom()))
+                        .and(priceTo(requestSearchDTO.getPriceTo()))
+                        .and(yearFrom(requestSearchDTO.getYearsFrom()))
+                        .and(yearTo(requestSearchDTO.getYearsTo()))
+                        .and(mileageFrom(requestSearchDTO.getMileageFrom()))
+                        .and(mileageTo(requestSearchDTO.getMileageTo()))
+                        .and(enginePowerFrom(requestSearchDTO.getEnginePowerFrom()))
+                        .and(enginePowerTo(requestSearchDTO.getEnginePowerTo()))
+                        .and(engineDisplacementFrom(requestSearchDTO.getEngineDisplacementFrom()))
+                        .and(engineDisplacementTo(requestSearchDTO.getEngineDisplacementTo()))
+                        .and(numberOfDoorsFrom(requestSearchDTO.getNumberOfDoorsFrom()))
+                        .and(numberOfDoorsTo(requestSearchDTO.getNumberOfDoorsTo()))
+                        .and(numberOfSeatsFrom(requestSearchDTO.getNumberOfSeatsFrom()))
+                        .and(numberOfSeatsTo(requestSearchDTO.getNumberOfSeatsTo()))
+                        .and(loadCapacityFrom(requestSearchDTO.getLoadCapacityFrom()))
+                        .and(loadCapacityTo(requestSearchDTO.getLoadCapacityTo()))
+                        .and(hasTrade(requestSearchDTO.getTrade()))
+                        .and(hasMilitary(requestSearchDTO.getMilitary()))
+                        .and(hasUncleared(requestSearchDTO.getUncleared()))
+                        .and(hasBargain(requestSearchDTO.getBargain()))
+                        .and(hasInstallmentPayment(requestSearchDTO.getInstallmentPayment()))
+                        .and(sortBy(Transport.class, requestSearchDTO.getSortBy(), requestSearchDTO.getOrderBy()))
+                , pageRequest);
+        return transportPage.getContent();
     }
 }

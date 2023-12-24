@@ -1,5 +1,6 @@
 package com.example.securityumarket.services.pages;
 
+import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.EmailSendingException;
 import com.example.securityumarket.models.DTO.pages.login.PasswordRequest;
 import com.example.securityumarket.models.entities.Users;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ResetPasswordService {
+public class ResetPasswordPageService {
 
     private final UserService userService;
 
@@ -26,7 +27,7 @@ public class ResetPasswordService {
     private final JwtService jwtService;
 
 
-    public ResponseEntity<String> sendResetPasswordCode(String email) {
+    public void sendResetPasswordCode(String email) {
         Users user = userService.findAppUserByEmail(email);
         String token = jwtService.generateToken(user);
         try {
@@ -36,21 +37,18 @@ public class ResetPasswordService {
         }
         user.setRefreshToken(token);
         userService.save(user);
-        return ResponseEntity.ok("Verification code sent successfully. Check your email");
     }
 
-    public ResponseEntity<String> verifyAccount(String email, String token) {
+    public void verifyAccount(String email, String token) {
         Users user = userService.findAppUserByEmail(email);
-        if (emailUtil.verifyAccount(user, token)) {
-            return ResponseEntity.ok("redirect:/api/v1/authorization/reset-password/form");
-        } else
-            return ResponseEntity.status(422).body("Token has expired. Please regenerate token and try again");
+        if (!emailUtil.verifyAccount(user, token)) {
+            throw new DataNotValidException("Token has expired. Please regenerate token and try again");
+        }
     }
 
-    public ResponseEntity<String> resetPassword(PasswordRequest passwordRequest) {
+    public void resetPassword(PasswordRequest passwordRequest) {
         Users user = userService.findAppUserByEmail(passwordRequest.getEmail());
         user.setPassword(passwordEncoder.encode(passwordRequest.getPassword()));
         userService.save(user);
-        return ResponseEntity.ok("Password reset successfully");
     }
 }

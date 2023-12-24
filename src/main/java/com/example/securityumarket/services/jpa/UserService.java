@@ -8,7 +8,9 @@ import com.example.securityumarket.exception.UnauthenticatedException;
 import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
 import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
 import com.example.securityumarket.models.entities.City;
+import com.example.securityumarket.models.entities.Transport;
 import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.services.notification.Observer;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.RequiredArgsConstructor;
@@ -101,11 +103,6 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<UserDetailsDTO> getUserDetails() {
-        Users user = getAuthenticatedUser();
-        return ResponseEntity.ok(buildUserDetailsDTOFromUser(user));
-    }
-
     @Transactional
     public ResponseEntity<String> updateUserDetails(UserDetailsDTO userDetailsDTO, MultipartFile photo) {
         Users currentUser = getAuthenticatedUser();
@@ -178,16 +175,6 @@ public class UserService {
         });
     }
 
-    private UserDetailsDTO buildUserDetailsDTOFromUser(Users user) {
-        UserDetailsDTO dto = new UserDetailsDTO();
-        dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
-        dto.setCityId((user.getCity() != null) ? (user.getCity().getId()) : null);
-        dto.setPhone(user.getPhone());
-        dto.setPhotoUrl(user.getPhotoUrl());
-        return dto;
-    }
 
     private String normalizePhoneNumber(String inputPhoneNumber) {
         String digitsAndParentheses = inputPhoneNumber.replaceAll("[^\\d()]", "");

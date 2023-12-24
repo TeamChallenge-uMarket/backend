@@ -3,7 +3,7 @@ package com.example.securityumarket.controllers.pages.authorization;
 import com.example.securityumarket.models.DTO.pages.login.OAuth2Request;
 import com.example.securityumarket.models.authentication.AuthenticationRequest;
 import com.example.securityumarket.models.authentication.AuthenticationResponse;
-import com.example.securityumarket.services.pages.LoginService;
+import com.example.securityumarket.services.pages.LoginPageService;
 import com.example.securityumarket.services.security.TokenRefreshService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,7 +24,7 @@ import java.util.Map;
 @Tag(name = "Login", description = "This controller contains login page endpoints, such as: login, refresh-token")
 public class LoginController {
 
-    private final LoginService loginService;
+    private final LoginPageService loginPageService;
 
     private final TokenRefreshService tokenRefreshService; //TEST VARIABLE
 
@@ -47,13 +47,13 @@ public class LoginController {
             @Parameter(description = "The login request sent by user in order to obtain " +
                     "an authentication token. It contains the necessary credentials to perform authentication")
             @RequestBody AuthenticationRequest authenticationRequest) {
-        return ResponseEntity.ok(loginService.login(authenticationRequest));
+        return ResponseEntity.ok(loginPageService.login(authenticationRequest));
     }
 
     @PostMapping("/oauth2")
     public ResponseEntity<AuthenticationResponse> loginOAuth2(
             @RequestBody OAuth2Request oAuth2Request) {
-        return ResponseEntity.ok(loginService.loginOAuth2(oAuth2Request));
+        return ResponseEntity.ok(loginPageService.loginOAuth2(oAuth2Request));
     }
 
     @Operation(hidden = true)

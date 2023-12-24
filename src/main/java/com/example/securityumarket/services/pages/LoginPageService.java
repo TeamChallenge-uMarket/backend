@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class LoginService {
+public class LoginPageService {
 
     private final UserService userService;
     private final JwtService jwtService;
