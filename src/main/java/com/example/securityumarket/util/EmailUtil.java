@@ -2,9 +2,8 @@ package com.example.securityumarket.util;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.EmailSendingException;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.Users;
-import com.example.securityumarket.services.notification.Observer;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.Users;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;

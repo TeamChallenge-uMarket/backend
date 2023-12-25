@@ -2,7 +2,7 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.ProducingCountryDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.ProducingCountry;
+import com.example.securityumarket.models.ProducingCountry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

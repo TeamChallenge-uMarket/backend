@@ -1,9 +1,9 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportSubscriptionDAO;
-import com.example.securityumarket.models.entities.Subscription;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportSubscription;
+import com.example.securityumarket.models.Subscription;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.TransportSubscription;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

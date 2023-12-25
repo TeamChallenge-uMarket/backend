@@ -1,6 +1,6 @@
 package com.example.securityumarket.controllers.pages.authorization;
 
-import com.example.securityumarket.models.DTO.pages.login.PasswordRequest;
+import com.example.securityumarket.dto.pages.login.PasswordRequest;
 import com.example.securityumarket.services.pages.ResetPasswordPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

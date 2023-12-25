@@ -1,15 +1,15 @@
 package com.example.securityumarket.services.pages;
 
+import com.example.securityumarket.dto.entities.*;
 import com.example.securityumarket.exception.DataNotValidException;
-import com.example.securityumarket.models.DTO.pages.catalog.request.RequestFilterParam;
-import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
-import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseDefaultTransportParameter;
-import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
-import com.example.securityumarket.models.DTO.entities.*;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportType;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.dto.pages.catalog.request.RequestFilterParam;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseDefaultTransportParameter;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.TransportType;
+import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.securityumarket.models.specifications.TransportSpecifications.*;
+import static com.example.securityumarket.dao.specifications.TransportSpecifications.*;
 
 
 @Service

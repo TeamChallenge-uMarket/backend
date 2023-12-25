@@ -1,8 +1,8 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.SubscriptionDAO;
-import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
-import com.example.securityumarket.models.entities.Subscription;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.models.Subscription;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

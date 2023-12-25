@@ -1,9 +1,10 @@
 package com.example.securityumarket.controllers.pages.subscription;
 
 
-import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.dto.pages.subscription.SubscriptionRequest;
+import com.example.securityumarket.models.Subscription;
 import com.example.securityumarket.services.notification.Observed;
-import com.example.securityumarket.services.pages.SubscriptionPageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,9 @@ public class SubscriptionController {
     private final Observed observed;
 
     @PostMapping()
-    public ResponseEntity<String> addSubscription(@ModelAttribute RequestSearchDTO requestSearchDTO) {
-        observed.addSubscription(requestSearchDTO);
+    public ResponseEntity<String> addSubscription(@ModelAttribute RequestSearchDTO requestSearchDTO,
+                                                  @RequestBody SubscriptionRequest subscriptionRequest) {
+        observed.addSubscription(requestSearchDTO, subscriptionRequest);
         return ResponseEntity.ok("Subscription added.");
     }
 

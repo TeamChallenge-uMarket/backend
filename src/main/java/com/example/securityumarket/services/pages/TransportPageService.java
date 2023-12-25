@@ -1,9 +1,9 @@
 package com.example.securityumarket.services.pages;
 
-import com.example.securityumarket.models.DTO.pages.transport.TransportDetailsResponse;
-import com.example.securityumarket.models.DTO.transports.TransportDTO;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.dto.pages.transport.TransportDetailsResponse;
+import com.example.securityumarket.dto.transports.TransportDTO;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.FavoriteTransportService;
 import com.example.securityumarket.services.jpa.TransportService;
 import com.example.securityumarket.services.jpa.TransportViewService;

@@ -1,7 +1,7 @@
 package com.example.securityumarket.controllers.pages.transport;
 
-import com.example.securityumarket.models.DTO.pages.transport.TransportDetailsResponse;
-import com.example.securityumarket.models.DTO.transports.TransportDTO;
+import com.example.securityumarket.dto.pages.transport.TransportDetailsResponse;
+import com.example.securityumarket.dto.transports.TransportDTO;
 import com.example.securityumarket.services.pages.TransportPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -2,10 +2,10 @@ package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.UnauthenticatedException;
-import com.example.securityumarket.models.DTO.pages.login.OAuth2Request;
-import com.example.securityumarket.models.authentication.AuthenticationRequest;
-import com.example.securityumarket.models.authentication.AuthenticationResponse;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.dto.pages.login.OAuth2Request;
+import com.example.securityumarket.dto.authentication.AuthenticationRequest;
+import com.example.securityumarket.dto.authentication.AuthenticationResponse;
+import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.UserService;
 import com.example.securityumarket.services.security.JwtService;
 import lombok.RequiredArgsConstructor;

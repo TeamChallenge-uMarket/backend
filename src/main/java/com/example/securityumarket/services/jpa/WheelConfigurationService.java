@@ -2,7 +2,7 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.WheelConfigurationDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.WheelConfiguration;
+import com.example.securityumarket.models.WheelConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

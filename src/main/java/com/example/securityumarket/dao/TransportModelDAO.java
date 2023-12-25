@@ -1,7 +1,6 @@
 package com.example.securityumarket.dao;
 
-import com.example.securityumarket.models.entities.BodyType;
-import com.example.securityumarket.models.entities.TransportModel;
+import com.example.securityumarket.models.TransportModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

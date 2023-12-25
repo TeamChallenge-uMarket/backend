@@ -2,8 +2,8 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.CityDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.City;
-import com.example.securityumarket.models.specifications.CitySpecifications;
+import com.example.securityumarket.models.City;
+import com.example.securityumarket.dao.specifications.CitySpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

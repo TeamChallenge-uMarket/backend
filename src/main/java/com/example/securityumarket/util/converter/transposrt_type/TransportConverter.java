@@ -1,12 +1,12 @@
 package com.example.securityumarket.util.converter.transposrt_type;
 
-import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.entities.TransportGalleryDTO;
-import com.example.securityumarket.models.DTO.transports.TransportDTO;
-import com.example.securityumarket.models.DTO.pages.user.response.TransportByStatusResponse;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportGallery;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseSearchDTO;
+import com.example.securityumarket.dto.entities.TransportGalleryDTO;
+import com.example.securityumarket.dto.transports.TransportDTO;
+import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.TransportGallery;
+import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.FavoriteTransportService;
 import com.example.securityumarket.services.jpa.TransportGalleryService;
 import com.example.securityumarket.services.jpa.TransportViewService;

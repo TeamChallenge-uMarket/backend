@@ -1,8 +1,8 @@
 package com.example.securityumarket.controllers.pages.authorization;
 
-import com.example.securityumarket.models.DTO.pages.login.OAuth2Request;
-import com.example.securityumarket.models.authentication.AuthenticationRequest;
-import com.example.securityumarket.models.authentication.AuthenticationResponse;
+import com.example.securityumarket.dto.pages.login.OAuth2Request;
+import com.example.securityumarket.dto.authentication.AuthenticationRequest;
+import com.example.securityumarket.dto.authentication.AuthenticationResponse;
 import com.example.securityumarket.services.pages.LoginPageService;
 import com.example.securityumarket.services.security.TokenRefreshService;
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,9 +1,9 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.UserRoleDAO;
-import com.example.securityumarket.models.entities.Role;
-import com.example.securityumarket.models.entities.UserRole;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.models.Role;
+import com.example.securityumarket.models.UserRole;
+import com.example.securityumarket.models.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

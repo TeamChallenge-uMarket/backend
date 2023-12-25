@@ -1,8 +1,8 @@
 package com.example.securityumarket.controllers.pages.authorization;
 
 import com.example.securityumarket.TestBean;
-import com.example.securityumarket.models.DTO.pages.login.PasswordRequest;
-import com.example.securityumarket.models.DTO.pages.login.RegisterRequest;
+import com.example.securityumarket.dto.pages.login.PasswordRequest;
+import com.example.securityumarket.dto.pages.login.RegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

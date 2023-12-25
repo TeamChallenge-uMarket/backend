@@ -1,9 +1,9 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.FavoriteTransportDAO;
-import com.example.securityumarket.models.entities.FavoriteTransport;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.models.FavoriteTransport;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

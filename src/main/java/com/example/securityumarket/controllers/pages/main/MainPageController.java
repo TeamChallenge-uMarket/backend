@@ -1,7 +1,7 @@
 package com.example.securityumarket.controllers.pages.main;
 
-import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.pages.main.response.*;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseSearchDTO;
+import com.example.securityumarket.dto.pages.main.response.*;
 import com.example.securityumarket.services.pages.MainPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

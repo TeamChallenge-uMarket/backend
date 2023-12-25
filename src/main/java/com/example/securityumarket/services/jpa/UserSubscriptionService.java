@@ -1,10 +1,11 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.UserSubscriptionDAO;
+import com.example.securityumarket.dto.pages.subscription.SubscriptionRequest;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.Subscription;
-import com.example.securityumarket.models.entities.UserSubscription;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.models.Subscription;
+import com.example.securityumarket.models.UserSubscription;
+import com.example.securityumarket.models.Users;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,8 @@ public class UserSubscriptionService {
         userSubscriptionDAO.save(userSubscription);
     }
 
-    public void save(Users user, Subscription subscription) {
-        UserSubscription userSubscription = buildUserSubscription(user, subscription);
+    public void save(Users user, Subscription subscription, SubscriptionRequest subscriptionRequest) {
+        UserSubscription userSubscription = buildUserSubscription(user, subscription, subscriptionRequest);
         userSubscriptionDAO.save(userSubscription);
     }
 
@@ -31,10 +32,13 @@ public class UserSubscriptionService {
         return userSubscriptionDAO.findBySubscriptionAndUser(subscription, user);
     }
 
-    public UserSubscription buildUserSubscription(Users user, Subscription subscription) {
+    public UserSubscription buildUserSubscription(
+            Users user, Subscription subscription, SubscriptionRequest subscriptionRequest) {
         return UserSubscription.builder()
                 .user(user)
                 .subscription(subscription)
+                .name(subscriptionRequest.name())
+                .notificationEnabled(subscriptionRequest.notificationEnabled())
                 .build();
     }
 

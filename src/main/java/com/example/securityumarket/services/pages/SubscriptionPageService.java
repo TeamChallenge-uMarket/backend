@@ -1,11 +1,12 @@
 package com.example.securityumarket.services.pages;
 
+import com.example.securityumarket.dto.pages.subscription.SubscriptionRequest;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
-import com.example.securityumarket.models.entities.Subscription;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.UserSubscription;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.models.Subscription;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.UserSubscription;
+import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.*;
 import com.example.securityumarket.services.notification.Observed;
 import com.example.securityumarket.services.notification.Observer;
@@ -33,7 +34,7 @@ public class SubscriptionPageService implements Observed {
 
     @Transactional
     @Override
-    public void addSubscription(RequestSearchDTO requestSearchDTO) {
+    public void addSubscription(RequestSearchDTO requestSearchDTO, SubscriptionRequest subscriptionRequest) {
         Subscription subscription = subscriptionService
                 .findByParameters(requestSearchDTO).orElseGet(() ->
                         buildSubscriptionByRequestSearchDTO(requestSearchDTO));
@@ -43,7 +44,7 @@ public class SubscriptionPageService implements Observed {
         }
 
         saveTransportSubscription(subscription);
-        saveUserSubscription(subscription);
+        saveUserSubscription(subscription, subscriptionRequest);
     }
 
     @Transactional
@@ -67,6 +68,7 @@ public class SubscriptionPageService implements Observed {
             Specification<Transport> specificationParam = catalogPageService.getSpecificationParam(subscription.getParameters());
             List<Transport> transports = transportService.findAll(specificationParam);
             if (transports.contains(transport)) {
+                transportSubscriptionService.save(transport, subscription);
                 notifyObservers(subscription, transport);
             }
         }
@@ -98,9 +100,9 @@ public class SubscriptionPageService implements Observed {
     }
 
 
-    private void saveUserSubscription(Subscription subscription) {
+    private void saveUserSubscription(Subscription subscription, SubscriptionRequest subscriptionRequest) {
         Users authenticatedUser = userService.getAuthenticatedUser();
-        userSubscriptionService.save(authenticatedUser, subscription);
+        userSubscriptionService.save(authenticatedUser, subscription, subscriptionRequest);
     }
 
     private void saveTransportSubscription(Subscription subscription) {

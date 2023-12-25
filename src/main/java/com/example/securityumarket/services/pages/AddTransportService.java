@@ -1,7 +1,7 @@
 package com.example.securityumarket.services.pages;
 
-import com.example.securityumarket.models.DTO.pages.main.request.RequestAddTransportDTO;
-import com.example.securityumarket.models.entities.*;
+import com.example.securityumarket.dto.pages.main.request.RequestAddTransportDTO;
+import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.services.jpa.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -2,9 +2,9 @@ package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.EmailSendingException;
-import com.example.securityumarket.models.DTO.pages.login.RegisterRequest;
-import com.example.securityumarket.models.entities.Role;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.dto.pages.login.RegisterRequest;
+import com.example.securityumarket.models.Role;
+import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.RoleService;
 import com.example.securityumarket.services.jpa.UserRoleService;
 import com.example.securityumarket.services.jpa.UserService;

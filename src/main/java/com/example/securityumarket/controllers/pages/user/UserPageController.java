@@ -1,10 +1,10 @@
 package com.example.securityumarket.controllers.pages.user;
 
-import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
-import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
-import com.example.securityumarket.models.DTO.transports.TransportDTO;
-import com.example.securityumarket.models.DTO.pages.user.request.RequestUpdateTransportDetails;
-import com.example.securityumarket.models.DTO.pages.user.response.TransportByStatusResponse;
+import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
+import com.example.securityumarket.dto.entities.user.UserSecurityDetailsDTO;
+import com.example.securityumarket.dto.transports.TransportDTO;
+import com.example.securityumarket.dto.pages.user.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
 import com.example.securityumarket.services.pages.UserPageService;
 import jakarta.validation.Valid;
 import java.util.List;

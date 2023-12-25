@@ -4,7 +4,7 @@ import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DuplicateDataException;
 import com.example.securityumarket.exception.UnauthenticatedException;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.models.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;

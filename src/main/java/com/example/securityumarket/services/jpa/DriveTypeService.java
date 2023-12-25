@@ -2,8 +2,8 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.DriveTypeDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.DriveType;
-import com.example.securityumarket.models.specifications.DriveTypeSpecifications;
+import com.example.securityumarket.models.DriveType;
+import com.example.securityumarket.dao.specifications.DriveTypeSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

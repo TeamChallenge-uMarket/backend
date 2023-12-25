@@ -2,7 +2,7 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportConditionDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.TransportCondition;
+import com.example.securityumarket.models.TransportCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

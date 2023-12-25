@@ -1,10 +1,10 @@
 package com.example.securityumarket.controllers.pages.catalog;
 
-import com.example.securityumarket.models.DTO.pages.catalog.request.RequestFilterParam;
-import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
-import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseDefaultTransportParameter;
-import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
+import com.example.securityumarket.dto.pages.catalog.request.RequestFilterParam;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseDefaultTransportParameter;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
 import com.example.securityumarket.services.pages.CatalogPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

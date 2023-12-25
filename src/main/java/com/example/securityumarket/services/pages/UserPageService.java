@@ -4,14 +4,13 @@ import com.example.securityumarket.exception.BadRequestException;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.InsufficientPermissionsException;
-import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
-import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
-import com.example.securityumarket.models.DTO.pages.user.request.RequestUpdateTransportDetails;
-import com.example.securityumarket.models.DTO.pages.user.response.TransportByStatusResponse;
-import com.example.securityumarket.models.DTO.transports.TransportDTO;
-import com.example.securityumarket.models.entities.*;
+import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
+import com.example.securityumarket.dto.entities.user.UserSecurityDetailsDTO;
+import com.example.securityumarket.dto.pages.user.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
+import com.example.securityumarket.dto.transports.TransportDTO;
+import com.example.securityumarket.models.*;
 import com.example.securityumarket.services.jpa.*;
-import com.example.securityumarket.services.notification.Observer;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.services.storage.CloudinaryService;
 import com.example.securityumarket.util.converter.transposrt_type.*;
@@ -30,8 +29,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.example.securityumarket.models.specifications.TransportSpecifications.findByUser;
-import static com.example.securityumarket.models.specifications.TransportSpecifications.hasStatus;
+import static com.example.securityumarket.dao.specifications.TransportSpecifications.findByUser;
+import static com.example.securityumarket.dao.specifications.TransportSpecifications.hasStatus;
 
 @RequiredArgsConstructor
 @Service
