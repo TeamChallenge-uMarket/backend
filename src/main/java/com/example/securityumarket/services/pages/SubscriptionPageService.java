@@ -1,12 +1,10 @@
 package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.dto.pages.subscription.SubscriptionRequest;
+import com.example.securityumarket.dto.pages.subscription.SubscriptionResponse;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
-import com.example.securityumarket.models.Subscription;
-import com.example.securityumarket.models.Transport;
-import com.example.securityumarket.models.UserSubscription;
-import com.example.securityumarket.models.Users;
+import com.example.securityumarket.models.*;
 import com.example.securityumarket.services.jpa.*;
 import com.example.securityumarket.services.notification.Observed;
 import com.example.securityumarket.services.notification.Observer;
@@ -16,6 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,7 +93,9 @@ public class SubscriptionPageService implements Observed {
         Optional<List<UserSubscription>> allBySubscription = userSubscriptionService.findAllBySubscription(subscription);
         if (allBySubscription.isPresent()){
             List<UserSubscription> userSubscriptions = allBySubscription.get();
-            List<Users> list = userSubscriptions.stream().map(UserSubscription::getUser).toList();
+            List<Users> list = userSubscriptions.stream()
+                    .filter(UserSubscription::getNotificationEnabled)
+                    .map(UserSubscription::getUser).toList();
             emailUtil.sendNotification(list, transport);
         }
     }
@@ -116,6 +117,36 @@ public class SubscriptionPageService implements Observed {
     private Subscription buildSubscriptionByRequestSearchDTO(RequestSearchDTO requestSearchDTO) {
         return Subscription.builder()
                 .parameters(requestSearchDTO)
+                .build();
+    }
+
+    public List<SubscriptionResponse> getSubscriptions() {
+        Users authenticatedUser = userService.getAuthenticatedUser();
+        List<UserSubscription> userSubscriptions = userSubscriptionService
+                .findAllByUser(authenticatedUser);
+        return userSubscriptions.stream().map(this::buildSubscriptionResponse).toList();
+    }
+
+    private int countNewTransports(UserSubscription userSubscriptions) {
+        LocalDateTime lastUpdate = userSubscriptions.getLastUpdate();
+        List<Transport> newTransports = findNewTransports(userSubscriptions.getSubscription(), lastUpdate);
+        return newTransports.size();
+    }
+
+    private List<Transport> findNewTransports(Subscription subscription, LocalDateTime lastUpdate) {
+        List<TransportSubscription> allBySubscription = transportSubscriptionService.findAllBySubscription(subscription);
+        return allBySubscription.stream()
+                .filter(sub -> sub.getLastUpdate().isAfter(lastUpdate))//TODO
+                .map(TransportSubscription::getTransport)
+                .toList();
+    }
+
+    private SubscriptionResponse buildSubscriptionResponse(UserSubscription subscription) {
+        return SubscriptionResponse.builder()
+                .id(subscription.getSubscription().getId())
+                .name(subscription.getName())
+                .notificationStatus(subscription.getNotificationEnabled())
+                .countNewTransports(countNewTransports(subscription))
                 .build();
     }
 }

@@ -14,5 +14,7 @@ public interface UserSubscriptionDAO extends JpaRepository<UserSubscription, Lon
     Optional<UserSubscription> findBySubscriptionAndUser(Subscription subscription, Users users);
 
     Optional<List<UserSubscription>> findAllBySubscription(Subscription subscription);
+
+    List<UserSubscription> findAllByUser(Users user);
     boolean existsBySubscription(Subscription subscription);
 }

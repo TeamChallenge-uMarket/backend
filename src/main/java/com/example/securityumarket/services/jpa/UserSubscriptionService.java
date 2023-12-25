@@ -55,4 +55,8 @@ public class UserSubscriptionService {
     public Optional<List<UserSubscription>> findAllBySubscription(Subscription subscription) {
         return userSubscriptionDAO.findAllBySubscription(subscription);
     }
+
+    public List<UserSubscription> findAllByUser(Users authenticatedUser) {
+        return userSubscriptionDAO.findAllByUser(authenticatedUser);
+    }
 }

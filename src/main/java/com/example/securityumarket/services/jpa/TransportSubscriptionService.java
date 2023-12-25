@@ -33,4 +33,8 @@ public class TransportSubscriptionService {
         return transportSubscriptionDAO.findAllByTransport(transport);
     }
 
+    public List<TransportSubscription> findAllBySubscription(Subscription subscription) {
+        return transportSubscriptionDAO.findAllBySubscription(subscription);
+    }
+
 }
