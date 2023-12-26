@@ -1,27 +1,18 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.FavoriteTransportDAO;
-import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.FavoriteTransport;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.models.FavoriteTransport;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class FavoriteTransportService {
 
     private final FavoriteTransportDAO favoriteTransportDAO;
-
-    public List<Transport> findFavorites(Users user) {
-        return favoriteTransportDAO.findFavorites(user)
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException("Favorite transport"));
-    }
 
     public Boolean isFavoriteByUser(Users user, Transport transport) {
         return favoriteTransportDAO.existsByUserAndTransport(user, transport);

@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-name-and-status_notification-fields-to-subscription_has_users-table
+      author: Oleh
+      changes:
+        - addColumn:
+            tableName: subscription_has_users
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: notification_enabled
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false

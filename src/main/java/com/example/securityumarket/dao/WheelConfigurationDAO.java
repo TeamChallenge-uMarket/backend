@@ -1,6 +1,6 @@
 package com.example.securityumarket.dao;
 
-import com.example.securityumarket.models.entities.WheelConfiguration;
+import com.example.securityumarket.models.WheelConfiguration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

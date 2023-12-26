@@ -1,7 +1,7 @@
 package com.example.securityumarket.controllers.pages.authorization;
 
 import com.example.securityumarket.TestBean;
-import com.example.securityumarket.models.authentication.AuthenticationRequest;
+import com.example.securityumarket.dto.authentication.AuthenticationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

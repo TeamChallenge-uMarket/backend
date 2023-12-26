@@ -3,12 +3,10 @@ package com.example.securityumarket.services.security;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.UnauthenticatedException;
-import com.example.securityumarket.models.authentication.AuthenticationResponse;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.dto.authentication.AuthenticationResponse;
+import com.example.securityumarket.models.Users;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor

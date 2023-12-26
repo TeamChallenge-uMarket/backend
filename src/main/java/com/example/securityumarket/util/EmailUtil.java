@@ -2,7 +2,8 @@ package com.example.securityumarket.util;
 
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.exception.EmailSendingException;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.Users;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -46,7 +48,7 @@ public class EmailUtil {
         String subject = "Verify account";
         String messageText = String.format(
                 "<div><a href=\"%s%s?email=%s&token=%s\" target=\"_blank\">click link to verify</a></div>",
-                BASE_URL,REQUEST_LOGIN_MAPPING_URL, email, token
+                BASE_URL+"/login", REQUEST_LOGIN_MAPPING_URL, email, token
         );
 
         MimeMessage mimeMessage = createAndConfigureMimeMessage(email, senderEmail, senderName, subject, messageText);
@@ -91,5 +93,35 @@ public class EmailUtil {
         } else {
             throw new DataNotValidException("No recent updates for the user");
         }
+    }
+
+    public void sendNotification(List<Users> users, Transport transport) {
+        String notificationMessage = buildNotificationMessage(transport);
+
+        users.forEach(user -> {
+            try {
+                sendNotificationEmail(user.getEmail(), "Новий транспорт", notificationMessage);
+            } catch (MessagingException e) {
+                throw new EmailSendingException();
+            }
+        });
+    }
+
+    @Async
+    public void sendNotificationEmail(String email, String subject, String messageText) throws MessagingException {
+        String senderEmail = "authenticator.umarket@gmail.com";
+        String senderName = "uAuto";
+
+        MimeMessage mimeMessage = createAndConfigureMimeMessage(email, senderEmail, senderName, subject, messageText);
+        javaMailSender.send(mimeMessage);
+    }
+
+
+    private String buildNotificationMessage(Transport transport) {
+        return String.format("Додано новий транспорт:%s%s \n" +
+                        "Посилання на автомобіль http://localhost:8081/api/v1/transport/%s",
+                transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand(),
+                transport.getTransportModel().getModel(),
+                transport.getId());
     }
 }

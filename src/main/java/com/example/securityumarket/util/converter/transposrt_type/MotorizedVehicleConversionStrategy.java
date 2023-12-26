@@ -1,7 +1,7 @@
 package com.example.securityumarket.util.converter.transposrt_type;
 
-import com.example.securityumarket.models.DTO.transports.impl.MotorcycleDTO;
-import com.example.securityumarket.models.entities.Transport;
+import com.example.securityumarket.dto.transports.impl.MotorcycleDTO;
+import com.example.securityumarket.models.Transport;
 import org.springframework.stereotype.Component;
 
 @Component

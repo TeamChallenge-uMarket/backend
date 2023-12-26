@@ -1,9 +1,8 @@
 package com.example.securityumarket.dao;
 
-import com.example.securityumarket.models.entities.FavoriteTransport;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.Users;
-import org.springframework.data.domain.PageRequest;
+import com.example.securityumarket.models.FavoriteTransport;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

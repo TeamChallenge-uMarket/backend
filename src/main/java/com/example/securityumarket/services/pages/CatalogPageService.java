@@ -1,22 +1,27 @@
 package com.example.securityumarket.services.pages;
 
+import com.example.securityumarket.dto.entities.*;
 import com.example.securityumarket.exception.DataNotValidException;
-import com.example.securityumarket.models.DTO.pages.catalog.request.RequestFilterParam;
-import com.example.securityumarket.models.DTO.pages.catalog.request.RequestSearchDTO;
-import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseDefaultTransportParameter;
-import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
-import com.example.securityumarket.models.DTO.entities.*;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportType;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.dto.pages.catalog.request.RequestFilterParam;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseDefaultTransportParameter;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseSearch;
+import com.example.securityumarket.dto.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.TransportType;
+import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.*;
+import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.example.securityumarket.dao.specifications.TransportSpecifications.*;
+
 
 @Service
 @RequiredArgsConstructor
@@ -52,40 +57,47 @@ public class CatalogPageService {
 
     private final TransportModelService transportModelService;
 
+    private final TransportConverter transportConverter;
 
-    public ResponseEntity<String> addFavorite(long carId) {
+
+    public void addFavorite(long carId) {
         Users authenticatedUser = userService.getAuthenticatedUser();
         Transport transport = transportService.findTransportById(carId);
         favoriteTransportService.addFavorite(authenticatedUser, transport);
-        return ResponseEntity.ok("added to favorites");
-
     }
 
-    public ResponseEntity<List<ResponseSearchDTO>> searchTransports(int page, int limit, RequestSearchDTO requestSearchDTO) {
-        List<Transport> transports = transportService.findTransportByParam(requestSearchDTO, PageRequest.of(page, limit));
-        return ResponseEntity.ok(transportService.convertTransportListToTransportSearchDTO(transports));
+    public List<ResponseSearch> searchTransports(int page, int limit,
+                                                 RequestSearch requestSearch) {
+        List<Transport> transports = findTransportByParam(requestSearch,
+                PageRequest.of(page, limit));
+        return transportConverter.convertTransportListToResponseSearchDTO(transports);
     }
 
-    public ResponseEntity<String> removeFavorite(long carId) {
+    public void removeFavorite(long carId) {
         Users user = userService.getAuthenticatedUser();
         Transport transport = transportService.findTransportById(carId);
         favoriteTransportService.deleteFromFavoriteByUserAndTransport(user, transport);
-        return ResponseEntity.ok("removed from favorites");
     }
 
-    public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(RequestFilterParam requestFilterParam) {
-        TransportType transportType = transportTypeService.findById(requestFilterParam.getTransportTypeId());
+    public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(
+            RequestFilterParam requestFilterParam) {
+        TransportType transportType = transportTypeService
+                .findById(requestFilterParam.getTransportTypeId());
         List<Long> transportBrandsId = requestFilterParam.getTransportBrandsId();
+
         if (isDefaultTransportType(transportType)) {
-            return ResponseEntity.ok(buildResponseDefaultTransportParameter(transportType, transportBrandsId));
+            return ResponseEntity.ok(buildResponseDefaultTransportParameter(transportType,
+                    transportBrandsId));
         } else if (isLoadBearingVehicleType(transportType)) {
-            return ResponseEntity.ok(buildResponseLoadBearingVehicleParameter(transportType, transportBrandsId));
+            return ResponseEntity.ok(buildResponseLoadBearingVehicleParameter(transportType,
+                    transportBrandsId));
         } else {
             throw new DataNotValidException("Request filter param is not valid");
         }
     }
 
-    private ResponseDefaultTransportParameter buildResponseDefaultTransportParameter(TransportType transportType, List<Long> transportBrands) {
+    private ResponseDefaultTransportParameter buildResponseDefaultTransportParameter(
+            TransportType transportType, List<Long> transportBrands) {
         return ResponseDefaultTransportParameter.builder()
                 .transportBrandDTOS(getTransportBrandDTOS(transportType))
                 .transportModelDTOS(getTransportModelDTOS(transportType, transportBrands))
@@ -99,7 +111,8 @@ public class CatalogPageService {
                 .build();
     }
 
-    private ResponseLoadBearingVehicleParameter buildResponseLoadBearingVehicleParameter(TransportType transportType, List<Long> transportBrands) {
+    private ResponseLoadBearingVehicleParameter buildResponseLoadBearingVehicleParameter(
+            TransportType transportType, List<Long> transportBrands) {
         return ResponseLoadBearingVehicleParameter.builder()
                 .transportBrandDTOS(getTransportBrandDTOS(transportType))
                 .transportModelDTOS(getTransportModelDTOS(transportType, transportBrands))
@@ -136,8 +149,11 @@ public class CatalogPageService {
                 .toList();
     }
 
-    private List<TransportModelDTO> getTransportModelDTOS(TransportType transportType, List<Long> transportBrands) {
-        return transportModelService.findAllByTransportTypeAndBrandSpecification(transportType, transportBrands).stream()
+    private List<TransportModelDTO> getTransportModelDTOS(
+            TransportType transportType, List<Long> transportBrands) {
+        return transportModelService
+                .findAllByTransportTypeAndBrandSpecification(transportType, transportBrands)
+                .stream()
                 .map(model ->
                         TransportModelDTO.builder()
                                 .transportModelId(model.getId())
@@ -147,7 +163,8 @@ public class CatalogPageService {
     }
 
     private List<BodyTypeDTO> getBodyTypeDTOS(TransportType transportType) {
-        return bodyTypeService.findAllByTransportTypesId(transportType.getId()).stream()
+        return bodyTypeService.findAllByTransportTypesId(transportType.getId())
+                .stream()
                 .map(bodyType ->
                         BodyTypeDTO.builder()
                                 .bodyTypeId(bodyType.getId())
@@ -157,7 +174,8 @@ public class CatalogPageService {
     }
 
     private List<DriveTypeDTO> getDriveTypeDTOS(TransportType transportType) {
-        return driveTypeService.findAllByTransportTypesId(transportType.getId()).stream()
+        return driveTypeService.findAllByTransportTypesId(transportType.getId())
+                .stream()
                 .map(driveType ->
                         DriveTypeDTO.builder()
                                 .driveTypeId(driveType.getId())
@@ -234,5 +252,54 @@ public class CatalogPageService {
                                 .numberAxles(numberAxles.getNumberAxles())
                                 .build())
                 .toList();
+    }
+
+    public List<Transport> findTransportByParam(RequestSearch requestSearch,
+                                                PageRequest pageRequest) {
+        return transportService.findAll(getSpecificationParam(requestSearch), pageRequest);
+    }
+
+    public Specification<Transport> getSpecificationParam(RequestSearch requestSearch) {
+        return Specification.allOf(
+                isActive()
+                        .and(hasTransportTypeId(requestSearch.getTransportTypeId()))
+                        .and(hasBrandId(requestSearch.getBrandId()))
+                        .and(hasModelId(requestSearch.getModelId()))
+                        .and(hasRegionId(requestSearch.getRegionId()))
+                        .and(hasCityId(requestSearch.getCityId()))
+                        .and(hasBodyTypeId(requestSearch.getBodyTypeId()))
+                        .and(hasFuelTypeId(requestSearch.getFuelTypeId()))
+                        .and(hasDriveTypeId(requestSearch.getDriveTypeId()))
+                        .and(hasTransmissionId(requestSearch.getTransmissionId()))
+                        .and(hasColorId(requestSearch.getColorId()))
+                        .and(hasConditionId(requestSearch.getConditionId()))
+                        .and(hasNumberAxlesId(requestSearch.getNumberAxlesId()))
+                        .and(hasProducingCountryId(requestSearch.getProducingCountryId()))
+                        .and(hasWheelConfigurationId(requestSearch.getWheelConfigurationId()))
+
+                        .and(priceFrom(requestSearch.getPriceFrom()))
+                        .and(priceTo(requestSearch.getPriceTo()))
+                        .and(yearFrom(requestSearch.getYearsFrom()))
+                        .and(yearTo(requestSearch.getYearsTo()))
+                        .and(mileageFrom(requestSearch.getMileageFrom()))
+                        .and(mileageTo(requestSearch.getMileageTo()))
+                        .and(enginePowerFrom(requestSearch.getEnginePowerFrom()))
+                        .and(enginePowerTo(requestSearch.getEnginePowerTo()))
+                        .and(engineDisplacementFrom(requestSearch.getEngineDisplacementFrom()))
+                        .and(engineDisplacementTo(requestSearch.getEngineDisplacementTo()))
+                        .and(numberOfDoorsFrom(requestSearch.getNumberOfDoorsFrom()))
+                        .and(numberOfDoorsTo(requestSearch.getNumberOfDoorsTo()))
+                        .and(numberOfSeatsFrom(requestSearch.getNumberOfSeatsFrom()))
+                        .and(numberOfSeatsTo(requestSearch.getNumberOfSeatsTo()))
+                        .and(loadCapacityFrom(requestSearch.getLoadCapacityFrom()))
+                        .and(loadCapacityTo(requestSearch.getLoadCapacityTo()))
+                        .and(hasTrade(requestSearch.getTrade()))
+                        .and(hasMilitary(requestSearch.getMilitary()))
+                        .and(hasUncleared(requestSearch.getUncleared()))
+                        .and(hasBargain(requestSearch.getBargain()))
+                        .and(hasInstallmentPayment(requestSearch.getInstallmentPayment()))
+                        .and(sortBy(
+                                requestSearch.getSortBy(), requestSearch.getOrderBy()))
+        );
     }
 }

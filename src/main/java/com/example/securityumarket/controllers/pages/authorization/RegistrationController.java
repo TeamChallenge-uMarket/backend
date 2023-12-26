@@ -1,8 +1,8 @@
 package com.example.securityumarket.controllers.pages.authorization;
 
 
-import com.example.securityumarket.models.DTO.pages.login.RegisterRequest;
-import com.example.securityumarket.services.pages.RegistrationService;
+import com.example.securityumarket.dto.pages.login.RegisterRequest;
+import com.example.securityumarket.services.pages.RegistrationPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,10 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/authorization/register")
-@Tag(name = "Registration", description = "This controller contains registration page endpoints, such as: registration, verify-account, resend-code")
+@Tag(name = "Registration",
+        description = "This controller contains registration page endpoints, such as: registration, verify-account, resend-code")
 public class RegistrationController {
 
-    private final RegistrationService registrationService;
+    private final RegistrationPageService registrationPageService;
 
 
     @Operation(
@@ -43,13 +44,14 @@ public class RegistrationController {
                                                @Valid
                                                @Parameter(description = "The request provided by the user to perform a registration",
                                                        examples = @ExampleObject(value = "{" +
-                                                               "\"username\": \"JohnDoe\"" +
+                                                               "\"name\": \"JohnDoe\"" +
                                                                "\"email\": \"test@gmail.com\"" +
                                                                "\"password\": \"Password11\"" +
                                                                "\"confirmPassword\": \"Password11\"" +
                                                                "}"))
                                                RegisterRequest registerRequest) {
-        return registrationService.register(registerRequest);
+        registrationPageService.register(registerRequest);
+        return ResponseEntity.ok("Email sent. Please verify account within 5 minutes");
     }
 
     @Operation(
@@ -66,7 +68,8 @@ public class RegistrationController {
     public ResponseEntity<String> resendCode(
             @Parameter(description = "The email address of the user")
             @RequestParam String email) {
-        return registrationService.resendCode(email);
+        registrationPageService.resendCode(email);
+        return ResponseEntity.ok("Email with resend-code sent.");
     }
 
     @Operation(
@@ -83,11 +86,7 @@ public class RegistrationController {
                                                     @RequestParam String email,
                                                 @Parameter(description = "The confirmation token")
                                                 @RequestParam String token) {
-        return registrationService.verifyAccount(email, token);
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        return "test page";
+        registrationPageService.verifyAccount(email, token);
+        return ResponseEntity.ok("Account verified! You can login.");
     }
 }

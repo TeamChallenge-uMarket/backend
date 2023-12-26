@@ -21,7 +21,8 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> usersDAO.findAppUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException(
+        return username -> usersDAO.findAppUserByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(
                 "no " + "such user"));
     }
 
@@ -39,8 +40,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
-
     }
 }

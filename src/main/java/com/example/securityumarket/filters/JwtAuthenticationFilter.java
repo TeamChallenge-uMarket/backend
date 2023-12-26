@@ -1,7 +1,7 @@
 package com.example.securityumarket.filters;
 
 import com.example.securityumarket.exception.UnauthenticatedException;
-import com.example.securityumarket.models.authentication.AuthenticationResponse;
+import com.example.securityumarket.dto.authentication.AuthenticationResponse;
 import com.example.securityumarket.services.pages.UserDetailsServiceImpl;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.services.security.TokenRefreshService;

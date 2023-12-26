@@ -1,0 +1,113 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-subscriptions
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: subscriptions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: parameters
+                  type: jsonb
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: create-subscription-has-users-table
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: subscription_has_users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP(6)
+              - column:
+                  name: last_update
+                  type: TIMESTAMP(6)
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subscription_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: subscription_has_users
+            baseColumnNames: user_id
+            constraintName: fk_subscription_has_users_user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: subscription_has_users
+            baseColumnNames: subscription_id
+            constraintName: fk_subscription_has_users_subscription_id
+            referencedTableName: subscriptions
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+  - changeSet:
+      id: create-transport-subscriptions-table
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: subscription_has_transports
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP(6)
+              - column:
+                  name: last_update
+                  type: TIMESTAMP(6)
+              - column:
+                  name: transport_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subscription_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: subscription_has_transports
+            baseColumnNames: transport_id
+            constraintName: fk_subscription_has_transports_transport_id
+            referencedTableName: transports
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: subscription_has_transports
+            baseColumnNames: subscription_id
+            constraintName: fk_subscription_has_transports_subscription_id
+            referencedTableName: subscriptions
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
