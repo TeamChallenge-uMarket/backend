@@ -2,9 +2,7 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.dto.pages.catalog.response.ResponseSearchDTO;
 import com.example.securityumarket.models.Transport;
-import com.example.securityumarket.util.converter.transposrt_type.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 
 @RequiredArgsConstructor
@@ -24,9 +20,6 @@ import java.util.stream.Collectors;
 public class TransportService {
 
     private final TransportDAO transportDAO;
-
-    private final TransportConverter transportConverter;
-
 
     public void save(Transport transport) {
         transportDAO.save(transport);
@@ -37,11 +30,6 @@ public class TransportService {
                 .orElseThrow(() -> new DataNotFoundException("Transport by id"));
     }
 
-    public List<ResponseSearchDTO> convertTransportListToTransportSearchDTO(List<Transport> transports) {
-        return transports.stream()
-                .map(transportConverter::convertTransportTransportSearchDTO)
-                .collect(Collectors.toList());
-    }
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void deleteDeletedTransportsOlderThanOneMonth() {

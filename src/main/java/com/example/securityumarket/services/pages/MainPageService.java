@@ -7,6 +7,7 @@ import com.example.securityumarket.dto.pages.catalog.response.ResponseSearchDTO;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.*;
+import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +37,10 @@ public class MainPageService {
 
     private final RegionService regionService;
 
+    private final TransportConverter transportConverter;
+
     private List<ResponseSearchDTO> getResponseTransportDTOList(List<Transport> transports) {
-        return transportService.convertTransportListToTransportSearchDTO(transports);
+        return transportConverter.convertTransportListToTransportSearchDTO(transports);
     }
 
     public List<ResponseSearchDTO> getNewTransports() {

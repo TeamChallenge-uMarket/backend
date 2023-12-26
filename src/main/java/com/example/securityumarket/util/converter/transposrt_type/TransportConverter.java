@@ -122,5 +122,11 @@ public class TransportConverter {
             return false;
         }
     }
+
+    public List<ResponseSearchDTO> convertTransportListToTransportSearchDTO(List<Transport> transports) {
+        return transports.stream()
+                .map(this::convertTransportTransportSearchDTO)
+                .collect(Collectors.toList());
+    }
 }
 

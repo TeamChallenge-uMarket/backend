@@ -11,6 +11,7 @@ import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.TransportType;
 import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.*;
+import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -56,6 +57,8 @@ public class CatalogPageService {
 
     private final TransportModelService transportModelService;
 
+    private final TransportConverter transportConverter;
+
 
     public void addFavorite(long carId) {
         Users authenticatedUser = userService.getAuthenticatedUser();
@@ -65,7 +68,7 @@ public class CatalogPageService {
 
     public List<ResponseSearchDTO> searchTransports(int page, int limit, RequestSearchDTO requestSearchDTO) {
         List<Transport> transports = findTransportByParam(requestSearchDTO, PageRequest.of(page, limit));
-        return transportService.convertTransportListToTransportSearchDTO(transports);
+        return transportConverter.convertTransportListToTransportSearchDTO(transports);
     }
 
     public void removeFavorite(long carId) {
