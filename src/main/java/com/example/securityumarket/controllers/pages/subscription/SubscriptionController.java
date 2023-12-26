@@ -5,6 +5,7 @@ import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
 import com.example.securityumarket.dto.pages.catalog.response.ResponseSearchDTO;
 import com.example.securityumarket.dto.pages.subscription.SubscriptionRequest;
 import com.example.securityumarket.dto.pages.subscription.SubscriptionResponse;
+import com.example.securityumarket.dto.pages.subscription.SubscriptionTransportsResponse;
 import com.example.securityumarket.services.pages.SubscriptionPageService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class SubscriptionController {
     }
 
     @GetMapping("{subscription-id}")
-    public ResponseEntity<List<ResponseSearchDTO>> getSubscription(
+    public ResponseEntity<SubscriptionTransportsResponse> getSubscription(
             @PathVariable("subscription-id") Long subscriptionId){
         return ResponseEntity.ok(subscriptionPageService.getSubscription(subscriptionId));
     }

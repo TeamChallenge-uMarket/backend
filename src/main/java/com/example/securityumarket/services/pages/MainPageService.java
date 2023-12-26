@@ -2,7 +2,6 @@ package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.dto.pages.main.response.*;
 import com.example.securityumarket.exception.BadRequestException;
-import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
 import com.example.securityumarket.dto.pages.catalog.response.ResponseSearchDTO;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.Users;
@@ -18,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.example.securityumarket.dao.specifications.TransportSpecifications.*;
+import static com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,8 +39,9 @@ public class MainPageService {
 
     private final TransportConverter transportConverter;
 
+
     private List<ResponseSearchDTO> getResponseTransportDTOList(List<Transport> transports) {
-        return transportConverter.convertTransportListToTransportSearchDTO(transports);
+        return transportConverter.convertTransportListToResponseSearchDTO(transports);
     }
 
     public List<ResponseSearchDTO> getNewTransports() {
@@ -66,18 +67,20 @@ public class MainPageService {
     }
 
     public List<ResponseTypeDTO> getTypeTransport() {
-        return transportTypeService.findAll().stream().map(carType -> ResponseTypeDTO.builder()
-                        .typeId(carType.getId())
-                        .type(carType.getType())
-                        .build())
+        return transportTypeService.findAll().stream().map(carType ->
+                        ResponseTypeDTO.builder()
+                                .typeId(carType.getId())
+                                .type(carType.getType())
+                                .build())
                 .collect(Collectors.toList());
     }
 
     public List<ResponseBrandDTO> getBrandTransport() {
-        return transportBrandService.findAll().stream().map(carBrand -> ResponseBrandDTO.builder()
-                        .brandId(carBrand.getId())
-                        .brand(carBrand.getBrand())
-                        .build())
+        return transportBrandService.findAll().stream().map(carBrand ->
+                        ResponseBrandDTO.builder()
+                                .brandId(carBrand.getId())
+                                .brand(carBrand.getBrand())
+                                .build())
                 .collect(Collectors.toList());
     }
 
@@ -85,7 +88,9 @@ public class MainPageService {
         return transportModelService.findAllByTransportBrand(brandId).stream()
                 .map(carModel -> ResponseModelDTO.builder()
                         .modelId(carModel.getId())
-                        .brand(carModel.getTransportTypeBrand().getTransportBrand().getBrand())
+                        .brand(carModel.getTransportTypeBrand()
+                                .getTransportBrand()
+                                .getBrand())
                         .model(carModel.getModel())
                         .build())
                 .collect(Collectors.toList());
@@ -95,7 +100,8 @@ public class MainPageService {
         if (transportTypeId == null) {
             return getBrandTransport();
         } else {
-            return transportBrandService.findAllByTransportTypeId(transportTypeId).stream()
+            return transportBrandService.findAllByTransportTypeId(transportTypeId)
+                    .stream()
                     .map(carBrand -> ResponseBrandDTO.builder()
                             .brandId(carBrand.getId())
                             .brand(carBrand.getBrand())
@@ -109,7 +115,8 @@ public class MainPageService {
             throw new BadRequestException("transportBrandId required");
         }
         if (transportTypeId != null) {
-            return transportModelService.findAllByTransportTypeAndBrand(transportBrandId, transportTypeId).stream()
+            return transportModelService.findAllByTransportTypeAndBrand(transportBrandId,
+                            transportTypeId).stream()
                     .map(carModel -> ResponseModelDTO.builder()
                             .brand(carModel.getTransportTypeBrand().getTransportBrand().getBrand())
                             .modelId(carModel.getId())
@@ -131,18 +138,19 @@ public class MainPageService {
     }
 
     public List<ResponseCityDTO> getCities(List<Long> regionId) {
-        return cityService.findAllByRegionId(regionId).stream().map(city -> ResponseCityDTO.builder()
-                        .cityId(city.getId())
-                        .city(city.getDescription())
-                        .region(city.getRegion().getDescription())
-                        .build())
+        return cityService.findAllByRegionId(regionId).stream().map(city ->
+                        ResponseCityDTO.builder()
+                                .cityId(city.getId())
+                                .city(city.getDescription())
+                                .region(city.getRegion().getDescription())
+                                .build())
                 .collect(Collectors.toList());
     }
 
     private List<Transport> findNewTransports() {
         Pageable pageable = PageRequest.of(0, 20);
         Specification<Transport> specification = isActive()
-                .and(sortBy(Transport.class, RequestSearchDTO.SortBy.DESC, RequestSearchDTO.OrderBy.CREATED));
+                .and(sortBy(SortBy.DESC, OrderBy.CREATED));
         return transportService.findAll(specification, pageable);
     }
 
@@ -163,7 +171,7 @@ public class MainPageService {
     private List<Transport> findFavoriteTransportsByRegisteredUser(Users user) {
         Specification<Transport> specification = isActive()
                 .and(findFavoriteTransportsByUser(user))
-                .and(sortBy(Transport.class, RequestSearchDTO.SortBy.DESC, RequestSearchDTO.OrderBy.CREATED));
+                .and(sortBy(SortBy.DESC, OrderBy.CREATED));
         return transportService.findAll(specification);
     }
 }

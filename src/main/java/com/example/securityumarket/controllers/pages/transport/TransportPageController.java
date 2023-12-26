@@ -29,12 +29,16 @@ public class TransportPageController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient Permissions", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
+            @ApiResponse(responseCode = "400",
+                    description = "Bad Request", content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden - Insufficient Permissions", content = @Content),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found - Data Not Found", content = @Content),
     })
     @GetMapping("/{transport-id}")
-    public ResponseEntity<? extends TransportDTO> getTransport(@PathVariable("transport-id") Long transportId) {
+    public ResponseEntity<? extends TransportDTO> getTransport(
+            @PathVariable("transport-id") Long transportId) {
         return transportPageService.getTransport(transportId);
     }
 
@@ -43,7 +47,8 @@ public class TransportPageController {
             description = "This endpoint returns a transport details by transport id."
     )
     @GetMapping("/details/{transport-id}")
-    public ResponseEntity<TransportDetailsResponse> getTransportDetails(@PathVariable("transport-id") Long transportId) {
+    public ResponseEntity<TransportDetailsResponse> getTransportDetails(
+            @PathVariable("transport-id") Long transportId) {
         return ResponseEntity.ok(transportPageService.getTransportDetails(transportId));
     }
 }

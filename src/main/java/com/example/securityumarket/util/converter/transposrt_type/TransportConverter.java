@@ -51,6 +51,7 @@ public class TransportConverter {
                 .fileUrl(transportGalleryService.findMainFileByTransport(transport.getId()))
                 .isFavorite(isFavoriteTransport(transport))
                 .created(transport.getCreated())
+                .lastUpdate(transport.getLastUpdate())
                 .build();
     }
 
@@ -123,7 +124,7 @@ public class TransportConverter {
         }
     }
 
-    public List<ResponseSearchDTO> convertTransportListToTransportSearchDTO(List<Transport> transports) {
+    public List<ResponseSearchDTO> convertTransportListToResponseSearchDTO(List<Transport> transports) {
         return transports.stream()
                 .map(this::convertTransportTransportSearchDTO)
                 .collect(Collectors.toList());

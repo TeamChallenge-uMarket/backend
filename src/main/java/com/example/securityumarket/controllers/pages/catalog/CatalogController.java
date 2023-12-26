@@ -21,7 +21,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/catalog")
 @RequiredArgsConstructor
-@Tag(name = "Catalog page", description = "This controller contains the catalog page endpoints, such as: " +
+@Tag(name = "Catalog page",
+        description = "This controller contains the catalog page endpoints, such as: " +
         "add favorite, remove favorite, searchTransports")
 public class CatalogController {
 
@@ -29,7 +30,8 @@ public class CatalogController {
 
     @Operation(description = "This endpoint allows the user to add a vehicle to favorites by its ID")
     @PutMapping("/favorite-add/{carId}")
-    @ApiResponse(responseCode = "200", description = "The vehicle has been successfully added to favorites")
+    @ApiResponse(responseCode = "200",
+            description = "The vehicle has been successfully added to favorites")
     public ResponseEntity<String> addFavorite(
             @Parameter(description = "The ID of the vehicle to be added to favorites")
             @PathVariable long carId) {
@@ -37,9 +39,11 @@ public class CatalogController {
         return ResponseEntity.ok("Transport added to favorites");
     }
 
-    @Operation(description = "This endpoint allows the user to remove a vehicle from favorites by its ID")
+    @Operation(
+            description = "This endpoint allows the user to remove a vehicle from favorites by its ID")
     @DeleteMapping("/favorite-remove/{carId}")
-    @ApiResponse(responseCode = "200", description = "The vehicle has been successfully deleted from favorites")
+    @ApiResponse(responseCode = "200",
+            description = "The vehicle has been successfully deleted from favorites")
     public ResponseEntity<String> removeFavorite(
             @Parameter(description = "The ID of the vehicle to be removed from favorites")
             @PathVariable long carId) {
@@ -47,8 +51,10 @@ public class CatalogController {
         return ResponseEntity.ok("Transport removed from favorites");
     }
 
-    @Operation(description = "This endpoint allows to search for vehicles using various filtering queries")
-    @ApiResponse(responseCode = "200", description = "list of vehicles retrieved successfully",
+    @Operation(
+            description = "This endpoint allows to search for vehicles using various filtering queries")
+    @ApiResponse(responseCode = "200",
+            description = "list of vehicles retrieved successfully",
             content = @Content(schema = @Schema(implementation = ResponseSearchDTO.class)))
     @GetMapping("/search/page/{page}/limit/{limit}/")
     public ResponseEntity<List<ResponseSearchDTO>> searchTransports(
@@ -60,14 +66,16 @@ public class CatalogController {
         return ResponseEntity.ok(catalogPageService.searchTransports(page, limit, requestSearchDTO));
     }
 
-    @Operation(description = "This endpoint returns a list of values for a vehicle search filter using different filter queries")
+    @Operation(
+            description = "This endpoint returns a list of values for a vehicle search filter using different filter queries")
     @ApiResponse(responseCode = "200", description = "List of parameters retrieved successfully",
             content = @Content(schema = @Schema(oneOf = {
                     ResponseDefaultTransportParameter.class,
                     ResponseLoadBearingVehicleParameter.class
             })))
     @GetMapping("/get-param")
-    public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(@ModelAttribute RequestFilterParam requestFilterParam) {
+    public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(
+            @ModelAttribute RequestFilterParam requestFilterParam) {
         return catalogPageService.getFilterParameters(requestFilterParam);
     }
 }

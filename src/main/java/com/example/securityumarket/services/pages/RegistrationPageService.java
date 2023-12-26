@@ -33,6 +33,7 @@ public class RegistrationPageService {
 
     private final RoleService roleService;
 
+
     @Value("${cloudinary.default.not-found-photo}")
     private String defaultPhoto;
 
@@ -52,7 +53,8 @@ public class RegistrationPageService {
     public void resendCode(String email) {
         Users user = userService.findAppUserByEmail(email);
         if (user.isActive()) {
-            throw new DataNotValidException("Account with this email: " + email + "has already activated. You can login.");
+            throw new DataNotValidException("Account with this email: " +
+                    email + "has already activated. You can login.");
         } else {
             sendEmailAndSaveUser(user);
         }
@@ -79,7 +81,8 @@ public class RegistrationPageService {
             user.setActive(true);
             userService.save(user);
         } else {
-            throw new DataNotValidException("Token has expired. Please regenerate token and try again");
+            throw new DataNotValidException
+                    ("Token has expired. Please regenerate token and try again");
         }
     }
 

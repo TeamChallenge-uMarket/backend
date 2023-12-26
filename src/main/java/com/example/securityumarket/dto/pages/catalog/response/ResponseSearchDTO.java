@@ -9,36 +9,21 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ResponseSearchDTO {
+public record ResponseSearchDTO (
+        Long id,
+        String brand,
+        String model,
+        Integer year,
+        BigDecimal price,
+        Integer mileage,
+        String description,
+        String transmission,
+        String fuelType,
+        Double engineDisplacement,
+        String city,
+        LocalDateTime created,
 
-    private Long id;
-
-    private String brand;
-
-    private String model;
-
-    private Integer year;
-
-    private BigDecimal price;
-
-    private Integer mileage;
-  
-    private String description;
-
-    private String transmission;
-
-    private String fuelType;
-
-    private Double engineDisplacement;
-
-    private String city;
-
-    private LocalDateTime created;
-
-    private String fileUrl;
-
-    private Boolean isFavorite;
-}
+        LocalDateTime lastUpdate,
+        String fileUrl,
+        Boolean isFavorite
+) {}

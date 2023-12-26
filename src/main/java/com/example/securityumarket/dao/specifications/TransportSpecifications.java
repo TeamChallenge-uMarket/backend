@@ -424,7 +424,7 @@ public class TransportSpecifications {
         return (root, query, cb) -> cb.equal(root.get("status"), status);
     }
 
-    public static <T> Specification<T> sortBy(Class<T> entityClass, SortBy sortBy, OrderBy orderBy) {
+    public static <T> Specification<T> sortBy(SortBy sortBy, OrderBy orderBy) {
         return (root, query, cb) -> {
             if (sortBy != null && orderBy != null) {
                 if (sortBy == SortBy.ASC) {

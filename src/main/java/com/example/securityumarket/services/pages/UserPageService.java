@@ -73,7 +73,6 @@ public class UserPageService {
     private final WheelConfigurationService wheelConfigurationService;
 
 
-
     @Value("${cloudinary.default.not-found-photo}")
     private String defaultPhoto;
 
@@ -84,7 +83,8 @@ public class UserPageService {
     }
 
     @Transactional
-    public void updateUserDetails(UserDetailsDTO userDetailsDTO, MultipartFile multipartFile) {
+    public void updateUserDetails(UserDetailsDTO userDetailsDTO,
+                                  MultipartFile multipartFile) {
         Users currentUser = userService.getAuthenticatedUser();
         updateUserFields(userDetailsDTO, multipartFile, currentUser);
 
@@ -108,7 +108,8 @@ public class UserPageService {
         Users authenticatedUser = userService.getAuthenticatedUser();
         if (!authenticatedUser.getPhotoUrl().equals(defaultPhoto)) {
             String photoUrl = authenticatedUser.getPhotoUrl();
-            cloudinaryService.deleteFile(CloudinaryService.getPhotoPublicIdFromUrl(photoUrl));
+            cloudinaryService.deleteFile(CloudinaryService
+                    .getPhotoPublicIdFromUrl(photoUrl));
             authenticatedUser.setPhotoUrl(defaultPhoto);
             userService.save(authenticatedUser);
         }
@@ -118,7 +119,8 @@ public class UserPageService {
         Users currentUser = userService.getAuthenticatedUser();
 
         if (currentUser.getPassword() != null) {
-            if (!passwordEncoder.matches(securityDetailsDTO.getOldPassword(), currentUser.getPassword())) {
+            if (!passwordEncoder.matches(securityDetailsDTO.getOldPassword(),
+                    currentUser.getPassword())) {
                 throw new DataNotValidException("The old password is incorrect");
             }
         }
@@ -130,20 +132,23 @@ public class UserPageService {
         Users authenticatedUser = userService.getAuthenticatedUser();
         try {
             Transport.Status transportStatus = Transport.Status.valueOf(status.toUpperCase());
-            List<Transport> transportByUserAndStatus = findTransportByUserAndStatus(authenticatedUser, transportStatus);
+            List<Transport> transportByUserAndStatus =
+                    findTransportByUserAndStatus(authenticatedUser, transportStatus);
+
             return convertTransportListToTransportByStatusResponse(transportByUserAndStatus);
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid status");
         }
     }
 
-    public List<Transport> findTransportByUserAndStatus(Users user, Transport.Status status) { //TODO Change to PageRequest
+    public List<Transport> findTransportByUserAndStatus(Users user, Transport.Status status) {
         Specification<Transport> specification = findByUser(user)
                 .and(hasStatus(status));
         return transportService.findAll(specification);
     }
 
-    public List<TransportByStatusResponse> convertTransportListToTransportByStatusResponse(List<Transport> transports) {
+    public List<TransportByStatusResponse> convertTransportListToTransportByStatusResponse(
+            List<Transport> transports) {
         return transports.stream()
                 .map(transportConverter::convertTransportToTransportByStatusResponse)
                 .collect(Collectors.toList());
@@ -155,6 +160,7 @@ public class UserPageService {
             Users authenticatedUser = userService.getAuthenticatedUser();
             Transport transportById = transportService.findTransportById(transportId);
             Transport.Status transportStatus = Transport.Status.valueOf(status.toUpperCase());
+
             if (isUserHasAdminOrModeratorRole(authenticatedUser)) {
                 updateStatusByTransportIdAndStatus(transportById, transportStatus);
             } else if (transportStatus.equals(Transport.Status.ACTIVE)) {
@@ -199,7 +205,8 @@ public class UserPageService {
         transportService.save(transport);
     }
 
-    public void updateStatusByTransportIdAndStatus(Transport transport, Transport.Status status) {
+    public void updateStatusByTransportIdAndStatus(Transport transport,
+                                                   Transport.Status status) {
         transport.setStatus(status);
         if (status.equals(Transport.Status.ACTIVE)) {
             subscriptionPageService.addTransport(transport);
@@ -224,7 +231,11 @@ public class UserPageService {
     }
 
     private ResponseEntity<? extends TransportDTO> convertTransportToTypeDTO(Transport transport) {
-        Long transportTypeId = transport.getTransportModel().getTransportTypeBrand().getTransportType().getId();
+        Long transportTypeId = transport.getTransportModel()
+                .getTransportTypeBrand()
+                .getTransportType()
+                .getId();
+
         return switch (transportTypeId.intValue()) {
             case 1 -> ResponseEntity.ok(transportConverter.convertTransportToTypeDTO(
                     transport, new MotorizedFourWheeledVehicleConversionStrategy()));
@@ -240,43 +251,62 @@ public class UserPageService {
 
     private void updateTransportFields(
             RequestUpdateTransportDetails transportDetailsDTO, Transport currentTransport) {
-        updateFieldIfPresent(transportDetailsDTO.getYear(), currentTransport::setYear);
+        updateFieldIfPresent(transportDetailsDTO.getYear(),
+                currentTransport::setYear);
 
-        updateFieldIfPresent(transportDetailsDTO.getMileage(), currentTransport::setMileage);
+        updateFieldIfPresent(transportDetailsDTO.getMileage(),
+                currentTransport::setMileage);
 
-        updateFieldIfPresent(transportDetailsDTO.getPrice(), currentTransport::setPrice);
+        updateFieldIfPresent(transportDetailsDTO.getPrice(),
+                currentTransport::setPrice);
 
-        updateFieldIfPresent(transportDetailsDTO.getBargain(), currentTransport::setBargain);
+        updateFieldIfPresent(transportDetailsDTO.getBargain(),
+                currentTransport::setBargain);
 
-        updateFieldIfPresent(transportDetailsDTO.getTrade(), currentTransport::setTrade);
+        updateFieldIfPresent(transportDetailsDTO.getTrade(),
+                currentTransport::setTrade);
 
-        updateFieldIfPresent(transportDetailsDTO.getMilitary(), currentTransport::setMilitary);
+        updateFieldIfPresent(transportDetailsDTO.getMilitary(),
+                currentTransport::setMilitary);
 
-        updateFieldIfPresent(transportDetailsDTO.getInstallmentPayment(), currentTransport::setInstallmentPayment);
+        updateFieldIfPresent(transportDetailsDTO.getInstallmentPayment(),
+                currentTransport::setInstallmentPayment);
 
-        updateFieldIfPresent(transportDetailsDTO.getUncleared(), currentTransport::setUncleared);
+        updateFieldIfPresent(transportDetailsDTO.getUncleared(),
+                currentTransport::setUncleared);
 
-        updateFieldIfPresent(transportDetailsDTO.getLoadCapacity(), currentTransport::setLoadCapacity);
+        updateFieldIfPresent(transportDetailsDTO.getLoadCapacity(),
+                currentTransport::setLoadCapacity);
 
-        updateFieldIfPresent(transportDetailsDTO.getAccidentHistory(), currentTransport::setAccidentHistory);
+        updateFieldIfPresent(transportDetailsDTO.getAccidentHistory(),
+                currentTransport::setAccidentHistory);
 
-        updateFieldIfPresent(transportDetailsDTO.getNumberOfDoors(), currentTransport::setNumberOfDoors);
+        updateFieldIfPresent(transportDetailsDTO.getNumberOfDoors(),
+                currentTransport::setNumberOfDoors);
 
-        updateFieldIfPresent(transportDetailsDTO.getNumberOfSeats(), currentTransport::setNumberOfSeats);
+        updateFieldIfPresent(transportDetailsDTO.getNumberOfSeats(),
+                currentTransport::setNumberOfSeats);
 
-        updateFieldIfPresent(transportDetailsDTO.getConsumptionCity(), currentTransport::setFuelConsumptionCity);
+        updateFieldIfPresent(transportDetailsDTO.getConsumptionCity(),
+                currentTransport::setFuelConsumptionCity);
 
-        updateFieldIfPresent(transportDetailsDTO.getConsumptionHighway(), currentTransport::setFuelConsumptionHighway);
+        updateFieldIfPresent(transportDetailsDTO.getConsumptionHighway(),
+                currentTransport::setFuelConsumptionHighway);
 
-        updateFieldIfPresent(transportDetailsDTO.getConsumptionMixed(), currentTransport::setFuelConsumptionMixed);
+        updateFieldIfPresent(transportDetailsDTO.getConsumptionMixed(),
+                currentTransport::setFuelConsumptionMixed);
 
-        updateFieldIfPresent(transportDetailsDTO.getEngineDisplacement(), currentTransport::setEngineDisplacement);
+        updateFieldIfPresent(transportDetailsDTO.getEngineDisplacement(),
+                currentTransport::setEngineDisplacement);
 
-        updateFieldIfPresent(transportDetailsDTO.getEnginePower(), currentTransport::setEnginePower);
+        updateFieldIfPresent(transportDetailsDTO.getEnginePower(),
+                currentTransport::setEnginePower);
 
-        updateFieldIfPresent(transportDetailsDTO.getVincode(), currentTransport::setVincode);
+        updateFieldIfPresent(transportDetailsDTO.getVincode(),
+                currentTransport::setVincode);
 
-        updateFieldIfPresent(transportDetailsDTO.getDescription(), currentTransport::setDescription);
+        updateFieldIfPresent(transportDetailsDTO.getDescription(),
+                currentTransport::setDescription);
 
 
         updateFieldIfPresent(transportDetailsDTO.getBodyType(), bodyType -> {
@@ -325,7 +355,8 @@ public class UserPageService {
         });
 
         updateFieldIfPresent(transportDetailsDTO.getWheelConfiguration(), wheelConfigurationId -> {
-            WheelConfiguration wheelConfiguration = wheelConfigurationService.findById(wheelConfigurationId);
+            WheelConfiguration wheelConfiguration = wheelConfigurationService
+                    .findById(wheelConfigurationId);
             currentTransport.setWheelConfiguration(wheelConfiguration);
         });
     }
@@ -341,17 +372,20 @@ public class UserPageService {
         return dto;
     }
 
-    private void updateUserFields(UserDetailsDTO userDetailsDTO, MultipartFile photo, Users currentUser) {
+    private void updateUserFields(UserDetailsDTO userDetailsDTO,
+                                  MultipartFile photo, Users currentUser) {
         updateFieldIfPresent(userDetailsDTO.getName(), currentUser::setName);
         updateFieldIfPresent(userDetailsDTO.getPhone(), phone -> {
             String normalizePhoneNumber = normalizePhoneNumber(phone);
             userService.existsUsersByPhone(normalizePhoneNumber);
             currentUser.setPhone(normalizePhoneNumber);
         });
+
         updateFieldIfPresent(userDetailsDTO.getCityId(), cityId -> {
             City city = cityService.findById(cityId);
             currentUser.setCity(city);
         });
+
         updateFieldIfPresent(photo, url -> {
             String oldUrl = currentUser.getPhotoUrl();
 
@@ -362,6 +396,7 @@ public class UserPageService {
                 cloudinaryService.deleteFile(CloudinaryService.getPhotoPublicIdFromUrl(oldUrl));
             }
         });
+
         updateFieldIfPresent(userDetailsDTO.getEmail(), email -> {
             userService.isUserEmailUnique(email);
             currentUser.setEmail(email);

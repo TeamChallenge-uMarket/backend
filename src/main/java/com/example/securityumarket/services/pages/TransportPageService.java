@@ -19,10 +19,15 @@ import org.springframework.stereotype.Service;
 public class TransportPageService {
 
     private final TransportService transportService;
+
     private final TransportViewService transportViewService;
+
     private final FavoriteTransportService favoriteTransportService;
+
     private final UserPageService userPageService;
+
     private final UserService userService;
+
 
     @Transactional
     public ResponseEntity<? extends TransportDTO> getTransport(Long transportId) {

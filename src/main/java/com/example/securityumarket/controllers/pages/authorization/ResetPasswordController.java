@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/authorization/reset-password")
-@Tag(name = "Reset passwords", description = "This controller contains the following endpoints: reset password endpoints: reset-password, form, send-code," +
-        " resend-code, verify account")
+@Tag(name = "Reset passwords",
+        description = "This controller contains the following endpoints: " +
+                "reset password endpoints: reset-password, form, send-code, resend-code, verify account")
 public class ResetPasswordController {
 
     private ResetPasswordPageService resetPasswordPageService;
@@ -31,10 +32,12 @@ public class ResetPasswordController {
             @ApiResponse(responseCode = "200", description = "Code sent successfully", content = @Content),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error - Email Sending Exception", content = @Content)
+            @ApiResponse(responseCode = "500",
+                    description = "Internal Server Error - Email Sending Exception", content = @Content)
     })
     @PutMapping("/send-code")
-    public ResponseEntity<String> sendCode(@Parameter(description = "The email of the user") @RequestParam String email) {
+    public ResponseEntity<String> sendCode(
+            @Parameter(description = "The email of the user") @RequestParam String email) {
         resetPasswordPageService.sendResetPasswordCode(email);
         return ResponseEntity.ok("Verification code sent successfully. Check your email");
     }
@@ -49,7 +52,8 @@ public class ResetPasswordController {
             @ApiResponse(responseCode = "422", description = "Unprocessable Entity", content = @Content)
     })
     @GetMapping("")
-    public ResponseEntity<String> verifyAccount(@Parameter(description = "The email of the user") @RequestParam String email,
+    public ResponseEntity<String> verifyAccount(@Parameter(description = "The email of the user")
+                                                    @RequestParam String email,
                                                 @Parameter(description = "The confirmation token")
                                                 @RequestParam String token) {
         resetPasswordPageService.verifyAccount(email, token);

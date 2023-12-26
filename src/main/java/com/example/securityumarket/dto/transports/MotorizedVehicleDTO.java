@@ -3,19 +3,10 @@ package com.example.securityumarket.dto.transports;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-/*
-transmission - тип коробки передач (наприклад, автоматична, механічна).
-fuelType - тип пального, яке використовується транспортним засобом (наприклад, бензин, дизель).
-fuelConsumptionMixed - споживання пального в комбінованому циклі.
-engineDisplacement - об'єм двигуна.
-enginePower - потужність двигуна.
-driveType - тип приводу (наприклад, передній, задній, повний).
-mileage - пробіг в кілометрах
- */
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Data
-public class MotorizedVehicleDTO extends TransportDTO { // MotorcycleDTO
+public class MotorizedVehicleDTO extends TransportDTO {
 
     protected String transmission;
 

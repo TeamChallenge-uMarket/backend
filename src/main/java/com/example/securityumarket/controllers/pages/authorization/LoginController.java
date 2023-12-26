@@ -34,17 +34,24 @@ public class LoginController {
             description = "This endpoint allows users to log in and obtain an authentication token."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successful login", content = @Content(mediaType = "application/json",
+            @ApiResponse(responseCode = "200", description = "Successful login",
+                    content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = AuthenticationResponse.class))),
-            @ApiResponse(responseCode = "422", description = "Unprocessable Entity", content = @Content),
-            @ApiResponse(responseCode = "409", description = "Conflict - Duplicate Data", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
-            @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient Permissions", content = @Content),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error - Email Sending Exception", content = @Content)
+            @ApiResponse(responseCode = "422",
+                    description = "Unprocessable Entity", content = @Content),
+            @ApiResponse(responseCode = "409",
+                    description = "Conflict - Duplicate Data", content = @Content),
+            @ApiResponse(responseCode = "404",
+                    description = "Not Found - Data Not Found", content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "Forbidden - Insufficient Permissions", content = @Content),
+            @ApiResponse(responseCode = "500",
+                    description = "Internal Server Error - Email Sending Exception", content = @Content)
     })
     @PostMapping("")
     public ResponseEntity<AuthenticationResponse> login(
-            @Parameter(description = "The login request sent by user in order to obtain " +
+            @Parameter(
+                    description = "The login request sent by user in order to obtain " +
                     "an authentication token. It contains the necessary credentials to perform authentication")
             @RequestBody AuthenticationRequest authenticationRequest) {
         return ResponseEntity.ok(loginPageService.login(authenticationRequest));
@@ -58,7 +65,8 @@ public class LoginController {
 
     @Operation(hidden = true)
     @PostMapping("/refresh")  //TEST METHOD
-    public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody Map<String, String> refreshRequest) {
+    public ResponseEntity<AuthenticationResponse> refreshToken(
+            @RequestBody Map<String, String> refreshRequest) {
         return ResponseEntity.ok(tokenRefreshService.refreshTokens(refreshRequest.get("refreshToken")));
     }
 }

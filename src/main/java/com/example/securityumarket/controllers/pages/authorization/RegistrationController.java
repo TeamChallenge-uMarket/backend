@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/authorization/register")
-@Tag(name = "Registration", description = "This controller contains registration page endpoints, such as: registration, verify-account, resend-code")
+@Tag(name = "Registration",
+        description = "This controller contains registration page endpoints, such as: registration, verify-account, resend-code")
 public class RegistrationController {
 
     private final RegistrationPageService registrationPageService;

@@ -20,8 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class LoginPageService {
 
     private final UserService userService;
+
     private final JwtService jwtService;
+
     private final AuthenticationManager authenticationManager;
+
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -47,12 +50,14 @@ public class LoginPageService {
         return getAuthenticationResponse(user);
     }
 
-    protected Users authenticate(AuthenticationRequest authenticationRequest, boolean isGoogleAuthorization) {
+    protected Users authenticate(AuthenticationRequest authenticationRequest,
+                                 boolean isGoogleAuthorization) {
         Users user = userService.findAppUserByEmail(authenticationRequest.getEmail());
 
         if (isGoogleAuthorization) {
             if (!user.getEmail().equals(authenticationRequest.getEmail()) ||
-                    !passwordEncoder.matches(authenticationRequest.getPassword(), user.getGoogleAccountPassword())) {
+                    !passwordEncoder.matches(authenticationRequest.getPassword(),
+                            user.getGoogleAccountPassword())) {
                 throw new UnauthenticatedException("Account is not authenticated. Reset your password");
             }
         } else {

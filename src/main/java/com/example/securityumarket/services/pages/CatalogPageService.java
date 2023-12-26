@@ -66,9 +66,11 @@ public class CatalogPageService {
         favoriteTransportService.addFavorite(authenticatedUser, transport);
     }
 
-    public List<ResponseSearchDTO> searchTransports(int page, int limit, RequestSearchDTO requestSearchDTO) {
-        List<Transport> transports = findTransportByParam(requestSearchDTO, PageRequest.of(page, limit));
-        return transportConverter.convertTransportListToTransportSearchDTO(transports);
+    public List<ResponseSearchDTO> searchTransports(int page, int limit,
+                                                    RequestSearchDTO requestSearchDTO) {
+        List<Transport> transports = findTransportByParam(requestSearchDTO,
+                PageRequest.of(page, limit));
+        return transportConverter.convertTransportListToResponseSearchDTO(transports);
     }
 
     public void removeFavorite(long carId) {
@@ -77,19 +79,25 @@ public class CatalogPageService {
         favoriteTransportService.deleteFromFavoriteByUserAndTransport(user, transport);
     }
 
-    public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(RequestFilterParam requestFilterParam) {
-        TransportType transportType = transportTypeService.findById(requestFilterParam.getTransportTypeId());
+    public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(
+            RequestFilterParam requestFilterParam) {
+        TransportType transportType = transportTypeService
+                .findById(requestFilterParam.getTransportTypeId());
         List<Long> transportBrandsId = requestFilterParam.getTransportBrandsId();
+
         if (isDefaultTransportType(transportType)) {
-            return ResponseEntity.ok(buildResponseDefaultTransportParameter(transportType, transportBrandsId));
+            return ResponseEntity.ok(buildResponseDefaultTransportParameter(transportType,
+                    transportBrandsId));
         } else if (isLoadBearingVehicleType(transportType)) {
-            return ResponseEntity.ok(buildResponseLoadBearingVehicleParameter(transportType, transportBrandsId));
+            return ResponseEntity.ok(buildResponseLoadBearingVehicleParameter(transportType,
+                    transportBrandsId));
         } else {
             throw new DataNotValidException("Request filter param is not valid");
         }
     }
 
-    private ResponseDefaultTransportParameter buildResponseDefaultTransportParameter(TransportType transportType, List<Long> transportBrands) {
+    private ResponseDefaultTransportParameter buildResponseDefaultTransportParameter(
+            TransportType transportType, List<Long> transportBrands) {
         return ResponseDefaultTransportParameter.builder()
                 .transportBrandDTOS(getTransportBrandDTOS(transportType))
                 .transportModelDTOS(getTransportModelDTOS(transportType, transportBrands))
@@ -103,7 +111,8 @@ public class CatalogPageService {
                 .build();
     }
 
-    private ResponseLoadBearingVehicleParameter buildResponseLoadBearingVehicleParameter(TransportType transportType, List<Long> transportBrands) {
+    private ResponseLoadBearingVehicleParameter buildResponseLoadBearingVehicleParameter(
+            TransportType transportType, List<Long> transportBrands) {
         return ResponseLoadBearingVehicleParameter.builder()
                 .transportBrandDTOS(getTransportBrandDTOS(transportType))
                 .transportModelDTOS(getTransportModelDTOS(transportType, transportBrands))
@@ -140,8 +149,11 @@ public class CatalogPageService {
                 .toList();
     }
 
-    private List<TransportModelDTO> getTransportModelDTOS(TransportType transportType, List<Long> transportBrands) {
-        return transportModelService.findAllByTransportTypeAndBrandSpecification(transportType, transportBrands).stream()
+    private List<TransportModelDTO> getTransportModelDTOS(
+            TransportType transportType, List<Long> transportBrands) {
+        return transportModelService
+                .findAllByTransportTypeAndBrandSpecification(transportType, transportBrands)
+                .stream()
                 .map(model ->
                         TransportModelDTO.builder()
                                 .transportModelId(model.getId())
@@ -151,7 +163,8 @@ public class CatalogPageService {
     }
 
     private List<BodyTypeDTO> getBodyTypeDTOS(TransportType transportType) {
-        return bodyTypeService.findAllByTransportTypesId(transportType.getId()).stream()
+        return bodyTypeService.findAllByTransportTypesId(transportType.getId())
+                .stream()
                 .map(bodyType ->
                         BodyTypeDTO.builder()
                                 .bodyTypeId(bodyType.getId())
@@ -161,7 +174,8 @@ public class CatalogPageService {
     }
 
     private List<DriveTypeDTO> getDriveTypeDTOS(TransportType transportType) {
-        return driveTypeService.findAllByTransportTypesId(transportType.getId()).stream()
+        return driveTypeService.findAllByTransportTypesId(transportType.getId())
+                .stream()
                 .map(driveType ->
                         DriveTypeDTO.builder()
                                 .driveTypeId(driveType.getId())
@@ -240,7 +254,8 @@ public class CatalogPageService {
                 .toList();
     }
 
-    public List<Transport> findTransportByParam(RequestSearchDTO requestSearchDTO, PageRequest pageRequest) {
+    public List<Transport> findTransportByParam(RequestSearchDTO requestSearchDTO,
+                                                PageRequest pageRequest) {
         return transportService.findAll(getSpecificationParam(requestSearchDTO), pageRequest);
     }
 
@@ -283,7 +298,8 @@ public class CatalogPageService {
                         .and(hasUncleared(requestSearchDTO.getUncleared()))
                         .and(hasBargain(requestSearchDTO.getBargain()))
                         .and(hasInstallmentPayment(requestSearchDTO.getInstallmentPayment()))
-                        .and(sortBy(Transport.class, requestSearchDTO.getSortBy(), requestSearchDTO.getOrderBy()))
+                        .and(sortBy(
+                                requestSearchDTO.getSortBy(), requestSearchDTO.getOrderBy()))
         );
     }
 }

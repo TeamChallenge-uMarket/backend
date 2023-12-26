@@ -7,7 +7,9 @@ import com.example.securityumarket.dto.pages.user.request.RequestUpdateTransport
 import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
 import com.example.securityumarket.services.pages.UserPageService;
 import jakarta.validation.Valid;
+
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +38,8 @@ public class UserPageController {
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateUserDetails(
-            @RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile,
+            @RequestPart(value = "multipartFile", required = false)
+            MultipartFile multipartFile,
             @RequestPart(value = "body") @Valid UserDetailsDTO userDetailsDTO) {
         userPageService.updateUserDetails(userDetailsDTO, multipartFile);
         return ResponseEntity.ok("User details updated successfully");
@@ -56,7 +59,8 @@ public class UserPageController {
     }
 
     @GetMapping("/my-transports/{status}")
-    public ResponseEntity<List<TransportByStatusResponse>> getMyTransports(@PathVariable String status) {
+    public ResponseEntity<List<TransportByStatusResponse>> getMyTransports(
+            @PathVariable String status) {
         return ResponseEntity.ok(userPageService.getMyTransportsByStatus(status));
     }
 
@@ -76,9 +80,13 @@ public class UserPageController {
 
     @PutMapping("/my-transports/update-details/{transport-id}")
     public ResponseEntity<String> updateTransportDetails(
-            @PathVariable ("transport-id") Long transportId,
-            @RequestPart(value = "multipartFiles", required = false) MultipartFile[] multipartFiles,
-            @RequestPart(value = "body", required = false) @Valid RequestUpdateTransportDetails updateTransportDetails) {
+            @PathVariable("transport-id") Long transportId,
+
+            @RequestPart(value = "multipartFiles", required = false)
+            MultipartFile[] multipartFiles,
+
+            @RequestPart(value = "body", required = false)
+            @Valid RequestUpdateTransportDetails updateTransportDetails) {
         userPageService.updateTransportDetails(transportId, updateTransportDetails, multipartFiles);
         return ResponseEntity.ok("Transport details updated successfully");
     }

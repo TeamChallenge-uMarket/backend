@@ -41,7 +41,8 @@ public class ResetPasswordPageService {
     public void verifyAccount(String email, String token) {
         Users user = userService.findAppUserByEmail(email);
         if (!emailUtil.verifyAccount(user, token)) {
-            throw new DataNotValidException("Token has expired. Please regenerate token and try again");
+            throw new DataNotValidException
+                    ("Token has expired. Please regenerate token and try again");
         }
     }
 
