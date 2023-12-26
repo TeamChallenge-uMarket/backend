@@ -1,8 +1,8 @@
 package com.example.securityumarket.services.chat;
 
-import com.example.securityumarket.models.DTO.chat.ChatNotification;
-import com.example.securityumarket.models.entities.ChatMessage;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.dto.chat.ChatNotification;
+import com.example.securityumarket.models.ChatMessage;
+import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.ChatMessageService;
 import com.example.securityumarket.services.jpa.UserService;
 import lombok.RequiredArgsConstructor;

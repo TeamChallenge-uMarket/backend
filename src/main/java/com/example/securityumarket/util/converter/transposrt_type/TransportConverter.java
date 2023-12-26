@@ -1,12 +1,12 @@
 package com.example.securityumarket.util.converter.transposrt_type;
 
-import com.example.securityumarket.models.DTO.pages.catalog.response.ResponseSearchDTO;
-import com.example.securityumarket.models.DTO.entities.TransportGalleryDTO;
-import com.example.securityumarket.models.DTO.transports.TransportDTO;
-import com.example.securityumarket.models.DTO.pages.user.response.TransportByStatusResponse;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportGallery;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseSearch;
+import com.example.securityumarket.dto.entities.TransportGalleryDTO;
+import com.example.securityumarket.dto.transports.TransportDTO;
+import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.TransportGallery;
+import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.FavoriteTransportService;
 import com.example.securityumarket.services.jpa.TransportGalleryService;
 import com.example.securityumarket.services.jpa.TransportViewService;
@@ -35,8 +35,8 @@ public class TransportConverter {
         return mapCommonProperties(transport, dto);
     }
 
-    public ResponseSearchDTO convertTransportTransportSearchDTO(Transport transport) {
-        return ResponseSearchDTO.builder()
+    public ResponseSearch convertTransportTransportSearchDTO(Transport transport) {
+        return ResponseSearch.builder()
                 .id(transport.getId())
                 .brand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand())
                 .model(transport.getTransportModel().getModel())
@@ -51,6 +51,7 @@ public class TransportConverter {
                 .fileUrl(transportGalleryService.findMainFileByTransport(transport.getId()))
                 .isFavorite(isFavoriteTransport(transport))
                 .created(transport.getCreated())
+                .lastUpdate(transport.getLastUpdate())
                 .build();
     }
 
@@ -121,6 +122,12 @@ public class TransportConverter {
         else {
             return false;
         }
+    }
+
+    public List<ResponseSearch> convertTransportListToResponseSearchDTO(List<Transport> transports) {
+        return transports.stream()
+                .map(this::convertTransportTransportSearchDTO)
+                .collect(Collectors.toList());
     }
 }
 

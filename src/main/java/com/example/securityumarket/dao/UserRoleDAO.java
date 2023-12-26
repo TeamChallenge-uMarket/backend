@@ -1,7 +1,7 @@
 package com.example.securityumarket.dao;
 
-import com.example.securityumarket.models.entities.UserRole;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.models.UserRole;
+import com.example.securityumarket.models.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

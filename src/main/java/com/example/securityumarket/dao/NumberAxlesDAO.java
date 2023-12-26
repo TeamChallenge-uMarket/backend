@@ -1,6 +1,6 @@
 package com.example.securityumarket.dao;
 
-import com.example.securityumarket.models.entities.NumberAxles;
+import com.example.securityumarket.models.NumberAxles;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -2,11 +2,10 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.FuelTypeDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.FuelType;
+import com.example.securityumarket.models.FuelType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.ChatRoomDAO;
-import com.example.securityumarket.models.entities.ChatRoom;
+import com.example.securityumarket.models.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

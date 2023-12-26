@@ -1,15 +1,15 @@
 package com.example.securityumarket.controllers.pages.user;
 
-import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
-import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
-import com.example.securityumarket.models.DTO.transports.TransportDTO;
-import com.example.securityumarket.models.DTO.pages.user.request.RequestUpdateTransportDetails;
-import com.example.securityumarket.models.DTO.pages.user.response.TransportByStatusResponse;
-import com.example.securityumarket.services.jpa.TransportGalleryService;
-import com.example.securityumarket.services.jpa.TransportService;
-import com.example.securityumarket.services.jpa.UserService;
+import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
+import com.example.securityumarket.dto.entities.user.UserSecurityDetailsDTO;
+import com.example.securityumarket.dto.transports.TransportDTO;
+import com.example.securityumarket.dto.pages.user.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
+import com.example.securityumarket.services.pages.UserPageService;
 import jakarta.validation.Valid;
+
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,65 +29,72 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UserPageController {
 
-    private final UserService userService;
-
-    private final TransportService transportService;
-
-    private final TransportGalleryService transportGalleryService;
-
+    private final UserPageService userPageService;
 
     @GetMapping
     public ResponseEntity<UserDetailsDTO> getUserDetails() {
-        return userService.getUserDetails();
+        return ResponseEntity.ok(userPageService.getUserDetails());
     }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateUserDetails(
-            @RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile,
+            @RequestPart(value = "multipartFile", required = false)
+            MultipartFile multipartFile,
             @RequestPart(value = "body") @Valid UserDetailsDTO userDetailsDTO) {
-        return userService.updateUserDetails(userDetailsDTO, multipartFile);
+        userPageService.updateUserDetails(userDetailsDTO, multipartFile);
+        return ResponseEntity.ok("User details updated successfully");
     }
 
     @DeleteMapping("/delete-photo")
     public ResponseEntity<String> deleteUserPhoto() {
-        return userService.deleteUserPhoto();
+        userPageService.deleteUserPhoto();
+        return ResponseEntity.ok("The user photo has been deleted");
     }
 
     @PutMapping("/security-info")
     public ResponseEntity<String> updateSecurityInformation(
             @Valid @RequestBody UserSecurityDetailsDTO securityDetailsDTO) {
-        return userService.updateUserSecurityDetails(securityDetailsDTO);
+        userPageService.updateSecurityInformation(securityDetailsDTO);
+        return ResponseEntity.ok("User password changed successfully");
     }
 
     @GetMapping("/my-transports/{status}")
-    public ResponseEntity<List<TransportByStatusResponse>> getMyTransports(@PathVariable String status) {
-        return transportService.getMyTransportsByStatus(status);
+    public ResponseEntity<List<TransportByStatusResponse>> getMyTransports(
+            @PathVariable String status) {
+        return ResponseEntity.ok(userPageService.getMyTransportsByStatus(status));
     }
 
     @PutMapping("/my-transports/{transport-id}/update-status/{status}")
     public ResponseEntity<String> updateTransportStatus(
             @PathVariable("transport-id") Long transportId,
             @PathVariable("status") String status) {
-        return transportService.updateTransportStatusByTransportIdAndStatus(transportId, status);
+        userPageService.updateTransportStatus(transportId, status);
+        return ResponseEntity.ok("The status of the transport has been successfully updated");
     }
 
     @GetMapping("/my-transports/get-details/{transport-id}")
     public ResponseEntity<? extends TransportDTO> getTransportDetails(
             @PathVariable("transport-id") Long transportId) {
-        return transportService.getTransportDetails(transportId);
+        return userPageService.getTransportDetails(transportId);
     }
 
     @PutMapping("/my-transports/update-details/{transport-id}")
     public ResponseEntity<String> updateTransportDetails(
-            @PathVariable ("transport-id") Long transportId,
-            @RequestPart(value = "multipartFiles", required = false) MultipartFile[] multipartFiles,
-            @RequestPart(value = "body", required = false) @Valid RequestUpdateTransportDetails updateTransportDetails) {
-        return transportService.updateTransportDetails(transportId, updateTransportDetails, multipartFiles);
+            @PathVariable("transport-id") Long transportId,
+
+            @RequestPart(value = "multipartFiles", required = false)
+            MultipartFile[] multipartFiles,
+
+            @RequestPart(value = "body", required = false)
+            @Valid RequestUpdateTransportDetails updateTransportDetails) {
+        userPageService.updateTransportDetails(transportId, updateTransportDetails, multipartFiles);
+        return ResponseEntity.ok("Transport details updated successfully");
     }
 
     @DeleteMapping("/my-transports/delete-files/")
     public ResponseEntity<String> deleteGalleryFiles(
             @RequestParam List<Long> galleryId) {
-        return transportGalleryService.deleteGalleryTransportByGalleryId(galleryId);
+        userPageService.deleteGalleryFiles(galleryId);
+        return ResponseEntity.ok("The files have been successfully deleted");
     }
 }

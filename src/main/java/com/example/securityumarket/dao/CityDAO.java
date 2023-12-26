@@ -1,7 +1,6 @@
 package com.example.securityumarket.dao;
 
-import com.example.securityumarket.models.entities.City;
-import com.example.securityumarket.models.entities.Transport;
+import com.example.securityumarket.models.City;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

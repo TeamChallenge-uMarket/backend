@@ -97,3 +97,7 @@ databaseChangeLog:
       file: db/changelog/changeset/createtables/create-chat-messages-table.yaml
   - include:
       file: db/changelog/changeset/add-google-account-password-column-to-users.yaml
+  - include:
+      file: db/changelog/changeset/createtables/create-table-subscriptions.yaml
+  - include:
+      file: db/changelog/changeset/add-name-and-status_notification-fields-to-subscription_has_users-table.yaml

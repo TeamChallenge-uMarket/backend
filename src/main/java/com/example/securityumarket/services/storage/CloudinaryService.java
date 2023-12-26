@@ -39,11 +39,14 @@ public class CloudinaryService {
     public String uploadFileWithPublicRead(MultipartFile file) {
         if (file.getSize() >= minFileSize && file.getSize() <= maxFileSize) {
             String contentType = file.getContentType();
-            if (Objects.requireNonNull(contentType).startsWith("image/") || contentType.startsWith("video/")) {
+            if (Objects.requireNonNull(contentType).startsWith("image/")
+                    || contentType.startsWith("video/")) {
                 File fileObj = convertMultiPartFileToFile(file);
-                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                String fileName = System.currentTimeMillis() +
+                        "_" + file.getOriginalFilename();
                 try {
-                    Map uploadResult = cloudinary.uploader().upload(fileObj, Map.of("public_id", fileName));
+                    Map uploadResult = cloudinary.uploader()
+                            .upload(fileObj, Map.of("public_id", fileName));
                     return uploadResult.get("public_id").toString();
                 } catch (IOException e) {
                     throw new CloudinaryException();
@@ -54,7 +57,8 @@ public class CloudinaryService {
                 throw new DataNotValidException("Unsupported file type. Please upload photos or videos.");
             }
         } else {
-            throw new DataNotValidException("File size must be between " + minFileSize + " and " + maxFileSize + " bytes.");
+            throw new DataNotValidException("File size must be between " +
+                    minFileSize + " and " + maxFileSize + " bytes.");
         }
     }
 
@@ -96,17 +100,19 @@ public class CloudinaryService {
                 .ok()
                 .contentLength(data.length)
                 .header("Content-type", "application/octet-stream")
-                .header("Content-disposition", "attachment; filename=\"" + fileName + "\"")
+                .header("Content-disposition",
+                        "attachment; filename=\"" + fileName + "\"")
                 .body(resource);
     }
 
 
-    public ResponseEntity<String> deleteFile(String publicId) {
+    public void deleteFile(String publicId) {
         try {
             Map result = cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
             if (result.get("result").equals("ok")) {
-                String text = String.format("File with publicId %s has been successfully deleted.", publicId);
-                return ResponseEntity.ok(text);
+                String text = String.format("File with publicId %s has been successfully deleted.",
+                        publicId);
+                ResponseEntity.ok(text);
             } else {
                 String text = String.format("Failed to delete file with %s", publicId);
                 log.error(text);
@@ -120,7 +126,7 @@ public class CloudinaryService {
 
     public static String getPhotoPublicIdFromUrl(String photoUrl) {
         photoUrl = photoUrl.substring(photoUrl.lastIndexOf('/'));
-        String publicId = photoUrl.substring(photoUrl.lastIndexOf('/')+ 1);
+        String publicId = photoUrl.substring(photoUrl.lastIndexOf('/') + 1);
         return publicId.substring(0, publicId.lastIndexOf('.'));
     }
 }

@@ -2,11 +2,10 @@ package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.ChatMessageDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.ChatMessage;
+import com.example.securityumarket.models.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

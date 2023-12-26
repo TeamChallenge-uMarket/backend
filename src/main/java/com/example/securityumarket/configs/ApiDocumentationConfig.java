@@ -37,13 +37,15 @@ public class ApiDocumentationConfig {
         contact.setUrl("https://github.com/TeamChallenge-uMarket/backend");
 
 
-        License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
+        License mitLicense = new License().name("MIT License")
+                .url("https://choosealicense.com/licenses/mit/");
 
         Info info = new Info()
                 .title("uAuto API")
                 .version("1.0")
                 .contact(contact)
-                .description("This API exposes endpoints to manage.").termsOfService("https://github.com/TeamChallenge-uMarket/backend")
+                .description("This API exposes endpoints to manage.")
+                .termsOfService("https://github.com/TeamChallenge-uMarket/backend")
                 .license(mitLicense);
 
         return new OpenAPI().info(info).servers(List.of(devServer, prodServer));

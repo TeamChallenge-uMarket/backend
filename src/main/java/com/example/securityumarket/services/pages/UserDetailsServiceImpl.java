@@ -1,15 +1,13 @@
 package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.dao.UsersDAO;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.models.Users;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @RequiredArgsConstructor
 @Service

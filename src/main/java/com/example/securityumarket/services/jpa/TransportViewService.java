@@ -1,17 +1,13 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportViewDAO;
-import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.models.entities.Transport;
-import com.example.securityumarket.models.entities.TransportView;
-import com.example.securityumarket.models.entities.Users;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.TransportView;
+import com.example.securityumarket.models.Users;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -23,11 +19,11 @@ public class TransportViewService {
         return transportViewDAO.save(transportView);
     }
 
-    public TransportView findByUserAndTransport(Users user, Transport transport) {
+    public void findByUserAndTransport(Users user, Transport transport) {
         TransportView transportView = transportViewDAO.findByUserAndTransport(user, transport)
                 .orElse(buildTransportView(user, transport));
         updateLastUpdated(transportView.getId(), LocalDateTime.now());
-        return save(transportView);
+        save(transportView);
     }
 
     private TransportView buildTransportView(Users user, Transport transport) {
@@ -44,23 +40,5 @@ public class TransportViewService {
 
     public Integer countByTransport(Transport transport) {
         return transportViewDAO.countAllByTransport(transport);
-    }
-
-    public List<Transport> findPopularTransport() {
-        return transportViewDAO.findPopularTransport()
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException("Popular transports"));
-    }
-
-    public List<Transport> findPopularTransportByTypeId(long id) {
-        return transportViewDAO.findPopularTransportByTypeId(id)
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException("Popular transports by type"));
-    }
-
-    public List<Transport> findViewedCarsByRegisteredUser(Users user) {
-        return transportViewDAO.findViewedCarsByRegisteredUser(user)
-                .filter(list -> !list.isEmpty())
-                .orElseThrow(() -> new DataNotFoundException("Popular transports by user"));
     }
 }

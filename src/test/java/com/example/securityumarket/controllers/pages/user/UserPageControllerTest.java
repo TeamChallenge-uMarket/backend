@@ -1,8 +1,8 @@
 package com.example.securityumarket.controllers.pages.user;
 
 import com.example.securityumarket.TestBean;
-import com.example.securityumarket.models.DTO.entities.user.UserDetailsDTO;
-import com.example.securityumarket.models.DTO.entities.user.UserSecurityDetailsDTO;
+import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
+import com.example.securityumarket.dto.entities.user.UserSecurityDetailsDTO;
 import com.example.securityumarket.services.jpa.TransportGalleryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.InputStream;
