@@ -1,9 +1,9 @@
 package com.example.securityumarket.controllers.pages.catalog;
 
 import com.example.securityumarket.dto.pages.catalog.request.RequestFilterParam;
-import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;
 import com.example.securityumarket.dto.pages.catalog.response.ResponseDefaultTransportParameter;
-import com.example.securityumarket.dto.pages.catalog.response.ResponseSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseSearch;
 import com.example.securityumarket.dto.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
 import com.example.securityumarket.services.pages.CatalogPageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,15 +55,15 @@ public class CatalogController {
             description = "This endpoint allows to search for vehicles using various filtering queries")
     @ApiResponse(responseCode = "200",
             description = "list of vehicles retrieved successfully",
-            content = @Content(schema = @Schema(implementation = ResponseSearchDTO.class)))
+            content = @Content(schema = @Schema(implementation = ResponseSearch.class)))
     @GetMapping("/search/page/{page}/limit/{limit}/")
-    public ResponseEntity<List<ResponseSearchDTO>> searchTransports(
+    public ResponseEntity<List<ResponseSearch>> searchTransports(
             @Parameter(description = "The number of the page to be displayed")
             @PathVariable int page,
             @Parameter(description = "The number of the vehicles to be displayed on one page")
             @PathVariable int limit,
-            @ModelAttribute RequestSearchDTO requestSearchDTO) {
-        return ResponseEntity.ok(catalogPageService.searchTransports(page, limit, requestSearchDTO));
+            @ModelAttribute RequestSearch requestSearch) {
+        return ResponseEntity.ok(catalogPageService.searchTransports(page, limit, requestSearch));
     }
 
     @Operation(

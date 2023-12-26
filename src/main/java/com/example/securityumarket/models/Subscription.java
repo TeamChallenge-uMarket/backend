@@ -1,6 +1,6 @@
 package com.example.securityumarket.models;
 
-import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,5 +22,5 @@ public class Subscription {
     private Long id;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    private RequestSearchDTO parameters;
+    private RequestSearch parameters;
 }

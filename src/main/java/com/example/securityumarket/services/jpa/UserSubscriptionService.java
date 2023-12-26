@@ -24,13 +24,18 @@ public class UserSubscriptionService {
         userSubscriptionDAO.save(userSubscription);
     }
 
+    public void saveAndFlush(UserSubscription userSubscription) {
+        userSubscriptionDAO.saveAndFlush(userSubscription);
+    }
+
     public void save(Users user, Subscription subscription, SubscriptionRequest subscriptionRequest) {
         UserSubscription userSubscription = buildUserSubscription(user, subscription, subscriptionRequest);
         userSubscriptionDAO.save(userSubscription);
     }
 
-    public Optional<UserSubscription> findBySubscriptionAndUser(Subscription subscription, Users user) {
-        return userSubscriptionDAO.findBySubscriptionAndUser(subscription, user);
+    public UserSubscription findBySubscriptionAndUser(Subscription subscription, Users user) {
+        return userSubscriptionDAO.findBySubscriptionAndUser(subscription, user)
+                .orElseThrow(() -> new DataNotFoundException("UserSubscription by subscription and user"));
     }
 
     public UserSubscription buildUserSubscription(
@@ -44,8 +49,7 @@ public class UserSubscriptionService {
     }
 
     public void deleteBySubscriptionAndUser(Subscription subscription, Users user) {
-        UserSubscription bySubscriptionAndUser = findBySubscriptionAndUser(subscription, user)
-                .orElseThrow(() -> new DataNotFoundException("UserSubscription by subscription and user"));
+        UserSubscription bySubscriptionAndUser = findBySubscriptionAndUser(subscription, user);
         userSubscriptionDAO.delete(bySubscriptionAndUser);
     }
 

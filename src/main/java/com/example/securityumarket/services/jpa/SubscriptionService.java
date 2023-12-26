@@ -1,7 +1,8 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.SubscriptionDAO;
-import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;
+import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.Subscription;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,8 @@ public class SubscriptionService {
 
     private final SubscriptionDAO subscriptionDAO;
 
-    public Optional<Subscription> findByParameters (RequestSearchDTO requestSearchDTO) {
-        return subscriptionDAO.findByParameters(requestSearchDTO);
+    public Optional<Subscription> findByParameters (RequestSearch requestSearch) {
+        return subscriptionDAO.findByParameters(requestSearch);
     }
 
 
@@ -25,8 +26,9 @@ public class SubscriptionService {
         subscriptionDAO.save(subscription);
     }
 
-    public Optional<Subscription> findById(Long subscriptionId) {
-        return subscriptionDAO.findById(subscriptionId);
+    public Subscription findById(Long subscriptionId) {
+        return subscriptionDAO.findById(subscriptionId)
+                .orElseThrow(() -> new DataNotFoundException("Subscription by id"));
     }
 
     public void delete(Subscription subscription) {

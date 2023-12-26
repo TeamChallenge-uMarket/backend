@@ -3,9 +3,9 @@ package com.example.securityumarket.services.pages;
 import com.example.securityumarket.dto.entities.*;
 import com.example.securityumarket.exception.DataNotValidException;
 import com.example.securityumarket.dto.pages.catalog.request.RequestFilterParam;
-import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;
 import com.example.securityumarket.dto.pages.catalog.response.ResponseDefaultTransportParameter;
-import com.example.securityumarket.dto.pages.catalog.response.ResponseSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseSearch;
 import com.example.securityumarket.dto.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.TransportType;
@@ -66,9 +66,9 @@ public class CatalogPageService {
         favoriteTransportService.addFavorite(authenticatedUser, transport);
     }
 
-    public List<ResponseSearchDTO> searchTransports(int page, int limit,
-                                                    RequestSearchDTO requestSearchDTO) {
-        List<Transport> transports = findTransportByParam(requestSearchDTO,
+    public List<ResponseSearch> searchTransports(int page, int limit,
+                                                 RequestSearch requestSearch) {
+        List<Transport> transports = findTransportByParam(requestSearch,
                 PageRequest.of(page, limit));
         return transportConverter.convertTransportListToResponseSearchDTO(transports);
     }
@@ -254,52 +254,52 @@ public class CatalogPageService {
                 .toList();
     }
 
-    public List<Transport> findTransportByParam(RequestSearchDTO requestSearchDTO,
+    public List<Transport> findTransportByParam(RequestSearch requestSearch,
                                                 PageRequest pageRequest) {
-        return transportService.findAll(getSpecificationParam(requestSearchDTO), pageRequest);
+        return transportService.findAll(getSpecificationParam(requestSearch), pageRequest);
     }
 
-    public Specification<Transport> getSpecificationParam(RequestSearchDTO requestSearchDTO) {
+    public Specification<Transport> getSpecificationParam(RequestSearch requestSearch) {
         return Specification.allOf(
                 isActive()
-                        .and(hasTransportTypeId(requestSearchDTO.getTransportTypeId()))
-                        .and(hasBrandId(requestSearchDTO.getBrandId()))
-                        .and(hasModelId(requestSearchDTO.getModelId()))
-                        .and(hasRegionId(requestSearchDTO.getRegionId()))
-                        .and(hasCityId(requestSearchDTO.getCityId()))
-                        .and(hasBodyTypeId(requestSearchDTO.getBodyTypeId()))
-                        .and(hasFuelTypeId(requestSearchDTO.getFuelTypeId()))
-                        .and(hasDriveTypeId(requestSearchDTO.getDriveTypeId()))
-                        .and(hasTransmissionId(requestSearchDTO.getTransmissionId()))
-                        .and(hasColorId(requestSearchDTO.getColorId()))
-                        .and(hasConditionId(requestSearchDTO.getConditionId()))
-                        .and(hasNumberAxlesId(requestSearchDTO.getNumberAxlesId()))
-                        .and(hasProducingCountryId(requestSearchDTO.getProducingCountryId()))
-                        .and(hasWheelConfigurationId(requestSearchDTO.getWheelConfigurationId()))
+                        .and(hasTransportTypeId(requestSearch.getTransportTypeId()))
+                        .and(hasBrandId(requestSearch.getBrandId()))
+                        .and(hasModelId(requestSearch.getModelId()))
+                        .and(hasRegionId(requestSearch.getRegionId()))
+                        .and(hasCityId(requestSearch.getCityId()))
+                        .and(hasBodyTypeId(requestSearch.getBodyTypeId()))
+                        .and(hasFuelTypeId(requestSearch.getFuelTypeId()))
+                        .and(hasDriveTypeId(requestSearch.getDriveTypeId()))
+                        .and(hasTransmissionId(requestSearch.getTransmissionId()))
+                        .and(hasColorId(requestSearch.getColorId()))
+                        .and(hasConditionId(requestSearch.getConditionId()))
+                        .and(hasNumberAxlesId(requestSearch.getNumberAxlesId()))
+                        .and(hasProducingCountryId(requestSearch.getProducingCountryId()))
+                        .and(hasWheelConfigurationId(requestSearch.getWheelConfigurationId()))
 
-                        .and(priceFrom(requestSearchDTO.getPriceFrom()))
-                        .and(priceTo(requestSearchDTO.getPriceTo()))
-                        .and(yearFrom(requestSearchDTO.getYearsFrom()))
-                        .and(yearTo(requestSearchDTO.getYearsTo()))
-                        .and(mileageFrom(requestSearchDTO.getMileageFrom()))
-                        .and(mileageTo(requestSearchDTO.getMileageTo()))
-                        .and(enginePowerFrom(requestSearchDTO.getEnginePowerFrom()))
-                        .and(enginePowerTo(requestSearchDTO.getEnginePowerTo()))
-                        .and(engineDisplacementFrom(requestSearchDTO.getEngineDisplacementFrom()))
-                        .and(engineDisplacementTo(requestSearchDTO.getEngineDisplacementTo()))
-                        .and(numberOfDoorsFrom(requestSearchDTO.getNumberOfDoorsFrom()))
-                        .and(numberOfDoorsTo(requestSearchDTO.getNumberOfDoorsTo()))
-                        .and(numberOfSeatsFrom(requestSearchDTO.getNumberOfSeatsFrom()))
-                        .and(numberOfSeatsTo(requestSearchDTO.getNumberOfSeatsTo()))
-                        .and(loadCapacityFrom(requestSearchDTO.getLoadCapacityFrom()))
-                        .and(loadCapacityTo(requestSearchDTO.getLoadCapacityTo()))
-                        .and(hasTrade(requestSearchDTO.getTrade()))
-                        .and(hasMilitary(requestSearchDTO.getMilitary()))
-                        .and(hasUncleared(requestSearchDTO.getUncleared()))
-                        .and(hasBargain(requestSearchDTO.getBargain()))
-                        .and(hasInstallmentPayment(requestSearchDTO.getInstallmentPayment()))
+                        .and(priceFrom(requestSearch.getPriceFrom()))
+                        .and(priceTo(requestSearch.getPriceTo()))
+                        .and(yearFrom(requestSearch.getYearsFrom()))
+                        .and(yearTo(requestSearch.getYearsTo()))
+                        .and(mileageFrom(requestSearch.getMileageFrom()))
+                        .and(mileageTo(requestSearch.getMileageTo()))
+                        .and(enginePowerFrom(requestSearch.getEnginePowerFrom()))
+                        .and(enginePowerTo(requestSearch.getEnginePowerTo()))
+                        .and(engineDisplacementFrom(requestSearch.getEngineDisplacementFrom()))
+                        .and(engineDisplacementTo(requestSearch.getEngineDisplacementTo()))
+                        .and(numberOfDoorsFrom(requestSearch.getNumberOfDoorsFrom()))
+                        .and(numberOfDoorsTo(requestSearch.getNumberOfDoorsTo()))
+                        .and(numberOfSeatsFrom(requestSearch.getNumberOfSeatsFrom()))
+                        .and(numberOfSeatsTo(requestSearch.getNumberOfSeatsTo()))
+                        .and(loadCapacityFrom(requestSearch.getLoadCapacityFrom()))
+                        .and(loadCapacityTo(requestSearch.getLoadCapacityTo()))
+                        .and(hasTrade(requestSearch.getTrade()))
+                        .and(hasMilitary(requestSearch.getMilitary()))
+                        .and(hasUncleared(requestSearch.getUncleared()))
+                        .and(hasBargain(requestSearch.getBargain()))
+                        .and(hasInstallmentPayment(requestSearch.getInstallmentPayment()))
                         .and(sortBy(
-                                requestSearchDTO.getSortBy(), requestSearchDTO.getOrderBy()))
+                                requestSearch.getSortBy(), requestSearch.getOrderBy()))
         );
     }
 }

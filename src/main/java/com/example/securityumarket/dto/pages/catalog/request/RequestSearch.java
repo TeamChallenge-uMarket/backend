@@ -9,7 +9,7 @@
 
     @Builder
     @Data
-    public class RequestSearchDTO implements Serializable {
+    public class RequestSearch implements Serializable {
 
         private Long transportTypeId;
 

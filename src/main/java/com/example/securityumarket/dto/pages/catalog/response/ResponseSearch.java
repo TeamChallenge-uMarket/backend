@@ -1,15 +1,12 @@
 package com.example.securityumarket.dto.pages.catalog.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
-public record ResponseSearchDTO (
+public record ResponseSearch(
         Long id,
         String brand,
         String model,
@@ -22,7 +19,6 @@ public record ResponseSearchDTO (
         Double engineDisplacement,
         String city,
         LocalDateTime created,
-
         LocalDateTime lastUpdate,
         String fileUrl,
         Boolean isFavorite

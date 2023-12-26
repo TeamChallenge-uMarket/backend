@@ -1,7 +1,7 @@
 package com.example.securityumarket.controllers.pages.catalog;
 
 import com.example.securityumarket.TestBean;
-import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
@@ -77,14 +77,14 @@ public class CatalogControllerTest {
 
     @Test
     void searchTransportTest() throws Exception {
-        RequestSearchDTO searchDTO = RequestSearchDTO.builder().yearsFrom(2015).yearsTo(2019).build();
+        RequestSearch searchDTO = RequestSearch.builder().yearsFrom(2015).yearsTo(2019).build();
 
         MvcResult result = mockMvc.perform(get(CATALOG_URL + "/search/page/{page}/limit/{limit}/", 0, 10)
                 .content(objectMapper.writeValueAsString(searchDTO))
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk()).andReturn();
 
-        List<RequestSearchDTO> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
+        List<RequestSearch> response = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {
         });
         Assertions.assertNotNull(response);
         Assertions.assertFalse(response.isEmpty());

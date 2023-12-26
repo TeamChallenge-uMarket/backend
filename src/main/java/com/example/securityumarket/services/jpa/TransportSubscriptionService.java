@@ -29,6 +29,10 @@ public class TransportSubscriptionService {
         transportSubscriptionDAO.delete(transportSubscription);
     }
 
+    public void deleteAll(List<TransportSubscription> transportSubscriptions){
+        transportSubscriptionDAO.deleteAll(transportSubscriptions);
+    }
+
     public List<TransportSubscription> findAllByTransport(Transport transport) {
         return transportSubscriptionDAO.findAllByTransport(transport);
     }

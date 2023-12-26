@@ -3,8 +3,7 @@ package com.example.securityumarket.services.pages;
 import com.example.securityumarket.dto.pages.subscription.SubscriptionRequest;
 import com.example.securityumarket.dto.pages.subscription.SubscriptionResponse;
 import com.example.securityumarket.dto.pages.subscription.SubscriptionTransportsResponse;
-import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.dto.pages.catalog.request.RequestSearchDTO;
+import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;
 import com.example.securityumarket.models.*;
 import com.example.securityumarket.services.jpa.*;
 import com.example.securityumarket.util.EmailUtil;
@@ -41,15 +40,12 @@ public class SubscriptionPageService {
 
 
     @Transactional
-    public void addSubscription(RequestSearchDTO requestSearchDTO,
+    public void addSubscription(RequestSearch requestSearch,
                                 SubscriptionRequest subscriptionRequest) {
         Subscription subscription = subscriptionService
-                .findByParameters(requestSearchDTO).orElseGet(() ->
-                        buildSubscriptionByRequestSearchDTO(requestSearchDTO));
-
-        if (subscriptionService.findByParameters(subscription.getParameters()).isEmpty()) {
-            subscriptionService.save(subscription);
-        }
+                .findByParameters(requestSearch).orElseGet(() ->
+                        buildSubscriptionByRequestSearchDTO(requestSearch));
+        subscriptionService.save(subscription);
 
         saveTransportSubscription(subscription);
         saveUserSubscription(subscription, subscriptionRequest);
@@ -57,14 +53,67 @@ public class SubscriptionPageService {
 
     @Transactional
     public void removeSubscription(Long subscriptionId) {
-        Subscription subscription = subscriptionService.findById(subscriptionId)
-                .orElseThrow(() -> new DataNotFoundException("Subscription by id"));
+        Subscription subscription = subscriptionService.findById(subscriptionId);
 
         Users authenticatedUser = userService.getAuthenticatedUser();
         userSubscriptionService.deleteBySubscriptionAndUser(subscription, authenticatedUser);
 
-        if (!userSubscriptionService.existsBySubscription(subscription)) {
-            subscriptionService.delete(subscription);
+        deleteIfNotExistsBySubscription(subscription);
+    }
+
+    @Transactional
+    public SubscriptionTransportsResponse getSubscription(long subscriptionId) {
+        Subscription subscription = subscriptionService.findById(subscriptionId);
+
+        Users authenticatedUser = userService.getAuthenticatedUser();
+        UserSubscription userSubscription = userSubscriptionService
+                .findBySubscriptionAndUser(subscription, authenticatedUser);
+
+        SubscriptionTransportsResponse response = buildSubscriptionTransportsResponse(
+                subscription, userSubscription.getLastUpdate());
+
+        userSubscription.setLastUpdate(LocalDateTime.now());
+        userSubscriptionService.save(userSubscription);
+        return response;
+    }
+
+    @Transactional
+    public void updateSubscription(Long subscriptionId, SubscriptionRequest subscriptionRequest) {
+        Subscription subscription = subscriptionService.findById(subscriptionId);
+        Users authenticatedUser = userService.getAuthenticatedUser();
+
+        UserSubscription userSubscription = userSubscriptionService
+                .findBySubscriptionAndUser(subscription, authenticatedUser);
+
+        if (subscriptionRequest.notificationEnabled()!= null) {
+            userSubscription.setNotificationEnabled(subscriptionRequest.notificationEnabled());
+        }
+        if (subscriptionRequest.name() != null) {
+            userSubscription.setName(subscriptionRequest.name());
+        }
+        userSubscriptionService.save(userSubscription);
+    }
+
+    @Transactional
+    public void updateSubscriptionParameters(Long subscriptionId,
+                                   RequestSearch requestSearch) {
+        Subscription subscription = subscriptionService.findById(subscriptionId);
+        Users authenticatedUser = userService.getAuthenticatedUser();
+
+        UserSubscription userSubscription = userSubscriptionService
+                .findBySubscriptionAndUser(subscription, authenticatedUser);
+
+        if (requestSearch != null && !subscription.getParameters().equals(requestSearch)) {
+            Subscription newSubscription = subscriptionService
+                    .findByParameters(requestSearch).orElseGet(() ->
+                            buildSubscriptionByRequestSearchDTO(requestSearch));
+            subscriptionService.save(newSubscription);
+
+            userSubscription.setSubscription(newSubscription);
+            userSubscriptionService.save(userSubscription);
+            saveTransportSubscription(newSubscription);
+
+            deleteIfNotExistsBySubscription(subscription);
         }
     }
 
@@ -92,6 +141,42 @@ public class SubscriptionPageService {
         }
     }
 
+    public List<SubscriptionResponse> getSubscriptions() {
+        Users authenticatedUser = userService.getAuthenticatedUser();
+        List<UserSubscription> userSubscriptions = userSubscriptionService
+                .findAllByUser(authenticatedUser);
+        return userSubscriptions
+                .stream()
+                .map(this::buildSubscriptionResponse)
+                .toList();
+    }
+
+    private SubscriptionResponse buildSubscriptionResponse(UserSubscription userSubscription) {
+        return SubscriptionResponse.builder()
+                .id(userSubscription.getSubscription().getId())
+                .name(userSubscription.getName())
+                .requestSearch(userSubscription.getSubscription()
+                        .getParameters())
+                .notificationStatus(userSubscription.getNotificationEnabled())
+                .countNewTransports(
+                        findUnseenTransports(
+                                userSubscription.getSubscription(),
+                                userSubscription.getLastUpdate()
+                        ).size())
+                .build();
+    }
+
+    private List<Transport> getTransportListByParameters(RequestSearch requestSearch) {
+        Specification<Transport> specificationParam = catalogPageService
+                .getSpecificationParam(requestSearch);
+        return transportService.findAll(specificationParam);
+    }
+
+    private Subscription buildSubscriptionByRequestSearchDTO(RequestSearch requestSearch) {
+        return Subscription.builder()
+                .parameters(requestSearch)
+                .build();
+    }
 
     private void saveUserSubscription(Subscription subscription,
                                       SubscriptionRequest subscriptionRequest) {
@@ -106,41 +191,6 @@ public class SubscriptionPageService {
         for (Transport transport : transports) {
             transportSubscriptionService.save(transport, subscription);
         }
-    }
-
-    @Transactional
-    public SubscriptionTransportsResponse getSubscription(long subscriptionId) {
-        Subscription subscription = subscriptionService.findById(subscriptionId)
-                .orElseThrow(() -> new DataNotFoundException("Subscription by id"));
-
-        Users authenticatedUser = userService.getAuthenticatedUser();
-        UserSubscription userSubscription = userSubscriptionService
-                .findBySubscriptionAndUser(subscription, authenticatedUser)
-                .orElseThrow(() -> new DataNotFoundException("UserSubscription by Subscription And User"));
-
-        SubscriptionTransportsResponse response = buildSubscriptionTransportsResponse(
-                subscription, userSubscription.getLastUpdate());
-
-        userSubscription.setLastUpdate(LocalDateTime.now());
-        userSubscriptionService.save(userSubscription);
-        return response;
-    }
-
-    private SubscriptionTransportsResponse buildSubscriptionTransportsResponse(
-            Subscription subscription,
-            LocalDateTime lastViewedSubscription) {
-
-        List<Transport> unseenTransports = findUnseenTransports(subscription,
-                lastViewedSubscription);
-        List<Transport> viewedTransports = findViewedTransports(subscription,
-                lastViewedSubscription);
-
-        return SubscriptionTransportsResponse.builder()
-                .unseenTransportList(transportConverter
-                        .convertTransportListToResponseSearchDTO(unseenTransports))
-                .viewedTransportList(transportConverter
-                        .convertTransportListToResponseSearchDTO(viewedTransports))
-                .build();
     }
 
     private List<Transport> findUnseenTransports(Subscription subscription,
@@ -169,42 +219,31 @@ public class SubscriptionPageService {
                 .toList();
     }
 
+    private SubscriptionTransportsResponse buildSubscriptionTransportsResponse(
+            Subscription subscription,
+            LocalDateTime lastViewedSubscription) {
 
-    public List<SubscriptionResponse> getSubscriptions() {
-        Users authenticatedUser = userService.getAuthenticatedUser();
-        List<UserSubscription> userSubscriptions = userSubscriptionService
-                .findAllByUser(authenticatedUser);
-        return userSubscriptions
-                .stream()
-                .map(this::buildSubscriptionResponse)
-                .toList();
-    }
+        List<Transport> unseenTransports = findUnseenTransports(subscription,
+                lastViewedSubscription);
+        List<Transport> viewedTransports = findViewedTransports(subscription,
+                lastViewedSubscription);
 
-
-    private SubscriptionResponse buildSubscriptionResponse(UserSubscription userSubscription) {
-        return SubscriptionResponse.builder()
-                .id(userSubscription.getSubscription().getId())
-                .name(userSubscription.getName())
-                .requestSearchDTO(userSubscription.getSubscription()
-                        .getParameters())
-                .notificationStatus(userSubscription.getNotificationEnabled())
-                .countNewTransports(
-                        findUnseenTransports(
-                                userSubscription.getSubscription(),
-                                userSubscription.getLastUpdate()
-                        ).size())
+        return SubscriptionTransportsResponse.builder()
+                .unseenTransportList(transportConverter
+                        .convertTransportListToResponseSearchDTO(unseenTransports))
+                .viewedTransportList(transportConverter
+                        .convertTransportListToResponseSearchDTO(viewedTransports))
                 .build();
     }
 
-    private List<Transport> getTransportListByParameters(RequestSearchDTO requestSearchDTO) {
-        Specification<Transport> specificationParam = catalogPageService
-                .getSpecificationParam(requestSearchDTO);
-        return transportService.findAll(specificationParam);
-    }
 
-    private Subscription buildSubscriptionByRequestSearchDTO(RequestSearchDTO requestSearchDTO) {
-        return Subscription.builder()
-                .parameters(requestSearchDTO)
-                .build();
+    private void deleteIfNotExistsBySubscription(Subscription subscription) {
+        if (!userSubscriptionService.existsBySubscription(subscription)) {
+            List<TransportSubscription> transportSubscriptions = transportSubscriptionService
+                    .findAllBySubscription(subscription);
+
+            transportSubscriptionService.deleteAll(transportSubscriptions);
+            subscriptionService.delete(subscription);
+        }
     }
 }
