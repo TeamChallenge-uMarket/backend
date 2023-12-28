@@ -28,7 +28,7 @@ public class EmailUtil {
     @Value("${mail.code.expiration.time}")
     public long CODE_EXPIRATION_TIME_MS;
 
-    @Value("${fronted.url}")
+    @Value("${vps.fronted.url}")
     private String FRONTEND_URL;
 
     @Value("${mail.request.login-page.url}")

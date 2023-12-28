@@ -1,0 +1,91 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: jdbc:postgresql://${PGHOST:localhost}:${PGPORT:5432}/${PGDATABASE:uAuto}?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${PGUSER:postgres}
+    password: ${PGPASSWORD:1111}
+
+  liquibase:
+    enabled: true
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    open-in-view: false
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_USERNAME}
+    password: ${GMAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connection timeout: 5000
+          timeout: 5000
+          write timeout: 5000
+          starttls:
+            enable: true
+
+  application:
+    name: uAuto
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2MB
+      max-file-size: 5MB
+      max-request-size: 10MB
+
+server:
+  port: 8081
+
+springdoc:
+  api-docs:
+    path: /swagger/api-docs
+  swagger-ui:
+    path: /swagger/swagger-ui.html
+
+jwt:
+  access:
+    token:
+      expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
+  refresh:
+    token:
+      expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
+  secret-key: ${JWT_SECRET_KEY}
+
+mail:
+  code:
+    expiration:
+      time: 1800000
+  request:
+    login-page:
+      url: /log-in
+    recover-password-page:
+      url: /recover/new
+
+vps:
+  fronted:
+    url: ${VPS_FRONTEND_URL}
+  backend:
+    url: ${VPS_BACKEND_URL}
+
+file:
+  upload:
+    minSize: 100
+    maxSize: 10485760
+
+cloudinary:
+  cloud-name: ${CLOUD_NAME}
+  api-key: ${API_KEY}
+  api-secret: ${API_SECRET}
+  default:
+    not-found-photo: ${CLOUDINARY_URL}
