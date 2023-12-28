@@ -1,12 +1,13 @@
 package com.example.securityumarket.services.pages;
 
+import com.example.securityumarket.dto.notification.NotificationRequest;
 import com.example.securityumarket.dto.pages.subscription.SubscriptionRequest;
 import com.example.securityumarket.dto.pages.subscription.SubscriptionResponse;
 import com.example.securityumarket.dto.pages.subscription.SubscriptionTransportsResponse;
 import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;
 import com.example.securityumarket.models.*;
 import com.example.securityumarket.services.jpa.*;
-import com.example.securityumarket.util.EmailUtil;
+import com.example.securityumarket.services.rabbitmq.producer.NotificationProducer;
 import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 
 @AllArgsConstructor
@@ -36,7 +36,7 @@ public class SubscriptionPageService {
 
     private final TransportConverter transportConverter;
 
-    private final EmailUtil emailUtil;
+    private final NotificationProducer notificationProducer;
 
 
     @Transactional
@@ -85,7 +85,7 @@ public class SubscriptionPageService {
         UserSubscription userSubscription = userSubscriptionService
                 .findBySubscriptionAndUser(subscription, authenticatedUser);
 
-        if (subscriptionRequest.notificationEnabled()!= null) {
+        if (subscriptionRequest.notificationEnabled() != null) {
             userSubscription.setNotificationEnabled(subscriptionRequest.notificationEnabled());
         }
         if (subscriptionRequest.name() != null) {
@@ -96,7 +96,7 @@ public class SubscriptionPageService {
 
     @Transactional
     public void updateSubscriptionParameters(Long subscriptionId,
-                                   RequestSearch requestSearch) {
+                                             RequestSearch requestSearch) {
         Subscription subscription = subscriptionService.findById(subscriptionId);
         Users authenticatedUser = userService.getAuthenticatedUser();
 
@@ -117,7 +117,7 @@ public class SubscriptionPageService {
         }
     }
 
-    public void addTransport(Transport transport) {
+    public void notifyUsers(Transport transport) {
         List<Subscription> all = subscriptionService.findAll();
         for (Subscription subscription : all) {
             List<Transport> transports = getTransportListByParameters(subscription
@@ -130,16 +130,12 @@ public class SubscriptionPageService {
     }
 
     public void notifyObservers(Subscription subscription, Transport transport) {
-        Optional<List<UserSubscription>> allBySubscription = userSubscriptionService
-                .findAllBySubscription(subscription);
-        if (allBySubscription.isPresent()) {
-            List<UserSubscription> userSubscriptions = allBySubscription.get();
-            List<Users> list = userSubscriptions.stream()
-                    .filter(UserSubscription::getNotificationEnabled)
-                    .map(UserSubscription::getUser).toList();
-            emailUtil.sendNotification(list, transport);
-        }
+        userSubscriptionService.findAllBySubscription(subscription)
+                .ifPresent(userSubscriptions -> userSubscriptions.stream()
+                        .filter(UserSubscription::getNotificationEnabled)
+                        .forEach(userSubscription -> notifyUser(userSubscription, transport)));
     }
+
 
     public List<SubscriptionResponse> getSubscriptions() {
         Users authenticatedUser = userService.getAuthenticatedUser();
@@ -236,7 +232,6 @@ public class SubscriptionPageService {
                 .build();
     }
 
-
     private void deleteIfNotExistsBySubscription(Subscription subscription) {
         if (!userSubscriptionService.existsBySubscription(subscription)) {
             List<TransportSubscription> transportSubscriptions = transportSubscriptionService
@@ -245,5 +240,34 @@ public class SubscriptionPageService {
             transportSubscriptionService.deleteAll(transportSubscriptions);
             subscriptionService.delete(subscription);
         }
+    }
+
+    private void notifyUser(UserSubscription userSubscription, Transport transport) {
+        notificationProducer.produce(buildNotificationRequest(
+                userSubscription.getUser().getId(),
+                userSubscription.getUser().getEmail(),
+                userSubscription.getSubscription().getId(),
+                userSubscription.getName(),
+                transport));
+    }
+
+    private NotificationRequest buildNotificationRequest(
+            Long userId, String email, Long subscriptionId, String subscriptionName, Transport transport) {
+        return NotificationRequest.builder()
+                .userId(userId)
+                .email(email)
+                .subscriptionId(subscriptionId)
+                .subscriptionName(subscriptionName)
+                .transportId(transport.getId())
+                .transportDetail(buildStringTransportDetails(transport))
+                .build();
+    }
+
+    private String buildStringTransportDetails(Transport transport) {
+        return String.format("%s %s, %s - %s",
+                transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand(),
+                transport.getTransportModel().getModel(),
+                transport.getCity().getDescription(),
+                transport.getPrice());
     }
 }

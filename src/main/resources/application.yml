@@ -44,6 +44,13 @@ spring:
       max-file-size: 5MB
       max-request-size: 10MB
 
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
+
 server:
   port: 8081
 
@@ -72,6 +79,10 @@ mail:
     recover-password-page:
       url: /recover/new
 
+  sender:
+    address: authenticator.umarket@gmail.com
+    name: uAuto
+
 vps:
   fronted:
     url: ${VPS_FRONTEND_URL}
@@ -89,3 +100,12 @@ cloudinary:
   api-secret: ${API_SECRET}
   default:
     not-found-photo: ${CLOUDINARY_URL}
+
+rabbitmq:
+  exchanges:
+    internal: ${RABBITMQ_EXCHANGE_INTERNAL}
+  queues:
+    notification: ${RABBITMQ_QUEUE_NOTIFICATION}
+  routing-keys:
+    internal-notification: ${RABBITMQ_ROUTING-KEY_INTERNAL-NOTIFICATION}
+
