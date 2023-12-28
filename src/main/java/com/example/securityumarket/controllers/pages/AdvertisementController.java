@@ -1,7 +1,7 @@
-package com.example.securityumarket.controllers.pages.main;
+package com.example.securityumarket.controllers.pages;
 
 import com.example.securityumarket.dto.pages.main.request.RequestAddTransportDTO;
-import com.example.securityumarket.services.pages.AddTransportService;
+import com.example.securityumarket.services.pages.AdvertisementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/v1/main/add-transport")
+@RequestMapping("/api/v1/main/advertisements")
 @RequiredArgsConstructor
-@Tag(name = "Add transport", description = "Add transport endpoints")
-public class AddTransportController {
+@Tag(name = "Advertisement", description = "Add transport endpoints")
+public class AdvertisementController {
 
-    private final AddTransportService addTransportService;
+    private final AdvertisementService advertisementService;
 
     @Operation(description = "This endpoint allows users to add transport")
     @ApiResponse(responseCode = "200", description = "The vehicle has been added successfully",
@@ -30,7 +30,7 @@ public class AddTransportController {
             @RequestPart("multipartFiles") MultipartFile[] multipartFiles,
             @Parameter(description = "The details of the transport to be added")
             @ModelAttribute @Valid RequestAddTransportDTO requestAddTransportDTO) {
-        addTransportService.addCar(requestAddTransportDTO, multipartFiles);
+        advertisementService.addAdvertisement(requestAddTransportDTO, multipartFiles);
         return ResponseEntity.ok("The ad with your transport has been successfully added.");
     }
 }

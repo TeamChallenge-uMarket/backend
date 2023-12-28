@@ -1,4 +1,4 @@
-package com.example.securityumarket.controllers.pages.user;
+package com.example.securityumarket.controllers.pages;
 
 import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
 import com.example.securityumarket.dto.entities.user.UserSecurityDetailsDTO;

@@ -1,4 +1,4 @@
-package com.example.securityumarket.controllers.pages.transport;
+package com.example.securityumarket.controllers.pages;
 
 import com.example.securityumarket.dto.pages.transport.TransportDetailsResponse;
 import com.example.securityumarket.dto.transports.TransportDTO;
