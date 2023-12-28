@@ -1,4 +1,4 @@
-package com.example.securityumarket.controllers.pages.main;
+package com.example.securityumarket.controllers.pages;
 
 import com.example.securityumarket.dto.pages.catalog.response.ResponseSearch;
 import com.example.securityumarket.dto.pages.main.response.*;

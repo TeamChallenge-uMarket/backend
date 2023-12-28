@@ -1,4 +1,4 @@
-package com.example.securityumarket.controllers.pages.subscription;
+package com.example.securityumarket.controllers.pages;
 
 
 import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;

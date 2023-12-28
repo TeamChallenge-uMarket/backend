@@ -24,10 +24,6 @@ public class UserSubscriptionService {
         userSubscriptionDAO.save(userSubscription);
     }
 
-    public void saveAndFlush(UserSubscription userSubscription) {
-        userSubscriptionDAO.saveAndFlush(userSubscription);
-    }
-
     public void save(Users user, Subscription subscription, SubscriptionRequest subscriptionRequest) {
         UserSubscription userSubscription = buildUserSubscription(user, subscription, subscriptionRequest);
         userSubscriptionDAO.save(userSubscription);

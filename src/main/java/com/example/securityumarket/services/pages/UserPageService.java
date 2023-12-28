@@ -209,7 +209,7 @@ public class UserPageService {
                                                    Transport.Status status) {
         transport.setStatus(status);
         if (status.equals(Transport.Status.ACTIVE)) {
-            subscriptionPageService.addTransport(transport);
+            subscriptionPageService.notifyUsers(transport);
         }
         transportService.save(transport);
     }

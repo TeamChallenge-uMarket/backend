@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Service
-public class AddTransportService {
+public class AdvertisementService {
 
     private final UserService userService;
 
@@ -43,8 +43,8 @@ public class AddTransportService {
     private final NumberAxlesService numberAxlesService;
 
     @Transactional
-    public void addCar(RequestAddTransportDTO requestAddTransportDTO,
-                       MultipartFile[] multipartFiles) {
+    public void addAdvertisement(RequestAddTransportDTO requestAddTransportDTO,
+                                 MultipartFile[] multipartFiles) {
         Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
         transportService.save(transport);
         transportGalleryService.uploadFiles(

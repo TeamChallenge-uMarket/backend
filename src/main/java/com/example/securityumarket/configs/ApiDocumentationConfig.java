@@ -15,22 +15,14 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class ApiDocumentationConfig {
 
-    @Value("${swagger.value.dev-url}")
-    private String devUrl;
-
-    @Value("${swagger.value.prod-url}")
-    private String prodUrl;
+    @Value("${vps.backend.url}")
+    private String backendUrl;
 
     @Bean
     public OpenAPI uAutoAPI() {
-        Server devServer = new Server();
-        devServer.setUrl(devUrl);
-        devServer.setDescription("Local server URL for development");
-
         Server prodServer = new Server();
-        prodServer.setUrl(prodUrl);
+        prodServer.setUrl(backendUrl);
         prodServer.setDescription("Server URL in Production");
-
 
         Contact contact = new Contact();
         contact.setName("Team challenge");
@@ -48,6 +40,6 @@ public class ApiDocumentationConfig {
                 .termsOfService("https://github.com/TeamChallenge-uMarket/backend")
                 .license(mitLicense);
 
-        return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
+        return new OpenAPI().info(info).servers(List.of(prodServer));
     }
 }

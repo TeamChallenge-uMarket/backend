@@ -1,4 +1,4 @@
-package com.example.securityumarket.controllers.pages.authorization;
+package com.example.securityumarket.controllers.pages;
 
 import com.example.securityumarket.dto.pages.login.PasswordRequest;
 import com.example.securityumarket.services.pages.ResetPasswordPageService;
