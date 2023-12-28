@@ -28,8 +28,8 @@ public class EmailUtil {
     @Value("${mail.code.expiration.time}")
     public long CODE_EXPIRATION_TIME_MS;
 
-    @Value("${mail.base.url}")
-    private String BASE_URL;
+    @Value("${fronted.url}")
+    private String FRONTEND_URL;
 
     @Value("${mail.request.login-page.url}")
     private String REQUEST_LOGIN_MAPPING_URL;
@@ -48,7 +48,7 @@ public class EmailUtil {
         String subject = "Verify account";
         String messageText = String.format(
                 "<div><a href=\"%s%s?email=%s&token=%s\" target=\"_blank\">click link to verify</a></div>",
-                BASE_URL+"/login", REQUEST_LOGIN_MAPPING_URL, email, token
+                FRONTEND_URL +"/login", REQUEST_LOGIN_MAPPING_URL, email, token
         );
 
         MimeMessage mimeMessage = createAndConfigureMimeMessage(email, senderEmail, senderName, subject, messageText);
@@ -62,7 +62,7 @@ public class EmailUtil {
         String subject = "Reset password account";
         String messageText = String.format(
                 "<div><a href=\"%s%s?email=%s&token=%s\" target=\"_blank\">click link to reset password</a></div>",
-                BASE_URL,REQUEST_RECOVER_PASSWORD_MAPPING_URL, email, token
+                FRONTEND_URL,REQUEST_RECOVER_PASSWORD_MAPPING_URL, email, token
         );
 
         MimeMessage mimeMessage = createAndConfigureMimeMessage(email, senderEmail, senderName, subject, messageText);
@@ -95,7 +95,7 @@ public class EmailUtil {
         }
     }
 
-    public void sendNotification(List<Users> users, Transport transport) {
+    public void sendNotification(List<Users> users, Transport transport) {///TODO
         String notificationMessage = buildNotificationMessage(transport);
 
         users.forEach(user -> {
@@ -117,7 +117,7 @@ public class EmailUtil {
     }
 
 
-    private String buildNotificationMessage(Transport transport) {
+    private String buildNotificationMessage(Transport transport) { //TODO
         return String.format("Додано новий транспорт:%s%s \n" +
                         "Посилання на автомобіль http://localhost:8081/api/v1/transport/%s",
                 transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand(),
