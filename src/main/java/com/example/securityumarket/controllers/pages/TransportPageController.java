@@ -58,6 +58,6 @@ public class TransportPageController {
 
     @GetMapping("/user-details")
     public ResponseEntity<TransportPageUserDetailsDto> getUserDetails() {
-        return ResponseEntity.ok(userPageService.getTransportPageUserDetails());
+        return ResponseEntity.ok(transportPageService.getTransportPageUserDetails());
     }
 }

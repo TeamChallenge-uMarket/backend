@@ -83,10 +83,6 @@ public class UserPageService {
         return buildUserDetailsDTOFromUser(user);
     }
 
-    public TransportPageUserDetailsDto getTransportPageUserDetails() {
-        Users user = userService.getAuthenticatedUser();
-        return buildTransportPageUserDetailsDTOFromUser(user);
-    }
 
     @Transactional
     public void updateUserDetails(UserDetailsDTO userDetailsDTO,
@@ -378,17 +374,7 @@ public class UserPageService {
         return dto;
     }
 
-    private TransportPageUserDetailsDto buildTransportPageUserDetailsDTOFromUser(Users user) {
-        TransportPageUserDetailsDto dto = new TransportPageUserDetailsDto();
-        dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
-        dto.setCityId((user.getCity() != null) ? (user.getCity().getId()) : null);
-        dto.setPhone(user.getPhone());
-        dto.setPhotoUrl(user.getPhotoUrl());
-        dto.setJoinDate(user.getCreated());
-        return dto;
-    }
+
 
 
     private void updateUserFields(UserDetailsDTO userDetailsDTO,
