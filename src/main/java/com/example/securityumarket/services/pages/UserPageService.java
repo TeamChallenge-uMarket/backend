@@ -1,5 +1,6 @@
 package com.example.securityumarket.services.pages;
 
+import com.example.securityumarket.dto.entities.user.TransportPageUserDetailsDto;
 import com.example.securityumarket.exception.BadRequestException;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DataNotValidException;
@@ -81,6 +82,7 @@ public class UserPageService {
         Users user = userService.getAuthenticatedUser();
         return buildUserDetailsDTOFromUser(user);
     }
+
 
     @Transactional
     public void updateUserDetails(UserDetailsDTO userDetailsDTO,
@@ -371,6 +373,9 @@ public class UserPageService {
         dto.setPhotoUrl(user.getPhotoUrl());
         return dto;
     }
+
+
+
 
     private void updateUserFields(UserDetailsDTO userDetailsDTO,
                                   MultipartFile photo, Users currentUser) {

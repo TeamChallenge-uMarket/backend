@@ -1,8 +1,11 @@
 package com.example.securityumarket.controllers.pages;
 
+import com.example.securityumarket.dto.entities.user.TransportPageUserDetailsDto;
+import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
 import com.example.securityumarket.dto.pages.transport.TransportDetailsResponse;
 import com.example.securityumarket.dto.transports.TransportDTO;
 import com.example.securityumarket.services.pages.TransportPageService;
+import com.example.securityumarket.services.pages.UserPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransportPageController {
 
     private final TransportPageService transportPageService;
+    private final UserPageService userPageService;
 
     @Operation(
             summary = "Get transport",
@@ -50,5 +54,10 @@ public class TransportPageController {
     public ResponseEntity<TransportDetailsResponse> getTransportDetails(
             @PathVariable("transport-id") Long transportId) {
         return ResponseEntity.ok(transportPageService.getTransportDetails(transportId));
+    }
+
+    @GetMapping("/user-details")
+    public ResponseEntity<TransportPageUserDetailsDto> getUserDetails() {
+        return ResponseEntity.ok(transportPageService.getTransportPageUserDetails());
     }
 }
