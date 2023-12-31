@@ -270,4 +270,10 @@ public class SubscriptionPageService {
                 transport.getCity().getDescription(),
                 transport.getPrice());
     }
+
+    public void removeTransportFromSubscription(Transport transport) {
+        List<TransportSubscription> allByTransport = transportSubscriptionService
+                .findAllByTransport(transport);
+        transportSubscriptionService.deleteAll(allByTransport);
+    }
 }

@@ -212,6 +212,8 @@ public class UserPageService {
         transport.setStatus(status);
         if (status.equals(Transport.Status.ACTIVE)) {
             subscriptionPageService.notifyUsers(transport);
+        } else {
+            subscriptionPageService.removeTransportFromSubscription(transport);
         }
         transportService.save(transport);
     }
