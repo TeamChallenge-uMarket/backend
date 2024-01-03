@@ -16,7 +16,6 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
-    show-sql: true
     open-in-view: false
 
   mail:
@@ -45,10 +44,7 @@ spring:
       max-request-size: 10MB
 
   rabbitmq:
-    host: ${RABBITMQ_HOST}
-    port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
+    addresses: ${RABBITMQ_ADDRESS}
 
 
 server:

@@ -39,6 +39,6 @@ public class TransportViewService {
     }
 
     public Integer countByTransport(Transport transport) {
-        return transportViewDAO.countAllByTransport(transport);
+        return transportViewDAO.countDistinctByTransport(transport);
     }
 }

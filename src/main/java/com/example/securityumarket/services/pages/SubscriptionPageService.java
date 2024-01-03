@@ -11,6 +11,7 @@ import com.example.securityumarket.services.rabbitmq.producer.NotificationProduc
 import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.Predicate;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class SubscriptionPageService {
@@ -48,17 +50,25 @@ public class SubscriptionPageService {
         subscriptionService.save(subscription);
 
         saveTransportSubscription(subscription);
-        saveUserSubscription(subscription, subscriptionRequest);
+
+        Users user = userService.getAuthenticatedUser();
+        saveUserSubscription(user, subscription, subscriptionRequest);
+
+        log.info("Subscription added successfully for User with ID {} and Subscription ID {}.",
+                user.getId(), subscription.getId());
     }
 
     @Transactional
     public void removeSubscription(Long subscriptionId) {
         Subscription subscription = subscriptionService.findById(subscriptionId);
 
-        Users authenticatedUser = userService.getAuthenticatedUser();
-        userSubscriptionService.deleteBySubscriptionAndUser(subscription, authenticatedUser);
+        Users user = userService.getAuthenticatedUser();
+        userSubscriptionService.deleteBySubscriptionAndUser(subscription, user);
 
         deleteIfNotExistsBySubscription(subscription);
+
+        log.info("Subscription removed successfully for User with ID {} and Subscription ID {}.",
+                user.getId(), subscription.getId());
     }
 
     @Transactional
@@ -80,10 +90,10 @@ public class SubscriptionPageService {
     @Transactional
     public void updateSubscription(Long subscriptionId, SubscriptionRequest subscriptionRequest) {
         Subscription subscription = subscriptionService.findById(subscriptionId);
-        Users authenticatedUser = userService.getAuthenticatedUser();
+        Users user = userService.getAuthenticatedUser();
 
         UserSubscription userSubscription = userSubscriptionService
-                .findBySubscriptionAndUser(subscription, authenticatedUser);
+                .findBySubscriptionAndUser(subscription, user);
 
         if (subscriptionRequest.notificationEnabled() != null) {
             userSubscription.setNotificationEnabled(subscriptionRequest.notificationEnabled());
@@ -92,16 +102,19 @@ public class SubscriptionPageService {
             userSubscription.setName(subscriptionRequest.name());
         }
         userSubscriptionService.save(userSubscription);
+
+        log.info("Subscription updated successfully for User with ID {} and Subscription ID {}.",
+                user.getId(), subscription.getId());
     }
 
     @Transactional
     public void updateSubscriptionParameters(Long subscriptionId,
                                              RequestSearch requestSearch) {
         Subscription subscription = subscriptionService.findById(subscriptionId);
-        Users authenticatedUser = userService.getAuthenticatedUser();
+        Users user = userService.getAuthenticatedUser();
 
         UserSubscription userSubscription = userSubscriptionService
-                .findBySubscriptionAndUser(subscription, authenticatedUser);
+                .findBySubscriptionAndUser(subscription, user);
 
         if (requestSearch != null && !subscription.getParameters().equals(requestSearch)) {
             Subscription newSubscription = subscriptionService
@@ -115,6 +128,9 @@ public class SubscriptionPageService {
 
             deleteIfNotExistsBySubscription(subscription);
         }
+
+        log.info("Subscription parameters updated successfully for User with ID {} and Subscription ID {}.",
+                user.getId(), subscription.getId());
     }
 
     public void notifyUsers(Transport transport) {
@@ -174,11 +190,10 @@ public class SubscriptionPageService {
                 .build();
     }
 
-    private void saveUserSubscription(Subscription subscription,
+    private void saveUserSubscription(Users user, Subscription subscription,
                                       SubscriptionRequest subscriptionRequest) {
-        Users authenticatedUser = userService.getAuthenticatedUser();
         userSubscriptionService.save(
-                authenticatedUser, subscription, subscriptionRequest);
+                user, subscription, subscriptionRequest);
     }
 
     private void saveTransportSubscription(Subscription subscription) {
@@ -238,7 +253,11 @@ public class SubscriptionPageService {
                     .findAllBySubscription(subscription);
 
             transportSubscriptionService.deleteAll(transportSubscriptions);
+            log.info("Deleted {} transport subscriptions associated with Subscription ID {}.",
+                    transportSubscriptions.size(), subscription.getId());
+
             subscriptionService.delete(subscription);
+            log.info("Deleted Subscription with ID {}.", subscription.getId());
         }
     }
 
@@ -264,10 +283,20 @@ public class SubscriptionPageService {
     }
 
     private String buildStringTransportDetails(Transport transport) {
-        return String.format("%s %s, %s - %s",
+        return String.format("%s %s %s, %s - %s",
                 transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand(),
                 transport.getTransportModel().getModel(),
+                transport.getYear(),
                 transport.getCity().getDescription(),
                 transport.getPrice());
+    }
+
+    public void removeTransportFromSubscription(Transport transport) {
+        List<TransportSubscription> allByTransport = transportSubscriptionService
+                .findAllByTransport(transport);
+        transportSubscriptionService.deleteAll(allByTransport);
+
+        log.info("Removed {} transport subscriptions associated with Transport ID {}.",
+                allByTransport.size(), transport.getId());
     }
 }

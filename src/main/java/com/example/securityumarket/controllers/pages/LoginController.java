@@ -26,7 +26,7 @@ public class LoginController {
 
     private final LoginPageService loginPageService;
 
-    private final TokenRefreshService tokenRefreshService; //TEST VARIABLE
+    private final TokenRefreshService tokenRefreshService;
 
 
     @Operation(
@@ -64,7 +64,7 @@ public class LoginController {
     }
 
     @Operation(hidden = true)
-    @PostMapping("/refresh")  //TEST METHOD
+    @PostMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refreshToken(
             @RequestBody Map<String, String> refreshRequest) {
         return ResponseEntity.ok(tokenRefreshService.refreshTokens(refreshRequest.get("refreshToken")));

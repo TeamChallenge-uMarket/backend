@@ -8,4 +8,5 @@ public class UnauthenticatedException extends RuntimeException  {
     public UnauthenticatedException() {
         super("The user is not authenticated");
     }
+
 }

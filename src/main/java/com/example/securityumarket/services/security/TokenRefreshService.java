@@ -1,6 +1,5 @@
 package com.example.securityumarket.services.security;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.UnauthenticatedException;
 import com.example.securityumarket.dto.authentication.AuthenticationResponse;
@@ -37,7 +36,7 @@ public class TokenRefreshService {
                 throw new UnauthenticatedException("Invalid refresh token");
             }
         } catch (ExpiredJwtException e) {
-            throw new TokenExpiredException("Refresh token has expired", e.getClaims().getExpiration().toInstant());
+            throw new UnauthenticatedException("Refresh token has expired");
         }
     }
 }

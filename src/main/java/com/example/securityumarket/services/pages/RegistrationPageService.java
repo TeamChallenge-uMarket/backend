@@ -12,11 +12,13 @@ import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.util.EmailUtil;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class RegistrationPageService {
@@ -48,6 +50,8 @@ public class RegistrationPageService {
         userService.save(user);
 
         sendEmailAndSaveUser(user);
+
+        log.info("User with email {} registered successfully.", user.getEmail());
     }
 
     public void resendCode(String email) {
@@ -57,6 +61,8 @@ public class RegistrationPageService {
                     email + "has already activated. You can login.");
         } else {
             sendEmailAndSaveUser(user);
+
+            log.info("Activation code resent to user with email: {}", email);
         }
     }
 
@@ -80,6 +86,8 @@ public class RegistrationPageService {
         if (emailUtil.verifyAccount(user, token)) {
             user.setActive(true);
             userService.save(user);
+
+            log.info("User with email {} activated account successfully.", email);
         } else {
             throw new DataNotValidException
                     ("Token has expired. Please regenerate token and try again");

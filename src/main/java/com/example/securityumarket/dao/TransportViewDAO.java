@@ -18,16 +18,7 @@ public interface TransportViewDAO extends JpaRepository<TransportView, Long> {
 
     Optional<TransportView> findByUserAndTransport(Users users, Transport transport);
 
-    @Query("SELECT cw.transport FROM TransportView cw GROUP BY cw.transport ORDER BY count(cw.transport) DESC LIMIT 54")
-    Optional<List<Transport>> findPopularTransport();
-
-    @Query("SELECT cw.transport FROM TransportView cw WHERE cw.user = :user ORDER BY cw.lastUpdate DESC ")
-    Optional<List<Transport>> findViewedCarsByRegisteredUser(@Param("user") Users user);
-
-    @Query("SELECT cw.transport FROM TransportView cw WHERE cw.transport.transportModel.transportTypeBrand.transportType.id=:id GROUP BY cw.transport ORDER BY count(cw.transport) DESC LIMIT 20")
-    Optional<List<Transport>> findPopularTransportByTypeId(long id);
-
-    Integer countAllByTransport(Transport transport);
+    Integer countDistinctByTransport(Transport transport);
 
     @Modifying
     @Query("UPDATE TransportView tv SET tv.lastUpdate = :localDateTime WHERE tv.id= :id")
