@@ -70,19 +70,15 @@ public class TransportPageService {
     }
 
 
-    public TransportPageUserDetailsDto getTransportPageUserDetails() {
-        Users user = userService.getAuthenticatedUser();
+    public TransportPageUserDetailsDto getTransportPageUserDetails(Long transportId) {
+        Transport transport = transportService.findTransportById(transportId);
+        Users user = transport.getUser();
         return buildTransportPageUserDetailsDTOFromUser(user);
     }
 
     private TransportPageUserDetailsDto buildTransportPageUserDetailsDTOFromUser(Users user) {
         TransportPageUserDetailsDto dto = new TransportPageUserDetailsDto();
-        dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
-        dto.setCityId((user.getCity() != null) ? (user.getCity().getId()) : null);
-        dto.setPhone(user.getPhone());
-        dto.setPhotoUrl(user.getPhotoUrl());
+        userPageService.fillUserDetailsDTO(dto, user);
         dto.setJoinDate(user.getCreated());
         return dto;
     }

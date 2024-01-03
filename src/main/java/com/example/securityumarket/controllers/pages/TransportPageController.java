@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TransportPageController {
 
     private final TransportPageService transportPageService;
-    private final UserPageService userPageService;
 
     @Operation(
             summary = "Get transport",
@@ -56,8 +55,9 @@ public class TransportPageController {
         return ResponseEntity.ok(transportPageService.getTransportDetails(transportId));
     }
 
-    @GetMapping("/user-details")
-    public ResponseEntity<TransportPageUserDetailsDto> getUserDetails() {
-        return ResponseEntity.ok(transportPageService.getTransportPageUserDetails());
+    @GetMapping("/user-details/{transport-id}")
+    public ResponseEntity<TransportPageUserDetailsDto> getUserDetails(
+            @PathVariable("transport-id") Long transportId) {
+        return ResponseEntity.ok(transportPageService.getTransportPageUserDetails(transportId));
     }
 }
