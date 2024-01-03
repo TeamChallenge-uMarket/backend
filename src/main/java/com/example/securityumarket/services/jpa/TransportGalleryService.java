@@ -8,14 +8,16 @@ import com.example.securityumarket.models.TransportGallery;
 import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@Slf4j
 @Getter
+@RequiredArgsConstructor
 @Service
 public class TransportGalleryService {
 
@@ -32,6 +34,8 @@ public class TransportGalleryService {
             String fileUrl = cloudinaryService.getOriginalUrl(fileName);
             TransportGallery transportGallery = buildCarGallery(fileName, fileUrl, transport);
             save(transportGallery);
+
+            log.info("Uploaded file '{}' for transport with ID {}.", fileName, transport.getId());
         }
         if (mainPhoto != null) {
             updateMainPhoto(transport, mainPhoto);
@@ -103,6 +107,7 @@ public class TransportGalleryService {
     }
     private void save(TransportGallery transportGallery) {
         transportGalleryDAO.save(transportGallery);
+        log.info("Saved transport gallery with ID {}.", transportGallery.getId());
     }
 
     public List<TransportGallery> findAllByTransportId(Long id) {
@@ -112,5 +117,6 @@ public class TransportGalleryService {
 
     public void deleteTransportGalleryById(Long id) {
         transportGalleryDAO.deleteTransportGalleryById(id);
+        log.info("Deleted transport gallery with ID {}.", id);
     }
 }

@@ -17,6 +17,7 @@ import com.example.securityumarket.util.converter.transposrt_type.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 import static com.example.securityumarket.dao.specifications.TransportSpecifications.findByUser;
 import static com.example.securityumarket.dao.specifications.TransportSpecifications.hasStatus;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserPageService {
@@ -102,32 +104,45 @@ public class UserPageService {
     public void updateUserDetails(UserDetailsDTO userDetailsDTO,
                                   MultipartFile multipartFile) {
         Users currentUser = userService.getAuthenticatedUser();
+
         updateUserFields(userDetailsDTO, multipartFile, currentUser);
 
         jwtService.generateToken(currentUser);
         String refreshToken = jwtService.generateRefreshToken(currentUser);
         currentUser.setRefreshToken(refreshToken);
+
         userService.save(currentUser);
+        log.info("User details updated successfully for user with ID {}.", currentUser.getId());
     }
 
     @Transactional
     public void deleteGalleryFiles(List<Long> galleryId) {
-        for (Long id : galleryId) {
-            TransportGallery gallery = transportGalleryService.findById(id);
-            cloudinaryService.deleteFile(gallery.getImageName());
-            transportGalleryService.deleteTransportGalleryById(gallery.getId());
-        }
+        galleryId.forEach(id -> {
+                    TransportGallery gallery = transportGalleryService.findById(id);
+                    try {
+                        cloudinaryService.deleteFile(gallery.getImageName());
+                        log.info("Image '{}' deleted from Cloudinary.", gallery.getImageName());
+                    } catch (Exception e) {
+                        log.error("Failed to delete image '{}' from Cloudinary: {}", gallery.getImageName(), e.getMessage(), e);
+                    }
+                    transportGalleryService.deleteTransportGalleryById(gallery.getId());
+                    log.info("Gallery entry with ID {} deleted successfully.", gallery.getId());
+                }
+        );
     }
 
 
     public void deleteUserPhoto() {
         Users authenticatedUser = userService.getAuthenticatedUser();
-        if (!authenticatedUser.getPhotoUrl().equals(defaultPhoto)) {
+
+        if (!authenticatedUser.getPhotoUrl().equals(defaultPhoto)) { //TODO
             String photoUrl = authenticatedUser.getPhotoUrl();
             cloudinaryService.deleteFile(CloudinaryService
                     .getPhotoPublicIdFromUrl(photoUrl));
             authenticatedUser.setPhotoUrl(defaultPhoto);
             userService.save(authenticatedUser);
+
+            log.info("User photo deleted successfully for user with ID {}.", authenticatedUser.getId());
         }
     }
 
@@ -142,6 +157,8 @@ public class UserPageService {
         }
         currentUser.setPassword(passwordEncoder.encode(securityDetailsDTO.getPassword()));
         userService.save(currentUser);
+
+        log.info("User security details updated successfully for user with ID {}.", currentUser.getId());
     }
 
     public List<TransportByStatusResponse> getMyTransportsByStatus(String status) {
@@ -200,6 +217,8 @@ public class UserPageService {
 
         if (updateTransportDetails != null) {
             updateTransportFields(updateTransportDetails, transport);
+            log.info("Updated transport fields with ID {} for User with ID {}.",
+                    transportId, userService.getAuthenticatedUser());
         }
 
         if (multipartFiles != null) {
@@ -210,15 +229,18 @@ public class UserPageService {
                 } else {
                     transportGalleryService.uploadFiles(
                             files, null, transport);
+                    log.info("Uploaded {} files to transport gallery.", multipartFiles.length);
                 }
             });
         }
 
         if (transport.getStatus().equals(Transport.Status.ACTIVE)) {
             transport.setStatus(Transport.Status.PENDING);
+            log.info("Changed transport status to PENDING.");
         }
 
         transportService.save(transport);
+        log.info("Transport with ID {} updated successfully.", transportId);
     }
 
 
@@ -231,6 +253,9 @@ public class UserPageService {
             subscriptionPageService.removeTransportFromSubscription(transport);
         }
         transportService.save(transport);
+
+        log.info("Transport with ID {} updated successfully to status {} for user with ID {}.",
+                transport.getId(), status, userService.getAuthenticatedUser().getId());
     }
 
     private boolean isUserHasAdminOrModeratorRole(Users authenticatedUser) {

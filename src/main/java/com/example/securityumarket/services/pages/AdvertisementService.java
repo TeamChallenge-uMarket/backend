@@ -4,12 +4,14 @@ import com.example.securityumarket.dto.pages.main.request.RequestAddTransportDTO
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.services.jpa.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.function.Function;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AdvertisementService {
@@ -47,8 +49,11 @@ public class AdvertisementService {
                                  MultipartFile[] multipartFiles) {
         Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
         transportService.save(transport);
+
         transportGalleryService.uploadFiles(
                 multipartFiles, requestAddTransportDTO.getMainPhoto(), transport);
+
+        log.info("Transport with ID {} added successfully.", transport.getId());
     }
 
     public Transport buildCarFromRequestAddCarDTO(RequestAddTransportDTO requestAddTransportDTO) {
