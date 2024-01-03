@@ -9,10 +9,11 @@ import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.util.EmailUtil;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ResetPasswordPageService {
@@ -36,6 +37,8 @@ public class ResetPasswordPageService {
         }
         user.setRefreshToken(token);
         userService.save(user);
+
+        log.info("Reset password code sent to user with email: {}", email);
     }
 
     public void verifyAccount(String email, String token) {
@@ -44,11 +47,15 @@ public class ResetPasswordPageService {
             throw new DataNotValidException
                     ("Token has expired. Please regenerate token and try again");
         }
+
+        log.info("User with email {} verified account for password reset.", email);
     }
 
     public void resetPassword(PasswordRequest passwordRequest) {
         Users user = userService.findAppUserByEmail(passwordRequest.getEmail());
         user.setPassword(passwordEncoder.encode(passwordRequest.getPassword()));
         userService.save(user);
+
+        log.info("Password reset successfully for user with email: {}", passwordRequest.getEmail());
     }
 }

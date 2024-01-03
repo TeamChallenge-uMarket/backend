@@ -37,7 +37,7 @@ public class TokenRefreshService {
                 throw new UnauthenticatedException("Invalid refresh token");
             }
         } catch (ExpiredJwtException e) {
-            throw new TokenExpiredException("Refresh token has expired", e.getClaims().getExpiration().toInstant());
+            throw new UnauthenticatedException("Refresh token has expired");
         }
     }
 }

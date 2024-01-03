@@ -43,8 +43,10 @@ public class CloudinaryService {
                 try {
                     Map uploadResult = cloudinary.uploader()
                             .upload(fileObj, Map.of("public_id", fileName));
+                    log.info("File '{}' uploaded successfully.", fileName);
                     return uploadResult.get("public_id").toString();
                 } catch (IOException e) {
+                    log.error("Failed to upload file '{}': {}", fileName, e.getMessage(), e);
                     throw new CloudinaryException();
                 } finally {
                     fileObj.delete();
@@ -84,6 +86,7 @@ public class CloudinaryService {
             if (result.get("result").equals("ok")) {
                 String text = String.format("File with publicId %s has been successfully deleted.",
                         publicId);
+                log.info(text);
                 ResponseEntity.ok(text);
             } else {
                 String text = String.format("Failed to delete file with %s", publicId);

@@ -12,12 +12,13 @@ import com.example.securityumarket.services.jpa.TransportViewService;
 import com.example.securityumarket.services.jpa.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-
-@Service
+@Slf4j
 @RequiredArgsConstructor
+@Service
 public class TransportPageService {
 
     private final TransportService transportService;
@@ -35,14 +36,17 @@ public class TransportPageService {
     public ResponseEntity<? extends TransportDTO> getTransport(Long transportId) {
         if (userService.isUserAuthenticated()) {
             addTransportView(transportId);
+
+            log.info("User with ID {} viewed details for transport with ID {}.",
+                    userService.getAuthenticatedUser().getId(), transportId);
         }
         return userPageService.getTransportDetails(transportId);
     }
 
     public TransportDetailsResponse getTransportDetails(Long transportId) {
         Transport transport = transportService.findTransportById(transportId);
-        Integer countViews = transportViewService.countByTransport(transport);
 
+        Integer countViews = transportViewService.countByTransport(transport);
         boolean isFavorite = isFavoriteTransport(transport);
 
         return TransportDetailsResponse.builder()
@@ -61,13 +65,8 @@ public class TransportPageService {
     }
 
     private boolean isFavoriteTransport(Transport transport) {
-        if (userService.isUserAuthenticated()) {
-            Users authenticatedUser = userService.getAuthenticatedUser();
-            return favoriteTransportService.isFavoriteByUser(authenticatedUser, transport);
-        }
-        else {
-            return false;
-        }
+        return userService.isUserAuthenticated() && favoriteTransportService
+                .isFavoriteByUser(userService.getAuthenticatedUser(), transport);
     }
 
 
@@ -87,8 +86,13 @@ public class TransportPageService {
 
     public UserContactDetailsResponse getUserContactDetails(Long transportId) {
         Transport transport = transportService.findTransportById(transportId);
-        transport.setPhoneViews(transport.getPhoneViews()+1);
+
+        int updatedPhoneViews = transport.getPhoneViews() + 1;
+        transport.setPhoneViews(updatedPhoneViews);
         transportService.save(transport);
+
+        log.info("User with ID {} viewed details for User's contacts with ID {}. Phone views updated to {}.",
+                userService.getAuthenticatedUser().getId(), transportId, updatedPhoneViews);
 
         Users user = transport.getUser();
         return buildUserContactDetailsResponseByUser(user);
