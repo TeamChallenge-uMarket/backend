@@ -2,6 +2,7 @@ package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.dto.entities.user.TransportPageUserDetailsDto;
 import com.example.securityumarket.dto.pages.transport.TransportDetailsResponse;
+import com.example.securityumarket.dto.pages.transport.UserContactDetailsResponse;
 import com.example.securityumarket.dto.transports.TransportDTO;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.Users;
@@ -73,13 +74,30 @@ public class TransportPageService {
     public TransportPageUserDetailsDto getTransportPageUserDetails(Long transportId) {
         Transport transport = transportService.findTransportById(transportId);
         Users user = transport.getUser();
-        return buildTransportPageUserDetailsDTOFromUser(user);
+        return buildTransportPageUserDetailsDTOByUser(user);
     }
 
-    private TransportPageUserDetailsDto buildTransportPageUserDetailsDTOFromUser(Users user) {
-        TransportPageUserDetailsDto dto = new TransportPageUserDetailsDto();
-        userPageService.fillUserDetailsDTO(dto, user);
-        dto.setJoinDate(user.getCreated());
-        return dto;
+    private TransportPageUserDetailsDto buildTransportPageUserDetailsDTOByUser(Users user) {
+        return TransportPageUserDetailsDto.builder()
+                .name(user.getName())
+                .photo(user.getPhotoUrl())
+                .createdAt(user.getCreated())
+                .build();
+    }
+
+    public UserContactDetailsResponse getUserContactDetails(Long transportId) {
+        Transport transport = transportService.findTransportById(transportId);
+        transport.setPhoneViews(transport.getPhoneViews()+1);
+        transportService.save(transport);
+
+        Users user = transport.getUser();
+        return buildUserContactDetailsResponseByUser(user);
+    }
+
+    private UserContactDetailsResponse buildUserContactDetailsResponseByUser(Users user) {
+        return UserContactDetailsResponse.builder()
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .build();
     }
 }

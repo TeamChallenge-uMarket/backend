@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-phone_views-column-to-transports-table
+      author: Oleh
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: phone_views
+                  type: int
+                  defaultValue: '0'
+            tableName: transports

@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@DynamicUpdate@Entity
+@Entity
 @Table(name = "transports")
 public class Transport extends DateAudit{
     @Id
@@ -77,9 +77,14 @@ public class Transport extends DateAudit{
     @Column(name = "load_capacity")
     private Integer loadCapacity;
 
+    @Column(name = "phone_views")
+    @Builder.Default
+    private Integer phoneViews = 0;
+
     @Column(insertable = false, name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
+
 
     public enum Status {
         ACTIVE, PENDING, INACTIVE, DELETED

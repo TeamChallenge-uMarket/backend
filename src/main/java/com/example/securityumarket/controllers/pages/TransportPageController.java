@@ -1,11 +1,10 @@
 package com.example.securityumarket.controllers.pages;
 
 import com.example.securityumarket.dto.entities.user.TransportPageUserDetailsDto;
-import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
 import com.example.securityumarket.dto.pages.transport.TransportDetailsResponse;
+import com.example.securityumarket.dto.pages.transport.UserContactDetailsResponse;
 import com.example.securityumarket.dto.transports.TransportDTO;
 import com.example.securityumarket.services.pages.TransportPageService;
-import com.example.securityumarket.services.pages.UserPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -59,5 +58,11 @@ public class TransportPageController {
     public ResponseEntity<TransportPageUserDetailsDto> getUserDetails(
             @PathVariable("transport-id") Long transportId) {
         return ResponseEntity.ok(transportPageService.getTransportPageUserDetails(transportId));
+    }
+
+    @GetMapping("/user-contacts/{transport-id}")
+    public ResponseEntity<UserContactDetailsResponse> getUserContactDetails(
+            @PathVariable("transport-id") Long transportId) {
+        return ResponseEntity.ok(transportPageService.getUserContactDetails(transportId));
     }
 }

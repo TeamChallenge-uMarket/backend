@@ -101,3 +101,7 @@ databaseChangeLog:
       file: db/changelog/changeset/createtables/create-table-subscriptions.yaml
   - include:
       file: db/changelog/changeset/add-name-and-status_notification-fields-to-subscription_has_users-table.yaml
+  - include:
+      file: db/changelog/changeset/add-phone_views-column-to-transports-table.yaml
+
+
