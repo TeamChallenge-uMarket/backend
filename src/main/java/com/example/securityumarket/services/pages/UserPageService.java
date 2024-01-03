@@ -129,11 +129,6 @@ public class UserPageService {
                     log.info("Gallery entry with ID {} deleted successfully.", gallery.getId());
                 }
         );
-        for (Long id : galleryId) {
-            TransportGallery gallery = transportGalleryService.findById(id);
-            cloudinaryService.deleteFile(gallery.getImageName());
-            transportGalleryService.deleteTransportGalleryById(gallery.getId());
-        }
     }
 
 

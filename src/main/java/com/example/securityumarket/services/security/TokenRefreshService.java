@@ -1,6 +1,5 @@
 package com.example.securityumarket.services.security;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.securityumarket.dao.UsersDAO;
 import com.example.securityumarket.exception.UnauthenticatedException;
 import com.example.securityumarket.dto.authentication.AuthenticationResponse;
