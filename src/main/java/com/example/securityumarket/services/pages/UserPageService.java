@@ -1,6 +1,5 @@
 package com.example.securityumarket.services.pages;
 
-import com.example.securityumarket.dto.entities.user.TransportPageUserDetailsDto;
 import com.example.securityumarket.exception.BadRequestException;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DataNotValidException;
