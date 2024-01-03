@@ -59,7 +59,7 @@ public class TransportConverter {
         return  TransportByStatusResponse.builder()
                 .lastUpdated(transport.getLastUpdate())
                 .addedFavoriteCount(favoriteTransportService.countByTransport(transport))
-                .openedPhoneCount(null)//TODO openedPhoneCount
+                .openedPhoneCount(transport.getPhoneViews())
                 .viewCount(transportViewService.countByTransport(transport))
                 .id(transport.getId())
                 .brand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand())

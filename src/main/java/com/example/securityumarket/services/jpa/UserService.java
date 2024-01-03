@@ -1,6 +1,7 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.UsersDAO;
+import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DuplicateDataException;
 import com.example.securityumarket.exception.UnauthenticatedException;

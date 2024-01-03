@@ -1,6 +1,5 @@
 package com.example.securityumarket.services.pages;
 
-import com.example.securityumarket.dto.entities.user.TransportPageUserDetailsDto;
 import com.example.securityumarket.exception.BadRequestException;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DataNotValidException;
@@ -81,6 +80,21 @@ public class UserPageService {
     public UserDetailsDTO getUserDetails() {
         Users user = userService.getAuthenticatedUser();
         return buildUserDetailsDTOFromUser(user);
+    }
+
+    private UserDetailsDTO buildUserDetailsDTOFromUser(Users user) {
+        UserDetailsDTO dto = new UserDetailsDTO();
+        fillUserDetailsDTO(dto, user);
+        return dto;
+    }
+
+    public void fillUserDetailsDTO(UserDetailsDTO dto, Users user) {
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setCityId((user.getCity() != null) ? user.getCity().getId() : null);
+        dto.setPhone(user.getPhone());
+        dto.setPhotoUrl(user.getPhotoUrl());
     }
 
 
@@ -206,6 +220,7 @@ public class UserPageService {
 
         transportService.save(transport);
     }
+
 
     public void updateStatusByTransportIdAndStatus(Transport transport,
                                                    Transport.Status status) {
@@ -364,19 +379,6 @@ public class UserPageService {
             currentTransport.setWheelConfiguration(wheelConfiguration);
         });
     }
-
-    private UserDetailsDTO buildUserDetailsDTOFromUser(Users user) {
-        UserDetailsDTO dto = new UserDetailsDTO();
-        dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
-        dto.setCityId((user.getCity() != null) ? (user.getCity().getId()) : null);
-        dto.setPhone(user.getPhone());
-        dto.setPhotoUrl(user.getPhotoUrl());
-        return dto;
-    }
-
-
 
 
     private void updateUserFields(UserDetailsDTO userDetailsDTO,
