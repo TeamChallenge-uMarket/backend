@@ -283,9 +283,10 @@ public class SubscriptionPageService {
     }
 
     private String buildStringTransportDetails(Transport transport) {
-        return String.format("%s %s, %s - %s",
+        return String.format("%s %s %s, %s - %s",
                 transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand(),
                 transport.getTransportModel().getModel(),
+                transport.getYear(),
                 transport.getCity().getDescription(),
                 transport.getPrice());
     }
