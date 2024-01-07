@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: change-status-column-defaultValue-to-pending
+      author: Oleh
+      changes:
+        - addDefaultValue:
+            tableName: transports
+            columnName: status
+            defaultValue: 'PENDING'

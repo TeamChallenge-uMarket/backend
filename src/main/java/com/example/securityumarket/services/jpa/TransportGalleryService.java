@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Getter
@@ -43,9 +44,11 @@ public class TransportGalleryService {
     }
 
     private void deactivateMainPhoto(Transport transport) {
-        TransportGallery mainTransportGallery = findMainTransportGalleryByTransportId(transport.getId());
-        mainTransportGallery.setMain(false);
-        save(mainTransportGallery);
+        findMainTransportGalleryByTransportId(transport.getId())
+                .ifPresent(transportGallery -> {
+                    transportGallery.setMain(false);
+                    save(transportGallery);
+                });
     }
 
     private void activateMainPhoto(Transport transport, String mainPhoto) {
@@ -79,9 +82,8 @@ public class TransportGalleryService {
         activateMainPhoto(transport, mainPhoto);
     }
 
-    private TransportGallery findMainTransportGalleryByTransportId(Long id) {
-        return transportGalleryDAO.findMainTransportGalleryByTransportId(id)
-                .orElseThrow(() -> new DataNotFoundException("Gallery"));
+    private Optional<TransportGallery> findMainTransportGalleryByTransportId(Long id) {
+        return transportGalleryDAO.findMainTransportGalleryByTransportId(id);
     }
 
     private TransportGallery buildCarGallery(String fileName, String fileUrl, Transport transport) {

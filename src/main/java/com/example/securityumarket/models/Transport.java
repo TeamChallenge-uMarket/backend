@@ -81,7 +81,7 @@ public class Transport extends DateAudit{
     @Builder.Default
     private Integer phoneViews = 0;
 
-    @Column(insertable = false, name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'ACTIVE'")
+    @Column(insertable = false, name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PENDING'")
     @Enumerated(EnumType.STRING)
     private Status status;
 
