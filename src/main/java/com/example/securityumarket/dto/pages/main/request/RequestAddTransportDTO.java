@@ -1,95 +1,90 @@
 package com.example.securityumarket.dto.pages.main.request;
 
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
 
-
-@Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class RequestAddTransportDTO {
+public record RequestAddTransportDTO(
+        @NotNull(message = "model is required")
+        Long model,
 
-    @NotNull(message = "model is required")
-    private Long model;
+        @NotNull(message = "bodyType is required")
+        Long bodyType,
 
-    @Min(value = 1968, message = "year should not be earlier than 1968")
-    @Max(value = 2023, message = "year should not be later than 2023")
-    @NotNull(message = "year is required")
-    private Integer year;
+        Long importedFrom,
+        @Min(value = 1968, message = "year should not be earlier than 1968")
+        @Max(value = 2024, message = "year should not be later than 2023")
+        @NotNull(message = "year is required")
+        Integer year,
 
-    private Integer mileage;
+        @NotNull(message = "price is required")
+        @Min(value = 0, message = "price should be a non-negative value")
+        BigDecimal price,
 
-    private Long bodyType;
+        Boolean bargain,
 
-    @NotNull(message = "city is required")
-    private Long city;
+        Boolean trade,
 
-    @Pattern(regexp = "(^[A-Z0-9]{17}$)|^$", message = "Invalid vincode")
-    private String vincode;
+        Boolean military,
 
-    @Size(max = 2000, message
-            = "the text should be no more than 2000 characters")
-    private String description;
+        Boolean installmentPayment,
 
-    private Long transmission;
+        Boolean uncleared,
 
-    private Long fuelType;
+        Boolean accidentHistory,
 
-    @Min(value = 0, message = "fuel consumption in city should be a non-negative value")
-    @Max(value = 50, message = "fuel consumption in city should be less then 50l per 100km")
-    private Double consumptionCity;
+        Long condition,
 
-    @Min(value = 0, message = "fuel consumption on highway should be a non-negative value")
-    @Max(value = 50, message = "fuel consumption on highway should be less then 50l per 100km")
-    private Double consumptionHighway;
+        @Pattern(regexp = "(^[A-Z0-9]{17}$)|^$", message = "Invalid vincode")
+        String vincode,
 
-    @Min(value = 0, message = "fuel consumption in mixed should be a non-negative value")
-    @Max(value = 50, message = "fuel consumption in mixed should be less then 50l per 100km")
-    private Double consumptionMixed;
+        @Size(max = 2000, message
+                = "the text should be no more than 2000 characters")
+        String description,
 
-    private Double engineDisplacement;
+        Long color,
 
-    private Integer enginePower;
+        @NotNull(message = "city is required")
+        Long city,
 
-    private Long driveType;
+        @NotNull(message = "Main photo is required")
+        String mainPhoto,
 
-    private Integer numberOfDoors;
+        Long transmission,
 
-    private Integer numberOfSeats;
+        Long fuelType,
 
-    private Long color;
+        @Min(value = 0, message = "fuel consumption in city should be a non-negative value")
+        @Max(value = 50, message = "fuel consumption in city should be less then 50l per 100km")
+        Double fuelConsumptionCity,
 
-    private Boolean accidentHistory;
+        @Min(value = 0, message = "fuel consumption on highway should be a non-negative value")
+        @Max(value = 50, message = "fuel consumption on highway should be less then 50l per 100km")
+        Double fuelConsumptionHighway,
 
-    private Long condition;
+        @Min(value = 0, message = "fuel consumption in mixed should be a non-negative value")
+        @Max(value = 50, message = "fuel consumption in mixed should be less then 50l per 100km")
+        Double fuelConsumptionMixed,
 
-    @NotNull(message = "price is required")
-    @Min(value = 0, message = "price should be a non-negative value")
-    private BigDecimal price;
+        Double engineDisplacement,
 
-    private Boolean bargain;
+        Integer enginePower,
 
-    private Boolean trade;
+        Long driveType,
 
-    private Boolean military;
+        Integer mileage,
 
-    private Boolean installmentPayment;
+        Integer numberOfDoors,
 
-    private Boolean uncleared;
+        Integer numberOfSeats,
 
-    private Integer loadCapacity;
+        Integer loadCapacity,
 
-    private Long producingCountry;
+        Long wheelConfiguration,
 
-    private Long wheelConfiguration;
-
-    private Long numberAxles;
-
-    private String mainPhoto;
+        Long numberAxles
+) {
 }
