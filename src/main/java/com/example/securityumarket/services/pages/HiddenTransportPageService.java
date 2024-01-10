@@ -13,12 +13,14 @@ import com.example.securityumarket.services.jpa.TransportService;
 import com.example.securityumarket.services.jpa.UserService;
 import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @AllArgsConstructor
 @Service
 public class HiddenTransportPageService {
@@ -52,16 +54,23 @@ public class HiddenTransportPageService {
 
     public void hideTransport(Long transportId) {
         Users user = userService.getAuthenticatedUser();
+
         Transport transport = transportService.findTransportById(transportId);
         hiddenAdService.save(user, transport);
+
+        log.info("User with ID {} hid transport with ID {}", user.getId(), transportId);
     }
 
     @Transactional
     public void unhideTransport(Long transportId) {
         Users user = userService.getAuthenticatedUser();
+
         Transport transport = transportService.findTransportById(transportId);
         HiddenAd hiddenAd = hiddenAdService.findByUserAndTransport(user, transport);
+
         hiddenAdService.delete(hiddenAd);
+
+        log.info("User with ID {} unhid transport with ID {}", user.getId(), transportId);
     }
 
     public void hideAllTransport(Long transportId) {
@@ -71,6 +80,8 @@ public class HiddenTransportPageService {
         Users hiddenUser = transport.getUser();
 
         hiddenUserService.save(user, hiddenUser);
+
+        log.info("User with ID {} hid transport with ID {}", user.getId(), transportId);
     }
 
     @Transactional
@@ -82,7 +93,10 @@ public class HiddenTransportPageService {
 
         HiddenUser hiddenUserByUserAndHiddenUser = hiddenUserService.findByUserAndHiddenUser(user, hiddenUser)
                 .orElseThrow(() -> new DataNotFoundException("HiddenUser by user and hiddenUser"));
+
         hiddenUserService.delete(hiddenUserByUserAndHiddenUser);
+
+        log.info("User with ID {} unhid transport with ID {}", user.getId(), transportId);
     }
 
     public void hideAllTransportByUser(Long userId) {
@@ -93,6 +107,8 @@ public class HiddenTransportPageService {
 
         hiddenUserService.findByUserAndHiddenUser(user, hiddenUser)
                 .orElseGet(() -> hiddenUserService.save(user, hiddenUser));
+
+        log.info("User with ID {} hid all transport of user with ID {}", user.getId(), hiddenUser.getId());
     }
 
     public void unhideAllTransportByUserId(Long userId) {
@@ -105,6 +121,8 @@ public class HiddenTransportPageService {
                 .orElseThrow(() -> new DataNotFoundException("HiddenUser by user and hiddenUser"));
 
         hiddenUserService.delete(hiddenUserByUserAndHiddenUser);
+
+        log.info("User with ID {} unhid all transport of user with ID {}", user.getId(), hiddenUser.getId());
     }
 
 
