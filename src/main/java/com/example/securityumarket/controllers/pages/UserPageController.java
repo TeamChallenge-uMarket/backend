@@ -6,6 +6,8 @@ import com.example.securityumarket.dto.transports.TransportDTO;
 import com.example.securityumarket.dto.pages.user.request.RequestUpdateTransportDetails;
 import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
 import com.example.securityumarket.services.pages.UserPageService;
+import com.example.securityumarket.util.EmailUtil;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,8 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/user-page")
 @RequiredArgsConstructor
 public class UserPageController {
-
     private final UserPageService userPageService;
+    private final EmailUtil emailUtil;
 
     @GetMapping
     public ResponseEntity<UserDetailsDTO> getUserDetails() {
@@ -53,8 +56,13 @@ public class UserPageController {
 
     @PutMapping("/security-info")
     public ResponseEntity<String> updateSecurityInformation(
-            @Valid @RequestBody UserSecurityDetailsDTO securityDetailsDTO) {
+            @Valid @RequestBody UserSecurityDetailsDTO securityDetailsDTO,
+            Authentication authentication) throws MessagingException {
         userPageService.updateSecurityInformation(securityDetailsDTO);
+
+        emailUtil.sendNotificationEmail(authentication.getName(), "Your password has been successfully changed.",
+                "Password change detected. If that wasn't you, reset password immediately");
+
         return ResponseEntity.ok("User password changed successfully");
     }
 
