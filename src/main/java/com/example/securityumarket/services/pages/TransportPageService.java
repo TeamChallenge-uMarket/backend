@@ -4,17 +4,19 @@ import com.example.securityumarket.dto.entities.user.TransportPageUserDetailsDto
 import com.example.securityumarket.dto.pages.transport.TransportDetailsResponse;
 import com.example.securityumarket.dto.pages.transport.UserContactDetailsResponse;
 import com.example.securityumarket.dto.transports.TransportDTO;
+import com.example.securityumarket.exception.DataNotFoundException;
+import com.example.securityumarket.models.HiddenUser;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.Users;
-import com.example.securityumarket.services.jpa.FavoriteTransportService;
-import com.example.securityumarket.services.jpa.TransportService;
-import com.example.securityumarket.services.jpa.TransportViewService;
-import com.example.securityumarket.services.jpa.UserService;
+import com.example.securityumarket.services.jpa.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,13 +25,13 @@ public class TransportPageService {
 
     private final TransportService transportService;
 
+    private final UserService userService;
+
     private final TransportViewService transportViewService;
 
     private final FavoriteTransportService favoriteTransportService;
 
     private final UserPageService userPageService;
-
-    private final UserService userService;
 
 
     @Transactional

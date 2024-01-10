@@ -105,3 +105,7 @@ databaseChangeLog:
       file: db/changelog/changeset/add-phone_views-column-to-transports-table.yaml
   - include:
       file: db/changelog/changeset/modify-status-default-value-from-transports.yaml
+  - include:
+      file: db/changelog/changeset/createtables/create-hidden_ads-table.yaml
+  - include:
+      file: db/changelog/changeset/createtables/create-hidden_users-table.yaml

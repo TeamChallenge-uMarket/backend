@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -90,5 +91,9 @@ public class UserService {
 
     private String getAuthenticatedUserEmail() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    public Optional<Users> findById(Long userId) {
+        return usersDAO.findById(userId);
     }
 }

@@ -7,9 +7,7 @@ import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;
 import com.example.securityumarket.dto.pages.catalog.response.ResponseDefaultTransportParameter;
 import com.example.securityumarket.dto.pages.catalog.response.ResponseSearch;
 import com.example.securityumarket.dto.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
-import com.example.securityumarket.models.Transport;
-import com.example.securityumarket.models.TransportType;
-import com.example.securityumarket.models.Users;
+import com.example.securityumarket.models.*;
 import com.example.securityumarket.services.jpa.*;
 import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import static com.example.securityumarket.dao.specifications.TransportSpecifications.*;
 
@@ -59,6 +61,10 @@ public class CatalogPageService {
     private final TransportModelService transportModelService;
 
     private final TransportConverter transportConverter;
+
+    private final HiddenAdService hiddenAdService;
+
+    private final HiddenUserService hiddenUserService;
 
 
     public void addFavorite(long carId) {
@@ -305,8 +311,43 @@ public class CatalogPageService {
                         .and(hasUncleared(requestSearch.getUncleared()))
                         .and(hasBargain(requestSearch.getBargain()))
                         .and(hasInstallmentPayment(requestSearch.getInstallmentPayment()))
+                        .and(hiddenTransport(getHiddenTransportList()))
                         .and(sortBy(
                                 requestSearch.getSortBy(), requestSearch.getOrderBy()))
         );
+    }
+
+    private List<Long> getHiddenTransportList() {
+        if (userService.isUserAuthenticated()) {
+            Users user = userService.getAuthenticatedUser();
+
+            List<Long> hiddenAdTransportList = getTransportListFromHiddenAdByUser(user);
+            List<Long> hiddenUserTransportList = getTransportListFromHiddenUserByUser(user);
+
+            return Stream.concat(hiddenAdTransportList.stream(), hiddenUserTransportList.stream())
+                    .distinct()
+                    .toList();
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    private List<Long> getTransportListFromHiddenAdByUser(Users user) {
+        List<HiddenAd> allByUser = hiddenAdService.findAllByUser(user);
+        return allByUser.stream()
+                .map(hiddenAd -> hiddenAd
+                        .getTransport()
+                        .getId())
+                .toList();
+    }
+
+    private List<Long> getTransportListFromHiddenUserByUser(Users user) {
+        List<HiddenUser> allByUser = hiddenUserService.findAllByUser(user);
+        return allByUser.stream()
+                .flatMap(hiddenUser -> hiddenUser
+                        .getHiddenUser()
+                        .getTransports().stream()
+                        .map(Transport::getId))
+                .toList();
     }
 }

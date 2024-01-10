@@ -58,7 +58,7 @@ public class Users extends DateAudit implements UserDetails {
         OFFLINE
 
     }
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Transport> transports;
 
     @OneToMany(mappedBy = "user")

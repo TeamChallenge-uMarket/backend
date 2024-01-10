@@ -1,5 +1,6 @@
 package com.example.securityumarket.dao.specifications;
 
+import com.example.securityumarket.models.HiddenAd;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.TransportView;
 import com.example.securityumarket.models.Users;
@@ -416,6 +417,7 @@ public class TransportSpecifications {
         };
     }
 
+
     public static Specification<Transport> findByUser(Users user) {
         return (root, query, cb) -> cb.equal(root.get("user"), user);
     }
@@ -436,4 +438,15 @@ public class TransportSpecifications {
             return cb.isTrue(cb.literal(true));
         };
     }
+
+    public static Specification<Transport> hiddenTransport(List<Long> transportId) {
+        return (root, query, cb) -> {
+            if (transportId != null && !transportId.isEmpty()) {
+                return cb.not(root.get("id").in(transportId));
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
+
 }
