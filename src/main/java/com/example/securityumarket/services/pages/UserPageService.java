@@ -1,9 +1,6 @@
 package com.example.securityumarket.services.pages;
 
-import com.example.securityumarket.exception.BadRequestException;
-import com.example.securityumarket.exception.DataNotFoundException;
-import com.example.securityumarket.exception.DataNotValidException;
-import com.example.securityumarket.exception.InsufficientPermissionsException;
+import com.example.securityumarket.exception.*;
 import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
 import com.example.securityumarket.dto.entities.user.UserSecurityDetailsDTO;
 import com.example.securityumarket.dto.pages.user.request.RequestUpdateTransportDetails;
@@ -13,7 +10,9 @@ import com.example.securityumarket.models.*;
 import com.example.securityumarket.services.jpa.*;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.services.storage.CloudinaryService;
+import com.example.securityumarket.util.EmailUtil;
 import com.example.securityumarket.util.converter.transposrt_type.*;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +72,8 @@ public class UserPageService {
     private final ProducingCountryService producingCountryService;
 
     private final WheelConfigurationService wheelConfigurationService;
+
+    private final EmailUtil emailUtil;
 
 
     @Value("${cloudinary.default.not-found-photo}")
@@ -157,6 +158,13 @@ public class UserPageService {
         }
         currentUser.setPassword(passwordEncoder.encode(securityDetailsDTO.getPassword()));
         userService.save(currentUser);
+
+        try {
+            emailUtil.sendNotificationEmail(currentUser.getEmail(), "Your password has been successfully changed.",
+                    "Password change detected. If that wasn't you, reset password immediately");
+        } catch (MessagingException e) {
+            throw new EmailSendingException();
+        }
 
         log.info("User security details updated successfully for user with ID {}.", currentUser.getId());
     }
