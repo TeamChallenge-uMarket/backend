@@ -2,6 +2,7 @@ package com.example.securityumarket.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -76,9 +77,14 @@ public class Transport extends DateAudit{
     @Column(name = "load_capacity")
     private Integer loadCapacity;
 
-    @Column(insertable = false, name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'ACTIVE'")
+    @Column(name = "phone_views")
+    @Builder.Default
+    private Integer phoneViews = 0;
+
+    @Column(insertable = false, name = "status", nullable = false, columnDefinition = "VARCHAR(255) DEFAULT 'PENDING'")
     @Enumerated(EnumType.STRING)
     private Status status;
+
 
     public enum Status {
         ACTIVE, PENDING, INACTIVE, DELETED

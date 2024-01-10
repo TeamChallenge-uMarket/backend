@@ -9,12 +9,14 @@ import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.UserService;
 import com.example.securityumarket.services.security.JwtService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class LoginPageService {
@@ -30,6 +32,8 @@ public class LoginPageService {
     @Transactional
     public AuthenticationResponse login(AuthenticationRequest authenticationRequest) {
         Users user = authenticate(authenticationRequest, false);
+
+        log.info("User with email {} logged in successfully.", authenticationRequest.getEmail());
         return getAuthenticationResponse(user);
     }
 
@@ -38,6 +42,8 @@ public class LoginPageService {
         if (!userService.existsUsersByEmail(oAuth2Request.email())) {
             Users user = buildUserByOAuth2Request(oAuth2Request);
             userService.save(user);
+
+            log.info("New user with email {} created successfully.", oAuth2Request.email());
         }
 
         AuthenticationRequest authenticationRequest = AuthenticationRequest.builder()
@@ -47,6 +53,7 @@ public class LoginPageService {
 
         Users user = authenticate(authenticationRequest, true);
 
+        log.info("User with email {} logged in successfully via OAuth2.", oAuth2Request.email());
         return getAuthenticationResponse(user);
     }
 

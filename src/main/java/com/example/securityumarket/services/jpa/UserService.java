@@ -29,11 +29,12 @@ public class UserService {
 
 
     public Users getAuthenticatedUser() {
-        String email = getAuthenticatedUserEmail();
-        if (email.equals("anonymousUser")) {
+        if (isUserAuthenticated()) {
+            String email = getAuthenticatedUserEmail();
+            return findAppUserByEmail(email);
+        } else {
             throw new UnauthenticatedException();
         }
-        return findAppUserByEmail(email);
     }
 
     public Users findAppUserByEmail(String email) {
@@ -56,8 +57,7 @@ public class UserService {
     }
 
     public boolean isUserAuthenticated() {
-        String authenticatedUserEmail = getAuthenticatedUserEmail();
-        return !authenticatedUserEmail.equals("anonymousUser");
+        return !SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser");
     }
 
     public void isUserEmailUnique(String email) {

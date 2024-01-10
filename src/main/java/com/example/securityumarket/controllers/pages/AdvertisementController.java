@@ -29,7 +29,7 @@ public class AdvertisementController {
             @Parameter(description = "The file which contains the photo of the vehicle")
             @RequestPart("multipartFiles") MultipartFile[] multipartFiles,
             @Parameter(description = "The details of the transport to be added")
-            @ModelAttribute @Valid RequestAddTransportDTO requestAddTransportDTO) {
+            @RequestPart @Valid RequestAddTransportDTO requestAddTransportDTO) {
         advertisementService.addAdvertisement(requestAddTransportDTO, multipartFiles);
         return ResponseEntity.ok("The ad with your transport has been successfully added.");
     }

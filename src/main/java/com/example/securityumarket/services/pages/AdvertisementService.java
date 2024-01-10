@@ -4,15 +4,17 @@ import com.example.securityumarket.dto.pages.main.request.RequestAddTransportDTO
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.services.jpa.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.function.Function;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
-public class AdvertisementService {
+    public class AdvertisementService {
 
     private final UserService userService;
 
@@ -47,54 +49,57 @@ public class AdvertisementService {
                                  MultipartFile[] multipartFiles) {
         Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
         transportService.save(transport);
+
         transportGalleryService.uploadFiles(
-                multipartFiles, requestAddTransportDTO.getMainPhoto(), transport);
+                multipartFiles, requestAddTransportDTO.mainPhoto(), transport);
+
+        log.info("Transport with ID {} added successfully.", transport.getId());
     }
 
     public Transport buildCarFromRequestAddCarDTO(RequestAddTransportDTO requestAddTransportDTO) {
         return Transport.builder()
                 .user(userService.getAuthenticatedUser())
                 .transportModel(getEntityFromRequest(
-                        requestAddTransportDTO.getModel(), transportModelService::findById))
-                .year(requestAddTransportDTO.getYear())
-                .mileage(requestAddTransportDTO.getMileage())
+                        requestAddTransportDTO.model(), transportModelService::findById))
                 .bodyType(getEntityFromRequest(
-                        requestAddTransportDTO.getBodyType(), bodyTypeService::findById))
-                .city(getEntityFromRequest(
-                        requestAddTransportDTO.getCity(), cityService::findById))
-                .vincode(requestAddTransportDTO.getVincode())
-                .description(requestAddTransportDTO.getDescription())
-                .transmission(getEntityFromRequest(
-                        requestAddTransportDTO.getTransmission(), transmissionService::findById))
-                .fuelType(getEntityFromRequest(
-                        requestAddTransportDTO.getFuelType(), fuelTypeService::findById))
-                .fuelConsumptionCity(requestAddTransportDTO.getConsumptionCity())
-                .fuelConsumptionHighway(requestAddTransportDTO.getConsumptionHighway())
-                .fuelConsumptionMixed(requestAddTransportDTO.getConsumptionMixed())
-                .engineDisplacement(requestAddTransportDTO.getEngineDisplacement())
-                .enginePower(requestAddTransportDTO.getEnginePower())
-                .driveType(getEntityFromRequest(
-                        requestAddTransportDTO.getDriveType(), driveTypeService::findById))
-                .numberOfDoors(requestAddTransportDTO.getNumberOfDoors())
-                .numberOfSeats(requestAddTransportDTO.getNumberOfSeats())
-                .transportColor(getEntityFromRequest(
-                        requestAddTransportDTO.getColor(), transportColorService::findById))
+                        requestAddTransportDTO.bodyType(), bodyTypeService::findById))
                 .producingCountry(getEntityFromRequest(
-                        requestAddTransportDTO.getProducingCountry(), producingCountryService::findById))
-                .accidentHistory(requestAddTransportDTO.getAccidentHistory())
+                        requestAddTransportDTO.importedFrom(), producingCountryService::findById))
+                .year(requestAddTransportDTO.year())
+                .price(requestAddTransportDTO.price())
+                .bargain(requestAddTransportDTO.bargain())
+                .trade(requestAddTransportDTO.trade())
+                .military(requestAddTransportDTO.military())
+                .installmentPayment(requestAddTransportDTO.installmentPayment())
+                .uncleared(requestAddTransportDTO.uncleared())
+                .accidentHistory(requestAddTransportDTO.accidentHistory())
                 .transportCondition(getEntityFromRequest(
-                        requestAddTransportDTO.getCondition(), transportConditionService::findById))
-                .price(requestAddTransportDTO.getPrice())
-                .bargain(requestAddTransportDTO.getBargain())
-                .trade(requestAddTransportDTO.getTrade())
-                .military(requestAddTransportDTO.getMilitary())
-                .installmentPayment(requestAddTransportDTO.getInstallmentPayment())
-                .uncleared(requestAddTransportDTO.getUncleared())
-                .loadCapacity(requestAddTransportDTO.getLoadCapacity())
+                        requestAddTransportDTO.condition(), transportConditionService::findById))
+                .vincode(requestAddTransportDTO.vincode())
+                .description(requestAddTransportDTO.description())
+                .transportColor(getEntityFromRequest(
+                        requestAddTransportDTO.color(), transportColorService::findById))
+                .city(getEntityFromRequest(
+                        requestAddTransportDTO.city(), cityService::findById))
+                .transmission(getEntityFromRequest(
+                        requestAddTransportDTO.transmission(), transmissionService::findById))
+                .fuelType(getEntityFromRequest(
+                        requestAddTransportDTO.fuelType(), fuelTypeService::findById))
+                .fuelConsumptionCity(requestAddTransportDTO.fuelConsumptionCity())
+                .fuelConsumptionHighway(requestAddTransportDTO.fuelConsumptionHighway())
+                .fuelConsumptionMixed(requestAddTransportDTO.fuelConsumptionMixed())
+                .engineDisplacement(requestAddTransportDTO.engineDisplacement())
+                .enginePower(requestAddTransportDTO.enginePower())
+                .driveType(getEntityFromRequest(
+                        requestAddTransportDTO.driveType(), driveTypeService::findById))
+                .mileage(requestAddTransportDTO.mileage())
+                .numberOfDoors(requestAddTransportDTO.numberOfDoors())
+                .numberOfSeats(requestAddTransportDTO.numberOfSeats())
+                .loadCapacity(requestAddTransportDTO.loadCapacity())
                 .wheelConfiguration(getEntityFromRequest(
-                        requestAddTransportDTO.getWheelConfiguration(), wheelConfigurationService::findById))
+                        requestAddTransportDTO.wheelConfiguration(), wheelConfigurationService::findById))
                 .numberAxles(getEntityFromRequest(
-                        requestAddTransportDTO.getNumberAxles(), numberAxlesService::findById))
+                        requestAddTransportDTO.numberAxles(), numberAxlesService::findById))
                 .status(Transport.Status.PENDING)
                 .build();
     }

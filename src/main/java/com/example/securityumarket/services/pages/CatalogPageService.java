@@ -13,6 +13,7 @@ import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.*;
 import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +23,9 @@ import java.util.List;
 
 import static com.example.securityumarket.dao.specifications.TransportSpecifications.*;
 
-
-@Service
+@Slf4j
 @RequiredArgsConstructor
+@Service
 public class CatalogPageService {
 
     private final FavoriteTransportService favoriteTransportService;
@@ -61,9 +62,12 @@ public class CatalogPageService {
 
 
     public void addFavorite(long carId) {
-        Users authenticatedUser = userService.getAuthenticatedUser();
+        Users user = userService.getAuthenticatedUser();
         Transport transport = transportService.findTransportById(carId);
-        favoriteTransportService.addFavorite(authenticatedUser, transport);
+        favoriteTransportService.addFavorite(user, transport);
+
+        log.info("Transport with ID {} added to favorites for user with ID {} successfully.",
+                transport.getId(), user.getId());
     }
 
     public List<ResponseSearch> searchTransports(int page, int limit,
@@ -77,6 +81,9 @@ public class CatalogPageService {
         Users user = userService.getAuthenticatedUser();
         Transport transport = transportService.findTransportById(carId);
         favoriteTransportService.deleteFromFavoriteByUserAndTransport(user, transport);
+
+        log.info("Transport with ID {} removed from favorites for user with ID {} successfully.",
+                transport.getId(), user.getId());
     }
 
     public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(
