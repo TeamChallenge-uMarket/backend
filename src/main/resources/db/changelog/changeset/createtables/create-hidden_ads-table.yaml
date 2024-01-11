@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-hidden_ads-table
+      author: Oleh
+      changes:
+        - createTable:
+            tableName: hidden_ads
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_hidden_ads_user
+                    references: users(id)
+              - column:
+                  name: transport_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_hidden_ads_transport
+                    references: transports(id)
+              - column:
+                  name: created
+                  type: TIMESTAMP(6)
+              - column:
+                  name: last_update
+                  type: TIMESTAMP(6)
