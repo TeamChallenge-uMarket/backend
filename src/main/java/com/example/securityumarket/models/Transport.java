@@ -103,6 +103,10 @@ public class Transport extends DateAudit{
     @OneToMany(mappedBy = "transport")
     private List<TransportGallery> transportGalleries;
 
+    @OneToMany(mappedBy = "transport")
+    private List<HiddenAd> hiddenAds;
+
+
     @ManyToOne
     @JoinColumn(name = "model_id")
     private TransportModel transportModel;

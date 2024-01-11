@@ -35,7 +35,7 @@ public class TransportConverter {
         return mapCommonProperties(transport, dto);
     }
 
-    public ResponseSearch convertTransportTransportSearchDTO(Transport transport) {
+    public ResponseSearch convertTransportToResponseSearch(Transport transport) {
         return ResponseSearch.builder()
                 .id(transport.getId())
                 .brand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand())
@@ -126,7 +126,7 @@ public class TransportConverter {
 
     public List<ResponseSearch> convertTransportListToResponseSearchDTO(List<Transport> transports) {
         return transports.stream()
-                .map(this::convertTransportTransportSearchDTO)
+                .map(this::convertTransportToResponseSearch)
                 .collect(Collectors.toList());
     }
 }
