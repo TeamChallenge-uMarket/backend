@@ -19,15 +19,16 @@ public class ChatMessageService {
 
     public ChatMessage save(ChatMessage chatMessage) {
         var chatId = chatRoomService
-                .getChatRoomId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true)
-                .orElseThrow(() -> new DataNotFoundException("Chat room"));
+                .getChatRoomId(chatMessage.getSenderId(), chatMessage.getRecipientId(),
+                        chatMessage.getCarId(), true)
+                .orElseThrow(() -> new DataNotFoundException("Chat room not found"));
         chatMessage.setChatId(chatId);
         chatMessageDAO.save(chatMessage);
         return chatMessage;
     }
 
-    public List<ChatMessage> findChatMessages(Long senderId, Long recipientId) {
-        var chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
+    public List<ChatMessage> findChatMessages(Long senderId, Long recipientId, Long carId) {
+        var chatId = chatRoomService.getChatRoomId(senderId, recipientId, carId, false);
         return chatId.map(chatMessageDAO::findByChatId).orElse(Collections.emptyList());
     }
 }

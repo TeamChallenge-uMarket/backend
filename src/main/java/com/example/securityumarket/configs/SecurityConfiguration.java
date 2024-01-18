@@ -31,8 +31,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(corsConfigurer -> corsConfigurer
-                        .configurationSource(corsConfigurationSource()))
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(matcherRegistry ->
                         matcherRegistry
                                 .requestMatchers(
@@ -41,7 +40,8 @@ public class SecurityConfiguration {
                                         "/api/v1/main/**",
                                         "/api/v1/transport/**",
                                         "/swagger/**",
-                                        "/api/v1/catalog/**")
+                                        "/api/v1/catalog/**",
+                                        "/ws/**")
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )

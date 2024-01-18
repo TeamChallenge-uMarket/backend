@@ -16,14 +16,15 @@ public class ChatRoomService {
     public Optional<String> getChatRoomId(
             Long senderId,
             Long recipientId,
+            Long carId,
             boolean createNewRoomIfNotExists
     ) {
         return chatRoomDAO
-                .findBySenderIdAndRecipientId(senderId, recipientId)
+                .findBySenderIdAndRecipientIdAndCarId(senderId, recipientId, carId)
                 .map(ChatRoom::getChatId)
                 .or(() -> {
                     if (createNewRoomIfNotExists) {
-                        var chatId = createChatId(senderId, recipientId);
+                        var chatId = createChatId(senderId, recipientId, carId);
                         return Optional.of(chatId);
                     }
 
@@ -31,14 +32,15 @@ public class ChatRoomService {
                 });
     }
 
-    private String createChatId(Long senderId, Long recipientId) {
-        var chatId = String.format("%s_%s", senderId, recipientId);
+    private String createChatId(Long senderId, Long recipientId, Long carId) {
+        var chatId = String.format("%s_%s_%s", senderId, recipientId, carId);
 
         ChatRoom senderRecipient = ChatRoom
                 .builder()
                 .chatId(chatId)
                 .senderId(senderId)
                 .recipientId(recipientId)
+                .carId(carId)
                 .build();
         chatRoomDAO.save(senderRecipient);
 
@@ -47,6 +49,7 @@ public class ChatRoomService {
                 .chatId(chatId)
                 .senderId(recipientId)
                 .recipientId(senderId)
+                .carId(carId)
                 .build();
         chatRoomDAO.save(recipientSender);
 

@@ -109,3 +109,7 @@ databaseChangeLog:
       file: db/changelog/changeset/createtables/create-hidden_ads-table.yaml
   - include:
       file: db/changelog/changeset/createtables/create-hidden_users-table.yaml
+  - include:
+      file: db/changelog/changeset/add-car-id-column-to-chat-messages.yaml
+  - include:
+      file: db/changelog/changeset/add-car-id-column-to-chat-rooms-table.yaml

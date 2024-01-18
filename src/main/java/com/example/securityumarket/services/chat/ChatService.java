@@ -42,12 +42,13 @@ public class ChatService {
                         savedMsg.getId(),
                         savedMsg.getSenderId(),
                         savedMsg.getRecipientId(),
+                        savedMsg.getCarId(),
                         savedMsg.getContent()
                 )
         );
     }
 
-    public List<ChatMessage> findChatMessages(Long senderId, Long recipientId) {
-        return chatMessageService.findChatMessages(senderId, recipientId);
+    public List<ChatMessage> findChatMessages(Long senderId, Long recipientId, Long carId) {
+        return chatMessageService.findChatMessages(senderId, recipientId, carId);
     }
 }

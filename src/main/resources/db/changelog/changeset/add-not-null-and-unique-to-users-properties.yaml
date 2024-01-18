@@ -5,18 +5,23 @@ databaseChangeLog:
       changes:
         - addNotNullConstraint:
             columnName: id
+            columnDataType: BIGINT
             tableName: users
         - addNotNullConstraint:
             columnName: name
+            columnDataType: VARCHAR(255)
             tableName: users
         - addNotNullConstraint:
             columnName: email
+            columnDataType: VARCHAR(255)
             tableName: users
         - addNotNullConstraint:
             columnName: password
+            columnDataType: VARCHAR(255)
             tableName: users
         - addUniqueConstraint:
             columnNames: phone
+            columnDataType: VARCHAR(255)
             tableName: users
 #        - addNotNullConstraint:
 #            columnName: refresh_token

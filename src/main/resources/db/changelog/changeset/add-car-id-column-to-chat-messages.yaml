@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-car-id-column-to-chat-messages
+      author: Dmytro
+
+      changes:
+        - addColumn:
+            tableName: chat_messages
+            columns:
+              - column:
+                  name: car_id
+                  type: BIGINT

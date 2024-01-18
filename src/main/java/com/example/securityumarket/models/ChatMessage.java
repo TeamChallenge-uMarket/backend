@@ -26,6 +26,9 @@ public class ChatMessage extends CreatedAtAudit{
     @Column(name = "recipient_id", nullable = false)
     private Long recipientId;
 
+    @Column(name = "car_id", nullable = false)
+    private Long carId;
+
     @Column(name = "content", nullable = false)
     private String content;
 }

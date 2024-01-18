@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-car-id-column-to-chat-rooms
+      author: Dmytro
+
+      changes:
+        - addColumn:
+            tableName: chat_rooms
+            columns:
+              - column:
+                  name: car_id
+                  type: BIGINT

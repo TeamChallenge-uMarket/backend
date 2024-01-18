@@ -7,5 +7,6 @@ public record ChatNotification(
         Long id,
         Long senderId,
         Long recipientId,
+        Long carId,
         String content) {
 }
