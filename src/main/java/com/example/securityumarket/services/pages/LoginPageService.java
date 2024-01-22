@@ -62,10 +62,12 @@ public class LoginPageService {
         Users user = userService.findAppUserByEmail(authenticationRequest.getEmail());
 
         if (isGoogleAuthorization) {
-            if (!user.getEmail().equals(authenticationRequest.getEmail()) ||
-                    !passwordEncoder.matches(authenticationRequest.getPassword(),
-                            user.getGoogleAccountPassword())) {
+            if (!user.getEmail().equals(authenticationRequest.getEmail())) {
                 throw new UnauthenticatedException("Account is not authenticated. Reset your password");
+            }
+            if ((user.getGoogleAccountPassword() == null) || !passwordEncoder.matches(user.getGoogleAccountPassword(), authenticationRequest.getPassword())) {
+                user.setGoogleAccountPassword(passwordEncoder.encode(authenticationRequest.getPassword()));
+                userService.save(user);
             }
         } else {
             try {
