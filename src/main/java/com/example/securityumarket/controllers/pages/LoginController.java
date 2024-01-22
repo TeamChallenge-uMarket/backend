@@ -63,7 +63,6 @@ public class LoginController {
         return ResponseEntity.ok(loginPageService.loginOAuth2(oAuth2Request));
     }
 
-    @Operation(hidden = true)
     @PostMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refreshToken(
             @RequestBody Map<String, String> refreshRequest) {
