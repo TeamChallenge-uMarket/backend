@@ -84,4 +84,7 @@ public class RequestUpdateTransportDetails {
     private Long numberAxles;
 
     private String mainPhoto;
+
+    @Pattern(regexp = "((\\+?38)?\\(?\\d{3}\\)?[\\s.-]?(\\d{7}|\\d{3}[\\s.-]\\d{2}[\\s.-]\\d{2}|\\d{3}-\\d{4}))|^$", message = "Invalid phone format")
+    private String phone;
 }

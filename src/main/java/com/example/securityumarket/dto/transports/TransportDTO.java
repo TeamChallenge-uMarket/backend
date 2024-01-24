@@ -61,5 +61,7 @@ public class TransportDTO {
 
     protected String brand;
 
+    protected String phone;
+
     protected List<TransportGalleryDTO> galleries;
 }

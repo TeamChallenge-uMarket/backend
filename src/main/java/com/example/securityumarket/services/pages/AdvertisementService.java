@@ -110,6 +110,7 @@ public class AdvertisementService {
                 .numberAxles(getEntityFromRequest(
                         requestAddTransportDTO.numberAxles(), numberAxlesService::findById))
                 .status(Transport.Status.ACTIVE)
+                .phone(requestAddTransportDTO.phone())
                 .build();
     }
 

@@ -85,6 +85,9 @@ public record RequestAddTransportDTO(
 
         Long wheelConfiguration,
 
-        Long numberAxles
+        Long numberAxles,
+
+        @NotNull(message = "phone number is required")
+        String phone
 ) {
 }

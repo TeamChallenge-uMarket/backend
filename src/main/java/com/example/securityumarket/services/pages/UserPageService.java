@@ -366,6 +366,10 @@ public class UserPageService {
         updateFieldIfPresent(transportDetailsDTO.getDescription(),
                 currentTransport::setDescription);
 
+        updateFieldIfPresent(transportDetailsDTO.getPhone(), phone -> {
+            String normalizePhoneNumber = normalizePhoneNumber(phone);
+            currentTransport.setPhone(normalizePhoneNumber);
+        });
 
         updateFieldIfPresent(transportDetailsDTO.getBodyType(), bodyType -> {
             bodyTypeService.findById(bodyType);

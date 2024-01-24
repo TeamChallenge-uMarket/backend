@@ -1,6 +1,7 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.UsersDAO;
+import com.example.securityumarket.dto.entities.user.ResponseUserContactDTO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.exception.DuplicateDataException;
 import com.example.securityumarket.exception.UnauthenticatedException;
@@ -95,5 +96,12 @@ public class UserService {
 
     public Optional<Users> findById(Long userId) {
         return usersDAO.findById(userId);
+    }
+
+    public ResponseUserContactDTO getUserContacts(Users users) {
+        return ResponseUserContactDTO.builder()
+                .phone(users.getPhone())
+                .email(users.getEmail())
+                .build();
     }
 }
