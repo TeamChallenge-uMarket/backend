@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-    public class AdvertisementService {
+public class AdvertisementService {
 
     private final UserService userService;
 
@@ -49,23 +49,20 @@ import java.util.function.Function;
 
     private final CloudinaryService cloudinaryService;
 
-
+    //TODO ADD NECESSARY FIELDS
     @Transactional
     public void addAdvertisement(RequestAddTransportDTO requestAddTransportDTO,
                                  MultipartFile[] multipartFiles) {
-        try {
-            Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
-            transportService.save(transport);
+        Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
+        transportService.save(transport);
 
-            subscriptionPageService.notifyUsers(transport);
+        subscriptionPageService.notifyUsers(transport);
 
-            transportGalleryService.uploadFiles(
-                    multipartFiles, requestAddTransportDTO.mainPhoto(), transport);
+        transportGalleryService.uploadFiles(
+                multipartFiles, requestAddTransportDTO.mainPhoto(), transport);
 
-            log.info("Transport with ID {} added successfully.", transport.getId());
-        } catch (Exception e) {
-            //TODO
-        }
+        log.info("Transport with ID {} added successfully.", transport.getId());
+
     }
 
     public Transport buildCarFromRequestAddCarDTO(RequestAddTransportDTO requestAddTransportDTO) {

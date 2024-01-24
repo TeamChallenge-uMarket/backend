@@ -1,6 +1,7 @@
 package com.example.securityumarket.services.security;
 
 import com.example.securityumarket.dao.UsersDAO;
+import com.example.securityumarket.exception.TokenExpiredException;
 import com.example.securityumarket.exception.UnauthenticatedException;
 import com.example.securityumarket.dto.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.Users;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class TokenRefreshService {
 
     private final JwtService jwtService;
+
     private final UsersDAO usersDAO;
 
 
@@ -36,7 +38,7 @@ public class TokenRefreshService {
                 throw new UnauthenticatedException("Invalid refresh token");
             }
         } catch (ExpiredJwtException e) {
-            throw new UnauthenticatedException("Refresh token has expired"); //TODO
+            throw new TokenExpiredException("Refresh token has expired");
         }
     }
 }
