@@ -3,6 +3,7 @@ package com.example.securityumarket.services.pages;
 import com.example.securityumarket.dto.pages.main.request.RequestAddTransportDTO;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.services.jpa.*;
+import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,16 +45,27 @@ import java.util.function.Function;
 
     private final NumberAxlesService numberAxlesService;
 
+    private final SubscriptionPageService subscriptionPageService;
+
+    private final CloudinaryService cloudinaryService;
+
+
     @Transactional
     public void addAdvertisement(RequestAddTransportDTO requestAddTransportDTO,
                                  MultipartFile[] multipartFiles) {
-        Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
-        transportService.save(transport);
+        try {
+            Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
+            transportService.save(transport);
 
-        transportGalleryService.uploadFiles(
-                multipartFiles, requestAddTransportDTO.mainPhoto(), transport);
+            subscriptionPageService.notifyUsers(transport);
 
-        log.info("Transport with ID {} added successfully.", transport.getId());
+            transportGalleryService.uploadFiles(
+                    multipartFiles, requestAddTransportDTO.mainPhoto(), transport);
+
+            log.info("Transport with ID {} added successfully.", transport.getId());
+        } catch (Exception e) {
+            //TODO
+        }
     }
 
     public Transport buildCarFromRequestAddCarDTO(RequestAddTransportDTO requestAddTransportDTO) {
@@ -100,7 +112,7 @@ import java.util.function.Function;
                         requestAddTransportDTO.wheelConfiguration(), wheelConfigurationService::findById))
                 .numberAxles(getEntityFromRequest(
                         requestAddTransportDTO.numberAxles(), numberAxlesService::findById))
-                .status(Transport.Status.PENDING)
+                .status(Transport.Status.ACTIVE)
                 .build();
     }
 

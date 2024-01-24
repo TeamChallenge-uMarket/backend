@@ -255,11 +255,17 @@ public class UserPageService {
     public void updateStatusByTransportIdAndStatus(Transport transport,
                                                    Transport.Status status) {
         transport.setStatus(status);
-        if (status.equals(Transport.Status.ACTIVE)) {
-            subscriptionPageService.notifyUsers(transport);
-        } else {
+        if (!status.equals(Transport.Status.ACTIVE)) {
             subscriptionPageService.removeTransportFromSubscription(transport);
         }
+
+// TODO FOR FUTURE
+//        if (status.equals(Transport.Status.ACTIVE)) {
+//            subscriptionPageService.notifyUsers(transport);
+//        } else {
+//            subscriptionPageService.removeTransportFromSubscription(transport);
+//        }
+
         transportService.save(transport);
 
         log.info("Transport with ID {} updated successfully to status {} for user with ID {}.",
