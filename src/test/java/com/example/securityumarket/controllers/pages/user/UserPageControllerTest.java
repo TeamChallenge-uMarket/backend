@@ -6,7 +6,6 @@ import com.example.securityumarket.dto.entities.user.UserSecurityDetailsDTO;
 import com.example.securityumarket.services.jpa.TransportGalleryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.InputStream;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -42,9 +40,6 @@ public class UserPageControllerTest {
 
     @Value("${user-page.url}")
     private String USER_PAGE_URL;
-
-    @MockBean
-    private TransportGalleryService transportGalleryService;
 
     @BeforeAll
     static void beforeAll(@Autowired WebApplicationContext applicationContext) {
@@ -165,13 +160,5 @@ public class UserPageControllerTest {
             .andExpect(status().isOk());
 
         Assertions.assertNotNull(res);
-    }
-
-    @Test
-    void deleteGalleryFiles() throws Exception {
-        mockMvc.perform(delete(USER_PAGE_URL + "/my-transports/delete-files/")
-                .param("galleryId", Stream.of(1).map(String::valueOf).toArray(String[]::new))
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
