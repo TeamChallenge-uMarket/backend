@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: modify-status-to-active-from-transports
+      author: Oleh
+      changes:
+        - addDefaultValue:
+            tableName: transports
+            columnName: status
+            defaultValue: 'ACTIVE'

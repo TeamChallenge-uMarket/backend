@@ -109,3 +109,7 @@ databaseChangeLog:
       file: db/changelog/changeset/createtables/create-hidden_ads-table.yaml
   - include:
       file: db/changelog/changeset/createtables/create-hidden_users-table.yaml
+  - include:
+      file: db/changelog/changeset/modify-status-to-active-from-transports.yaml
+  - include:
+      file: db/changelog/changeset/add-phone-column-to-transports.yaml

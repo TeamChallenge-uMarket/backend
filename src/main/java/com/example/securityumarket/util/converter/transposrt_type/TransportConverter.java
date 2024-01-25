@@ -31,7 +31,7 @@ public class TransportConverter {
 
 
     public <T extends TransportDTO> T convertTransportToTypeDTO(Transport transport, TransportTypeConversionStrategy strategy) {
-        T dto = strategy.createDTO(transport);
+        T dto = strategy.createDTO(transport); //TODO IF NOT NULL
         return mapCommonProperties(transport, dto);
     }
 
@@ -103,6 +103,7 @@ public class TransportConverter {
         dto.setModel(transport.getTransportModel().getModel());
         dto.setBrand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand());
         dto.setGalleries(buildTransportGalleryDTO(transport));
+        dto.setPhone(transport.getPhone());
         return dto;
     }
 

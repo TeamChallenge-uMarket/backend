@@ -96,14 +96,9 @@ public class TransportPageService {
         log.info("User with ID {} viewed details for User's contacts with ID {}. Phone views updated to {}.",
                 userService.getAuthenticatedUser().getId(), transportId, updatedPhoneViews);
 
-        Users user = transport.getUser();
-        return buildUserContactDetailsResponseByUser(user);
-    }
-
-    private UserContactDetailsResponse buildUserContactDetailsResponseByUser(Users user) {
         return UserContactDetailsResponse.builder()
-                .email(user.getEmail())
-                .phone(user.getPhone())
+                .email(transport.getUser().getEmail())
+                .phone(transport.getPhone())
                 .build();
     }
 }
