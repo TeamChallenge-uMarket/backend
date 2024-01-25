@@ -73,6 +73,13 @@ public class ApplicationExceptionHandler {
         return createErrorResponse(exception.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(TokenExpiredException.class)
+    public Map<String, String> handleTokenExpiredException(TokenExpiredException exception) {
+        log.error("Handling TokenExpiredException", exception);
+        return createErrorResponse(exception.getMessage());
+    }
+
 
     private Map<String, String> createErrorResponse(String errorMessage) {
         Map<String, String> errorMap = new HashMap<>();

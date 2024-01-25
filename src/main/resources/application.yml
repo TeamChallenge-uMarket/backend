@@ -104,4 +104,3 @@ rabbitmq:
     notification: ${RABBITMQ_QUEUE_NOTIFICATION}
   routing-keys:
     internal-notification: ${RABBITMQ_ROUTING-KEY_INTERNAL-NOTIFICATION}
-
