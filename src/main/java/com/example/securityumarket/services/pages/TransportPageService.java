@@ -52,6 +52,7 @@ public class TransportPageService {
         boolean isFavorite = isFavoriteTransport(transport);
 
         return TransportDetailsResponse.builder()
+                .id(transportId)
                 .isFavorite(isFavorite)
                 .countViews(countViews)
                 .created(transport.getCreated())
