@@ -23,32 +23,32 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Catalog page",
         description = "This controller contains the catalog page endpoints, such as: " +
-        "add favorite, remove favorite, searchTransports")
+                "add favorite, remove favorite, searchTransports")
 public class CatalogController {
 
     private final CatalogPageService catalogPageService;
 
     @Operation(description = "This endpoint allows the user to add a vehicle to favorites by its ID")
-    @PutMapping("/favorite-add/{carId}")
+    @PutMapping("/favorite-add/{transportId}")
     @ApiResponse(responseCode = "200",
             description = "The vehicle has been successfully added to favorites")
-    public ResponseEntity<String> addFavorite(
+    public ResponseEntity<Long> addFavorite(
             @Parameter(description = "The ID of the vehicle to be added to favorites")
-            @PathVariable long carId) {
-        catalogPageService.addFavorite(carId);
-        return ResponseEntity.ok("Transport added to favorites");
+            @PathVariable Long transportId) {
+        catalogPageService.addFavorite(transportId);
+        return ResponseEntity.ok(transportId);
     }
 
     @Operation(
             description = "This endpoint allows the user to remove a vehicle from favorites by its ID")
-    @DeleteMapping("/favorite-remove/{carId}")
+    @DeleteMapping("/favorite-remove/{transportId}")
     @ApiResponse(responseCode = "200",
             description = "The vehicle has been successfully deleted from favorites")
-    public ResponseEntity<String> removeFavorite(
+    public ResponseEntity<Long> removeFavorite(
             @Parameter(description = "The ID of the vehicle to be removed from favorites")
-            @PathVariable long carId) {
-        catalogPageService.removeFavorite(carId);
-        return ResponseEntity.ok("Transport removed from favorites");
+            @PathVariable Long transportId) {
+        catalogPageService.removeFavorite(transportId);
+        return ResponseEntity.ok(transportId);
     }
 
     @Operation(

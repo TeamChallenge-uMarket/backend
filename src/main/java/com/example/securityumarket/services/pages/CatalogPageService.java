@@ -67,9 +67,9 @@ public class CatalogPageService {
     private final HiddenUserService hiddenUserService;
 
 
-    public void addFavorite(long carId) {
+    public void addFavorite(Long transportId) {
         Users user = userService.getAuthenticatedUser();
-        Transport transport = transportService.findTransportById(carId);
+        Transport transport = transportService.findTransportById(transportId);
         favoriteTransportService.addFavorite(user, transport);
 
         log.info("Transport with ID {} added to favorites for user with ID {} successfully.",
@@ -83,7 +83,7 @@ public class CatalogPageService {
         return transportConverter.convertTransportListToResponseSearchDTO(transports);
     }
 
-    public void removeFavorite(long carId) {
+    public void removeFavorite(Long carId) {
         Users user = userService.getAuthenticatedUser();
         Transport transport = transportService.findTransportById(carId);
         favoriteTransportService.deleteFromFavoriteByUserAndTransport(user, transport);
