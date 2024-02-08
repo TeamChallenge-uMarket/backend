@@ -29,7 +29,7 @@ public class PasswordRequest {
         if (password == null || confirmPassword == null) {
             return false;
         }
-        return password.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d#?!@$%^&*(){}:;_+|<>/.,'=№`\\-\"\\[\\]]{8,49}")
+        return password.matches("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d#?!@$%^&~*(){}:;_+|<>/.,'=№`\\-\"\\[\\]]{8,49}")
                 && password.equals(confirmPassword);
     }
 
