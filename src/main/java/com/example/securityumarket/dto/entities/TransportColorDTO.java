@@ -10,4 +10,6 @@ public class TransportColorDTO {
     private long transportColorId;
 
     private String transportColor;
+
+    private String hex;
 }

@@ -113,3 +113,5 @@ databaseChangeLog:
       file: db/changelog/changeset/modify-status-to-active-from-transports.yaml
   - include:
       file: db/changelog/changeset/add-phone-column-to-transports.yaml
+  - include:
+      file: db/changelog/changeset/add-hex-column-to-transport_colors.yaml

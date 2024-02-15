@@ -16,4 +16,7 @@ public class TransportColor {
 
     @Column(name = "color")
     private String color;
+
+    @Column(name = "hex")
+    private String hex;
 }

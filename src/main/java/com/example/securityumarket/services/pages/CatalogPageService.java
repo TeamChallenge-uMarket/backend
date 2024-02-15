@@ -17,10 +17,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 import static com.example.securityumarket.dao.specifications.TransportSpecifications.*;
@@ -233,6 +231,7 @@ public class CatalogPageService {
                         TransportColorDTO.builder()
                                 .transportColorId(color.getId())
                                 .transportColor(color.getColor())
+                                .hex(color.getHex())
                                 .build())
                 .toList();
     }
