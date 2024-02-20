@@ -1,6 +1,6 @@
 package com.example.securityumarket.util.converter.transposrt_type;
 
-import com.example.securityumarket.dto.pages.catalog.response.ResponseSearch;
+import com.example.securityumarket.dto.pages.catalog.response.TransportSearchResponse;
 import com.example.securityumarket.dto.entities.TransportGalleryDTO;
 import com.example.securityumarket.dto.transports.TransportDTO;
 import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
@@ -35,8 +35,8 @@ public class TransportConverter {
         return mapCommonProperties(transport, dto);
     }
 
-    public ResponseSearch convertTransportToResponseSearch(Transport transport) {
-        return ResponseSearch.builder()
+    public TransportSearchResponse convertTransportToResponseSearch(Transport transport) {
+        return TransportSearchResponse.builder()
                 .id(transport.getId())
                 .brand(transport.getTransportModel().getTransportTypeBrand().getTransportBrand().getBrand())
                 .model(transport.getTransportModel().getModel())
@@ -125,7 +125,7 @@ public class TransportConverter {
         }
     }
 
-    public List<ResponseSearch> convertTransportListToResponseSearchDTO(List<Transport> transports) {
+    public List<TransportSearchResponse> convertTransportListToResponseSearchDTO(List<Transport> transports) {
         return transports.stream()
                 .map(this::convertTransportToResponseSearch)
                 .collect(Collectors.toList());

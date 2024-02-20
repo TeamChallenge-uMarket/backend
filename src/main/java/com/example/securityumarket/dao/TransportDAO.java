@@ -19,4 +19,5 @@ public interface TransportDAO extends JpaRepository<Transport, Long>, JpaSpecifi
     @Modifying
     @Query("DELETE FROM Transport t WHERE t.status = 'DELETED' AND t.lastUpdate < :lastUpdate")
     void deleteDeletedTransportsOlderThanOneMonth(@Param("lastUpdate") LocalDateTime lastUpdate);
+
 }

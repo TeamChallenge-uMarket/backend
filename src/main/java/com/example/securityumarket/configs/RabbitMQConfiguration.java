@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMQConfig {
+public class RabbitMQConfiguration {
 
     @Value("${rabbitmq.queues.notification}")
     private String notificationQueue;
@@ -21,15 +21,28 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.routing-keys.internal-notification}")
     private String routingInternalNotificationKey;
 
+    @Value("${rabbitmq.queues.filter-parameters}")
+    private String filterParametersQueue;
+
+    @Value("${rabbitmq.routing-keys.internal-filter-parameters}")
+    private String routingInternalFilterParametersKey;
+
+    @Bean
+    public Queue filterParametersQueue() {
+        return new Queue(filterParametersQueue);
+    }
+
+    @Bean
+    public Binding filterParametersBinding() {
+        return BindingBuilder
+                .bind(filterParametersQueue())
+                .to(internalExchange())
+                .with(routingInternalFilterParametersKey);
+    }
 
     @Bean
     public Queue notificationQueue() {
         return new Queue(notificationQueue);
-    }
-
-    @Bean
-    public TopicExchange internalExchange() {
-        return new TopicExchange(internalExchange);
     }
 
     @Bean
@@ -38,6 +51,11 @@ public class RabbitMQConfig {
                 .bind(notificationQueue())
                 .to(internalExchange())
                 .with(routingInternalNotificationKey);
+    }
+
+    @Bean
+    public TopicExchange internalExchange() {
+        return new TopicExchange(internalExchange);
     }
 
     @Bean
@@ -51,4 +69,5 @@ public class RabbitMQConfig {
     public MessageConverter jacksonConverter() {
         return new Jackson2JsonMessageConverter();
     }
+
 }

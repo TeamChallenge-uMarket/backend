@@ -42,8 +42,16 @@ public class TransportService {
         return transportDAO.findAll(specification);
     }
 
+    public List<Transport> findAll() {
+        return transportDAO.findAll();
+    }
+
     public List<Transport> findAll(Specification<Transport> specification, Pageable pageRequest) {
         Page<Transport> transportPage = transportDAO.findAll(specification, pageRequest);
         return transportPage.getContent();
+    }
+
+    public long countByParameters(Specification<Transport> specification) {
+        return transportDAO.count(specification);
     }
 }

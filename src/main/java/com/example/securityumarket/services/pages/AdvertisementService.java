@@ -3,7 +3,6 @@ package com.example.securityumarket.services.pages;
 import com.example.securityumarket.dto.pages.main.request.RequestAddTransportDTO;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.services.jpa.*;
-import com.example.securityumarket.services.storage.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,9 +46,6 @@ public class AdvertisementService {
 
     private final SubscriptionPageService subscriptionPageService;
 
-    private final CloudinaryService cloudinaryService;
-
-    //TODO ADD NECESSARY FIELDS
     @Transactional
     public void addAdvertisement(RequestAddTransportDTO requestAddTransportDTO,
                                  MultipartFile[] multipartFiles) {
