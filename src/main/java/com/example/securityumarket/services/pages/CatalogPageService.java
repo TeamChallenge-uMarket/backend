@@ -55,8 +55,7 @@ public class CatalogPageService {
 
         long total = transportService.countByParameters(getSpecificationParam(requestSearch));
 
-        List<Transport> transports = findTransportByParam(requestSearch,
-                PageRequest.of(page, limit));
+        List<Transport> transports = transportService.findAll(getSpecificationParam(requestSearch), PageRequest.of(page, limit));
 
         List<TransportSearchResponse> transportSearchResponses =
                 transportConverter.convertTransportListToResponseSearchDTO(transports);
@@ -81,36 +80,6 @@ public class CatalogPageService {
 
         return filterParametersResponseService
                 .getFilterParameters(request.getTransportTypeId(), request.getTransportBrandsId());
-    }
-
-//        TransportType transportType = transportTypeService
-//                .findById(requestFilterParam.getTransportTypeId());
-//        List<Long> transportBrandsId = requestFilterParam.getTransportBrandsId();
-//
-//        if (isDefaultTransportType(transportType)) {
-//            return ResponseEntity.ok(buildResponseDefaultTransportParameter(transportType,
-//                    transportBrandsId));
-//        } else if (isLoadBearingVehicleType(transportType)) {
-//            return ResponseEntity.ok(buildResponseLoadBearingVehicleParameter(transportType,
-//                    transportBrandsId));
-//        } else {
-//            throw new DataNotValidException("Request filter param is not valid");
-//        }
-
-
-//    private boolean isDefaultTransportType(TransportType transportType) {
-//        int id = Math.toIntExact(transportType.getId());
-//        return id == 1 || id == 2 || id == 6;
-//    }
-//
-//    private boolean isLoadBearingVehicleType(TransportType transportType) {
-//        int id = Math.toIntExact(transportType.getId());
-//        return id == 3 || id == 4 || id == 5;
-//    }
-
-    public List<Transport> findTransportByParam(RequestSearch requestSearch,
-                                                PageRequest pageRequest) {
-        return transportService.findAll(getSpecificationParam(requestSearch), pageRequest);
     }
 
     public Specification<Transport> getSpecificationParam(RequestSearch requestSearch) {

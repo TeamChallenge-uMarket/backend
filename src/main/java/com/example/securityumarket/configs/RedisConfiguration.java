@@ -10,9 +10,11 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLParameters;
+import javax.net.ssl.SSLSocketFactory;
 import java.time.Duration;
-
-import static org.springframework.data.redis.connection.jedis.JedisClientConfiguration.*;
+import java.util.Optional;
 
 @Configuration
 @EnableCaching
@@ -53,9 +55,4 @@ public class RedisConfiguration {
 
 
 }
-/*
-REDIS_HOSTNAME=redis-11872.c55.eu-central-1-1.ec2.cloud.redislabs.com
-REDIS_PORT=11872
-REDIS_USERNAME=default
-REDIS_PASSWORD=dhwXmkiIMwrxbDApO35pm7fGc8PIg2ia
- */
+

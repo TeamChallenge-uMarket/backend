@@ -46,7 +46,6 @@ spring:
   rabbitmq:
     addresses: ${RABBITMQ_ADDRESS}
 
-
 server:
   port: 8081
 

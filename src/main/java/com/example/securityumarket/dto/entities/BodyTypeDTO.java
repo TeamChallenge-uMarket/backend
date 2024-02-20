@@ -1,11 +1,17 @@
 package com.example.securityumarket.dto.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
 @Builder
-public class BodyTypeDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class BodyTypeDTO implements Serializable {
 
     private long bodyTypeId;
 

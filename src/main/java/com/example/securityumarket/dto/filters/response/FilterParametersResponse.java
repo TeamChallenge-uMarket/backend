@@ -11,14 +11,20 @@ import com.example.securityumarket.dto.entities.TransportColorDTO;
 import com.example.securityumarket.dto.entities.TransportConditionDTO;
 import com.example.securityumarket.dto.entities.TransportModelDTO;
 import com.example.securityumarket.dto.entities.WheelConfigurationDTO;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import org.springframework.data.redis.core.RedisHash;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
-//@RedisHash("FilterParameters")
+@JsonAutoDetect
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Builder
 public class FilterParametersResponse implements Serializable {
 

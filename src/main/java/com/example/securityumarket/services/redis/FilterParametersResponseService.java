@@ -34,6 +34,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Service
@@ -75,14 +76,13 @@ public class FilterParametersResponseService {
         String key = generateKey(transportTypeId);
 
         FilterParametersResponse filterParameters = (FilterParametersResponse) redisTemplate.opsForValue().get(key);
-        if (filterParameters == null) {
-            FilterParametersResponse filterParametersResponse =
-                    buildFilterParametersResponse(transportTypeId, transportBrands);
 
-            redisTemplate.opsForValue().set(key, filterParametersResponse);
-            return filterParametersResponse;
+        if (filterParameters == null) {
+            filterParameters = buildFilterParametersResponse(transportTypeId);
+            redisTemplate.opsForValue().set(key, filterParameters);
         }
 
+        filterParameters.setTransportModelDTOS(getTransportModelDTOS(transportTypeId, transportBrands));
         return filterParameters;
     }
 
@@ -104,11 +104,10 @@ public class FilterParametersResponseService {
     }
 
     private FilterParametersResponse buildFilterParametersResponse(
-            Long transportTypeId, List<Long> transportBrands) {
-        List<Transport> transports = transportService.findAll();
+            Long transportTypeId) {
+        List<Transport> transports = transportService.findAllByTransportTypeId(transportTypeId);
         return FilterParametersResponse.builder()
                 .transportBrandDTOS(getTransportBrandDTOS(transportTypeId))
-                .transportModelDTOS(getTransportModelDTOS(transportTypeId, transportBrands))
                 .bodyTypeDTOS(getBodyTypeDTOS(transportTypeId))
                 .driveTypeDTOS(getDriveTypeDTOS(transportTypeId))
                 .fuelTypeDTOS(getFuelTypeDTOS())
@@ -138,6 +137,7 @@ public class FilterParametersResponseService {
     private Integer getMaximalNumberOfSeats(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getNumberOfSeats)
+                .filter(Objects::nonNull)
                 .max(Comparator.naturalOrder())
                 .orElse(50);
     }
@@ -145,6 +145,7 @@ public class FilterParametersResponseService {
     private Integer getMinimalNumberOfSeats(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getNumberOfSeats)
+                .filter(Objects::nonNull)
                 .min(Comparator.naturalOrder())
                 .orElse(1);
     }
@@ -152,6 +153,7 @@ public class FilterParametersResponseService {
     private Integer getMaximalNumberOfDoors(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getNumberOfDoors)
+                .filter(Objects::nonNull)
                 .max(Comparator.naturalOrder())
                 .orElse(20);
     }
@@ -159,6 +161,7 @@ public class FilterParametersResponseService {
     private Integer getMinimalNumberOfDoors(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getNumberOfDoors)
+                .filter(Objects::nonNull)
                 .min(Comparator.naturalOrder())
                 .orElse(1);
     }
@@ -166,6 +169,7 @@ public class FilterParametersResponseService {
     private Double getMaximalEngineDisplacement(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getEngineDisplacement)
+                .filter(Objects::nonNull)
                 .max(Comparator.naturalOrder())
                 .orElse(50.0);
     }
@@ -173,6 +177,7 @@ public class FilterParametersResponseService {
     private Double getMinimalEngineDisplacement(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getEngineDisplacement)
+                .filter(Objects::nonNull)
                 .min(Comparator.naturalOrder())
                 .orElse(1.0);
     }
@@ -180,6 +185,7 @@ public class FilterParametersResponseService {
     private Integer getMaximalEnginePower(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getEnginePower)
+                .filter(Objects::nonNull)
                 .max(Comparator.naturalOrder())
                 .orElse(2000);
     }
@@ -187,6 +193,7 @@ public class FilterParametersResponseService {
     private Integer getMinimalEnginePower(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getEnginePower)
+                .filter(Objects::nonNull)
                 .min(Comparator.naturalOrder())
                 .orElse(1);
     }
@@ -194,6 +201,7 @@ public class FilterParametersResponseService {
     private Integer getMaximalMileage(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getMileage)
+                .filter(Objects::nonNull)
                 .max(Comparator.naturalOrder())
                 .orElse(999_999);
     }
@@ -201,6 +209,7 @@ public class FilterParametersResponseService {
     private Integer getMinimalMileage(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getMileage)
+                .filter(Objects::nonNull)
                 .min(Comparator.naturalOrder())
                 .orElse(1);
     }
@@ -208,6 +217,7 @@ public class FilterParametersResponseService {
     private Integer getMaximalYear(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getYear)
+                .filter(Objects::nonNull)
                 .max(Comparator.naturalOrder())
                 .orElse(LocalDate.now().getYear());
     }
@@ -215,6 +225,7 @@ public class FilterParametersResponseService {
     private Integer getMinimalYear(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getYear)
+                .filter(Objects::nonNull)
                 .min(Comparator.naturalOrder())
                 .orElse(1970);
     }
@@ -222,6 +233,7 @@ public class FilterParametersResponseService {
     private BigDecimal getMinimalPrice(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getPrice)
+                .filter(Objects::nonNull)
                 .min(Comparator.naturalOrder())
                 .orElse(BigDecimal.ONE);
     }
@@ -229,6 +241,7 @@ public class FilterParametersResponseService {
     private BigDecimal getMaximalPrice(List<Transport> transports) {
         return transports.stream()
                 .map(Transport::getPrice)
+                .filter(Objects::nonNull)
                 .max(Comparator.naturalOrder())
                 .orElse(BigDecimal.ONE);
     }
@@ -331,6 +344,7 @@ public class FilterParametersResponseService {
 
     private List<WheelConfigurationDTO> getWheelConfigurationDTOS() {
         return wheelConfigurationService.findAll().stream()
+                .filter(Objects::nonNull)
                 .map(wheelConfiguration ->
                         WheelConfigurationDTO.builder()
                                 .wheelConfigurationId(wheelConfiguration.getId())
@@ -341,6 +355,7 @@ public class FilterParametersResponseService {
 
     private List<NumberAxlesDTO> getNumberAxlesDTOS() {
         return numberAxlesService.findAll().stream()
+                .filter(Objects::nonNull)
                 .map(numberAxles ->
                         NumberAxlesDTO.builder()
                                 .numberAxlesId(numberAxles.getId())
