@@ -1,10 +1,10 @@
 package com.example.securityumarket.controllers.pages;
 
+import com.example.securityumarket.dto.filters.response.FilterParametersResponse;
 import com.example.securityumarket.dto.pages.catalog.request.RequestFilterParam;
 import com.example.securityumarket.dto.pages.catalog.request.RequestSearch;
-import com.example.securityumarket.dto.pages.catalog.response.ResponseDefaultTransportParameter;
-import com.example.securityumarket.dto.pages.catalog.response.ResponseSearch;
-import com.example.securityumarket.dto.pages.catalog.response.impl.ResponseLoadBearingVehicleParameter;
+import com.example.securityumarket.dto.pages.catalog.response.SearchResponse;
+import com.example.securityumarket.dto.pages.catalog.response.TransportSearchResponse;
 import com.example.securityumarket.services.pages.CatalogPageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -55,9 +55,9 @@ public class CatalogController {
             description = "This endpoint allows to search for vehicles using various filtering queries")
     @ApiResponse(responseCode = "200",
             description = "list of vehicles retrieved successfully",
-            content = @Content(schema = @Schema(implementation = ResponseSearch.class)))
+            content = @Content(schema = @Schema(implementation = TransportSearchResponse.class)))
     @GetMapping("/search/page/{page}/limit/{limit}/")
-    public ResponseEntity<List<ResponseSearch>> searchTransports(
+    public ResponseEntity<SearchResponse> searchTransports(
             @Parameter(description = "The number of the page to be displayed")
             @PathVariable int page,
             @Parameter(description = "The number of the vehicles to be displayed on one page")
@@ -66,16 +66,9 @@ public class CatalogController {
         return ResponseEntity.ok(catalogPageService.searchTransports(page, limit, requestSearch));
     }
 
-    @Operation(
-            description = "This endpoint returns a list of values for a vehicle search filter using different filter queries")
-    @ApiResponse(responseCode = "200", description = "List of parameters retrieved successfully",
-            content = @Content(schema = @Schema(oneOf = {
-                    ResponseDefaultTransportParameter.class,
-                    ResponseLoadBearingVehicleParameter.class
-            })))
     @GetMapping("/get-param")
-    public ResponseEntity<? extends ResponseDefaultTransportParameter> getFilterParameters(
+    public ResponseEntity<FilterParametersResponse> getFilterParameters(
             @ModelAttribute RequestFilterParam requestFilterParam) {
-        return catalogPageService.getFilterParameters(requestFilterParam);
+        return ResponseEntity.ok(catalogPageService.getFilterParameters(requestFilterParam));
     }
 }

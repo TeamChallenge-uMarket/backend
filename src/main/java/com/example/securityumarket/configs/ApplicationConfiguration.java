@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @AllArgsConstructor
-public class ApplicationConfig {
+public class ApplicationConfiguration {
 
     private UsersDAO usersDAO;
 

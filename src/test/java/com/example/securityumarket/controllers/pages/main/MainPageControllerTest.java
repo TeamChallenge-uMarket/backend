@@ -80,12 +80,12 @@ class MainPageControllerTest {
     @ParameterizedTest
     void testGetBrandsByTransportType(Long transportTypeId) throws Exception {
         mockMvc.perform(get(MAIN_URL + "/brands")
-                .param("transportTypeId", String.valueOf(transportTypeId))
-                .contentType(MediaType.APPLICATION_JSON))
-                    .andExpectAll(
-                            status().isOk(),
-                            content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
-                    );
+                        .param("transportTypeId", String.valueOf(transportTypeId))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(
+                        status().isOk(),
+                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+                );
     }
 
     @ValueSource(longs = {7L, 8L, 9L})
@@ -322,15 +322,15 @@ class MainPageControllerTest {
                 );
     }
 
-   @Test
-   void testGetPopularsTransports() throws Exception {
-       mockMvc.perform(get(MAIN_URL + "/popular-transports"))
-               .andExpectAll(
-                       status().isOk(),
-                       content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON),
-                       jsonPath("$", hasSize(greaterThan(0)))
-               );
-   }
+    @Test
+    void testGetPopularsTransports() throws Exception {
+        mockMvc.perform(get(MAIN_URL + "/popular-transports"))
+                .andExpectAll(
+                        status().isOk(),
+                        content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON),
+                        jsonPath("$", hasSize(greaterThan(0)))
+                );
+    }
 
     @Sql(value = {"add_recently_view.sql"})
     @WithUserDetails(value = "praice07@gmail.com", userDetailsServiceBeanName = "userDetailsServiceImpl")

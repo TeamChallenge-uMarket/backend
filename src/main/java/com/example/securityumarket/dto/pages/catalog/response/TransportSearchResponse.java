@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
-public record ResponseSearch(
+public record TransportSearchResponse(
         Long id,
         String brand,
         String model,

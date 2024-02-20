@@ -13,7 +13,7 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
-public class ApiDocumentationConfig {
+public class ApiDocumentationConfiguration {
 
     @Value("${vps.backend.url}")
     private String backendUrl;

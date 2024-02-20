@@ -34,12 +34,12 @@ public class TransportModelService {
                 .orElseThrow(() -> new DataNotFoundException("Models by brand"));
     }
 
-    public List<TransportModel> findAllByTransportTypeAndBrandSpecification(TransportType transportType, List<Long> transportBrands) {
+    public List<TransportModel> findAllByTransportTypeAndBrandSpecification(Long transportTypeId, List<Long> transportBrands) {
         if (transportBrands == null || transportBrands.isEmpty()) {
             return Collections.emptyList();
         }
         return transportModelDAO.findAll(
-                TransportModelSpecifications.hasTransportTypeId(transportType.getId())
+                TransportModelSpecifications.hasTransportTypeId(transportTypeId)
                         .and(TransportModelSpecifications.hasTransportBrandId(transportBrands)));
     }
 }
