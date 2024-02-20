@@ -11,13 +11,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class FilterParametersConsumer {
 
-//    private final RedisService redisService;
-//
-//    @RabbitListener(queues = {"${rabbitmq.queues.filter-parameters}"})
-//    public void consume(UpdateFilterParametersRequest request) {
-//        redisService.updateFilterParameters(request);
-//        log.info(String.format("Filter parameters updated. Filed %s -> new value = %s.",
-//                request.field(), request.value()));
-//    }
+    @RabbitListener(queues = {"${rabbitmq.queues.filter-parameters}"})
+    public void consume(UpdateFilterParametersRequest request) { //TODO: add cunsume when user add or update transport
+        log.info(String.format("Filter parameters updated. Filed %s -> new value = %s.",
+                request.field(), request.value()));
+    }
 
 }
