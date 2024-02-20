@@ -1,11 +1,17 @@
 package com.example.securityumarket.dto.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
 @Builder
-public class WheelConfigurationDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class WheelConfigurationDTO implements Serializable {
 
     private long wheelConfigurationId;
 

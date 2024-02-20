@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.example.securityumarket.dao.specifications.TransportSpecifications.hasTransportTypeId;
+
 
 @RequiredArgsConstructor
 @Service
@@ -42,8 +44,21 @@ public class TransportService {
         return transportDAO.findAll(specification);
     }
 
+    public List<Transport> findAll() {
+        return transportDAO.findAll();
+    }
+
+    public List<Transport> findAllByTransportTypeId(Long transportTypeId) {
+        return transportDAO.findAll(Specification.allOf(hasTransportTypeId(transportTypeId)));
+    }
+
+
     public List<Transport> findAll(Specification<Transport> specification, Pageable pageRequest) {
         Page<Transport> transportPage = transportDAO.findAll(specification, pageRequest);
         return transportPage.getContent();
+    }
+
+    public long countByParameters(Specification<Transport> specification) {
+        return transportDAO.count(specification);
     }
 }

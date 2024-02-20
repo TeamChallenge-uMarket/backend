@@ -46,7 +46,6 @@ spring:
   rabbitmq:
     addresses: ${RABBITMQ_ADDRESS}
 
-
 server:
   port: 8081
 
@@ -102,5 +101,13 @@ rabbitmq:
     internal: ${RABBITMQ_EXCHANGE_INTERNAL}
   queues:
     notification: ${RABBITMQ_QUEUE_NOTIFICATION}
+    filter-parameters: ${RABBITMQ_QUEUE_FILTER-PARAMETERS}
   routing-keys:
     internal-notification: ${RABBITMQ_ROUTING-KEY_INTERNAL-NOTIFICATION}
+    internal-filter-parameters: ${RABBITMQ_ROUTING-KEY_INTERNAL-FILTER-PARAMETERS}
+
+redis:
+  hostname: ${REDIS_HOSTNAME}
+  port: ${REDIS_PORT}
+  username: ${REDIS_USERNAME}
+  password: ${REDIS_PASSWORD}

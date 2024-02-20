@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-hex-column-to-transport_colors
+      author: Oleh
+      changes:
+        - addColumn:
+            columns:
+              - column:
+                  name: hex
+                  type: VARCHAR(7)
+            tableName: transport_colors

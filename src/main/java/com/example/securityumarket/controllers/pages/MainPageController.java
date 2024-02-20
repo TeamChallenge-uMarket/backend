@@ -1,6 +1,6 @@
 package com.example.securityumarket.controllers.pages;
 
-import com.example.securityumarket.dto.pages.catalog.response.ResponseSearch;
+import com.example.securityumarket.dto.pages.catalog.response.TransportSearchResponse;
 import com.example.securityumarket.dto.pages.main.response.*;
 import com.example.securityumarket.services.pages.MainPageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -115,12 +115,12 @@ public class MainPageController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseSearch.class))),
+                    schema = @Schema(implementation = TransportSearchResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
     })
     @GetMapping("/new-transports")
-    public ResponseEntity<List<ResponseSearch>> getNewTransports() {
+    public ResponseEntity<List<TransportSearchResponse>> getNewTransports() {
         return ResponseEntity.ok(mainPageService.getNewTransports());
     }
 
@@ -130,12 +130,12 @@ public class MainPageController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseSearch.class))),
+                    schema = @Schema(implementation = TransportSearchResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found", content = @Content),
     })
     @GetMapping("/popular-transports")
-    public ResponseEntity<List<ResponseSearch>> getPopularsTransports() {
+    public ResponseEntity<List<TransportSearchResponse>> getPopularsTransports() {
         return ResponseEntity.ok(mainPageService.getPopularTransports());
     }
 
@@ -145,14 +145,14 @@ public class MainPageController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseSearch.class))),
+                    schema = @Schema(implementation = TransportSearchResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient Permissions", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
     })
 
     @GetMapping("/recently-viewed")
-    public ResponseEntity<List<ResponseSearch>> getRecentlyViewedTransports() {
+    public ResponseEntity<List<TransportSearchResponse>> getRecentlyViewedTransports() {
         return ResponseEntity.ok(mainPageService.getRecentlyViewedTransports());
     }
 
@@ -162,13 +162,13 @@ public class MainPageController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = ResponseSearch.class))),
+                    schema = @Schema(implementation = TransportSearchResponse.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden - Insufficient Permissions", content = @Content),
             @ApiResponse(responseCode = "404", description = "Not Found - Data Not Found", content = @Content),
     })
     @GetMapping("/favorite-transports")
-    public ResponseEntity<List<ResponseSearch>> getFavorites() {
+    public ResponseEntity<List<TransportSearchResponse>> getFavorites() {
         return ResponseEntity.ok(mainPageService.getFavoriteTransport());
     }
 }

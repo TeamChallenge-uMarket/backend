@@ -2,7 +2,7 @@ package com.example.securityumarket.services.pages;
 
 import com.example.securityumarket.dto.pages.main.response.*;
 import com.example.securityumarket.exception.BadRequestException;
-import com.example.securityumarket.dto.pages.catalog.response.ResponseSearch;
+import com.example.securityumarket.dto.pages.catalog.response.TransportSearchResponse;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.*;
@@ -40,27 +40,27 @@ public class MainPageService {
     private final TransportConverter transportConverter;
 
 
-    private List<ResponseSearch> getResponseTransportDTOList(List<Transport> transports) {
+    private List<TransportSearchResponse> getResponseTransportDTOList(List<Transport> transports) {
         return transportConverter.convertTransportListToResponseSearchDTO(transports);
     }
 
-    public List<ResponseSearch> getNewTransports() {
+    public List<TransportSearchResponse> getNewTransports() {
         List<Transport> newTransports = findNewTransports();
         return getResponseTransportDTOList(newTransports);
     }
 
-    public List<ResponseSearch> getPopularTransports() {
+    public List<TransportSearchResponse> getPopularTransports() {
         List<Transport> popularTransports = findPopularTransport();
         return getResponseTransportDTOList(popularTransports);
     }
 
-    public List<ResponseSearch> getRecentlyViewedTransports() {
+    public List<TransportSearchResponse> getRecentlyViewedTransports() {
         Users user = userService.getAuthenticatedUser();
         List<Transport> viewedCarsByUser = findViewedTransportsByRegisteredUser(user);
         return getResponseTransportDTOList(viewedCarsByUser);
     }
 
-    public List<ResponseSearch> getFavoriteTransport() {
+    public List<TransportSearchResponse> getFavoriteTransport() {
         Users user = userService.getAuthenticatedUser();
         List<Transport> viewedCarsByUser = findFavoriteTransportsByRegisteredUser(user);
         return getResponseTransportDTOList(viewedCarsByUser);
