@@ -40,7 +40,6 @@ public class CatalogPageService {
 
     private final FilterParametersService filterParametersService;
 
-
     public void addFavorite(Long transportId) {
         Users user = userService.getAuthenticatedUser();
         Transport transport = transportService.findTransportById(transportId);
@@ -75,9 +74,7 @@ public class CatalogPageService {
                 transport.getId(), user.getId());
     }
 
-    public FilterParametersResponse getFilterParameters(
-            RequestFilterParam request) {
-
+    public FilterParametersResponse getFilterParameters(RequestFilterParam request) {
         return filterParametersService
                 .getFilterParameters(request.getTransportTypeId(), request.getTransportBrandsId());
     }
@@ -99,7 +96,6 @@ public class CatalogPageService {
                         .and(hasNumberAxlesId(requestSearch.getNumberAxlesId()))
                         .and(hasProducingCountryId(requestSearch.getProducingCountryId()))
                         .and(hasWheelConfigurationId(requestSearch.getWheelConfigurationId()))
-
                         .and(priceFrom(requestSearch.getPriceFrom()))
                         .and(priceTo(requestSearch.getPriceTo()))
                         .and(yearFrom(requestSearch.getYearsFrom()))
