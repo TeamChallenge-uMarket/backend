@@ -4,8 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record UpdateFilterParametersRequest(
-        String key,
-        Object value,
 
-        String field) {
+        Long transportTypeId) {
+
 }
