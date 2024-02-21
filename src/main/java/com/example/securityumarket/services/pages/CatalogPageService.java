@@ -7,7 +7,7 @@ import com.example.securityumarket.dto.pages.catalog.response.SearchResponse;
 import com.example.securityumarket.dto.pages.catalog.response.TransportSearchResponse;
 import com.example.securityumarket.models.*;
 import com.example.securityumarket.services.jpa.*;
-import com.example.securityumarket.services.redis.FilterParametersResponseService;
+import com.example.securityumarket.services.redis.FilterParametersService;
 import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class CatalogPageService {
 
     private final HiddenUserService hiddenUserService;
 
-    private final FilterParametersResponseService filterParametersResponseService;
+    private final FilterParametersService filterParametersService;
 
 
     public void addFavorite(Long transportId) {
@@ -78,7 +78,7 @@ public class CatalogPageService {
     public FilterParametersResponse getFilterParameters(
             RequestFilterParam request) {
 
-        return filterParametersResponseService
+        return filterParametersService
                 .getFilterParameters(request.getTransportTypeId(), request.getTransportBrandsId());
     }
 

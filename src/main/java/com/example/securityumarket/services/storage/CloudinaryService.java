@@ -89,8 +89,7 @@ public class CloudinaryService {
                 log.info(text);
                 ResponseEntity.ok(text);
             } else {
-                String text = String.format("Failed to delete file with %s", publicId);
-                log.error(text);
+                log.error("Failed to delete file with {}", publicId);
                 throw new DataNotFoundException(publicId);
             }
         } catch (Exception e) {

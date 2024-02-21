@@ -8,6 +8,7 @@ import com.example.securityumarket.dto.pages.user.response.TransportByStatusResp
 import com.example.securityumarket.dto.transports.TransportDTO;
 import com.example.securityumarket.models.*;
 import com.example.securityumarket.services.jpa.*;
+import com.example.securityumarket.services.redis.FilterParametersService;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.services.storage.CloudinaryService;
 import com.example.securityumarket.util.EmailUtil;
@@ -74,6 +75,8 @@ public class UserPageService {
     private final WheelConfigurationService wheelConfigurationService;
 
     private final EmailUtil emailUtil;
+
+    private final FilterParametersService filterParametersService;
 
 
     @Value("${cloudinary.default.not-found-photo}")
@@ -198,19 +201,20 @@ public class UserPageService {
     @Transactional
     public void updateTransportStatus(Long transportId, String status) {
         try {
-            Users authenticatedUser = userService.getAuthenticatedUser();
             Transport transportById = transportService.findTransportById(transportId);
             Transport.Status transportStatus = Transport.Status.valueOf(status.toUpperCase());
 
-            if (isUserHasAdminOrModeratorRole(authenticatedUser)) {
-                updateStatusByTransportIdAndStatus(transportById, transportStatus);
-            } else if (transportStatus.equals(Transport.Status.ACTIVE)) {
-                updateStatusByTransportIdAndStatus(transportById, Transport.Status.PENDING);
-            } else if (isUserHasUserRole(authenticatedUser)) {
-                updateStatusByTransportIdAndStatus(transportById, transportStatus);
-            } else {
-                throw new InsufficientPermissionsException("to update the transport status");
-            }
+            updateStatusByTransportIdAndStatus(transportById, transportStatus);
+//            Users authenticatedUser = userService.getAuthenticatedUser();
+//            if (isUserHasAdminOrModeratorRole(authenticatedUser)) { TODO: For future
+//                updateStatusByTransportIdAndStatus(transportById, transportStatus);
+//            } else if (transportStatus.equals(Transport.Status.ACTIVE)) {
+//                updateStatusByTransportIdAndStatus(transportById, Transport.Status.PENDING);
+//            } else if (isUserHasUserRole(authenticatedUser)) {
+//                updateStatusByTransportIdAndStatus(transportById, transportStatus);
+//            } else {
+//                throw new InsufficientPermissionsException("to update the transport status");
+//            }
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Invalid status");
         }
@@ -248,6 +252,9 @@ public class UserPageService {
         }
 
         transportService.save(transport);
+
+        filterParametersService.update(transport);
+
         log.info("Transport with ID {} updated successfully.", transportId);
     }
 

@@ -21,8 +21,8 @@ public class FilterParametersProducer {
     @Value("${rabbitmq.routing-keys.internal-filter-parameters}")
     private String routingKey;
 
-    public void produce(UpdateFilterParametersRequest updateFilterParametersRequest) { //TODO: add params
-        rabbitTemplate.convertAndSend(exchange, routingKey, "Object from params");
+    public void produce(UpdateFilterParametersRequest request) {
+        rabbitTemplate.convertAndSend(exchange, routingKey, request);
     }
 
 }

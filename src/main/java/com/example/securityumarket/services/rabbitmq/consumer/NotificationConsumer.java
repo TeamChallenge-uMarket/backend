@@ -17,7 +17,7 @@ public class NotificationConsumer {
     @RabbitListener(queues = {"${rabbitmq.queues.notification}"})
     public void consume(NotificationRequest notification) {
         emailUtil.sendSubscriptionNotification(notification);
-        log.info(String.format("Email notification sent -> for subscription ID %s, transport ID %s, to the user's ID %s.",
-                notification.subscriptionId(), notification.transportId(), notification.userId()));
+        log.info("Email notification sent -> for subscription ID {}, transport ID {}, to the user's ID {}.",
+                notification.subscriptionId(), notification.transportId(), notification.userId());
     }
 }

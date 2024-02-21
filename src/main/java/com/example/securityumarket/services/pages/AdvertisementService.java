@@ -3,6 +3,7 @@ package com.example.securityumarket.services.pages;
 import com.example.securityumarket.dto.pages.main.request.RequestAddTransportDTO;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.services.jpa.*;
+import com.example.securityumarket.services.redis.FilterParametersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,19 +47,22 @@ public class AdvertisementService {
 
     private final SubscriptionPageService subscriptionPageService;
 
+    private final FilterParametersService filterParametersService;
+
     @Transactional
     public void addAdvertisement(RequestAddTransportDTO requestAddTransportDTO,
                                  MultipartFile[] multipartFiles) {
         Transport transport = buildCarFromRequestAddCarDTO(requestAddTransportDTO);
         transportService.save(transport);
 
-        subscriptionPageService.notifyUsers(transport);
 
         transportGalleryService.uploadFiles(
                 multipartFiles, requestAddTransportDTO.mainPhoto(), transport);
 
-        log.info("Transport with ID {} added successfully.", transport.getId());
+        subscriptionPageService.notifyUsers(transport);
+        filterParametersService.update(transport);
 
+        log.info("Transport with ID {} added successfully.", transport.getId());
     }
 
     public Transport buildCarFromRequestAddCarDTO(RequestAddTransportDTO requestAddTransportDTO) {
@@ -105,7 +109,7 @@ public class AdvertisementService {
                         requestAddTransportDTO.wheelConfiguration(), wheelConfigurationService::findById))
                 .numberAxles(getEntityFromRequest(
                         requestAddTransportDTO.numberAxles(), numberAxlesService::findById))
-                .status(Transport.Status.ACTIVE)
+                .status(Transport.Status.ACTIVE) // TODO: for future set to PENNDING
                 .phone(requestAddTransportDTO.phone())
                 .build();
     }
