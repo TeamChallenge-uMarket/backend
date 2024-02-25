@@ -128,11 +128,8 @@ public class CatalogPageService {
             Users user = userService.getAuthenticatedUser();
 
             List<Long> hiddenAdTransportList = getTransportListFromHiddenAdByUser(user);
-            List<Long> hiddenUserTransportList = getTransportListFromHiddenUserByUser(user);
-
-            return Stream.concat(hiddenAdTransportList.stream(), hiddenUserTransportList.stream())
-                    .distinct()
-                    .toList();
+//            List<Long> hiddenUserTransportList = getTransportListFromHiddenUserByUser(user);
+            return hiddenAdTransportList;
         } else {
             return Collections.emptyList();
         }

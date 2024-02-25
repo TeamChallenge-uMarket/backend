@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_unique_constraint
+      author: Oleh
+      changes:
+        - addUniqueConstraint:
+            constraintName: unique_user_transport
+            columnNames: user_id, transport_id
+            tableName: hidden_ads
+        - addUniqueConstraint:
+            constraintName: unique_user_hidden_user
+            columnNames: user_id, hidden_user_id
+            tableName: hidden_users

@@ -1,6 +1,5 @@
 package com.example.securityumarket.dao.specifications;
 
-import com.example.securityumarket.models.HiddenAd;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.TransportView;
 import com.example.securityumarket.models.Users;
