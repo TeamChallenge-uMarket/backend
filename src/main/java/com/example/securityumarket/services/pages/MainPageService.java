@@ -137,14 +137,24 @@ public class MainPageService {
                 .collect(Collectors.toList());
     }
 
-    public List<ResponseCityDTO> getCities(List<Long> regionId) {
-        return cityService.findAllByRegionId(regionId).stream().map(city ->
+    public List<ResponseCityDTO> getResponseCityDto(List<Long> regionIds) {
+        return regionIds.stream()
+                .map(regionId ->
                         ResponseCityDTO.builder()
+                                .regionId(regionId)
+                                .cities(getCitiesById(regionId))
+                                .build()
+                ).toList();
+    }
+
+    private List<CityDTO> getCitiesById(Long regionId) {
+        return cityService.findAllByRegion(regionId).stream()
+                .map(city ->
+                        CityDTO.builder()
                                 .cityId(city.getId())
                                 .city(city.getDescription())
-                                .region(city.getRegion().getDescription())
-                                .build())
-                .collect(Collectors.toList());
+                                .build()
+                ).toList();
     }
 
     private List<Transport> findNewTransports() {

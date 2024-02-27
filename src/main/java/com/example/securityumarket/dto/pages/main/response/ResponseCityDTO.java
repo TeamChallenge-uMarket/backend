@@ -3,13 +3,15 @@ package com.example.securityumarket.dto.pages.main.response;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Builder
 public class ResponseCityDTO {
 
-    private long cityId;
+    private Long regionId;
 
-    private String city;
+    private List<CityDTO> cities = new ArrayList<>();
 
-    private String region;
 }

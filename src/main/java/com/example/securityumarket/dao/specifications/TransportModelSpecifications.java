@@ -30,4 +30,16 @@ public class TransportModelSpecifications {
             }
         };
     }
+
+    public static Specification<TransportModel> hasTransportBrandId(Long transportBrandId) {
+        return (root, query, cb) -> {
+            if (transportBrandId != null) {
+                Join<Object, Object> transportTypeBrandJoin = root.join("transportTypeBrand");
+                Join<Object, Object> transportBrandJoin = transportTypeBrandJoin.join("transportBrand");
+                return cb.equal(transportBrandJoin.get("id"), transportBrandId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
 }

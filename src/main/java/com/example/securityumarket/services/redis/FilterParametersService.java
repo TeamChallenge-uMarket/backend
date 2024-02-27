@@ -3,6 +3,7 @@ package com.example.securityumarket.services.redis;
 import com.example.securityumarket.dto.entities.BodyTypeDTO;
 import com.example.securityumarket.dto.entities.DriveTypeDTO;
 import com.example.securityumarket.dto.entities.FuelTypeDTO;
+import com.example.securityumarket.dto.entities.ModelDTO;
 import com.example.securityumarket.dto.entities.NumberAxlesDTO;
 import com.example.securityumarket.dto.entities.ProducingCountryDTO;
 import com.example.securityumarket.dto.entities.TransmissionDTO;
@@ -85,7 +86,10 @@ public class FilterParametersService {
             filterParametersProducer.produce(new UpdateFilterParametersRequest(transportTypeId));
         }
 
-        filterParameters.setTransportModelDTOS(getTransportModelDTOS(transportTypeId, transportBrands));
+        if(transportBrands != null) {
+            filterParameters.setTransportModelDTOS(getTransportModelDTOS(transportTypeId, transportBrands));
+        }
+
         return filterParameters;
     }
 
@@ -356,15 +360,22 @@ public class FilterParametersService {
 
     private List<TransportModelDTO> getTransportModelDTOS(
             Long transportTypeId, List<Long> transportBrands) {
+
+        return transportBrands.stream()
+                .map(transportBrand -> TransportModelDTO.builder()
+                        .brandId(transportBrand)
+                        .models(getTransportModels(transportTypeId, transportBrand))
+                        .build()
+                ).toList();
+    }
+
+    private List<ModelDTO> getTransportModels(Long transportTypeId, Long transportBrand) {
         return transportModelService
-                .findAllByTransportTypeAndBrandSpecification(transportTypeId, transportBrands)
-                .stream()
-                .map(model ->
-                        TransportModelDTO.builder()
-                                .transportModelId(model.getId())
-                                .model(model.getModel())
-                                .build())
-                .toList();
+                .findAllByTransportTypeAndBrandSpecification(transportTypeId, transportBrand).stream()
+                .map(transportModel -> ModelDTO.builder()
+                        .modelId(transportModel.getId())
+                        .model(transportModel.getModel())
+                        .build()).toList();
     }
 
     private List<BodyTypeDTO> getBodyTypeDTOS(Long transportTypeId) {
