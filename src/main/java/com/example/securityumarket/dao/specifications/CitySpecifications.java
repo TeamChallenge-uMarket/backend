@@ -17,4 +17,15 @@ public class CitySpecifications {
             }
         };
     }
+
+    public static Specification<City> hasRegionId(Long regionId) {
+        return (root, query, cb) -> {
+            if (regionId != null) {
+                Join<Object, Object> cityJoin = root.join("region");
+                return cb.equal(cityJoin.get("id"), regionId);
+            } else {
+                return cb.isTrue(cb.literal(true));
+            }
+        };
+    }
 }

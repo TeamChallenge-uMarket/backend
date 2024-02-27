@@ -23,4 +23,8 @@ public class CityService {
     public List<City> findAllByRegionId(List<Long> regionId) {
         return cityDAO.findAll(CitySpecifications.hasRegionId(regionId));
     }
+
+    public List<City> findAllByRegion(Long regionId) {
+        return cityDAO.findAll(CitySpecifications.hasRegionId(regionId));
+    }
 }

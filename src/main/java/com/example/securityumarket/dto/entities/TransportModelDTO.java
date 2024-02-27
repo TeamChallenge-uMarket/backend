@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @Builder
@@ -13,7 +14,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class TransportModelDTO implements Serializable {
 
-    private long transportModelId;
+    private Long brandId;
 
-    private String model;
+    private List<ModelDTO> models;
+
 }

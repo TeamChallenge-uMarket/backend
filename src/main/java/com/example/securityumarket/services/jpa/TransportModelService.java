@@ -3,7 +3,6 @@ package com.example.securityumarket.services.jpa;
 import com.example.securityumarket.dao.TransportModelDAO;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.TransportModel;
-import com.example.securityumarket.models.TransportType;
 import com.example.securityumarket.dao.specifications.TransportModelSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,12 +33,13 @@ public class TransportModelService {
                 .orElseThrow(() -> new DataNotFoundException("Models by brand"));
     }
 
-    public List<TransportModel> findAllByTransportTypeAndBrandSpecification(Long transportTypeId, List<Long> transportBrands) {
-        if (transportBrands == null || transportBrands.isEmpty()) {
+    public List<TransportModel> findAllByTransportTypeAndBrandSpecification(Long transportTypeId, Long transportBrand) {
+        if (transportBrand == null) {
             return Collections.emptyList();
         }
         return transportModelDAO.findAll(
                 TransportModelSpecifications.hasTransportTypeId(transportTypeId)
-                        .and(TransportModelSpecifications.hasTransportBrandId(transportBrands)));
+                        .and(TransportModelSpecifications.hasTransportBrandId(transportBrand)));
     }
+
 }
