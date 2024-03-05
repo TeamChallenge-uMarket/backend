@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -123,13 +124,22 @@ public class CatalogPageService {
         );
     }
 
+    private List<Long> getHiddenUserList() {
+        if (userService.isUserAuthenticated()) {
+            Users user = userService.getAuthenticatedUser();
+            return getTransportListFromHiddenUserByUser(user);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
     private List<Long> getHiddenTransportList() {
         if (userService.isUserAuthenticated()) {
             Users user = userService.getAuthenticatedUser();
 
-            List<Long> hiddenAdTransportList = getTransportListFromHiddenAdByUser(user);
-//            List<Long> hiddenUserTransportList = getTransportListFromHiddenUserByUser(user);
-            return hiddenAdTransportList;
+            List<Long> result = new ArrayList<>(getTransportListFromHiddenAdByUser(user));
+            result.addAll(getTransportListFromHiddenUserByUser(user));
+            return result;
         } else {
             return Collections.emptyList();
         }
