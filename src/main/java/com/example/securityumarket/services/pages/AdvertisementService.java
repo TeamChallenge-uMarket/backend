@@ -121,4 +121,10 @@ public class AdvertisementService {
         }
         return null;
     }
+
+    public void addAdvertisement(MultipartFile[] multipartFiles) {
+        transportGalleryService.uploadFiles(multipartFiles);
+
+        log.info("Transport photo added successfully.");
+    }
 }

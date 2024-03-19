@@ -33,4 +33,11 @@ public class AdvertisementController {
         advertisementService.addAdvertisement(requestAddTransportDTO, multipartFiles);
         return ResponseEntity.ok("The ad with your transport has been successfully added.");
     }
+
+    @PostMapping("/test")
+    public ResponseEntity<String> addTestPhoto(
+            @RequestPart("multipartFiles") MultipartFile[] multipartFiles) {
+        advertisementService.addAdvertisement(multipartFiles);
+        return ResponseEntity.ok("The ad with your transport has been successfully added.");
+    }
 }

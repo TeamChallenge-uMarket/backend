@@ -121,4 +121,11 @@ public class TransportGalleryService {
         transportGalleryDAO.deleteTransportGalleryById(id);
         log.info("Deleted transport gallery with ID {}.", id);
     }
+
+    public void uploadFiles(MultipartFile[] multipartFiles) {
+        for (MultipartFile file : multipartFiles) {
+            String fileName = cloudinaryService.uploadFileWithPublicRead(file);
+            log.info("Uploaded file '{}'.", fileName);
+        }
+    }
 }
