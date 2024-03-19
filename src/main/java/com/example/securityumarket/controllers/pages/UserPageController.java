@@ -58,9 +58,9 @@ public class UserPageController {
         return ResponseEntity.ok("User password changed successfully");
     }
 
-    @GetMapping("/my-transports/{status}")
+    @GetMapping("/my-transports")
     public ResponseEntity<List<TransportByStatusResponse>> getMyTransports(
-            @PathVariable String status) {
+            @RequestParam String status) {
         return ResponseEntity.ok(userPageService.getMyTransportsByStatus(status));
     }
 
