@@ -1,9 +1,9 @@
 package com.example.securityumarket.services.jpa;
 
 import com.example.securityumarket.dao.TransportModelDAO;
+import com.example.securityumarket.dao.specifications.TransportModelSpecifications;
 import com.example.securityumarket.exception.DataNotFoundException;
 import com.example.securityumarket.models.TransportModel;
-import com.example.securityumarket.dao.specifications.TransportModelSpecifications;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

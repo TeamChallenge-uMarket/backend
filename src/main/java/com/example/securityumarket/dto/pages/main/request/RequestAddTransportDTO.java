@@ -1,8 +1,11 @@
 package com.example.securityumarket.dto.pages.main.request;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import org.springframework.validation.annotation.Validated;
 
 import java.math.BigDecimal;
 

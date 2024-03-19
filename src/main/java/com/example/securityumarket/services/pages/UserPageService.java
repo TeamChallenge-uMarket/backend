@@ -1,18 +1,49 @@
 package com.example.securityumarket.services.pages;
 
-import com.example.securityumarket.exception.*;
 import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
 import com.example.securityumarket.dto.entities.user.UserSecurityDetailsDTO;
 import com.example.securityumarket.dto.pages.user.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.dto.pages.user.response.CountTransportByStatusResponse;
 import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
 import com.example.securityumarket.dto.transports.TransportDTO;
-import com.example.securityumarket.models.*;
-import com.example.securityumarket.services.jpa.*;
+import com.example.securityumarket.exception.BadRequestException;
+import com.example.securityumarket.exception.DataNotFoundException;
+import com.example.securityumarket.exception.DataNotValidException;
+import com.example.securityumarket.exception.EmailSendingException;
+import com.example.securityumarket.models.City;
+import com.example.securityumarket.models.DriveType;
+import com.example.securityumarket.models.FuelType;
+import com.example.securityumarket.models.NumberAxles;
+import com.example.securityumarket.models.ProducingCountry;
+import com.example.securityumarket.models.Transmission;
+import com.example.securityumarket.models.Transport;
+import com.example.securityumarket.models.TransportColor;
+import com.example.securityumarket.models.TransportCondition;
+import com.example.securityumarket.models.TransportGallery;
+import com.example.securityumarket.models.Users;
+import com.example.securityumarket.models.WheelConfiguration;
+import com.example.securityumarket.services.jpa.BodyTypeService;
+import com.example.securityumarket.services.jpa.CityService;
+import com.example.securityumarket.services.jpa.DriveTypeService;
+import com.example.securityumarket.services.jpa.FuelTypeService;
+import com.example.securityumarket.services.jpa.NumberAxlesService;
+import com.example.securityumarket.services.jpa.ProducingCountryService;
+import com.example.securityumarket.services.jpa.TransmissionService;
+import com.example.securityumarket.services.jpa.TransportColorService;
+import com.example.securityumarket.services.jpa.TransportConditionService;
+import com.example.securityumarket.services.jpa.TransportGalleryService;
+import com.example.securityumarket.services.jpa.TransportService;
+import com.example.securityumarket.services.jpa.UserService;
+import com.example.securityumarket.services.jpa.WheelConfigurationService;
 import com.example.securityumarket.services.redis.FilterParametersService;
 import com.example.securityumarket.services.security.JwtService;
 import com.example.securityumarket.services.storage.CloudinaryService;
 import com.example.securityumarket.util.EmailUtil;
-import com.example.securityumarket.util.converter.transposrt_type.*;
+import com.example.securityumarket.util.converter.transposrt_type.LoadBearingVehicleConversionStrategy;
+import com.example.securityumarket.util.converter.transposrt_type.MotorizedFourWheeledVehicleConversionStrategy;
+import com.example.securityumarket.util.converter.transposrt_type.MotorizedVehicleConversionStrategy;
+import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
+import com.example.securityumarket.util.converter.transposrt_type.WaterVehicleConversionStrategy;
 import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -26,6 +57,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -188,6 +220,11 @@ public class UserPageService {
     public List<Transport> findTransportByUserAndStatus(Users user, Transport.Status status) {
         Specification<Transport> specification = findByUser(user)
                 .and(hasStatus(status));
+        return transportService.findAll(specification);
+    }
+
+    public List<Transport> findTransportByUser(Users user) {
+        Specification<Transport> specification = findByUser(user);
         return transportService.findAll(specification);
     }
 
@@ -487,4 +524,14 @@ public class UserPageService {
         return cloudinaryService.getOriginalUrl(fileName);
     }
 
+    public List<CountTransportByStatusResponse> countTransports() {
+        Users authenticatedUser = userService.getAuthenticatedUser();
+        List<Transport> transportByUserAndStatus = findTransportByUser(authenticatedUser);
+        Map<Transport.Status, Long> countByStatus = transportByUserAndStatus.stream()
+                .collect(Collectors.groupingBy(Transport::getStatus, Collectors.counting()));
+
+        return countByStatus.entrySet().stream()
+                .map(entry -> new CountTransportByStatusResponse(entry.getKey(), entry.getValue()))
+                .toList();
+    }
 }

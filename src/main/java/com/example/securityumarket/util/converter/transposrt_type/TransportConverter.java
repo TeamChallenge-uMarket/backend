@@ -1,9 +1,9 @@
 package com.example.securityumarket.util.converter.transposrt_type;
 
-import com.example.securityumarket.dto.pages.catalog.response.TransportSearchResponse;
 import com.example.securityumarket.dto.entities.TransportGalleryDTO;
-import com.example.securityumarket.dto.transports.TransportDTO;
+import com.example.securityumarket.dto.pages.catalog.response.TransportSearchResponse;
 import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
+import com.example.securityumarket.dto.transports.TransportDTO;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.TransportGallery;
 import com.example.securityumarket.models.Users;

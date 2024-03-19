@@ -2,14 +2,12 @@ package com.example.securityumarket.controllers.pages;
 
 import com.example.securityumarket.dto.entities.user.UserDetailsDTO;
 import com.example.securityumarket.dto.entities.user.UserSecurityDetailsDTO;
-import com.example.securityumarket.dto.transports.TransportDTO;
 import com.example.securityumarket.dto.pages.user.request.RequestUpdateTransportDetails;
+import com.example.securityumarket.dto.pages.user.response.CountTransportByStatusResponse;
 import com.example.securityumarket.dto.pages.user.response.TransportByStatusResponse;
+import com.example.securityumarket.dto.transports.TransportDTO;
 import com.example.securityumarket.services.pages.UserPageService;
 import jakarta.validation.Valid;
-
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user-page")
@@ -62,6 +62,11 @@ public class UserPageController {
     public ResponseEntity<List<TransportByStatusResponse>> getMyTransports(
             @PathVariable String status) {
         return ResponseEntity.ok(userPageService.getMyTransportsByStatus(status));
+    }
+
+    @GetMapping("/my-transports/count")
+    public ResponseEntity<List<CountTransportByStatusResponse>> getMyTransports() {
+        return ResponseEntity.ok(userPageService.countTransports());
     }
 
     @PutMapping("/my-transports/{transport-id}/update-status/{status}")

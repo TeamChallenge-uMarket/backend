@@ -1,11 +1,22 @@
 package com.example.securityumarket.services.pages;
 
-import com.example.securityumarket.dto.pages.main.response.*;
-import com.example.securityumarket.exception.BadRequestException;
 import com.example.securityumarket.dto.pages.catalog.response.TransportSearchResponse;
+import com.example.securityumarket.dto.pages.main.response.CityDTO;
+import com.example.securityumarket.dto.pages.main.response.ResponseBrandDTO;
+import com.example.securityumarket.dto.pages.main.response.ResponseCityDTO;
+import com.example.securityumarket.dto.pages.main.response.ResponseModelDTO;
+import com.example.securityumarket.dto.pages.main.response.ResponseRegionDTO;
+import com.example.securityumarket.dto.pages.main.response.ResponseTypeDTO;
+import com.example.securityumarket.exception.BadRequestException;
 import com.example.securityumarket.models.Transport;
 import com.example.securityumarket.models.Users;
-import com.example.securityumarket.services.jpa.*;
+import com.example.securityumarket.services.jpa.CityService;
+import com.example.securityumarket.services.jpa.RegionService;
+import com.example.securityumarket.services.jpa.TransportBrandService;
+import com.example.securityumarket.services.jpa.TransportModelService;
+import com.example.securityumarket.services.jpa.TransportService;
+import com.example.securityumarket.services.jpa.TransportTypeService;
+import com.example.securityumarket.services.jpa.UserService;
 import com.example.securityumarket.util.converter.transposrt_type.TransportConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -16,8 +27,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.securityumarket.dao.specifications.TransportSpecifications.*;
-import static com.example.securityumarket.dto.pages.catalog.request.RequestSearch.*;
+import static com.example.securityumarket.dao.specifications.TransportSpecifications.findFavoriteTransportsByUser;
+import static com.example.securityumarket.dao.specifications.TransportSpecifications.findTransportViewedByUser;
+import static com.example.securityumarket.dao.specifications.TransportSpecifications.isActive;
+import static com.example.securityumarket.dao.specifications.TransportSpecifications.sortBy;
+import static com.example.securityumarket.dao.specifications.TransportSpecifications.sortPopularTransports;
+import static com.example.securityumarket.dto.pages.catalog.request.RequestSearch.OrderBy;
+import static com.example.securityumarket.dto.pages.catalog.request.RequestSearch.SortBy;
 
 @Service
 @RequiredArgsConstructor

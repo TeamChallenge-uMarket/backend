@@ -1,6 +1,7 @@
 package com.example.securityumarket.dto.transports;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 @EqualsAndHashCode(callSuper = true)

@@ -1,6 +1,14 @@
 package com.example.securityumarket.dto.pages.catalog.response;
 
-import com.example.securityumarket.dto.entities.*;
+import com.example.securityumarket.dto.entities.BodyTypeDTO;
+import com.example.securityumarket.dto.entities.DriveTypeDTO;
+import com.example.securityumarket.dto.entities.FuelTypeDTO;
+import com.example.securityumarket.dto.entities.ProducingCountryDTO;
+import com.example.securityumarket.dto.entities.TransmissionDTO;
+import com.example.securityumarket.dto.entities.TransportBrandDTO;
+import com.example.securityumarket.dto.entities.TransportColorDTO;
+import com.example.securityumarket.dto.entities.TransportConditionDTO;
+import com.example.securityumarket.dto.entities.TransportModelDTO;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 

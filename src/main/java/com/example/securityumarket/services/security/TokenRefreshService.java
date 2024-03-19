@@ -1,9 +1,9 @@
 package com.example.securityumarket.services.security;
 
 import com.example.securityumarket.dao.UsersDAO;
+import com.example.securityumarket.dto.authentication.AuthenticationResponse;
 import com.example.securityumarket.exception.TokenExpiredException;
 import com.example.securityumarket.exception.UnauthenticatedException;
-import com.example.securityumarket.dto.authentication.AuthenticationResponse;
 import com.example.securityumarket.models.Users;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;

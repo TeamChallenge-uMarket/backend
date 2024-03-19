@@ -1,8 +1,8 @@
 package com.example.securityumarket.dto.pages.catalog.response.impl;
 
-import com.example.securityumarket.dto.pages.catalog.response.ResponseDefaultTransportParameter;
 import com.example.securityumarket.dto.entities.NumberAxlesDTO;
 import com.example.securityumarket.dto.entities.WheelConfigurationDTO;
+import com.example.securityumarket.dto.pages.catalog.response.ResponseDefaultTransportParameter;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;

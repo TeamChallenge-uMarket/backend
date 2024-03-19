@@ -6,10 +6,10 @@ import com.example.securityumarket.models.Users;
 import com.example.securityumarket.services.jpa.ChatMessageService;
 import com.example.securityumarket.services.jpa.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 @Service
 @RequiredArgsConstructor
