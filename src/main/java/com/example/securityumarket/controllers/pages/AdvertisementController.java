@@ -29,11 +29,9 @@ public class AdvertisementController {
             content = @Content(mediaType = "application/json"))
     @PostMapping("")
     public ResponseEntity<String> addTransportCloudinary(
-            @Parameter(description = "The file which contains the photo of the vehicle")
-            @RequestPart("multipartFiles") MultipartFile[] multipartFiles,
-            @Parameter(description = "The details of the transport to be added")
+//            @RequestPart("multipartFiles") MultipartFile[] multipartFiles,
             @RequestPart @Valid RequestAddTransportDTO requestAddTransportDTO) {
-        advertisementService.addAdvertisement(requestAddTransportDTO, multipartFiles);
+        advertisementService.addAdvertisement(requestAddTransportDTO, null);
         return ResponseEntity.ok("The ad with your transport has been successfully added.");
     }
 
@@ -43,4 +41,11 @@ public class AdvertisementController {
         advertisementService.addAdvertisement(multipartFiles);
         return ResponseEntity.ok("The ad with your transport has been successfully added.");
     }
+
+//    @PostMapping("/test")
+//    public ResponseEntity<String> addTestPhoto(
+//            @RequestPart("multipartFiles") MultipartFile[] multipartFiles) {
+//        advertisementService.addAdvertisement(multipartFiles);
+//        return ResponseEntity.ok("The ad with your transport has been successfully added.");
+//    }
 }

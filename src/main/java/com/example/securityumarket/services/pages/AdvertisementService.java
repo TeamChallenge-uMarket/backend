@@ -69,8 +69,8 @@ public class AdvertisementService {
         transportService.save(transport);
 
 
-        transportGalleryService.uploadFiles(
-                multipartFiles, requestAddTransportDTO.mainPhoto(), transport);
+//        transportGalleryService.uploadFiles(
+//                multipartFiles, requestAddTransportDTO.mainPhoto(), transport);
 
         subscriptionPageService.notifyUsers(transport);
         filterParametersService.update(transport);
