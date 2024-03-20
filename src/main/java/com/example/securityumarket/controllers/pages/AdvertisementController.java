@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ public class AdvertisementController {
     @Operation(description = "This endpoint allows users to add transport")
     @ApiResponse(responseCode = "200", description = "The vehicle has been added successfully",
             content = @Content(mediaType = "application/json"))
-    @PostMapping("")
+    @PostMapping(value = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> addTransportCloudinary(
             @RequestPart("multipartFiles") MultipartFile[] multipartFiles,
             @RequestPart @Valid RequestAddTransportDTO requestAddTransportDTO) {
